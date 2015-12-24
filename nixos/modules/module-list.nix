@@ -203,7 +203,8 @@
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
-  ./services/mail/postsrsd.nix
+  ./services/mail/postsrsd.nix #TODO is this the same?
+  ./services/mail/pfix-srsd.nix
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
   ./services/mail/rmilter.nix
