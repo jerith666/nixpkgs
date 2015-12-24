@@ -119,6 +119,12 @@ let
     + optionalString (cfg.dnsBlacklists != []) ''
       smtpd_client_restrictions = ${clientRestrictions}
     ''
+    + optionalString cfg.useSrs ''
+      sender_canonical_maps = tcp:127.0.0.1:10001
+      sender_canonical_classes = envelope_sender
+      recipient_canonical_maps = tcp:127.0.0.1:10002
+      recipient_canonical_classes= envelope_recipient
+    ''
     + cfg.extraConfig;
 
   masterCf = ''
@@ -412,6 +418,10 @@ in
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
+      useSrs = mkOption {
+        default = false;
+        description = "Whether to enable sender rewriting scheme";
+      };
     };
 
   };
@@ -431,6 +441,8 @@ in
         # This makes comfortable for root to run 'postqueue' for example.
         systemPackages = [ pkgs.postfix ];
       };
+
+      services.pfix-srsd.enable = config.services.postfix.useSrs;
 
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";

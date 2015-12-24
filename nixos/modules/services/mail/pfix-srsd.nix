@@ -1,0 +1,53 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+
+  secretsFile = pkgs.writeText "pfix-srsd-secrets" config.services.pfix-srsd.secret;
+
+in
+
+{
+
+  ###### interface
+
+  options = {
+
+    services.pfix-srsd = {
+      enable = mkOption {
+        default = false;
+        description = "Whether to run the postfix sender rewriting scheme daemon.";
+      };
+
+      domain = mkOption {
+        description = "The domain for which to enable srs";
+      };
+
+      secret = mkOption {
+        description = "The secret data used to encode the SRS address";
+      };
+    };
+  };
+
+  ###### implementation
+
+  config = mkIf config.services.pfix-srsd.enable {
+    environment = {
+      systemPackages = [ pkgs.pfixtools ];
+    };
+
+    systemd.services."pfix-srsd" = {
+      description = "Postfix sender rewriting scheme daemon";
+      before = [ "postfix.service" ];
+      #note that we use requires rather than wants because postfix
+      #is unable to process (almost) all mail without srsd
+      requiredBy = [ "postfix.service" ];
+      serviceConfig = {
+        Type = "forking";
+        PIDFile = "/var/run/pfix-srsd.pid";
+        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /var/run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${secretsFile}";
+      };
+    };
+  };
+}
