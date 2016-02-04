@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gnome3, glib, intltool, pkgconfig, gtk_doc, libtool } :
+{ stdenv, fetchgit, gnome3, glib, intltool, pkgconfig, gtk_doc, libtool, gtk, libsoup, sqlite, webkitgtk } :
 
 let
   version = "3.18.4";
@@ -14,7 +14,8 @@ stdenv.mkDerivation {
     sha256 = "1hi6n9mii98s4dbzilpq59hcbj20mcpzy3wwxj3sh0njjks68l8r";
   };
 
-  buildInputs = [ gnome3.gnome_common gnome3.evolution_data_server glib intltool pkgconfig gtk_doc libtool ];
+  buildInputs = [ gnome3.gnome_common gnome3.evolution_data_server gnome3.evolution
+                  glib intltool pkgconfig gtk_doc libtool gtk libsoup sqlite webkitgtk ];
 
   buildPhase = ''
     ./autogen.sh;
