@@ -19,9 +19,7 @@ stdenv.mkDerivation {
 
   patches = [ ./lib-install.patch ];
 
-  buildPhase = ''
-    ./autogen.sh;
-    substituteInPlace po/Makefile --replace /usr/local $out;
-    buildPhase
+  preConfigure = ''
+    ./autogen.sh --prefix=$out;
   '';
 }
