@@ -21,6 +21,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     ./autogen.sh;
+    substituteInPlace po/Makefile --replace /usr/local/share $out/share;
     buildPhase
   '';
 }
