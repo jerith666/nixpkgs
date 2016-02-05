@@ -1,0 +1,35 @@
+diff --git a/configure.ac b/configure.ac
+index 0c9a4d1..887acc0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -343,7 +343,7 @@ dnl *******************
+ errordir=`$PKG_CONFIG --variable=errordir evolution-shell-3.0`
+ AC_SUBST(errordir)
+ 
+-camel_providerdir=`$PKG_CONFIG --variable=camel_providerdir camel-1.2`
++camel_providerdir=$out/camel-providers
+ AC_SUBST(camel_providerdir) 
+ 
+ privincludedir=`$PKG_CONFIG --variable=privincludedir libedataserver-1.2`
+@@ -355,7 +355,7 @@ if test "$os_win32" = yes; then
+ 	dnl $bindir. This means just having $bindir in PATH will be enough.
+ 	privlibdir=$libdir
+ else
+-	privlibdir=`$PKG_CONFIG --variable=privlibdir evolution-data-server-1.2`
++	privlibdir=$out/privlib
+ fi
+ AC_SUBST(privlibdir)
+ 
+diff --git a/src/server/Makefile.am b/src/server/Makefile.am
+index d0f559d..397737a 100644
+--- a/src/server/Makefile.am
++++ b/src/server/Makefile.am
+@@ -74,7 +74,7 @@ libeews_1_2_la_LIBADD = \
+ 
+ libeews_1_2_la_LDFLAGS = $(NO_UNDEFINED) $(CODE_COVERAGE_LDFLAGS)
+ 
+-libeewsincludedir = $(privincludedir)/ews
++libeewsincludedir = include/ews
+ 
+ libeewsinclude_HEADERS = \
+ 	ews-errors.h \
