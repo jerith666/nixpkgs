@@ -1,9 +1,13 @@
 diff --git a/configure.ac b/configure.ac
-index 0c9a4d1..887acc0 100644
+index 0c9a4d1..e1c6176 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -343,7 +343,7 @@ dnl *******************
- errordir=`$PKG_CONFIG --variable=errordir evolution-shell-3.0`
+@@ -340,10 +340,10 @@ AC_SUBST_FILE(EVO_PLUGIN_RULE)
+ dnl *******************
+ dnl Special directories
+ dnl *******************
+-errordir=`$PKG_CONFIG --variable=errordir evolution-shell-3.0`
++errordir=$out/errors
  AC_SUBST(errordir)
  
 -camel_providerdir=`$PKG_CONFIG --variable=camel_providerdir camel-1.2`
@@ -11,7 +15,7 @@ index 0c9a4d1..887acc0 100644
  AC_SUBST(camel_providerdir) 
  
  privincludedir=`$PKG_CONFIG --variable=privincludedir libedataserver-1.2`
-@@ -355,7 +355,7 @@ if test "$os_win32" = yes; then
+@@ -355,26 +355,26 @@ if test "$os_win32" = yes; then
  	dnl $bindir. This means just having $bindir in PATH will be enough.
  	privlibdir=$libdir
  else
@@ -20,6 +24,30 @@ index 0c9a4d1..887acc0 100644
  fi
  AC_SUBST(privlibdir)
  
+ edataserver_privincludedir=`$PKG_CONFIG --variable=privincludedir libedataserver-1.2`
+ AC_SUBST(edataserver_privincludedir)
+ 
+-ecal_backenddir=`$PKG_CONFIG --variable=backenddir libedata-cal-1.2`
++ecal_backenddir=$out/calendar-backends
+ AC_SUBST(ecal_backenddir)
+ 
+-ebook_backenddir=`$PKG_CONFIG --variable=backenddir libedata-book-1.2`
++ebook_backenddir=$out/addressbook-backends
+ AC_SUBST(ebook_backenddir)
+ 
+-eds_moduledir=`$PKG_CONFIG --variable=moduledir libebackend-1.2`
++eds_moduledir=$out/registry-modules
+ AC_SUBST(eds_moduledir)
+ 
+-evo_moduledir=`$PKG_CONFIG --variable=moduledir evolution-shell-3.0`
++evo_moduledir=$out/modules
+ AC_SUBST(evo_moduledir)
+ 
+-ewsdatadir=`$PKG_CONFIG --variable=privdatadir evolution-data-server-1.2`/ews
++ewsdatadir=$out/ews
+ AC_SUBST(ewsdatadir)
+ 
+ dnl *************
 diff --git a/src/server/Makefile.am b/src/server/Makefile.am
 index d0f559d..397737a 100644
 --- a/src/server/Makefile.am
