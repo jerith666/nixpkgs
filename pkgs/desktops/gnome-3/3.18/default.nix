@@ -89,6 +89,8 @@ let
 
   evolution-ews = callPackage ./misc/evolution-ews { };
 
+  evolution-w-ews = callPackage ./misc/evolution-w-ews { };
+
   gconf = callPackage ./core/gconf { };
 
   geocode_glib = callPackage ./core/geocode-glib { };
