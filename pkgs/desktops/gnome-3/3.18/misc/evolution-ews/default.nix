@@ -19,15 +19,6 @@ stdenv.mkDerivation {
 
   patches = [ ./lib-install.patch ];
 
-  #$out/errors/ = $evolution/share/evolution/errors/
-  #$out/camel-providers/ = $evolution-data-server/lib/evolution-data-server/camel-providers/
-  #$out/privlib/ = $evolution-data-server/lib/evolution-data-server/
-  #$out/calendar-backends/ = $evolution-data-server/lib/evolution-data-server/calendar-backends/
-  #$out/addressbook-backends/ = $evolution-data-server/lib/evolution-data-server/addressbook-backends/
-  #$out/registry-modules/ = $evolution-data-server/lib/evolution-data-server/registry-modules/
-  #$out/modules/ = $evolution/lib/evolution/modules
-  #$out/ews/ = $evolution-data-server/share/evolution-data-server/ews
-
   preConfigure = ''
     ./autogen.sh --prefix=$out;
   '';

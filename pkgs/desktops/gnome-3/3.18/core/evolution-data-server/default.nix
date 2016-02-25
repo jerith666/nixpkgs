@@ -1,7 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gnome3, python
 , intltool, libsoup, libxml2, libsecret, icu, sqlite
-, p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true, vala,
-  evolution-ews }:
+, p11_kit, db, nspr, nss, libical, gperf, makeWrapper, valaSupport ? true, vala }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -21,10 +20,6 @@ stdenv.mkDerivation rec {
     for f in "$out/libexec/"*; do
       wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     done
-  '';
-
-  postInstall = ''
-    ln -s ${evolution-ews}/privlib/x $out/lib/evolution-data-server/x
   '';
 
   meta = with stdenv.lib; {
