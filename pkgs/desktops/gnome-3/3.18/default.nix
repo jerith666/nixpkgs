@@ -90,6 +90,10 @@ let
 
   evolution_data_server = callPackage ./core/evolution-data-server { };
 
+  evolution-ews = callPackage ./misc/evolution-ews { };
+
+  evolution-w-ews = callPackage ./misc/evolution-w-ews { };
+
   gconf = callPackage ./core/gconf { };
 
   geocode_glib = callPackage ./core/geocode-glib { };
