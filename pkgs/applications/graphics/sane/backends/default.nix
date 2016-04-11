@@ -1,7 +1,7 @@
 { callPackage, fetchurl, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "1.0.25";
+  version = "1.0.24";
   src = fetchurl {
     sha256 = "0b3fvhrxl4l82bf3v0j47ypjv6a0k5lqbgknrq1agpmjca6vmmx4";
     urls = [
