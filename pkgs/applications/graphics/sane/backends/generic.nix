@@ -18,7 +18,6 @@ stdenv.mkDerivation {
   name = "sane-backends-${version}";
 
   outputs = [ "out" "doc" "man" ];
-  patches = [ ./pixma-keep-waiting.patch ];
 
   configureFlags = ["--disable-ipv6"]
     ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
