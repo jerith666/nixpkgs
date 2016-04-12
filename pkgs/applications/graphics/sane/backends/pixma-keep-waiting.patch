@@ -1,0 +1,19 @@
+commit 6b8f5ef01ffb4ef3f5e28d979db8c2e93e68db39
+Author: Matt McHenry <mmchenry@carnegielearning.com>
+Date:   Mon Apr 11 21:53:18 2016
+
+    keep waiting for a real response
+
+diff --git a/backend/pixma_bjnp.c b/backend/pixma_bjnp.c
+index 7d2d541c..62301773 100644
+--- a/backend/pixma_bjnp.c
++++ b/backend/pixma_bjnp.c
+@@ -2053,7 +2053,7 @@ sanei_bjnp_find_devices (const char **conf_devices,
+                     {
+                       /* not a response, a command from somebody else or */
+                       /* a discover command that we generated */
+-                      break;
++                      continue;
+                     }
+ 		};
+ 
