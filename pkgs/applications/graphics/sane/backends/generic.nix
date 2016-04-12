@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "doc" "man" ];
 
-  configureFlags = []
+  configureFlags = ["--disable-ipv6"]
     ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
