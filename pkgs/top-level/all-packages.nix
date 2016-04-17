@@ -9436,6 +9436,8 @@ in
     erlang = erlangR16;
   };
 
+  daemontools = callPackage ../tools/system/daemontools { };
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
