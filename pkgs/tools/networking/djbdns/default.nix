@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   postPatch = ''
     echo gcc -O2 -include ${glibc}/include/errno.h > conf-cc
     echo $out > conf-home
+    sed -i "s|/etc/dnsroots.global|$out/etc/dnsroots.global|" dnscache-conf.c
   '';
 
   installPhase = ''
