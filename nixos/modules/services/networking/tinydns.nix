@@ -32,19 +32,32 @@ in
       systemPackages = [ pkgs.djbdns ];
     };
 
+    users = {
+      extraGroups.tinydns = {
+        gid = config.ids.gids.tinydns;
+      };
+
+      extraUsers.tinydns = {
+        uid = config.ids.uids.tinydns;
+        description = "tinydns user";
+        group = "tinydns";
+      };
+    };
+
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
-      path = [ pkgs.djbdns ];
+      path = with pkgs; [ daemontools djbdns ];
       preStart = ''
         rm -rf /var/lib/tinydns;
-	tinydns-conf tinydns tinydns /var/lib/tinydns ip;
-	cd /var/lib/tinydns/root/;
-	ln -s ${dataFile} data;
-	tinydns-data;
+        tinydns-conf tinydns tinydns /var/lib/tinydns 0.0.0.0;
+        cd /var/lib/tinydns/root/;
+	rm data;
+        ln -s ${dataFile} data;
+        tinydns-data;
       '';
       script = ''
         cd /var/lib/tinydns;
-	./run;
+        ./run;
       '';
     };
   };
