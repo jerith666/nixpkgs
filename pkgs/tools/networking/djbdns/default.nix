@@ -3,6 +3,11 @@
 let
   version = "1.05";
 
+  manSrc = fetchurl {
+    url = "http://smarden.org/pape/djb/manpages/djbdns-${version}-man-20031023.tar.gz";
+    sha256 = "0sg51gjy6j1hnrra406q1qhf5kvk1m00y8qqhs6r0a699gqmh75s";
+  };
+
 in
 
 stdenv.mkDerivation {
@@ -24,5 +29,12 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -pv $out/etc;
     make setup
+    cd $out;
+    tar xzvf ${manSrc};
+    for n in 1 5 8; do
+      mkdir -p man/man$n;
+      mv -iv djbdns-man/*.$n man/man$n;
+    done;
+    rm -rv djbdns-man;
   '';
 }
