@@ -5,6 +5,11 @@
 let
   version = "0.76";
 
+  manSrc = fetchurl {
+    url = "http://smarden.org/pape/djb/manpages/daemontools-${version}-man-20020131.tar.gz";
+    sha256 = "02k06k2f69jl758cz6hfmnvzxq5vyyik29b7hzshv2l7w2ppfk8v";
+  };
+
 in
 
 stdenv.mkDerivation{
@@ -30,5 +35,9 @@ stdenv.mkDerivation{
   installPhase = ''
     mkdir -p $out/bin;
     cp -v command/* $out/bin;
+    cd $out;
+    tar xzvf ${manSrc};
+    mkdir -v man;
+    mv -iv daemontools-man man/man8;
   '';
 }
