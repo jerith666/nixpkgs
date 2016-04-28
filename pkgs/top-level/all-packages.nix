@@ -1349,6 +1349,8 @@ let
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
+  djbdns = callPackage ../tools/networking/djbdns { };
+
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
@@ -9512,6 +9514,8 @@ let
     sphinx = python27Packages.sphinx;
     erlang = erlangR16;
   };
+
+  daemontools = callPackage ../tools/system/daemontools { };
 
   dico = callPackage ../servers/dico { };
 

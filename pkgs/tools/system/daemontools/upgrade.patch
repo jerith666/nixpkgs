@@ -1,0 +1,13 @@
+--- a/package/upgrade	2001-07-12 12:49:49.000000000 -0400
++++ b/package/upgrade	2016-04-17 17:04:26.501630852 -0400
+@@ -12,7 +12,9 @@
+ ln -s daemontools-0.76 daemontools
+ mv -f daemontools ..
+ 
+-echo 'Making command links in /command...'
++echo 'skip Making command links in /command...'
++exit;
++
+ mkdir -p /command
+ for i in `cat package/commands`
+ do
