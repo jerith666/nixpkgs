@@ -1,0 +1,71 @@
+diff --git a/configure.ac b/configure.ac
+index 0c9a4d10..9a1b09d5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -340,10 +340,12 @@ AC_SUBST_FILE(EVO_PLUGIN_RULE)
+ dnl *******************
+ dnl Special directories
+ dnl *******************
+-errordir=`$PKG_CONFIG --variable=errordir evolution-shell-3.0`
++dnl evolution-relative:
++errordir=$out/share/evolution/errors
+ AC_SUBST(errordir)
+ 
+-camel_providerdir=`$PKG_CONFIG --variable=camel_providerdir camel-1.2`
++dnl eds-relative
++camel_providerdir=$out/lib/evolution-data-server/camel-providers
+ AC_SUBST(camel_providerdir) 
+ 
+ privincludedir=`$PKG_CONFIG --variable=privincludedir libedataserver-1.2`
+@@ -355,26 +357,32 @@ if test "$os_win32" = yes; then
+ 	dnl $bindir. This means just having $bindir in PATH will be enough.
+ 	privlibdir=$libdir
+ else
+-	privlibdir=`$PKG_CONFIG --variable=privlibdir evolution-data-server-1.2`
++	dnl eds-relative
++	privlibdir=$out/lib/evolution-data-server
+ fi
+ AC_SUBST(privlibdir)
+ 
+ edataserver_privincludedir=`$PKG_CONFIG --variable=privincludedir libedataserver-1.2`
+ AC_SUBST(edataserver_privincludedir)
+ 
+-ecal_backenddir=`$PKG_CONFIG --variable=backenddir libedata-cal-1.2`
++dnl eds relative
++ecal_backenddir=$out/lib/evolution-data-server/calendar-backends
+ AC_SUBST(ecal_backenddir)
+ 
+-ebook_backenddir=`$PKG_CONFIG --variable=backenddir libedata-book-1.2`
++dnl eds relative
++ebook_backenddir=$out/lib/evolution-data-server/addressbook-backends
+ AC_SUBST(ebook_backenddir)
+ 
+-eds_moduledir=`$PKG_CONFIG --variable=moduledir libebackend-1.2`
++dnl eds relative
++eds_moduledir=$out/lib/evolution-data-server/registry-modules
+ AC_SUBST(eds_moduledir)
+ 
+-evo_moduledir=`$PKG_CONFIG --variable=moduledir evolution-shell-3.0`
++dnl evolution relative
++evo_moduledir=$out/lib/evolution/modules
+ AC_SUBST(evo_moduledir)
+ 
+-ewsdatadir=`$PKG_CONFIG --variable=privdatadir evolution-data-server-1.2`/ews
++dnl eds relative
++ewsdatadir=$out/share/evolution-data-server/ews
+ AC_SUBST(ewsdatadir)
+ 
+ dnl *************
+diff --git a/src/server/Makefile.am b/src/server/Makefile.am
+index d0f559db..397737aa 100644
+--- a/src/server/Makefile.am
++++ b/src/server/Makefile.am
+@@ -74,7 +74,7 @@ libeews_1_2_la_LIBADD = \
+ 
+ libeews_1_2_la_LDFLAGS = $(NO_UNDEFINED) $(CODE_COVERAGE_LDFLAGS)
+ 
+-libeewsincludedir = $(privincludedir)/ews
++libeewsincludedir = include/ews
+ 
+ libeewsinclude_HEADERS = \
+ 	ews-errors.h \
