@@ -13806,6 +13806,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  XMLGrove = buildPerlPackage rec {
+    name = "XML-Grove-0.46alpha";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
+      sha256 = "0llgkgifcw7zz7r7f2jiqryi5axymmd3fwzp4aa5gk6j37w66xkn";
+    };
+    buildInputs = [ pkgs.libxml2 ];
+    propagatedBuildInputs = [ XMLSAX ];
+    meta = {
+      description = "Perl-style XML objects";
+    };
+  };
+
   XMLLibXML = buildPerlPackage rec {
     name = "XML-LibXML-2.0122";
     src = fetchurl {
