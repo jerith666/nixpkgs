@@ -6166,6 +6166,18 @@ let self = _self // overrides; _self = with self; {
   # For backwards compatibility.
   if_ = self."if";
 
+  ImageInfo = buildPerlPackage rec {
+    name = "Image-Info-1.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "06g9nwp9k3arsma09qxkxlxsc5y92kzyjvwmczvylpsmc5b8p9mq";
+    };
+    meta = {
+      description = "Extract meta information from image files";
+      license = "perl";
+    };
+  };
+
   ImageSize = buildPerlPackage rec {
     name = "Image-Size-3.232";
     src = fetchurl {
