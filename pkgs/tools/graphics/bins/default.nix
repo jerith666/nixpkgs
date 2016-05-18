@@ -16,7 +16,9 @@ stdenv.mkDerivation {
   buildInputs = with perlPackages; [ makeWrapper perl
                                      ImageSize ImageInfo PerlMagick
                                      URI HTMLParser HTMLTemplate HTMLClean
-                                     XMLGrove XMLHandlerYAWriter ];
+                                     XMLGrove XMLHandlerYAWriter
+                                     TextIconv TextUnaccent
+                                     DateTimeFormatDateParse ];
 
   installPhase = ''
     export DESTDIR=$out;
