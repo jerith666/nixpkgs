@@ -13810,7 +13810,7 @@ let self = _self // overrides; _self = with self; {
     name = "XML-Grove-0.46alpha";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
-      sha256 = "0llgkgifcw7zz7r7f2jiqryi5axymmd3fwzp4aa5gk6j37w66xkn";
+      sha256 = "05yis1ms7cgwjh57k57whrmalb3ha0bjr9hyvh7cnadcyiynvdpw";
     };
     buildInputs = [ pkgs.libxml2 ];
     propagatedBuildInputs = [ XMLSAX ];
