@@ -13813,7 +13813,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "05yis1ms7cgwjh57k57whrmalb3ha0bjr9hyvh7cnadcyiynvdpw";
     };
     buildInputs = [ pkgs.libxml2 ];
-    propagatedBuildInputs = [ ExtUtilsCommand ExtUtilsMakeMaker TestHarness libxml_perl XMLSAX ];
+    propagatedBuildInputs = [ libxml_perl ];
+
+    #patch from https://bugzilla.redhat.com/show_bug.cgi?id=226285
+    patches = [ ../development/perl-modules/xml-grove-utf8.patch ];
     meta = {
       description = "Perl-style XML objects";
     };
