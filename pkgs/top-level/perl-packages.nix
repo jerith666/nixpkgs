@@ -13813,7 +13813,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "05yis1ms7cgwjh57k57whrmalb3ha0bjr9hyvh7cnadcyiynvdpw";
     };
     buildInputs = [ pkgs.libxml2 ];
-    propagatedBuildInputs = [ XMLSAX ];
+    propagatedBuildInputs = [ libxml_perl XMLSAX ];
     meta = {
       description = "Perl-style XML objects";
     };
