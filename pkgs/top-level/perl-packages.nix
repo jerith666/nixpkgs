@@ -13876,6 +13876,15 @@ let self = _self // overrides; _self = with self; {
     makeMakerFlags = "EXPATLIBPATH=${pkgs.expat.out}/lib EXPATINCPATH=${pkgs.expat.dev}/include";
   };
 
+  XMLParserPerlSAX = buildPerlPackage rec {
+    name = "libxml-perl-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
+      sha256 = "1jy9af0ljyzj7wakqli0437zb2vrbplqj4xhab7bfj2xgfdhawa5";
+    };
+    propagatedBuildInputs = [ XMLParser ];
+  };
+
   XMLXPath = buildPerlPackage {
     name = "XML-XPath-1.13";
     src = fetchurl {
