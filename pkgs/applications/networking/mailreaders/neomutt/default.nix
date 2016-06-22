@@ -2,14 +2,14 @@
 , cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "20160416";
+  version = "20160530";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = "neomutt-${version}";
-    sha256 = "1sgc77fyjcf859y896w208fw4rxd0bzhp0c7cp3vacb7lqr07ngb";
+    sha256 = "17v9qnd7dd7rgz5bq5qqf0b1v59ba6jlqkbmwngx4hal6zm9b9wi";
   };
 
   buildInputs =
@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
     "--enable-pgp"
     "--enable-pop"
     "--enable-sidebar"
+    "--enable-keywords"
     "--enable-smtp"
+    "--enable-nntp"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
@@ -46,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.neomutt.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ hiberno cstrahan ];
+    maintainers = with maintainers; [ hiberno cstrahan vrthra ];
   };
 }

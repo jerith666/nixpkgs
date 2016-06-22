@@ -1,5 +1,5 @@
 { stdenv, acl, attr, autoreconfHook, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk
-, lib, libaio, libcap_progs, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
+, lib, libaio, libcap, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://oss.sgi.com/xfs/cmds/xfstests.git";
     rev = "dfe582dd396f16ddce1909baab7376e00af07792";
-    sha256 = "0hbgccmhcxn5nm87nq13kpi3rcbjadlj65kd03bfjqxhm4gx732q";
+    sha256 = "1pvqzw4f0r63lzhcw2lii72bp4dwqd50xshv8ch7v529z0f5icwa";
   };
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap_progs lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

@@ -7,7 +7,7 @@
 
 let
   ccargs = lib.concatStringsSep " " ([
-    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl}/include/sasl"
+    "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
     "-fPIE" "-fstack-protector-all" "--param" "ssp-buffer-size=4" "-O2" "-D_FORTIFY_SOURCE=2"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
@@ -23,11 +23,11 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.0.3";
+  version = "3.0.4";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "00mc12k5p1zlrlqcf33vh5zizaqr5ai8q78dwv69smjh6kn4c7j0";
+    sha256 = "03msimdzxndm1nskljarws45wpqk020ckfcrmn1p3pxrfq8yh75q";
   };
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]

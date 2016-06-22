@@ -1,10 +1,8 @@
 { stdenv, fetchFromGitHub, coreutils, qtbase, qtdeclarative, qmakeHook, texlive }:
 
-let
-  version = "37.0.0";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
+  version = "37.0.0";
 
   src = fetchFromGitHub {
     owner = "splintermind";
@@ -24,6 +22,8 @@ stdenv.mkDerivation {
     mkdir -p $layouts
     mv $out/share/dwarftherapist/memory_layouts/* $layouts
     rmdir $out/share/dwarftherapist/memory_layouts
+    # Useless symlink
+    rm $out/bin/dwarftherapist
   '';
 
   meta = {

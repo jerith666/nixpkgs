@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/ledger/ledger.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1l5y4k830jyw7n1nnhssci3qahq091fj5cxcr77znk20nclz851s";
+    sha256 = "07r8ds4qdzgicfdf0ar3kp1zn09ami87jkrx1yn5k7hi8n4ns0ka";
   };
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];
@@ -40,6 +40,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny jwiegley ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny jwiegley ];
   };
 }

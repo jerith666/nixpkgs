@@ -4,6 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
+, autoconf213, which
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -24,7 +25,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   src = fetchurl {
     url =
       let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
-      in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
+      in "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
     inherit sha512;
   };
 
@@ -36,10 +37,13 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx /* cairo */
-      gstreamer gst_plugins_base icu libpng jemalloc
+      icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
-    ++ lib.optional enableGTK3 gtk3;
+    ++ lib.optional enableGTK3 gtk3
+    ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst_plugins_base ];
+
+  nativeBuildInputs = [autoconf213 which];
 
   configureFlags =
     [ "--enable-application=browser"
@@ -58,7 +62,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-system-pixman"
       "--enable-system-sqlite"
       #"--enable-system-cairo"
-      "--enable-gstreamer"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
       "--disable-content-sandbox-reporter"  # keeping disabled for now
@@ -69,6 +72,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
+      "--enable-default-toolkit=cairo-gtk2"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -122,7 +126,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   passthru = {
     inherit gtk nspr version;
     isFirefox3Like = true;
-    browserName = pname;
+    browserName = "firefox";
+    ffmpegSupport = lib.versionAtLeast version "46.0";
   };
 };
 
@@ -130,14 +135,14 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "45.0.2";
-    sha512 = "8c0b7afb41a1a405fe499299d1a8b1138dac52b9ad67bfc8761b70a26f330581c2aa1d76d67075896ec3a0c3f5367b8b58365ebc8b3a01f801fa37071b3de526";
+    version = "47.0";
+    sha512 = "35275e5595e7f01a232e5ea6d7899857d0a1d7eab640fe614ef66c865abedae3e08bc6c0cde13165d53140ccf6f721bbcd583d091032e119d44884287393c223";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.0.2esr";
-    sha512 = "a1e9e9371ee47181b01252d60166c405a7835063dffb4928dfb8abb9f151edd8db1dd2b59f35d7898f1660a0fcd8e41f91a3e799c25b6dd43b6ab056bc5ad6bf";
+    version = "45.1.1esr";
+    sha512 = "ee6bccdf01450c5b371e31c35f5bb084ad49f796fcc9cf3a346646972044ad85ce198cc34b697c32e2d3ad1e25955ef5b91b68790704ecaa4de9d3a412914fc7";
   };
 
 }

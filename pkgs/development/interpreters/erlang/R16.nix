@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sed -e s@/bin/pwd@pwd@g -i otp_build
   '';
 
-  configureFlags= "--with-ssl=${openssl} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
+  configureFlags= "--with-ssl=${openssl.dev} ${optionalString odbcSupport "--with-odbc=${unixODBC}"} ${optionalString stdenv.isDarwin "--enable-darwin-64bit"}";
 
   postInstall = let
     manpages = fetchurl {
@@ -68,8 +68,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    # Note: Maintainer of prev. erlang version was simons. If he wants
-    # to continue maintaining erlang I'm totally ok with that.
     maintainers = [ maintainers.the-kenny ];
   };
 }

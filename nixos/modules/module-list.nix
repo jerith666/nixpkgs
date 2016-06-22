@@ -62,7 +62,8 @@
   ./programs/bash/bash.nix
   ./programs/blcr.nix
   ./programs/cdemu.nix
-  ./programs/command-not-found/command-not-found.nix
+  # see https://github.com/NixOS/nixos-channel-scripts/issues/4
+  #./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/freetds.nix
@@ -78,6 +79,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/tmux.nix
+  ./programs/unity3d.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
@@ -126,6 +128,7 @@
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/hydra/default.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix
@@ -183,6 +186,7 @@
   ./services/hardware/thermald.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
+  ./services/logging/graylog.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -238,6 +242,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
@@ -338,11 +343,13 @@
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
+  ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
   ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
+  ./services/networking/mosquitto.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
@@ -377,6 +384,7 @@
   ./services/networking/skydns.nix
   ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
+  ./services/networking/sniproxy.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
@@ -392,6 +400,7 @@
   ./services/networking/tftpd.nix
   ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
+  ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -422,6 +431,7 @@
   ./services/security/haveged.nix
   ./services/security/hologram.nix
   ./services/security/munge.nix
+  ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
   ./services/security/torify.nix
   ./services/security/tor.nix
@@ -497,10 +507,10 @@
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix
   ./system/boot/loader/grub/memtest.nix
-  ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/raspberrypi/raspberrypi.nix
+  ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix

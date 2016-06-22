@@ -78,18 +78,16 @@ containing
 ```nix
 with import <nixpkgs> {};
 
-(pkgs.python35.buildEnv.override  {
-  extraLibs = with pkgs.python35Packages; [ numpy toolz ];
-}).env
+(pkgs.python35.withPackages (ps: [ps.numpy ps.toolz])).env
 ```
 executing `nix-shell` gives you again a Nix shell from which you can run Python.
 
 What's happening here?
 
 1. We begin with importing the Nix Packages collections. `import <nixpkgs>` import the `<nixpkgs>` function, `{}` calls it and the `with` statement brings all attributes of `nixpkgs` in the local scope. Therefore we can now use `pkgs`.
-2. Then we create a Python 3.5 environment with `pkgs.buildEnv`. Because we want to use it with a custom set of Python packages, we override it.
-3. The `extraLibs` argument of the original `buildEnv` function can be used to specify which packages should be included. We want `numpy` and `toolz`. Again, we use the `with` statement to bring a set of attributes into the local scope.
-4. And finally, for in interactive use we return the environment.
+2. Then we create a Python 3.5 environment with the `withPackages` function.
+3. The `withPackages` function expects us to provide a function as an argument that takes the set of all python packages and returns a list of packages to include in the environment. Here, we select the packages `numpy` and `toolz` from the package set.
+4. And finally, for in interactive use we return the environment by using the `env` attribute.
 
 ### Developing with Python
 
@@ -108,7 +106,7 @@ toolz = buildPythonPackage rec{
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -146,7 +144,7 @@ pkgs.python35Packages.buildPythonPackage rec {
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -175,7 +173,7 @@ with import <nixpkgs> {};
       version = "0.7.4";
 
       src = pkgs.fetchurl{
-        url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+        url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
         sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
       };
 
@@ -187,10 +185,7 @@ with import <nixpkgs> {};
       };
     };
 
-  in pkgs.python35.buildEnv.override rec {
-
-    extraLibs = [ pkgs.python35Packages.numpy toolz ];
-}
+  in pkgs.python35.withPackages (ps: [ps.numpy toolz])
 ).env
 ```
 
@@ -199,8 +194,11 @@ locally defined package as well as `numpy` which is build according to the
 definition in Nixpkgs. What did we do here? Well, we took the Nix expression
 that we used earlier to build a Python environment, and said that we wanted to
 include our own version of `toolz`. To introduce our own package in the scope of
-`buildEnv.override` we used a
+`withPackages` we used a
 [`let`](http://nixos.org/nix/manual/#sec-constructs) expression.
+You can see that we used `ps.numpy` to select numpy from the nixpkgs package set (`ps`).
+But we do not take `toolz` from the nixpkgs package set this time.
+Instead, `toolz` will resolve to our local definition that we introduced with `let`.
 
 ### Handling dependencies
 
@@ -220,7 +218,7 @@ datashape = buildPythonPackage rec {
   version = "0.4.7";
 
   src = pkgs.fetchurl {
-    url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
+    url = "mirror://pypi/D/DataShape/${name}.tar.gz";
     sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
   };
 
@@ -251,7 +249,7 @@ lxml = buildPythonPackage rec {
   name = "lxml-3.4.4";
 
   src = pkgs.fetchurl {
-    url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+    url = "mirror://pypi/l/lxml/${name}.tar.gz";
     sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
   };
 
@@ -282,7 +280,7 @@ pyfftw = buildPythonPackage rec {
   version = "0.9.2";
 
   src = pkgs.fetchurl {
-    url = "https://pypi.python.org/packages/source/p/pyFFTW/pyFFTW-${version}.tar.gz";
+    url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
     sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
   };
 
@@ -359,7 +357,7 @@ own packages. The important functions here are `import` and `callPackage`.
 
 ### Including a derivation using `callPackage`
 
-Earlier we created a Python environment using `buildEnv`, and included the
+Earlier we created a Python environment using `withPackages`, and included the
 `toolz` package via a `let` expression.
 Let's split the package definition from the environment definition.
 
@@ -373,7 +371,7 @@ buildPythonPackage rec {
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -394,9 +392,7 @@ with import <nixpkgs> {};
 
 ( let
     toolz = pkgs.callPackage ~/path/to/toolz/release.nix { pkgs=pkgs; buildPythonPackage=pkgs.python35Packages.buildPythonPackage; };
-  in pkgs.python35.buildEnv.override rec {
-    extraLibs = [ pkgs.python35Packages.numpy  toolz ];
-}
+  in pkgs.python35.withPackages (ps: [ ps.numpy toolz ])
 ).env
 ```
 
@@ -450,6 +446,7 @@ Each interpreter has the following attributes:
 - `libPrefix`. Name of the folder in `${python}/lib/` for corresponding interpreter.
 - `interpreter`. Alias for `${python}/bin/${executable}`.
 - `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
+- `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, ie `python3.4`.
 
@@ -534,6 +531,7 @@ All parameters from `mkDerivation` function are still supported.
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `makeWrapperArgs`: A list of strings. Arguments to be passed to `makeWrapper`, which wraps generated binaries. By default, the arguments to `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling the binary. Additional arguments here can allow a developer to set environment variables which will be available when the binary is run. For example, `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
 * `installFlags`: A list of strings. Arguments to be passed to `pip install`. To pass options to `python setup.py install`, use `--install-option`. E.g., `installFlags=["--install-option='--cpp_implementation'"].
+* `format`: Format of the source. Options are `setup` for when the source has a `setup.py` and `setuptools` is used to build a wheel, and `wheel` in case the source is already a binary wheel. The default value is `setup`.
 
 #### `buildPythonApplication` function
 
@@ -547,7 +545,7 @@ Python environments can be created using the low-level `pkgs.buildEnv` function.
 This example shows how to create an environment that has the Pyramid Web Framework.
 Saving the following as `default.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     python.buildEnv.override {
       extraLibs = [ pkgs.pythonPackages.pyramid ];
@@ -564,7 +562,7 @@ You can also use the `env` attribute to create local environments with needed
 packages installed. This is somewhat comparable to `virtualenv`. For example,
 running `nix-shell` with the following `shell.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     (python3.buildEnv.override {
       extraLibs = with python3Packages; [ numpy requests ];
@@ -580,6 +578,37 @@ specified packages in its path.
 * `postBuild`: Shell command executed after the build of environment.
 * `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
 
+#### python.withPackages function
+
+The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
+It takes a function as an argument that is passed the set of python packages and returns the list 
+of the packages to be included in the environment. Using the `withPackages` function, the previous
+example for the Pyramid Web Framework environment can be written like this:
+
+    with import <nixpkgs> {};
+
+    python.withPackages (ps: [ps.pyramid])
+
+`withPackages` passes the correct package set for the specific interpreter version as an 
+argument to the function. In the above example, `ps` equals `pythonPackages`.
+But you can also easily switch to using python3:
+    
+    with import <nixpkgs> {};
+
+    python3.withPackages (ps: [ps.pyramid])
+
+Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
+
+As `python.withPackages` simply uses `python.buildEnv` under the hood, it also supports the `env`
+attribute. The `shell.nix` file from the previous section can thus be also written like this:
+
+    with import <nixpkgs> {};
+
+    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+
+In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
+such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
@@ -590,7 +619,7 @@ Warning: `shellPhase` is executed only if `setup.py` exists.
 
 Given a `default.nix`:
 
-    with import {};
+    with import <nixpkgs> {};
 
     buildPythonPackage { name = "myproject";
 
@@ -648,9 +677,8 @@ newpkgs = pkgs.overridePackages(self: super: rec {
     self = python35Packages // { pandas = python35Packages.pandas.override{name="foo";};};
   };
 });
-in newpkgs.python35.buildEnv.override{
-  extraLibs = [newpkgs.python35Packages.blaze ];
-}).env
+in newpkgs.python35.withPackages (ps: [ps.blaze])
+).env
 ```
 A typical use case is to switch to another version of a certain package. For example, in the Nixpkgs repository we have multiple versions of `django` and `scipy`.
 In the following example we use a different version of `scipy`. All packages in `newpkgs` will now use the updated `scipy` version.
@@ -664,9 +692,8 @@ newpkgs = pkgs.overridePackages(self: super: rec {
     self = python35Packages // { scipy = python35Packages.scipy_0_16;};
   };
 });
-in pkgs.python35.buildEnv.override{
-  extraLibs = [newpkgs.python35Packages.blaze ];
-}).env
+in newpkgs.python35.withPackages (ps: [ps.blaze])
+).env
 ```
 The requested package `blaze` depends upon `pandas` which itself depends on `scipy`.
 

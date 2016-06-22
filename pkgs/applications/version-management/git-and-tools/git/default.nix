@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "2.8.0";
+  version = "2.8.3";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0k77b5x41k80fqqmkmg59rdvs92xgp73iigh01l49h383r7rl2cs";
+    sha256 = "14dafk7rz8cy2z5b92yf009qf4pc70s0viwq7hxsgd4898knr3kx";
   };
 
   patches = [
@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
     ./ssh-path.patch
+    ./ssl-cert-file.patch
   ];
 
   postPatch = ''
@@ -111,12 +112,12 @@ stdenv.mkDerivation {
 
       ''# wrap git-svn
         gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs} ${svn}; do
+        for i in ${builtins.toString perlLibs} ${svn.out}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
         wrapProgram $out/libexec/git-core/git-svn     \
                      --set GITPERLLIB "$gitperllib"   \
-                     --prefix PATH : "${svn}/bin" ''
+                     --prefix PATH : "${svn.out}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
        '')
@@ -164,6 +165,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
   };
 }

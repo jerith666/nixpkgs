@@ -49,6 +49,10 @@ let
               jobs.python3.x86_64-linux
               jobs.python3.i686-linux
               jobs.python3.x86_64-darwin
+              # Needed by travis-ci to test PRs
+              jobs.nox.i686-linux
+              jobs.nox.x86_64-linux
+              jobs.nox.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
@@ -96,7 +100,6 @@ let
       ddrescue = linux;
       dhcp = linux;
       dico = linux;
-      dietlibc = linux;
       diffutils = all;
       disnix = all;
       disnixos = linux;
@@ -183,6 +186,7 @@ let
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
+      qt4_clang = ["i686-linux"];
       quake3demo = linux;
       reiserfsprogs = linux;
       rubber = allBut cygwin;
@@ -259,11 +263,18 @@ let
 
       perlPackages = { };
 
-      pythonPackages = { };
+      pythonPackages = {
+        pandas = unix;
+        scikitlearn = unix;
+      };
       python2Packages = { };
       python27Packages = { };
       python3Packages = { };
-      python35Packages = { };
+      python35Packages = {
+        blaze = unix;
+        pandas = unix;
+        scikitlearn = unix;
+      };
 
       xorg = {
         fontadobe100dpi = linux ++ darwin;
@@ -291,7 +302,6 @@ let
         xf86videonv = linux;
         xf86videovesa = linux;
         xf86videovmware = linux;
-        xf86videomodesetting = linux;
         xfs = linux ++ darwin;
         xinput = linux ++ darwin;
         xkbcomp = linux ++ darwin;
@@ -323,9 +333,6 @@ let
       };
 
       linuxPackages_testing = { };
-      linuxPackages_grsec_stable_desktop = { };
-      linuxPackages_grsec_stable_server = { };
-      linuxPackages_grsec_stable_server_xen = { };
       linuxPackages_grsec_testing_desktop = { };
       linuxPackages_grsec_testing_server = { };
       linuxPackages_grsec_testing_server_xen = { };

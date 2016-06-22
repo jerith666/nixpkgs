@@ -9,7 +9,7 @@
 assert withEditor -> wxGTK != null;
 
 let
-  version = "0.0.19";
+  version = "0.0.20";
 
   releaseType = "alpha";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-${releaseType}-unix-build.tar.xz";
-    sha256 = "1cwvhg30i6axm7y5b62qyjwf1j8gwa5fgc13xsga3gzdphmjchrd";
+    sha256 = "13n61xhjsawda3kl7112la41bqkbqmq4yhr3slydsz856z5xb5m3";
   };
 
   buildInputs = [
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [
     "-I${xproto}/include/X11"
-    "-I${libX11}/include/X11"
-    "-I${libXcursor}/include/X11"
+    "-I${libX11.dev}/include/X11"
+    "-I${libXcursor.dev}/include/X11"
     "-I${SDL}/include/SDL"
     "-I${SDL2}/include/SDL2"
   ];

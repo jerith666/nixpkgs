@@ -32,6 +32,12 @@ let
     ''
       #! ${pkgs.bash}/bin/bash
 
+      ${optionalString cfg.displayManager.logToJournal ''
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$1"
+        fi
+      ''}
+
       . /etc/profile
       cd "$HOME"
 
@@ -39,7 +45,7 @@ let
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
 
-      ${optionalString (!cfg.displayManager.job.logsXsession) ''
+      ${optionalString (!cfg.displayManager.job.logsXsession && !cfg.displayManager.logToJournal) ''
         exec > ~/.xsession-errors 2>&1
       ''}
 
@@ -83,6 +89,8 @@ let
       # .local/share doesn't exist yet.
       mkdir -p $HOME/.local/share
 
+      unset _DID_SYSTEMD_CAT
+
       ${cfg.displayManager.sessionCommands}
 
       # Allow the user to execute commands at the beginning of the X session.
@@ -125,6 +133,14 @@ let
         '') dm}
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
+
+      ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
+        ${pkgs.glib}/bin/gdbus call --session \
+          --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
+          --method org.freedesktop.DBus.UpdateActivationEnvironment \
+          "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
+                  | ${pkgs.coreutils}/bin/paste -sd,)}"
+      ''}
 
       test -n "$waitPID" && wait "$waitPID"
       exit 0
@@ -268,6 +284,16 @@ in
           '';
         };
 
+      };
+
+      logToJournal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          By default, the stdout/stderr of sessions is written
+          to <filename>~/.xsession-errors</filename>. When this option
+          is enabled, it will instead be written to the journal.
+        '';
       };
 
     };

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl ];
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${openssl.dev}";
 
   meta = {
     homepage = "http://www.fetchmail.info/";
@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

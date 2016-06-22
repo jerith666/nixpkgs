@@ -18,7 +18,10 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
+  ghc-boot = null;
+  ghc-boot-th = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hoopl = null;
   hpc = null;
@@ -33,33 +36,14 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # ekmett/linear#74
-  linear = overrideCabal super.linear (drv: {
-    prePatch = "sed -i 's/-Werror//g' linear.cabal";
-  });
+  # Enable latest version of cabal-install.
+  cabal-install = (doDistribute (dontJailbreak (dontCheck (super.cabal-install)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
-  # Cabal_1_22_1_1 requires filepath >=1 && <1.4
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
+  # Jailbreaking is required for the test suite only (which we don't run).
+  Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
 
-  # Don't compile jailbreak-cabal with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
-  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
-    version = "1.23.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "fe7b8784ac0a5848974066bdab76ce376ba67277";
-      sha256 = "1d70ryz1l49pkr70g8r9ysqyg1rnx84wwzx8hsg6vwnmg0l5am7s";
-    };
-    jailbreak = false;
-    doHaddock = false;
-    postUnpack = "sourceRoot+=/Cabal";
-  });
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = self.Cabal_1_23_0_0;
-    mkDerivation = drv: self.mkDerivation (drv // {
-      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-    });
-  };
+  # Build jailbreak-cabal with the latest version of Cabal.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_0_0; };
 
   idris = overrideCabal super.idris (drv: {
     # "idris" binary cannot find Idris library otherwise while building.
@@ -78,9 +62,6 @@ self: super: {
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
-
-  # We have time 1.5
-  aeson = disableCabalFlag super.aeson "old-locale";
 
   # requires filepath >=1.1 && <1.4
   Glob = doJailbreak super.Glob;
@@ -197,10 +178,40 @@ self: super: {
   # https://github.com/haskell/haddock/issues/427
   haddock = dontCheck super.haddock;
 
+  # haddock-api >= 2.17 is GHC 8.0 only
+  haddock-api = self.haddock-api_2_16_1;
+
+  # lens-family-th >= 0.5.0.0 is GHC 8.0 only
+  lens-family-th = self.lens-family-th_0_4_1_0;
+
+  # cereal must have `fail` in pre-ghc-8.0.x versions
+  cereal = addBuildDepend super.cereal self.fail;
+
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
   # https://github.com/fpco/stackage/issues/1112
   vector-algorithms = dontCheck super.vector-algorithms;
+
+  # Trigger rebuild to mitigate broken packaes on Hydra.
+  amazonka-core = triggerRebuild super.amazonka-core 1;
+
+  # https://github.com/thoughtpolice/hs-ed25519/issues/13
+  ed25519 = dontCheck super.ed25519;
+
+  # https://github.com/well-typed/hackage-security/issues/157
+  # https://github.com/well-typed/hackage-security/issues/158
+  hackage-security = dontHaddock (dontCheck super.hackage-security);
+
+  # GHC versions prior to 8.x require additional build inputs.
+  aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
+  case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  bytes = addBuildDepend super.bytes self.doctest;
+  hslogger = addBuildDepend super.hslogger self.HUnit;
+  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
+
+  # Moved out from common as no longer the case for GHC8
+  ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
 }

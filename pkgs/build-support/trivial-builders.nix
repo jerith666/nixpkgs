@@ -47,16 +47,22 @@ rec {
 
 
   # Create a forest of symlinks to the files in `paths'.
-  symlinkJoin = name: paths:
+  symlinkJoin =
+    args@{ name
+         , paths
+         , preferLocalBuild ? true
+         , allowSubstitutes ? false
+         , postBuild ? ""
+         , ...
+         }:
     runCommand name
-      { inherit paths;
-        preferLocalBuild = true; allowSubstitutes = false;
-      }
+      (removeAttrs args [ "name" "postBuild" ])
       ''
         mkdir -p $out
         for i in $paths; do
           ${lndir}/bin/lndir $i $out
         done
+        ${postBuild}
       '';
 
 

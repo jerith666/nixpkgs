@@ -10,16 +10,16 @@
 let
 
   name = "hplip-${version}";
-  version = "3.15.11";
+  version = "3.16.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0vbw815a3wffp6l5m7j6f78xwp9pl1vn43ppyf0lp8q4vqdp3i1k";
+    sha256 = "1nay65q1zmx2jxiwn66n7mlr73azacz5097gw98kqqf90dh522f6";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "00ii36y3914jd8zz4h6rn3xrf1w8szh1z8fngbl2qvs3qr9cm1m9";
+    sha256 = "15qrcd3ndnxri6pfdfmsjyv2f3zfkig80yghs76jbsm106rp8g3q";
   };
 
   hplipState =
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     find . -type f -exec sed -i \
       -e s,/etc/hp,$out/etc/hp, \
       -e s,/etc/sane.d,$out/etc/sane.d, \
-      -e s,/usr/include/libusb-1.0,${libusb1}/include/libusb-1.0, \
+      -e s,/usr/include/libusb-1.0,${libusb1.dev}/include/libusb-1.0, \
       -e s,/usr/share/hal/fdi/preprobe/10osvendor,$out/share/hal/fdi/preprobe/10osvendor, \
       -e s,/usr/lib/systemd/system,$out/lib/systemd/system, \
       -e s,/var/lib/hp,$out/var/lib/hp, \

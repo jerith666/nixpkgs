@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config
+{ stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , atk
 , cairo
@@ -13,7 +13,8 @@
 , glibc
 , gst_plugins_base
 , gstreamer
-, gtk
+, gtk2
+, gtk3
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -26,6 +27,7 @@
 , libcanberra
 , libgnome
 , libgnomeui
+, defaultIconTheme
 , mesa
 , nspr
 , nss
@@ -33,14 +35,23 @@
 , libheimdal
 , libpulseaudio
 , systemd
+, channel ? "stable"
 }:
 
 assert stdenv.isLinux;
 
-# imports `version` and `sources`
-with (import ./sources.nix);
-
 let
+
+  generated = if channel == "stable" then (import ./sources.nix)
+         else if channel == "beta"   then (import ./beta_sources.nix)
+         else if channel == "developer"   then { version = "49.0a2"; sources = [
+            { locale = "en-US"; arch = "linux-i686"; sha512 = "45dad182bf7a4e753c1be6b8f966393a06531e7b5530238d20cb67b26324e8f5d0eeec983a0855418f31187d3ae508c28810ab86269848b4e48ab2ca3b5d21e7"; }
+            { locale = "en-US"; arch = "linux-x86_64"; sha512 = "cfcbfc633b51612a62267c8a1afc25af212eb832d1fa876a1ffd82421e9378f96b3ac1488446f804518290abd99c21c9f10e4d0e0f699432aeb74b63305d7edc"; }
+          ]; }
+         else builtins.abort "Wrong channel! Channel must be one of `stable`, `beta` or `developer`";
+
+  inherit (generated) version sources;
+
   arch = if stdenv.system == "i686-linux"
     then "linux-i686"
     else "linux-x86_64";
@@ -63,8 +74,10 @@ stdenv.mkDerivation {
   name = "firefox-bin-unwrapped-${version}";
 
   src = fetchurl {
-    url = "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
-    inherit (source) sha256;
+    url = if channel == "developer"
+            then "http://download-installer.cdn.mozilla.net/pub/firefox/nightly/latest-mozilla-aurora/firefox-${version}.${source.locale}.${source.arch}.tar.bz2"
+            else "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
+    inherit (source) sha512;
   };
 
   phases = "unpackPhase installPhase";
@@ -85,7 +98,8 @@ stdenv.mkDerivation {
       glibc
       gst_plugins_base
       gstreamer
-      gtk
+      gtk2
+      gtk3
       libX11
       libXScrnSaver
       libXcomposite
@@ -105,9 +119,11 @@ stdenv.mkDerivation {
       libheimdal
       libpulseaudio
       systemd
-    ] + ":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] [
+    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
+
+  buildInputs = [ makeWrapper gtk3 defaultIconTheme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -125,13 +141,18 @@ stdenv.mkDerivation {
         firefox firefox-bin plugin-container \
         updater crashreporter webapprt-stub
       do
-        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          "$out/usr/lib/firefox-bin-${version}/$executable"
+        if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
+          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+            "$out/usr/lib/firefox-bin-${version}/$executable"
+        fi
       done
 
       find . -executable -type f -exec \
         patchelf --set-rpath "$libPath" \
           "$out/usr/lib/firefox-bin-${version}/{}" \;
+
+      # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
+      ln -s "$out/usr/lib" "$out/lib"
 
       # Create a desktop item.
       mkdir -p $out/share/applications
@@ -144,7 +165,14 @@ stdenv.mkDerivation {
       GenericName=Web Browser
       Categories=Application;Network;
       EOF
+
+      wrapProgram "$out/bin/firefox" \
+        --argv0 "$out/bin/.firefox-wrapped" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
+
+  passthru.ffmpegSupport = true;
 
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
@@ -154,5 +182,6 @@ stdenv.mkDerivation {
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     platforms = platforms.linux;
+    maintainers = with maintainers; [ garbas ];
   };
 }

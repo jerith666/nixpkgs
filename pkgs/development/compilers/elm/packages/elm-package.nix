@@ -6,11 +6,11 @@
 }:
 mkDerivation {
   pname = "elm-package";
-  version = "0.16";
+  version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-package";
-    sha256 = "836789a823ab1d97a37907396856d8808c5573e295315c0a55e5bb44915fba4b";
-    rev = "6305a7954a45d1635d6a7185f2dcf136c376074f";
+    sha256 = "0z86560a2f7w3ywqvzqghgz100z0yn8zsiixkw4lp5168krp4axg";
+    rev = "fc0924210fe5a7c0af543769b1353dbb2ddf2f0c";
   };
   isLibrary = true;
   isExecutable = true;

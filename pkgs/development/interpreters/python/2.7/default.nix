@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, self, callPackage
+{ stdenv, fetchurl, self, callPackage, python27Packages
 , bzip2, openssl, gettext
 
 , includeModules ? false
@@ -102,8 +102,8 @@ let
   propagatedBuildInputs = optional stdenv.isDarwin configd;
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
+    C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
+    LIBRARY_PATH = makeLibraryPath paths;
   };
 
   # Build the basic Python interpreter without modules that have
@@ -151,6 +151,7 @@ let
       isPy2 = true;
       isPy27 = true;
       buildEnv = callPackage ../wrapper.nix { python = self; };
+      withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
@@ -173,7 +174,7 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
+      maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
     };
   };
 

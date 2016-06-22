@@ -255,6 +255,9 @@ with stdenv.lib;
     SQUASHFS_LZ4 y
   ''}
 
+  # Runtime security tests
+  DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
+
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
@@ -495,6 +498,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.10") ''
     BINFMT_SCRIPT y
   ''}
+
+  # For systemd-binfmt
+  BINFMT_MISC? y
 
   # Enable the 9P cache to speed up NixOS VM tests.
   9P_FSCACHE? y

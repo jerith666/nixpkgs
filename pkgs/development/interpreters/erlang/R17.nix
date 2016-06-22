@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags= [
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
@@ -85,8 +85,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    # Note: Maintainer of prev. erlang version was simons. If he wants
-    # to continue maintaining erlang I'm totally ok with that.
     maintainers = [ maintainers.the-kenny maintainers.sjmackenzie ];
   };
 }

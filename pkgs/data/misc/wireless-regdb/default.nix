@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "wireless-regdb-${version}";
-  version = "2016-02-08";
+  version = "2016-05-02";
 
   src = fetchgit {
-    sha256 = "0cqnkkcni27ya6apy2ba4im7xj4nrhbcgrahlarvrzbbjkp740m9";
+    sha256 = "1qa741an242wi6gdikkr4ahanphfhwnjg8q2z3rsv8wdha91k895";
     url = https://git.kernel.org/pub/scm/linux/kernel/git/sforshee/wireless-regdb.git;
     rev = "refs/tags/master-${version}";
   };

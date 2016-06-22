@@ -572,10 +572,11 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS }:
+    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name postInstall;
+      inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
 
@@ -734,7 +735,8 @@ rec {
   makeImageFromDebDist =
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? [], postInstall ? "" }:
+    , packages, extraPackages ? [], postInstall ? ""
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
       expr = debClosureGenerator {
@@ -743,7 +745,7 @@ rec {
       };
     in
       (fillDiskWithDebs {
-        inherit name fullName size postInstall;
+        inherit name fullName size postInstall QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;};
       }) // {inherit expr;};
 
@@ -1180,6 +1182,30 @@ rec {
       packages = commonOpenSUSEPackages;
     };
 
+    opensuse132i386 = {
+      name = "opensuse-13.2-i586";
+      fullName = "openSUSE 13.2 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+      packages = commonOpenSUSEPackages;
+    };
+
+    opensuse132x86_64 = {
+      name = "opensuse-13.2-x86_64";
+      fullName = "openSUSE 13.2 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "x86_64"];
+      packages = commonOpenSUSEPackages;
+    };
+
     centos65i386 = {
       name = "centos-6.5-i386";
       fullName = "CentOS 6.5 (i386)";
@@ -1189,7 +1215,7 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/i386;
       archs = ["noarch" "i386"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
     };
 
     centos65x86_64 = {
@@ -1201,7 +1227,20 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/x86_64/;
       archs = ["noarch" "x86_64"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
+    };
+
+    # Note: no i386 release for 7.x
+    centos71x86_64 = {
+      name = "centos-7.1-x86_64";
+      fullName = "CentOS 7.1 (x86_64)";
+      packagesList = fetchurl {
+        url = http://vault.centos.org/7.1.1503/os/x86_64/repodata/1386c5af55bda40669bb5ed91e0a22796c3ed7325367506109b09ea2657f22bd-primary.xml.gz;
+        sha256 = "1g92gxjs57mh15hm0rsk6bbkwv3r4851xnaypdlhd95xanpwb1hk";
+      };
+      urlPrefix = http://vault.centos.org/7.1.1503/os/x86_64;
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
 
   };
@@ -1688,6 +1727,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1604i386 = {
+      name = "ubuntu-16.04-xenial-i386";
+      fullName = "Ubuntu 16.04 Xenial (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            sha256 = "14fid1rqm3sc0wlygcvn0yx5aljf51c2jpd4x0zxij4019316hsh";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1604x86_64 = {
+      name = "ubuntu-16.04-xenial-amd64";
+      fullName = "Ubuntu 16.04 Xenial (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
+            sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz;
+            sha256 = "0mm7gj491yi6q4v0n4qkbsm94s59bvqir6fk60j73w7y4la8rg68";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1759,22 +1832,22 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.9-wheezy-i386";
-      fullName = "Debian 7.9 Wheezy (i386)";
+      name = "debian-7.10-wheezy-i386";
+      fullName = "Debian 7.10 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "a390176680327fd52d6aada6dd8eee051c94ce49d80f0a68dc90ef51b81c3169";
+        sha256 = "02dncyhz3c02jzdxqngbhfic7acsa7p2yv76xwrhawj38yjgqzrm";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.9-wheezy-amd64";
-      fullName = "Debian 7.9 Wheezy (amd64)";
+      name = "debian-7.10-wheezy-amd64";
+      fullName = "Debian 7.10 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "818d78c648505f91cb99f269178d4f62b56d4209cd51bebbc9bf2bd31c8c7156";
+        sha256 = "1kir3j6y81s914njvs0sbwywq7qv28f8s615r9agg9s0h5g760fw";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1843,7 +1916,6 @@ rec {
     "patch"
     "perl"
     "pkgconfig"
-    "procps"
     "rpm"
     "rpm-build"
     "tar"

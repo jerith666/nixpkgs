@@ -5,14 +5,14 @@
 let
   inherit (bootPkgs) ghc;
 
-in 
+in
 stdenv.mkDerivation rec {
-  version = "8.0.0.20160411";
+  version = "8.0.1";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.1-rc3/${name}-src.tar.xz";
-    sha256 = "0cgk0li3pwag65xcrjci8l840aphklymjfmsrq0qpdi8bpsmi97d";
+    url = "https://downloads.haskell.org/~ghc/8.0.1/${name}-src.tar.xz";
+    sha256 = "1lniqy29djhjkddnailpaqhlqh4ld2mqvb1fxgxw1qqjhz6j1ywh";
   };
 
   patches = [
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp.out}/lib"
-    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
   };
 

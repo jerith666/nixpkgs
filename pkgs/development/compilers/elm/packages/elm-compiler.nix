@@ -7,11 +7,11 @@
 }:
 mkDerivation {
   pname = "elm-compiler";
-  version = "0.16";
+  version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-compiler";
-    sha256 = "b3bcdca469716f3a4195469549a9e9bc53a6030aff132ec620b9c93958a5ffe6";
-    rev = "df86c1c9b3cf06de3ccb78f26b4d2fac0129ce5a";
+    sha256 = "1vx4jp20nj4s41zsqnwyh80dvg7b7kd9fh6agl99v1xx9d3i6ws1";
+    rev = "c9c7e72c424a13255f8ee84c719f7ef48b689c1a";
   };
   isLibrary = true;
   isExecutable = true;

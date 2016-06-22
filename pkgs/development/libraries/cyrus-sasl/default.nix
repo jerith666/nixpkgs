@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     );
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
   ];
 
   # Set this variable at build-time to make sure $out can be evaluated.
@@ -51,6 +51,5 @@ stdenv.mkDerivation rec {
     homepage = "http://cyrusimap.web.cmu.edu/";
     description = "library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons ];
   };
 }
