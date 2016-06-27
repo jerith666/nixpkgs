@@ -183,7 +183,19 @@ in modules // {
     };
   };
 
-
+  emcee = buildPythonPackage {
+    name = "emcee-2.1.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/emcee/emcee-2.1.0.tar.gz";
+      sha256 = "0qyafp9jfya0mkxgqfvljf0rkic5fm8nimzwadyrxyvq7nd07qaw";
+    };
+    propagatedBuildInputs = [ self.numpy ];
+    meta = {
+      homepage = http://dan.iel.fm/emcee;
+      license = "MIT";
+      description = "Kick ass affine-invariant ensemble MCMC sampling";
+    };
+  };
 
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
@@ -3384,12 +3396,12 @@ in modules // {
   };
 
   click-threading = buildPythonPackage rec {
-    version = "0.1.2";
+    version = "0.4.0";
     name = "click-threading-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "0jmrv4334lfxa2ss53c06dafdwqbk1pb3ihd26izn5igw1bm8145";
+      sha256 = "1lrn2inlzz5lr8ay36dz9gmlnqqvdnh14rcm2nmhaxvbbz0gl8qq";
     };
 
     propagatedBuildInputs = with self; [ click ];
@@ -3821,20 +3833,21 @@ in modules // {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.23.4";
+    version = "0.24";
 
     src = pkgs.fetchurl {
-      url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "13hdffhd37mx3gjby018xl179jaj957fy7kzi01crmimxvn2zi7y";
+      url = "mirror://pypi/C/Cython/${name}.tar.gz";
+      sha256 = "1wd3q97gia3zhsgcdlvxh26hkrf3m53i6r1l4g0yya119264vr3d";
     };
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
+    # For testing
+    nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
 
     checkPhase = ''
+      export HOME="$NIX_BUILD_TOP"
       ${python.interpreter} runtests.py
     '';
-
-    doCheck = false; # Lots of weird compiler errors
 
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
@@ -7518,6 +7531,12 @@ in modules // {
     };
   };
 
+  pycuda = callPackage ../development/python-modules/pycuda rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (pkgs.stdenv) mkDerivation;
+    inherit pythonOlder;
+  };
+
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
     version = "0.1.7";
@@ -7787,6 +7806,35 @@ in modules // {
       license = licenses.gpl2;
       platform = platforms.all;
     };
+  };
+
+  pytools = buildPythonPackage rec { 
+    name = "pytools-${version}"; 
+    version = "2016.2.1"; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "inducer";
+      repo = "pytools";
+      rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
+      sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
+    };
+
+    doCheck = pythonOlder "3.5";
+
+    buildInputs = with self; [
+      decorator
+      appdirs
+      six
+      numpy
+    ];
+
+    meta = {
+      homepage = https://github.com/inducer/pytools/; 
+      description = "Miscellaneous Python lifesavers.";
+      license = licenses.mit;
+      maintainers = with maintainers; [ artuuge ];
+    };
+
   };
 
   radicale = buildPythonPackage rec {
@@ -11950,6 +11998,12 @@ in modules // {
     };
   });
 
+  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
+    inherit (self) numpy scipy;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit75;
+    clblas = pkgs.clblas-cuda;
+  };
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -16470,13 +16524,13 @@ in modules // {
 
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
-    version="2.8.6";
+    version="2.10.3";
 
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/platformio/platformio-${version}.tar.gz";
-      sha256 = "1l8jcwf8flmx8xcsvly2my8al8nzjr67h3mg5c9wvdr7a42q7dil";
+      url = "https://pypi.python.org/packages/b7/a3/1d3a9d7bae91df1b607e0f31549ec3e0006f29484cc6a1431b3fe3c5b02e/platformio-2.10.3.tar.gz";
+      sha256 = "f3a646871f9baed05f336a32576edaab90abf0737d8adb54f2acb7bcad42a65f";
      };
 
      propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
@@ -16827,10 +16881,10 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "1.0.0";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
+      sha256 = "00cc0lr8hj3pgn2jy9z7b4hrrfj53axa8yfbyds86xqbsvw0w3jj";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
     checkPhase = ''
@@ -23552,6 +23606,9 @@ in modules // {
     buildInputs = with self; [ pytest pytestcov coverage ];
 
     propagatedBuildInputs = with self; [ jsonschema ];
+
+    # We add this flag to ignore the copy installed by bootstrapped-pip
+    installFlags = [ "--ignore-installed" ];
 
     meta = {
       description = "A built-package format for Python";

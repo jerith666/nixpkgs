@@ -110,6 +110,7 @@
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
+  ./services/audio/squeezelite.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
@@ -125,10 +126,11 @@
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
-  ./services/continuous-integration/jenkins/default.nix
-  ./services/continuous-integration/jenkins/slave.nix
-  ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
+  ./services/continuous-integration/jenkins/default.nix
+  ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix
@@ -219,6 +221,7 @@
   ./services/misc/confd.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
+  ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
   ./services/misc/emby.nix
@@ -370,6 +373,7 @@
   ./services/networking/ostinato.nix
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
+  ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
@@ -492,6 +496,7 @@
   ./services/x11/window-managers/windowlab.nix
   ./services/x11/window-managers/wmii.nix
   ./services/x11/window-managers/xmonad.nix
+  ./services/x11/xbanish.nix
   ./services/x11/xfs.nix
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
