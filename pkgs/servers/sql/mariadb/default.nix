@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
       --replace /usr/bin/libtool libtool
-    sed -i "s,SET(DEFAULT_MYSQL_HOME.*$,SET(DEFAULT_MYSQL_HOME /not/a/real/dir),g" CMakeLists.txt
+    sed -i "s,SET(DEFAULT_MYSQL_HOME.*$,SET(DEFAULT_MYSQL_HOME $out),g" CMakeLists.txt
     sed -i "s,SET(PLUGINDIR.*$,SET(PLUGINDIR $lib/lib/mysql/plugin),g" CMakeLists.txt
 
     sed -i "s,SET(pkgincludedir.*$,SET(pkgincludedir $lib/include),g" scripts/CMakeLists.txt
