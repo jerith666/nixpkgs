@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt5 }:
 
 stdenv.mkDerivation {
   name = "qtscriptgenerator-0.1.0";
@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = http://qtscriptgenerator.googlecode.com/files/qtscriptgenerator-src-0.1.0.tar.gz;
     sha256 = "0h8zjh38n2wfz7jld0jz6a09y66dbsd2jhm4f2024qfgcmxcabj6";
   };
-  buildInputs = [ qt4 ];
+  buildInputs = [ qt5.full ];
 
   patches = [ ./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch ];
   
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     qmake
     make
     # Set QTDIR, see http://code.google.com/p/qtscriptgenerator/issues/detail?id=38
-    QTDIR=${qt4} ./generator
+    QTDIR=${qt5.full} ./generator
     cd ../qtbindings
     qmake
     make
@@ -28,14 +28,13 @@ stdenv.mkDerivation {
   
   installPhase = ''
     cd ..
-    mkdir -p $out/lib/qt4/plugins/script
-    cp -av plugins/script/* $out/lib/qt4/plugins/script
+    mkdir -p $out/lib/qt5/plugins/script
+    cp -av plugins/script/* $out/lib/qt5/plugins/script
   '';
 
   meta = {
     description = "QtScript bindings generator";
     homepage = http://code.google.com/p/qtscriptgenerator/;
-    inherit (qt4.meta) platforms;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
