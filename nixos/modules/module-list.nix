@@ -318,6 +318,7 @@
   ./services/networking/cntlm.nix
   ./services/networking/connman.nix
   ./services/networking/consul.nix
+  ./services/networking/coturn.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
@@ -415,6 +416,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
+  ./services/networking/xl2tpd.nix
   ./services/networking/zerobin.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
@@ -461,6 +463,7 @@
   ./services/web-servers/lighttpd/cgit.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
+  ./services/web-servers/lighttpd/inginious.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm.nix
   ./services/web-servers/shellinabox.nix
