@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.gnu;
+    priority = 10; # resolves collision with iputils
   };
 }
