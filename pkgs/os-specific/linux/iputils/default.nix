@@ -43,6 +43,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.skbuff.net/iputils/;
     description = "A set of small useful utilities for Linux networking";
     platforms = stdenv.lib.platforms.linux;
-    priority = 5; # resolves collision with inetutils
   };
 }
