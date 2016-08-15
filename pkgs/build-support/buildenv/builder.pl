@@ -111,7 +111,7 @@ sub findFiles {
 
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
         if ($ignoreCollisions) {
-            warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
+            warn "collision between `$target' (p=$priority) and `$oldTarget' (p=$oldPriority)\n" if $ignoreCollisions == 1;
             return;
         } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
