@@ -11032,7 +11032,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_6;
+  linuxPackages = linuxPackages_4_7;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
