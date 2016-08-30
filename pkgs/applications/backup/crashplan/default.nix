@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
     maintainers = with maintainers; [ sztupi domenkozar ];
+    priority = 500000000; # resolves collision with apache-httpd over conf/ directory
   };
 
   buildInputs = [ makeWrapper cpio ];

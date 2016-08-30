@@ -84,5 +84,6 @@ stdenv.mkDerivation rec {
     license     = licenses.asl20;
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = with maintainers; [ lovek323 peti ];
+    priority = 1;
   };
 }

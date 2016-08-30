@@ -12,5 +12,6 @@ bundlerEnv {
     description = "A simple command line time tracker written in ruby";
     homepage = https://github.com/samg/timetrap;
     license = lib.licenses.mit;
+    priority = 10; # resolves collision with bundler
   };
 }
