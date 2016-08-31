@@ -72,6 +72,8 @@ stdenv.mkDerivation rec {
     ./patches/15.9-mtrr.patch
     ./patches/15.9-preempt.patch
     ./patches/15.9-sep_printf.patch
+    ./patches/kernel-4.6-get_user_pages.patch
+    ./patches/kernel-4.6-page_cache_release-put_page.patch
   ];
 
   buildInputs =
