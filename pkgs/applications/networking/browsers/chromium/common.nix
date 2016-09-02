@@ -128,12 +128,19 @@ let
 
     patches = [
       ./patches/widevine.patch
+      ./patches/glibc-2.24.patch
       (if versionOlder version "52.0.0.0"
        then ./patches/nix_plugin_paths_50.patch
        else ./patches/nix_plugin_paths_52.patch)
     ];
 
     postPatch = ''
+      # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
+      substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
+        --replace \
+          'return sandbox_binary;' \
+          'return base::FilePath(GetDevelSandboxPath());'
+
       sed -i -r \
         -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
         -e 's|/bin/echo|echo|' \

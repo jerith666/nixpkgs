@@ -173,6 +173,8 @@ let
 
   gtksourceview = callPackage ./core/gtksourceview { };
 
+  gtksourceviewmm = callPackage ./core/gtksourceviewmm { };
+
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
@@ -318,6 +320,8 @@ let
   gdl = callPackage ./devtools/gdl { };
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
+
+  nemiver = callPackage ./devtools/nemiver { };
 
 #### Games
 

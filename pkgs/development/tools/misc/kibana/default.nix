@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     mv * $out/libexec/kibana/
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
-      --prefix PATH : "${nodejs}/bin:${coreutils}/bin:${which}/bin"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline rickynils ];
+    platforms = with platforms; unix;
   };
 }

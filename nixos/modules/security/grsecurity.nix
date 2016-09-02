@@ -12,7 +12,7 @@ let
     (fs: (fs.neededForBoot
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
-    (attrValues config.fileSystems) != [];
+    config.system.build.fileSystems != [];
 
   # Ascertain whether NixOS container support is required
   containerSupportRequired =
@@ -37,6 +37,18 @@ in
       '';
     };
 
+    disableEfiRuntimeServices = mkOption {
+      type = types.bool;
+      example = false;
+      default = true;
+      description = ''
+        Whether to disable access to EFI runtime services.  Enabling EFI runtime
+        services creates a venue for code injection attacks on the kernel and
+        should be disabled if at all possible.  Changing this option enters into
+        effect upon reboot.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -44,6 +56,8 @@ in
     # Allow the user to select a different package set, subject to the stated
     # required kernel config
     boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
+
+    boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "GRKERNSEC")
@@ -105,11 +119,13 @@ in
       "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
+      "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
     } // optionalAttrs containerSupportRequired {
       # chroot(2) restrictions that conflict with NixOS lightweight containers
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
+      "kernel.grsecurity.chroot_caps" = mkForce 0;
     };
 
     assertions = [

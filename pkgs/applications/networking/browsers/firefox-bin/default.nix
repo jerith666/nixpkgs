@@ -17,6 +17,7 @@
 , gtk3
 , libX11
 , libXScrnSaver
+, libxcb
 , libXcomposite
 , libXdamage
 , libXext
@@ -90,6 +91,7 @@ stdenv.mkDerivation {
       libX11
       libXScrnSaver
       libXcomposite
+      libxcb
       libXdamage
       libXext
       libXfixes
@@ -104,6 +106,7 @@ stdenv.mkDerivation {
       nss
       pango
       libheimdal
+      libpulseaudio
       libpulseaudio.dev
       systemd
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
