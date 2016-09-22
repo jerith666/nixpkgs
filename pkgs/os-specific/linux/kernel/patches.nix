@@ -74,6 +74,11 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
+  modinst_arg_list_too_long =
+    { name = "modinst-arglist-too-long";
+      patch = ./modinst-arg-list-too-long.patch;
+    };
+
   ubuntu_fan_4_4 =
     { name = "ubuntu-fan";
       patch = ./ubuntu-fan-4.4.patch;
@@ -95,9 +100,9 @@ rec {
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.7.2";
-      grrev  = "201608211829";
-      sha256 = "1a7pvmb57w7j9s4ww8xvzzijlpnr2i7nhm7jhgfz4n5w3jvxcny3";
+    { kver   = "4.7.3";
+      grrev  = "201609072139";
+      sha256 = "0c70nfsa1bk07z6sivy645d9w0qkq23pwpwdm28160kfy7dampyh";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
