@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "7458ee5a7121a7d243fd6a7528ba427945d9120c5efc7cd75b3951fb01f09c59";
+    sha256 = (lib.importJSON ../upstream-info.json).guest;
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -139,5 +139,6 @@ stdenv.mkDerivation {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
+    broken = kernel.features.grsecurity or false;
   };
 }

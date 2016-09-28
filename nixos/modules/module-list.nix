@@ -40,6 +40,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/ati.nix
   ./hardware/video/bumblebee.nix
+  ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/input-method/default.nix
@@ -144,7 +145,6 @@
   ./services/databases/hbase.nix
   ./services/databases/influxdb.nix
   ./services/databases/memcached.nix
-  ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/neo4j.nix
@@ -289,6 +289,9 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/node-exporter.nix
+  ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -297,6 +300,7 @@
   ./services/monitoring/statsd.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
+  ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/zabbix-agent.nix
@@ -352,6 +356,7 @@
   ./services/networking/haproxy.nix
   ./services/networking/heyefi.nix
   ./services/networking/hostapd.nix
+  ./services/networking/htpdate.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
   ./services/networking/iodine.nix
@@ -386,6 +391,7 @@
   ./services/networking/ostinato.nix
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
+  ./services/networking/powerdns.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
