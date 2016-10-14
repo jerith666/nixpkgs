@@ -86,6 +86,7 @@
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
+  cmfwyp = "cmfwyp <cmfwyp@riseup.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
@@ -168,6 +169,7 @@
   grahamc = "Graham Christensen <graham@grahamc.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  hakuch = "Jesse Haber-Kucharsky <hakuch@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   hce = "Hans-Christian Esperer <hc@hcesperer.org>";
@@ -195,6 +197,7 @@
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
+  jonafato = "Jon Banafato <jon@jonafato.com>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
@@ -416,6 +419,7 @@
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";
+  tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
