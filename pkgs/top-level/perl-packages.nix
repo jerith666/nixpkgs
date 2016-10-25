@@ -32,7 +32,7 @@ let self = _self // overrides; _self = with self; {
     };
     outputs = ["out" "doc"];
     # use gnused so that the preCheck command passes
-    buildInputs = stdenv.lib.optional stdenv.isDarwin [ gnused ];
+    buildInputs = stdenv.lib.optional stdenv.isDarwin gnused;
     propagatedBuildInputs = [ FileNext ];
     meta = with stdenv.lib; {
       description = "A grep-like tool tailored to working with large trees of source code";
@@ -128,6 +128,31 @@ let self = _self // overrides; _self = with self; {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
+  };
+
+  AnyEventCacheDNS = buildPerlModule rec {
+    name = "AnyEvent-CacheDNS-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PO/POTYL/${name}.tar.gz";
+      sha256 = "41c1faf183b61806b55889ceea1237750c1f61b9ce2735fdf33dc05536712dae";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ AnyEvent ];
+    doCheck = false; # does an DNS lookup
+    meta = {
+      homepage = http://github.com/potyl/perl-AnyEvent-CacheDNS;
+      description = "Simple DNS resolver with caching";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  AnyEventHTTP = buildPerlPackage rec {
+    name = "AnyEvent-HTTP-2.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "2e3376d03bfa5f172f43d4c615ba496281c9ffe3093a828c539683e17e2fbbcb";
+    };
+    propagatedBuildInputs = [ AnyEvent CommonSense ];
   };
 
   AnyEventI3 = buildPerlPackage rec {
@@ -2733,10 +2758,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.040";
+    name = "CryptX-0.041";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "0e1e44811e951fa04971912a8b03cf41de540d8cf8d464c5655aaf3bf976db50";
+      sha256 = "481f8c9285d6ce3cf330e1fa52c835a202debdac5d81e1acd20bd1d93b99790e";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -6584,6 +6609,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  IOMultiplex = buildPerlPackage {
+    name = "IO-Multiplex-1.16";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BB/BBB/IO-Multiplex-1.16.tar.gz;
+      sha256 = "74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad";
+    };
+  };
+  
   IOPager = buildPerlPackage {
     name = "IO-Pager-0.06";
     src = fetchurl {
@@ -9360,23 +9393,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DBI DBDSQLite ];
   };
 
-  NetAmazonS3 = buildPerlPackage {
-    name = "Net-Amazon-S3-0.60";
+  NetAmazonS3 = buildPerlPackage rec {
+    name = "Net-Amazon-S3-0.80";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PF/PFIG/Net-Amazon-S3-0.60.tar.gz;
-      sha256 = "628937132268e501fb82410f96636e01b183423ea133b6c362894da109d6ac81";
+      url = "mirror://cpan/authors/id/R/RC/RCONOVER/${name}.tar.gz";
+      sha256 = "efb73dd9a96078742cb8564f7b58f5abe5168277342c7634961d63b4ef278848";
     };
     buildInputs = [ LWP TestException ];
-    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI XMLLibXML JSON ];
-    # See https://github.com/pfig/net-amazon-s3/pull/25
-    patches =
-      [ ../development/perl-modules/net-amazon-s3-credentials-provider.patch
-        ../development/perl-modules/net-amazon-s3-moose-warning.patch
-      ];
+    propagatedBuildInputs = [ DataStreamBulk DateTimeFormatHTTP DigestHMAC DigestMD5File FileFindRule HTTPDate HTTPMessage LWPUserAgentDetermined MIMETypes Moose MooseXStrictConstructor MooseXTypesDateTimeMoreCoercions PathClass RegexpCommon TermEncoding TermProgressBarSimple URI VMEC2SecurityCredentialCache XMLLibXML ];
     meta = {
+      homepage = http://search.cpan.org/dist/Net-Amazon-S3/;
       description = "Use the Amazon S3 - Simple Storage Service";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -9473,10 +9501,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDomainTLD = buildPerlPackage rec {
-    name = "Net-Domain-TLD-1.74";
+    name = "Net-Domain-TLD-1.75";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AL/ALEXP/${name}.tar.gz";
-      sha256 = "bf936cc20834d5b9497e33dc41c2da6a58536b7a1e0df0b8f6ce7ed5111ca868";
+      sha256 = "4c37f811184d68ac4179d48c10ea31922dd5fca2c1bffcdcd95c5a2a3b4002ee";
     };
     meta = {
       description = "Work with TLD names";
@@ -9981,6 +10009,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ParseSyslog = buildPerlPackage {
+    name = "Parse-Syslog-1.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSCHWEI/Parse-Syslog-1.10.tar.gz;
+      sha256 = "659a2145441ef36d9835decaf83da308fcd03f49138cb3d90928e8bfc9f139d9";
+    };
+  };
+
   PathClass = buildPerlPackage {
     name = "Path-Class-0.33";
     src = fetchurl {
@@ -10047,10 +10083,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PDFAPI2 = buildPerlPackage rec {
-    name = "PDF-API2-2.028";
+    name = "PDF-API2-2.030";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
-      sha256 = "a642b41362884b7005e421ec93c7d3a54f7adef7657540331e0d4ca89d106b04";
+      sha256 = "a802c25c1f00b093778223fc7aea94ebd87a9abdb915151746b8ee5d4a358769";
     };
     propagatedBuildInputs = [ FontTTF ];
     meta = {
@@ -10717,13 +10753,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodWeaver = buildPerlPackage rec {
-    name = "Pod-Weaver-4.013";
+    name = "Pod-Weaver-4.015";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "5f12c5f11d313294520b0a1ab5c0775ef56e222d9181c8dac520cdc77af309e0";
+      sha256 = "5af25b29a55783e495a9df5ef6293240e2c9ab02764613d79f1ed50b12dec5ae";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
-    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise Moose PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
+    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise ModuleRuntime Moose ParamsUtil PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
     meta = {
       homepage = https://github.com/rjbs/Pod-Weaver;
       description = "Weave together a Pod document from an outline";
@@ -11420,6 +11456,14 @@ let self = _self // overrides; _self = with self; {
       homepage = http://git.shadowcat.co.uk/gitweb/gitweb.cgi?p=p5sagit/strictures.git;
       description = "Turn on strict and make all warnings fatal";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  StringApprox = buildPerlPackage rec {
+    name = "String-Approx-3.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHI/${name}.tar.gz";
+      sha256 = "2b8c1acd24fa9681ebba0ccb3c49f16289de1d579af8a0c898ea8f8d1baf5d36";
     };
   };
 
@@ -14153,6 +14197,34 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  VMEC2 = buildPerlModule rec {
+    name = "VM-EC2-1.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
+      sha256 = "b2b6b31745c57431fca0efb9b9d0b8f168d6081755e048fd9d6c4469bd108acd";
+    };
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ AnyEvent AnyEventCacheDNS AnyEventHTTP JSON LWP StringApprox URI XMLSimple ];
+    meta = {
+      description = "Perl interface to Amazon EC2, Virtual Private Cloud, Elastic Load Balancing, Autoscaling, and Relational Database services";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  VMEC2SecurityCredentialCache = buildPerlPackage rec {
+    name = "VM-EC2-Security-CredentialCache-0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCONOVER/${name}.tar.gz";
+      sha256 = "fc7e9c152ff2b721ccb221ac40089934775cf58366aedb5cc1693609f840937b";
+    };
+    propagatedBuildInputs = [ DateTimeFormatISO8601 VMEC2 ];
+    meta = {
+      homepage = http://search.cpan.org/dist/VM-EC2-Security-CredentialCache/;
+      description = "Cache credentials respecting expiration time for IAM roles";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   W3CLinkChecker = buildPerlPackage rec {
     name = "W3C-LinkChecker-4.81";
     src = fetchurl {
@@ -14181,6 +14253,7 @@ let self = _self // overrides; _self = with self; {
         substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
         substituteInPlace Makefile.PL --replace '_LASTENTRY\z' '_LASTENTRY\z|CURL_DID_MEMORY_FUNC_TYPEDEFS\z'
       '';
+    NIX_CFLAGS_COMPILE = "-DCURL_STRICTER";
     doCheck = false; # performs network access
   };
 

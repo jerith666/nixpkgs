@@ -38,16 +38,6 @@ in
 
 rec {
 
-  link_lguest =
-    { name = "gcc5-link-lguest";
-      patch = ./gcc5-link-lguest.patch;
-    };
-
-  link_apm =
-    { name = "gcc5-link-apm";
-      patch = ./gcc5-link-apm.patch;
-    };
-
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;
@@ -96,9 +86,9 @@ rec {
   };
 
   grsecurity_testing = grsecPatch
-    { kver   = "4.7.4";
-      grrev  = "201609211951";
-      sha256 = "0h5lxl04rvww02ww0y21id6dc8mhglls8dqhjdcxdcpahxq1fb6y";
+    { kver   = "4.7.9";
+      grrev  = "201610200819";
+      sha256 = "1q2j819g3yidd9m7myskx2g1rzrx3cw8fwjrzbbhaxv2kxjmrrjb";
     };
 
   # This patch relaxes grsec constraints on the location of usermode helpers,
@@ -149,4 +139,13 @@ rec {
     };
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
+
+  lguest_entry-linkage =
+    { name = "lguest-asmlinkage.patch";
+      patch = fetchpatch {
+        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git"
+            + "/patch/drivers/lguest/x86/core.c?id=cdd77e87eae52";
+        sha256 = "04xlx6al10cw039av6jkby7gx64zayj8m1k9iza40sw0fydcfqhc";
+    };
+  };
 }

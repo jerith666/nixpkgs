@@ -24,6 +24,7 @@ doNotDisplayTwice rec {
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
   bar-xft = lemonbar-xft;  # added 2015-01-16
+  bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   bundler_HEAD = bundler; # added 2015-11-15
@@ -50,6 +51,7 @@ doNotDisplayTwice rec {
   fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
+  googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
@@ -58,6 +60,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
   letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
@@ -114,4 +117,20 @@ doNotDisplayTwice rec {
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
   m3d-linux = m33-linux; # added 2016-08-13
-}
+
+  inherit (ocaml-ng) # added 2016-09-14
+    ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
+    ocamlPackages_4_00_1 ocamlPackages_4_01_0 ocamlPackages_4_02
+    ocamlPackages_4_03
+    ocamlPackages_latest;
+} // (with ocaml-ng; { # added 2016-09-14
+  ocaml_3_08_0 = ocamlPackages_3_08_0.ocaml;
+  ocaml_3_10_0 = ocamlPackages_3_10_0.ocaml;
+  ocaml_3_11_2 = ocamlPackages_3_11_2.ocaml;
+  ocaml_3_12_1 = ocamlPackages_3_12_1.ocaml;
+  ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
+  ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
+  ocaml_4_02   = ocamlPackages_4_02.ocaml;
+  ocaml_4_03   = ocamlPackages_4_03.ocaml;
+  ocaml        = ocamlPackages.ocaml;
+})
