@@ -3592,6 +3592,8 @@ in
 
   securefs = callPackage ../tools/filesystems/securefs { };
 
+  set-dyn-ip = callPackage ../tools/networking/set-dyn-ip { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
