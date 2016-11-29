@@ -4,6 +4,11 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super: {
 
+  # Some Hackage packages reference this attribute, which exists only in the
+  # GHCJS package set. We provide a dummy version here to fix potential
+  # evaluation errors.
+  ghcjs-base = null;
+
   # Some packages need a non-core version of Cabal.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_1_0; });
 
@@ -43,7 +48,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1np1v2x5n9dl39cbwlqbjap1j5120q4n8p18cm1884vdxidbkc01";
+      sha256 = "0bi4ynhjx265yaryx7yd5wmwf44hav8bmhkj0knwynb6kpl92qp8";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -974,7 +979,7 @@ self: super: {
 
   # https://github.com/commercialhaskell/stack/issues/2263
   stack = super.stack.overrideScope (self: super: {
-    http-client = self.http-client_0_5_3_4;
+    http-client = self.http-client_0_5_4;
     http-client-tls = self.http-client-tls_0_3_3;
     http-conduit = self.http-conduit_2_2_3;
     optparse-applicative = dontCheck self.optparse-applicative_0_13_0_0;
@@ -1018,14 +1023,14 @@ self: super: {
 
   # http-api-data_0.3.x requires QuickCheck > 2.9, but overriding that version
   # is hard because of transitive dependencies, so we just disable tests.
-  http-api-data_0_3_2 = dontCheck super.http-api-data_0_3_2;
+  http-api-data_0_3_3 = dontCheck super.http-api-data_0_3_3;
 
   # Fix build for latest versions of servant and servant-client.
   servant_0_9_1_1 = super.servant_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_2;
+    http-api-data = self.http-api-data_0_3_3;
   });
   servant-client_0_9_1_1 = super.servant-client_0_9_1_1.overrideScope (self: super: {
-    http-api-data = self.http-api-data_0_3_2;
+    http-api-data = self.http-api-data_0_3_3;
     servant-server = self.servant-server_0_9_1_1;
     servant = self.servant_0_9_1_1;
   });
@@ -1070,5 +1075,11 @@ self: super: {
 
   # Test suite occasionally runs for 1+ days on Hydra.
   distributed-process-tests = dontCheck super.distributed-process-tests;
+
+  # https://github.com/mulby/diff-parse/issues/9
+  diff-parse = doJailbreak super.diff-parse;
+
+  # https://github.com/josefs/STMonadTrans/issues/4
+  STMonadTrans = dontCheck super.STMonadTrans;
 
 }
