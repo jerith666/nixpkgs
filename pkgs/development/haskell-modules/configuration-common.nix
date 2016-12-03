@@ -48,7 +48,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "0bi4ynhjx265yaryx7yd5wmwf44hav8bmhkj0knwynb6kpl92qp8";
+      sha256 = "0yy4fdk0sp19hc838j82sls68l5wnrhr55zzs0gbqnagna77cxhd";
       rev = drv.version;
     };
   })).overrideScope (self: super: {
@@ -144,7 +144,6 @@ self: super: {
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
   HaXml = dontHaddock super.HaXml;
-  HDBC-odbc = dontHaddock super.HDBC-odbc;
   hoodle-core = dontHaddock super.hoodle-core;
   hsc3-db = dontHaddock super.hsc3-db;
   http-client-conduit = dontHaddock super.http-client-conduit;
@@ -989,6 +988,25 @@ self: super: {
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
 
+  # To be in sync with Hoogle.
+  lambdabot-haskell-plugins = (overrideCabal super.lambdabot-haskell-plugins (drv: {
+    patches = [
+      (pkgs.fetchpatch {
+        url = "https://github.com/lambdabot/lambdabot/commit/78a2361024724acb70bc1c12c42f3a16015bb373.patch";
+        sha256 = "0aw0jpw07idkrg8pdn3y3qzhjfrxsvmx3plg51m1aqgbzs000yxf";
+        stripLen = 2;
+        addPrefixes = true;
+      })
+    ];
+
+    jailbreak = true;
+  })).override {
+    haskell-src-exts = self.haskell-src-exts-simple;
+  };
+
+  # Needs new version.
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_18_2; };
+
   # Test suite fails a QuickCheck property.
   optparse-applicative_0_13_0_0 = dontCheck super.optparse-applicative_0_13_0_0;
 
@@ -1048,6 +1066,15 @@ self: super: {
   # https://github.com/roelvandijk/terminal-progress-bar/issues/13
   terminal-progress-bar = doJailbreak super.terminal-progress-bar;
 
+  # https://github.com/hdbc/hdbc-odbc/pull/29
+  HDBC-odbc = overrideCabal super.HDBC-odbc (old: {
+    postPatch = old.postPatch or "" + ''
+      sed -e '/data BoundValue =/ { s/$/{/ ; n; n ; s/{ bvVal/  bvVal/ }' \
+          -e 's/-- | This is rather/-- This is rather/' \
+          -i Database/HDBC/ODBC/Statement.hsc
+    '';
+  });
+
   # https://github.com/vshabanov/HsOpenSSL/issues/11
   HsOpenSSL = doJailbreak super.HsOpenSSL;
 
@@ -1081,5 +1108,22 @@ self: super: {
 
   # https://github.com/josefs/STMonadTrans/issues/4
   STMonadTrans = dontCheck super.STMonadTrans;
+
+  socket_0_7_0_0 = super.socket_0_7_0_0.overrideScope (self: super: { QuickCheck = self.QuickCheck_2_9_2; });
+
+  # 0.5.6 invokes $PAGER in a way that crashes if there are args such as $PAGER="less -R"
+  ghc-core = overrideCabal super.ghc-core (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner  = "shachaf";
+      repo   = "ghc-core";
+      rev    = "630196adf0bebf073328325302453ef1c409fd9a";
+      sha256 = "05jzpjy5zkri2faw5jnq5vh12mx58lrb0zfzz4h598miq2vc8848";
+    };
+    version = "2012-12-15";
+  });
+
+  # Encountered missing dependencies: hspec >=1.3 && <2.1
+  # https://github.com/rampion/ReadArgs/issues/8
+  ReadArgs = doJailbreak super.ReadArgs;
 
 }
