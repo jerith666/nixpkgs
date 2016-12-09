@@ -58,7 +58,6 @@
       #utmp = 29; # unused
       ddclient = 30;
       davfs2 = 31;
-      privoxy = 32;
       #disnix = 33; # unused
       osgi = 34;
       tor = 35;
@@ -281,6 +280,7 @@
       ipfs  = 261;
       stanchion = 262;
       riak-cs = 263;
+      infinoted = 264;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -321,7 +321,6 @@
       utmp = 29;
       #ddclient = 30; # unused
       davfs2 = 31;
-      privoxy = 32;
       disnix = 33;
       osgi = 34;
       tor = 35;
@@ -532,6 +531,7 @@
       ipfs = 261;
       stanchion = 262;
       riak-cs = 263;
+      infinoted = 264;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
