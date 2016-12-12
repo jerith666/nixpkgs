@@ -207,9 +207,6 @@ stdenv.mkDerivation ({
       fi
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
-        ${ stdenv.lib.optionalString stdenv.isDarwin
-            "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib"
-        }
       fi
     done
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
@@ -307,7 +304,7 @@ stdenv.mkDerivation ({
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
-        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcEnv.name}"
+        export NIX_${ghcCommandCaps}_LIBDIR="${ghcEnv}/lib/${ghcCommand}-${ghc.version}"
         ${shellHook}
       '';
     };

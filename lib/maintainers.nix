@@ -48,6 +48,7 @@
   aske = "Kirill Boltaev <aske@fmap.me>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
+  asymmetric = "Lorenzo Manacorda <lorenzo@mailbox.org>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
   auntie = "Jonathan Glines <auntieNeo@gmail.com>";
   avnik = "Alexander V. Nikolaev <avn@avnik.info>";
@@ -88,6 +89,7 @@
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  ckampka = "Christian Kampka <christian@kampka.net>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
@@ -289,6 +291,7 @@
   mlieberman85 = "Michael Lieberman <mlieberman85@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
@@ -321,6 +324,7 @@
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   odi = "Oliver Dunkl <oliver.dunkl@gmail.com>";
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
+  okasu = "Okasu <oka.sux@gmail.com>";
   olcai = "Erik Timan <dev@timan.info>";
   olejorgenb = "Ole Jørgen Brønner <olejorgenb@yahoo.no>";
   orbekk = "KJ Ørbekk <kjetil.orbekk@gmail.com>";

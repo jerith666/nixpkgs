@@ -115,7 +115,6 @@ stdenv.mkDerivation {
     -widgets
     -opengl desktop
     -qml-debug
-    -nis
     -iconv
     -icu
     -pch
@@ -229,7 +228,7 @@ stdenv.mkDerivation {
     '';
 
   inherit lndir;
-  setupHook = ./setup-hook.sh;
+  setupHook = ../../qtbase-setup-hook.sh;
 
   enableParallelBuilding = true;
 
