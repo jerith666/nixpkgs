@@ -25,7 +25,7 @@ with stdenv.lib;
 let
   majorVersion = "3.6";
   minorVersion = "0";
-  minorVersionSuffix = "b2";
+  minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "python${majorVersion}";
@@ -45,7 +45,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "1sk990n2xm5vhn3ys2cp427dx0z14cx3sz1za5f2fcwrp524bz9s";
+    sha256 = "08inlbb2vb8lahw6wfq654lqk6l1x7ncpggp6a92vqw5yq2gkidh";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";

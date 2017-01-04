@@ -22,6 +22,8 @@ PAX_PT_PAX_FLAGS y
 PAX_XATTR_PAX_FLAGS y
 PAX_EI_PAX n
 
+PAX_INITIFY y
+
 # The bts instrumentation method is compatible with binary only modules.
 #
 # Note: if platform supports SMEP, we could do without this
