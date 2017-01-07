@@ -161,17 +161,7 @@ in
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
-  packer = callPackage ../development/tools/packer {
-    # Go 1.7 changed the linker flag format
-    buildGoPackage = buildGo16Package;
-    gotools = self.gotools.override {
-      buildGoPackage = buildGo16Package;
-      go = self.go_1_6;
-    };
-    gox = self.gox.override {
-      buildGoPackage = buildGo16Package;
-    };
-  };
+  packer = callPackage ../development/tools/packer { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
@@ -1287,6 +1277,7 @@ in
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
+    attrSupport = stdenv.isLinux;
   };
 
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
@@ -1555,7 +1546,21 @@ in
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcomp = callPackage ../development/compilers/emscripten-fastcomp { };
+  emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
+  emscriptenfastcomp-wrapped = wrapCCWith ccWrapperFun stdenv.cc.libc ''
+    # hardening flags break WASM support
+    cat > $out/nix-support/add-hardening.sh
+  '' emscriptenfastcomp-unwrapped;
+  emscriptenfastcomp = symlinkJoin {
+    name = "emscriptenfastcomp";
+    paths = [ emscriptenfastcomp-wrapped emscriptenfastcomp-unwrapped ];
+    preferLocalBuild = false;
+    allowSubstitutes = true;
+    postBuild = ''
+      # replace unwrapped clang-3.9 binary by wrapper
+      ln -sf $out/bin/clang $out/bin/clang-[0-9]*
+    '';
+  };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -1928,6 +1933,8 @@ in
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
 
   gnused = callPackage ../tools/text/gnused { };
+  # This is an easy work-around for [:space:] problems.
+  gnused_422 = callPackage ../tools/text/gnused/422.nix { };
 
   gnutar = callPackage ../tools/archivers/gnutar { };
 
@@ -1936,6 +1943,8 @@ in
   goaccess = callPackage ../tools/misc/goaccess { };
 
   gocryptfs = callPackage ../tools/filesystems/gocrypfs { };
+
+  godot = callPackage ../development/tools/godot {};
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -2308,6 +2317,8 @@ in
   isyncUnstable = callPackage ../tools/networking/isync/unstable.nix { };
 
   jaaa = callPackage ../applications/audio/jaaa { };
+
+  jade = callPackage ../tools/text/sgml/jade { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
@@ -2714,6 +2725,8 @@ in
 
   makemkv = callPackage ../applications/video/makemkv { };
 
+  makerpm = callPackage ../development/tools/makerpm { };
+
   # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
   # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
   # trouble on bsd and/or cygwin as well.
@@ -2800,6 +2813,10 @@ in
   miniball = callPackage ../development/libraries/miniball { };
 
   minixml = callPackage ../development/libraries/minixml { };
+
+  miredo = callPackage ../tools/networking/miredo { };
+
+  mitmproxy = callPackage ../tools/networking/mitmproxy { };
 
   mjpegtoolsFull = callPackage ../tools/video/mjpegtools { };
 
@@ -3819,10 +3836,9 @@ in
 
   su-exec = callPackage ../tools/security/su-exec {};
 
-  subsurface =
-    qt55.callPackage ../applications/misc/subsurface {
-        libgit2 = pkgs.libgit2_0_23;
-    };
+  subsurface = qt55.callPackage ../applications/misc/subsurface {
+    libdivecomputer = libdivecomputer_ssrf;
+  };
 
   sudo = callPackage ../tools/security/sudo { };
 
@@ -4159,6 +4175,13 @@ in
     openssl = null;
   };
 
+  ding-libs = callPackage ../tools/misc/ding-libs { };
+
+  sssd = callPackage ../os-specific/linux/sssd {
+    inherit (perlPackages) Po4a;
+    inherit (python27Packages) ldap;
+  };
+
   vtun = callPackage ../tools/networking/vtun { };
 
   wakatime = callPackage ../tools/misc/wakatime { };
@@ -4357,6 +4380,8 @@ in
 
   which = callPackage ../tools/system/which { };
 
+  chase = callPackage ../tools/system/chase { };
+
   wicd = callPackage ../tools/networking/wicd { };
 
   wipe = callPackage ../tools/security/wipe { };
@@ -4520,7 +4545,7 @@ in
 
   ### SHELLS
 
-  bash = lowPrio (callPackage ../shells/bash/4.3.nix {
+  bash = lowPrio (callPackage ../shells/bash/4.4.nix {
     texinfo = null;
     interactive = stdenv.isCygwin; # patch for cygwin requires readline support
   });
@@ -4671,6 +4696,7 @@ in
   drumstick = callPackage ../development/libraries/drumstick { };
 
   ecl = callPackage ../development/compilers/ecl { };
+  ecl_16_1_2 = callPackage ../development/compilers/ecl/16.1.2.nix { };
 
   eql = callPackage ../development/compilers/eql {};
 
@@ -4918,6 +4944,8 @@ in
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
   };
+
+  gcl_2_6_13_pre = callPackage ../development/compilers/gcl/2.6.13-pre.nix { };
 
   gcc-arm-embedded-4_7 = callPackage_i686 ../development/compilers/gcc-arm-embedded {
     version = "4.7-2013q3-20130916";
@@ -5174,9 +5202,13 @@ in
     inherit (stdenvAdapters) overrideCC;
   };
 
-  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 {
+  llvmPackages_37 = callPackage ../development/compilers/llvm/3.7 ({
     inherit (stdenvAdapters) overrideCC;
-  };
+  } // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    cmake = cmake.override { isBootstrap = true; useSharedLibraries = false; };
+    libxml2 = libxml2.override { pythonSupport = false; };
+    python2 = callPackage ../development/interpreters/python/cpython/2.7/boot.nix { inherit (darwin) CF configd; };
+  });
 
   llvmPackages_38 = callPackage ../development/compilers/llvm/3.8 {
     inherit (stdenvAdapters) overrideCC;
@@ -5229,6 +5261,7 @@ in
 
   nim = callPackage ../development/compilers/nim { };
   nimble = callPackage ../development/tools/nimble { };
+  nrpl = callPackage ../development/tools/nrpl { };
 
   neko = callPackage ../development/compilers/neko { };
 
@@ -5276,11 +5309,16 @@ in
   };
 
   rust = rustStable;
-  rustcNightlyBin = lowPrio (callPackage ../development/compilers/rust/nightlyBin.nix {});
   rustStable = callPackage ../development/compilers/rust {};
   rustBeta = callPackage ../development/compilers/rust/beta.nix {};
   rustNightly = callPackage ../development/compilers/rust/nightly.nix {
     rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
+  };
+  rustNightlyBin = callPackage ../development/compilers/rust/nightlyBin.nix {
+     buildRustPackage = callPackage ../build-support/rust {
+       rust = rustNightlyBin;
+       rustRegistry = callPackage ./rust-packages.nix { };
+     };
   };
 
   cargo = rust.cargo;
@@ -5309,6 +5347,8 @@ in
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
+  # For Maxima
+  sbcl_1_3_12 = callPackage ../development/compilers/sbcl/1.3.12.nix { };
   # For StumpWM
   sbcl_1_2_5 = callPackage ../development/compilers/sbcl/1.2.5.nix {
     clisp = clisp;
@@ -5485,32 +5525,40 @@ in
   };
   erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
   };
   erlangR18_odbc = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     odbcSupport = true;
   };
   erlangR18_javac = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true;
   };
   erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true; odbcSupport = true;
   };
   erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
   };
   erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     odbcSupport = true;
   };
   erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
-      javacSupport = true;
+    wxGTK = wxGTK30;
+    javacSupport = true;
   };
   erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    wxGTK = wxGTK30;
     javacSupport = true; odbcSupport = true;
   };
   erlang = erlangR18;
@@ -6092,7 +6140,6 @@ in
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake {
-    wantPS = stdenv.isDarwin;
     inherit (darwin) ps;
   };
 
@@ -6228,6 +6275,7 @@ in
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
+  flex_2_6_1 = callPackage ../development/tools/parsing/flex/2.6.1.nix { };
   flex = callPackage ../development/tools/parsing/flex/default.nix { };
 
   flexcpp = callPackage ../development/tools/parsing/flexc++ { };
@@ -6635,6 +6683,8 @@ in
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+  vultr = callPackage ../development/tools/vultr { };
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
@@ -6966,6 +7016,7 @@ in
   eclib = callPackage ../development/libraries/eclib {};
 
   eigen = callPackage ../development/libraries/eigen {};
+  eigen3_3 = callPackage ../development/libraries/eigen/3.3.nix {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
@@ -7199,7 +7250,6 @@ in
   );
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
-  libgit2_0_23 = callPackage ../development/libraries/git2/0.23.nix { };
 
   gle = callPackage ../development/libraries/gle { };
 
@@ -7839,6 +7889,8 @@ in
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivecomputer = callPackage ../development/libraries/libdivecomputer { };
+
+  libdivecomputer_ssrf = callPackage ../development/libraries/libdivecomputer/subsurface.nix { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
@@ -9091,7 +9143,14 @@ in
 
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
 
-    kirigami = callPackage ../development/libraries/kirigami { };
+    kirigami_1 = callPackage ../development/libraries/kirigami { };
+
+    kirigami_2 = callPackage ../development/libraries/kirigami/v2.nix {
+      # kirigami v2 requires qt 5.7 and above
+      inherit (qt57) qtbase qtquickcontrols2;
+    };
+
+    kirigami = kirigami_1;
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
 
@@ -9483,6 +9542,8 @@ in
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
+  tix = callPackage ../development/libraries/tix { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
@@ -9636,7 +9697,7 @@ in
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk212x;
+  webkitgtk = webkitgtk214x;
 
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
@@ -9688,6 +9749,7 @@ in
   wxGTK30 = callPackage ../development/libraries/wxGTK-3.0/default.nix {
     inherit (gnome2) GConf;
     inherit (darwin.stubs) setfile;
+    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
@@ -11185,6 +11247,8 @@ in
 
     odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
+    ofp = callPackage ../os-specific/linux/ofp { };
+
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
@@ -11241,10 +11305,12 @@ in
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
 
-    spl = callPackage ../os-specific/linux/spl {
+    inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
       inherit kernel;
-    };
+    }) splStable splUnstable;
+
+    spl = splStable;
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
@@ -11268,10 +11334,12 @@ in
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    zfs = callPackage ../os-specific/linux/zfs {
+    inherit (callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel spl;
-    };
+    }) zfsStable zfsUnstable;
+
+    zfs = zfsStable;
   });
 
   # The current default kernel / kernel modules.
@@ -11580,9 +11648,11 @@ in
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
-  spl = callPackage ../os-specific/linux/spl {
+  inherit (callPackage ../os-specific/linux/spl {
     configFile = "user";
-  };
+  }) splStable splUnstable;
+
+  spl = splStable;
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -11786,9 +11856,11 @@ in
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
-  zfs = callPackage ../os-specific/linux/zfs {
+  inherit (callPackage ../os-specific/linux/zfs {
     configFile = "user";
-  };
+  }) zfsStable zfsUnstable;
+
+  zfs = zfsStable;
 
   ### DATA
 
@@ -12306,6 +12378,8 @@ in
     giflib = giflib_4_1;
   };
 
+  astroid = callPackage ../applications/networking/mailreaders/astroid { };
+
   audacious = callPackage ../applications/audio/audacious { };
   audaciousQt5 = qt5.callPackage ../applications/audio/audacious/qt-5.nix { };
 
@@ -12323,8 +12397,18 @@ in
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
 
+  libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
+    secp256k1 = secp256k1.override { enableECDH = true; };
+  };
+
+  libbitcoin-client = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
+
+  libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
+
+  stellar-core = self.altcoins.stellar-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -13011,6 +13095,8 @@ in
 
   flacon = callPackage ../applications/audio/flacon { };
 
+  flexget = callPackage ../applications/networking/flexget { };
+
   fldigi = callPackage ../applications/audio/fldigi { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
@@ -13138,6 +13224,7 @@ in
     libpng = libpng_apng;
     enableGTK3 = false;
     python = python2;
+    gnused = gnused_422;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -13580,7 +13667,7 @@ in
 
   imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
-  imagemagick7_light = lowPrio (imagemagick.override {
+  imagemagick7_light = lowPrio (imagemagick7.override {
     bzip2 = null;
     zlib = null;
     libX11 = null;
@@ -13600,7 +13687,7 @@ in
     libwebp = null;
   });
 
-  imagemagick7 = lowPrio (imagemagickBig.override {
+  imagemagick7 = lowPrio (imagemagick7Big.override {
     ghostscript = null;
   });
 
@@ -14124,6 +14211,8 @@ in
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
+  natron = callPackage ../applications/video/natron { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -14440,6 +14529,8 @@ in
 
   pommed = callPackage ../os-specific/linux/pommed {};
 
+  pommed_light = callPackage ../os-specific/linux/pommed-light {};
+
   pond = callPackage ../applications/networking/instant-messengers/pond { };
 
   ponymix = callPackage ../applications/audio/ponymix { };
@@ -14518,7 +14609,7 @@ in
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
   };
-  
+
   qsyncthingtray = qt5.callPackage ../applications/misc/qsyncthingtray { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
@@ -15484,7 +15575,7 @@ in
   };
   xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
 
-  xca = callPackage ../applications/misc/xca { };
+  xca = qt5.callPackage ../applications/misc/xca { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
@@ -17047,8 +17138,14 @@ in
 
   geogebra = callPackage ../applications/science/math/geogebra { };
 
-  maxima = callPackage ../applications/science/math/maxima { ecl = null; };
-  maxima-ecl = callPackage ../applications/science/math/maxima { sbcl = null; };
+  maxima = callPackage ../applications/science/math/maxima {
+    sbcl = sbcl_1_3_12;
+    ecl = null;
+  };
+  maxima-ecl = callPackage ../applications/science/math/maxima {
+    ecl = ecl_16_1_2;
+    sbcl = null;
+  };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
