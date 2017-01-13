@@ -6,8 +6,9 @@ rec {
 
 
   coreutilsMinimal = coreutils.override (args: {
-    # We want coreutils without ACL support.
+    # We want coreutils without ACL/attr support.
     aclSupport = false;
+    attrSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
   });
@@ -173,16 +174,7 @@ rec {
     bootstrapTools = "${build}/on-server/bootstrap-tools.tar.xz";
   };
 
-  bootstrapTools = (import ./default.nix {
-    inherit system bootstrapFiles;
-
-    lib = assert false; null;
-    allPackages = assert false; null;
-
-    platform = assert false; null;
-    crossSystem = assert false; null;
-    config = assert false; null;
-  }).bootstrapTools;
+  bootstrapTools = import ./bootstrap-tools { inherit system bootstrapFiles; };
 
   test = derivation {
     name = "test-bootstrap-tools";
