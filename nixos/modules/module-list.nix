@@ -26,6 +26,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
   ./hardware/ksm.nix
@@ -66,6 +67,7 @@
   ./programs/bash/bash.nix
   ./programs/blcr.nix
   ./programs/cdemu.nix
+  ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/dconf.nix
   ./programs/environment.nix
@@ -195,6 +197,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/illum.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -210,6 +213,7 @@
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/graylog.nix
+  ./services/logging/journalbeat.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -242,6 +246,7 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
+  ./services/misc/couchpotato.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/dysnomia.nix
@@ -256,8 +261,9 @@
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
+  ./services/misc/gogs.nix
   ./services/misc/gpsd.nix
-  ./services/misc/ihaskell.nix
+  #./services/misc/ihaskell.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
@@ -295,6 +301,7 @@
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
+  ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
@@ -308,24 +315,33 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/netdata.nix
   ./services/monitoring/prometheus/default.nix
-  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/alertmanager.nix
+  ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/json-exporter.nix
+  ./services/monitoring/prometheus/nginx-exporter.nix
+  ./services/monitoring/prometheus/node-exporter.nix
+  ./services/monitoring/prometheus/snmp-exporter.nix
+  ./services/monitoring/prometheus/varnish-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
   ./services/monitoring/scollector.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/statsd.nix
+  ./services/monitoring/sysstat.nix
   ./services/monitoring/systemhealth.nix
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
+  ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/drbd.nix
+  ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/ipfs.nix
   ./services/network-filesystems/netatalk.nix
   ./services/network-filesystems/nfsd.nix
@@ -360,6 +376,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
+  ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
   ./services/networking/fan.nix
@@ -386,6 +403,7 @@
   ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
+  ./services/networking/kresd.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/logmein-hamachi.nix
@@ -416,6 +434,7 @@
   ./services/networking/pdnsd.nix
   ./services/networking/polipo.nix
   ./services/networking/powerdns.nix
+  ./services/networking/pdns-recursor.nix
   ./services/networking/pptpd.nix
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
@@ -482,7 +501,8 @@
   ./services/security/frandom.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
-  ./services/security/hologram.nix
+  ./services/security/hologram-server.nix
+  ./services/security/hologram-agent.nix
   ./services/security/munge.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/physlock.nix
@@ -506,6 +526,7 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
+  ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
   ./services/web-apps/pump.io.nix
