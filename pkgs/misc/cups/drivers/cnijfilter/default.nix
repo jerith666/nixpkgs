@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "http://gdlp01.c-wss.com/gds/1/0100000841/01/cnijfilter-common-2.80-1.tar.gz";
-    # url = "http://gdlp01.c-wss.com/gds/0100000841/cnijfilter-common-2.80-1.tar.gz";
     sha256 = "06s9nl155yxmx56056y22kz1p5b2sb5fhr3gf4ddlczjkd1xch53";
   };
 
