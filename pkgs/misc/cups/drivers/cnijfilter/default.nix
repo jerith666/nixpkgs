@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     for dir in libs cngpij pstocanonij backend; do
       cd $dir;
-      ./autogen.sh --prefix=$out --enable-progpath=$out;
+      ./autogen.sh --prefix=$out;
       cd ..;
     done;
   '';
