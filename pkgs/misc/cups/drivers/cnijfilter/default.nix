@@ -30,6 +30,22 @@ stdenv.mkDerivation rec {
       ./autogen.sh --prefix=$out;
       cd ..;
     done;
+
+    cd ppd;
+    ./autogen.sh --prefix=$out --program-suffix=mp520;
+    cd ..;
+  '';
+
+  postBuild = ''
+    cd ppd;
+    make;
+    cd ..;
+  '';
+
+  postInstall = ''
+    cd ppd;
+    make install;
+    cd ..;
   '';
 
   meta = with lib; {
