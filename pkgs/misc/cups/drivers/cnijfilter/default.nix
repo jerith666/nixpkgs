@@ -3,7 +3,7 @@
 
 { stdenv, lib, fetchzip,
   autoconf, automake, libtool,
-  cups, popt }:
+  cups, popt, libtiff, libpng }:
 
 stdenv.mkDerivation rec {
   name = "cnijfilter-${version}";
@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoconf libtool automake
-                  cups popt ];
+                  cups popt libtiff libpng ];
 
-  patches = [ ./patches/missing-include.patch ];
+  patches = [ ./patches/missing-include.patch
+              ./patches/libpng15.patch ];
 
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
