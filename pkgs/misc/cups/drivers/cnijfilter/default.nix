@@ -25,27 +25,46 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    for dir in libs cngpij pstocanonij backend; do
-      cd $dir;
-      ./autogen.sh --prefix=$out;
-      cd ..;
-    done;
+    cd libs
+    ./autogen.sh --prefix=$out;
 
-    cd ppd;
-    ./autogen.sh --prefix=$out --program-suffix=mp520;
+    cd ../cngpij
+    ./autogen.sh --prefix=$out --enable-progpath=$out/bin;
+
+    cd ../pstocanonij
+    ./autogen.sh --prefix=$out --enable-progpath=$out/bin;
+
+    cd ../backend
+    ./autogen.sh --prefix=$out;
     cd ..;
   '';
 
-  postBuild = ''
-    cd ppd;
-    make;
-    cd ..;
+  preInstall = ''
+    mkdir -p $out/bin $out/lib/cups/filter $out/share/cups/model;
   '';
 
   postInstall = ''
-    cd ppd;
-    make install;
-    cd ..;
+    for pr in mp140 mp210 ip3500 mp520 ip4500 mp610; do
+      cd ppd;
+      ./autogen.sh --prefix=$out --program-suffix=$pr
+      make clean;
+      make;
+      make install DESTDIR=$out;
+
+      cd ../cnijfilter;
+      ./autogen.sh --prefix=$out --program-suffix=$pr --enable-libpath=$out/lib/bjlib --enable-binpath=$out/bin;
+      make clean;
+      make;
+      make install;
+
+      cd ..;
+    done;
+
+    mkdir -p $out/lib/bjlib;
+    for pr_id in 315 316 319 328 326 327; do
+      install -c -m 755 $pr_id/database/* $out/lib/bjlib;
+      install -c -s -m 755 $pr_id/libs_bin/*.so.* $out/lib;
+    done;
   '';
 
   meta = with lib; {
