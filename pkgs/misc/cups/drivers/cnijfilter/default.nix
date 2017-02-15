@@ -1,8 +1,8 @@
 # { stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
 # , withDebug ? false }:
 
-{ stdenv, lib, fetchurl,
-  autoconf, automake, libtool, rpm,
+{ stdenv, lib, fetchzip,
+  autoconf, automake, libtool,
   cups, popt }:
 
 stdenv.mkDerivation rec {
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
 
   version = "2.80";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "http://gdlp01.c-wss.com/gds/1/0100000841/01/cnijfilter-common-2.80-1.tar.gz";
-    sha256 = "1qb4kwi1j86vj0cr0rx71avks8x5nbzzlc5gykcc3pyfrz4malqp";
+    sha256 = "06s9nl155yxmx56056y22kz1p5b2sb5fhr3gf4ddlczjkd1xch53";
   };
 
   buildInputs = [ autoconf libtool automake
-                  cups popt rpm ];
+                  cups popt ];
 
   patches = [ ./patches/missing-include.patch ];
 
@@ -24,13 +24,28 @@ stdenv.mkDerivation rec {
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
   '';
 
-  buildPhase = ''
-    echo build phase;
-    pwd;
-    ls -al;
-    mkdir -pv rpmbuild/SOURCES;
-    cp -iv $src rpmbuild/SOURCES/cnijfilter-common-2.80-1.tar.gz;
-    rpmbuild --define '_topdir rpmbuild' -bi cnijfilter-common.spec;
+  configurePhase = ''
+    for dir in libs cngpij pstocanonij backend; do
+      cd $dir;
+      ./autogen.sh --prefix=$out;
+      cd ..;
+    done;
+
+    cd ppd;
+    ./autogen.sh --prefix=$out --program-suffix=mp520;
+    cd ..;
+  '';
+
+  postBuild = ''
+    cd ppd;
+    make;
+    cd ..;
+  '';
+
+  postInstall = ''
+    cd ppd;
+    make install;
+    cd ..;
   '';
 
   meta = with lib; {
