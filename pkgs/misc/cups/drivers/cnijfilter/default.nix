@@ -21,11 +21,17 @@ stdenv.mkDerivation rec {
   patches = [ ./patches/missing-include.patch
               ./patches/libpng15.patch ];
 
+  #NIX_LDFLAGS = "-L $out/lib -rpath $out/lib";
+
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
   '';
 
   configurePhase = ''
+    echo flags before $NIX_LDFLAGS;
+    export NIX_LDFLAGS="$NIX_LDFLAGS -L $out/lib -rpath $out/lib";
+    echo flags after $NIX_LDFLAGS;
+
     cd libs
     ./autogen.sh --prefix=$out;
 
