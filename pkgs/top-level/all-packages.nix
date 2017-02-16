@@ -18255,9 +18255,7 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
-  cnijfilter = callPackage ../misc/cups/drivers/cnijfilter {
-    stdenv = stdenv_32bit;
-  };
+  cnijfilter = callPackage_i686 ../misc/cups/drivers/cnijfilter { };
 
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
     libusb = libusb1;
