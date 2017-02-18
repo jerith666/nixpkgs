@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
+    sed -i "s|/usr|$out|" backend/src/cnij_backend_common.c;
     sed -i "s|/usr/bin|${ghostscript}/bin|" pstocanonij/filter/pstocanonij.c;
+    sed -i "s|/usr/local|$out|" libs/bjexec/bjexec.c;
   '';
 
   configurePhase = ''
