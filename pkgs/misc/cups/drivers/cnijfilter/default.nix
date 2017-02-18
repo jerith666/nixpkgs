@@ -21,16 +21,12 @@ stdenv.mkDerivation rec {
   patches = [ ./patches/missing-include.patch
               ./patches/libpng15.patch ];
 
-  #NIX_LDFLAGS = "-L " ++ out ++"/lib -rpath " ++ out ++ "/lib";
-
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
   '';
 
   configurePhase = ''
-    echo flags before $NIX_LDFLAGS;
     export NIX_LDFLAGS="-L$out/lib -rpath $out/lib $NIX_LDFLAGS";
-    echo flags configurePhase $NIX_LDFLAGS;
 
     cd libs
     ./autogen.sh --prefix=$out;
@@ -47,29 +43,24 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    mkdir -pv $out/lib/bjlib;
-    echo flags preBuild $NIX_LDFLAGS;
+    mkdir -p $out/lib/bjlib;
     for pr_id in 315 316 319 328 326 327; do
-      install -v -c -m 755 $pr_id/database/* $out/lib/bjlib;
-      install -v -c -s -m 755 $pr_id/libs_bin/*.so.* $out/lib;
+      install -c -m 755 $pr_id/database/* $out/lib/bjlib;
+      install -c -s -m 755 $pr_id/libs_bin/*.so.* $out/lib;
     done;
-    find $out/lib -type f;
+
     pushd $out/lib;
     for so_file in *.so.*; do
-      echo ln -v -s $so_file ''${so_file/.so.*/}.so;
-      ln -v -s $so_file ''${so_file/.so.*/}.so;
+      ln -s $so_file ''${so_file/.so.*/}.so;
     done;
     popd;
-    find $out/lib -type f;
   '';
 
   preInstall = ''
-    echo flags preInstall $NIX_LDFLAGS;
     mkdir -p $out/bin $out/lib/cups/filter $out/share/cups/model;
   '';
 
   postInstall = ''
-    echo flags postInstall $NIX_LDFLAGS;
     for pr in mp140 mp210 ip3500 mp520 ip4500 mp610; do
       cd ppd;
       ./autogen.sh --prefix=$out --program-suffix=$pr
