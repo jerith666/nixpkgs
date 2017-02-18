@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export NIX_LDFLAGS="-L$out/lib -rpath $out/lib $NIX_LDFLAGS";
-
     cd libs
     ./autogen.sh --prefix=$out;
 
