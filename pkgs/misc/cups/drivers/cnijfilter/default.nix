@@ -42,20 +42,6 @@ stdenv.mkDerivation rec {
     cd ..;
   '';
 
-  preBuild = ''
-    mkdir -p $out/lib/bjlib;
-    for pr_id in 315 316 319 328 326 327; do
-      install -c -m 755 $pr_id/database/* $out/lib/bjlib;
-      install -c -s -m 755 $pr_id/libs_bin/*.so.* $out/lib;
-    done;
-
-    pushd $out/lib;
-    for so_file in *.so.*; do
-      ln -s $so_file ''${so_file/.so.*/}.so;
-    done;
-    popd;
-  '';
-
   preInstall = ''
     mkdir -p $out/bin $out/lib/cups/filter $out/share/cups/model;
   '';
@@ -76,6 +62,18 @@ stdenv.mkDerivation rec {
 
       cd ..;
     done;
+
+    mkdir -p $out/lib/bjlib;
+    for pr_id in 315 316 319 328 326 327; do
+      install -c -m 755 $pr_id/database/* $out/lib/bjlib;
+      install -c -s -m 755 $pr_id/libs_bin/*.so.* $out/lib;
+    done;
+
+    pushd $out/lib;
+    for so_file in *.so.*; do
+      ln -s $so_file ''${so_file/.so.*/}.so;
+    done;
+    popd;
   '';
 
   meta = with lib; {
