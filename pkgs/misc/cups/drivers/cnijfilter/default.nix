@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       make install;
 
       cd ../cnijfilter;
-      ./autogen.sh --prefix=$out --program-suffix=$pr --enable-libpath=$out/lib/bjlib --enable-binpath=$out/bin;
+      ./autogen.sh --prefix=$out --program-suffix=$pr --enable-libpath=/var/lib/cups/path/lib/bjlib --enable-binpath=$out/bin;
       make clean;
       make;
       make install;
