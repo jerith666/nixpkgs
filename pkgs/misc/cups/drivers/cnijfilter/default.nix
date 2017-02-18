@@ -3,7 +3,8 @@
 
 { stdenv, lib, fetchzip,
   autoconf, automake, libtool,
-  cups, popt, libtiff, libpng }:
+  cups, popt, libtiff, libpng,
+  ghostscript }:
 
 stdenv.mkDerivation rec {
   name = "cnijfilter-${version}";
@@ -16,13 +17,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ autoconf libtool automake
-                  cups popt libtiff libpng ];
+                  cups popt libtiff libpng
+                  ghostscript ];
 
   patches = [ ./patches/missing-include.patch
               ./patches/libpng15.patch ];
 
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
+    sed -i "s|/usr/bin|${ghostscript}/bin|" pstocanonij/filter/pstocanonij.c;
   '';
 
   configurePhase = ''
