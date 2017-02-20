@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DDEBUG -DDEBUG_LOG -D__DEBUG__";
+
     cd libs
     ./autogen.sh --prefix=$out;
 
