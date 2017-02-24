@@ -41,6 +41,7 @@
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
+  ./hardware/video/capture/mwprocapture.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/displaylink.nix
   ./hardware/video/nvidia.nix
@@ -80,6 +81,7 @@
   ./programs/light.nix
   ./programs/man.nix
   ./programs/mosh.nix
+  ./programs/mtr.nix
   ./programs/nano.nix
   ./programs/oblogout.nix
   ./programs/screen.nix
@@ -91,6 +93,7 @@
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/wireshark.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
@@ -113,7 +116,7 @@
   ./security/prey.nix
   ./security/rngd.nix
   ./security/rtkit.nix
-  ./security/setuid-wrappers.nix
+  ./security/wrappers/default.nix
   ./security/sudo.nix
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
@@ -141,6 +144,7 @@
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildbot/master.nix
+  ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -206,6 +210,7 @@
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
+  ./services/hardware/trezord.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
@@ -258,6 +263,7 @@
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
   ./services/misc/gammu-smsd.nix
+  ./services/misc/geoip-updater.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
@@ -292,6 +298,7 @@
   ./services/misc/siproxd.nix
   ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
+  ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
@@ -445,6 +452,7 @@
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
+  ./services/networking/redsocks.nix
   ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
@@ -557,7 +565,6 @@
   ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
-  ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/lightdm.nix
   ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
@@ -643,6 +650,7 @@
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
   ./virtualisation/docker.nix
+  ./virtualisation/ecs-agent.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/lxc.nix
   ./virtualisation/lxcfs.nix
