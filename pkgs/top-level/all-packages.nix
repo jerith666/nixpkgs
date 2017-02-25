@@ -359,6 +359,8 @@ with pkgs;
 
   aescrypt = callPackage ../tools/misc/aescrypt { };
 
+  afio = callPackage ../tools/archivers/afio { };
+
   afl = callPackage ../tools/security/afl { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };
@@ -1432,6 +1434,8 @@ with pkgs;
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsperf = callPackage ../tools/networking/dnsperf { };
+
   dnstop = callPackage ../tools/networking/dnstop { };
 
   dhcp = callPackage ../tools/networking/dhcp { };
@@ -1448,7 +1452,6 @@ with pkgs;
 
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
-    pythonPackages = python3Packages;
   };
 
   diffstat = callPackage ../tools/text/diffstat { };
@@ -2008,6 +2011,9 @@ with pkgs;
   grails = callPackage ../development/web/grails { jdk = null; };
 
   graylog = callPackage ../tools/misc/graylog { };
+  graylogPlugins = recurseIntoAttrs (
+    callPackage ../tools/misc/graylog/plugins.nix { }
+  );
 
   gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
     # Using pypy provides significant performance improvements (~2x)
@@ -4136,6 +4142,8 @@ with pkgs;
 
   tryton = callPackage ../applications/office/tryton { };
 
+  trytond = callPackage ../applications/office/trytond { };
+
   omapd = callPackage ../tools/security/omapd { };
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
@@ -4227,6 +4235,8 @@ with pkgs;
     inherit (gnome2) scrollkeeper;
     inherit (gnome3) gexiv2;
   };
+
+  vim-vint = callPackage ../development/tools/vim-vint { };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -4768,7 +4778,14 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) compcert;
+  compcert = callPackage ../development/compilers/compcert ((
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  ) // {
+    coq = coq_8_6;
+  });
+
 
   # Users installing via `nix-env` will likely be using the REPL,
   # which has a hard dependency on Z3, so make sure it is available.
@@ -5808,8 +5825,7 @@ with pkgs;
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php71;
-
-  phpPackages = php70Packages;
+  phpPackages = php71Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -6699,7 +6715,12 @@ with pkgs;
 
   shards = callPackage ../development/tools/build-managers/shards { };
 
-  shellcheck = self.haskellPackages.ShellCheck;
+  shellcheck = haskell.lib.overrideCabal haskellPackages.ShellCheck (drv: {
+    isLibrary = false;
+    enableSharedExecutables = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  });
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -7273,6 +7294,8 @@ with pkgs;
 
   freetts = callPackage ../development/libraries/freetts { };
 
+  fstrm = callPackage ../development/libraries/fstrm { };
+
   cfitsio = callPackage ../development/libraries/cfitsio { };
 
   fontconfig_210 = callPackage ../development/libraries/fontconfig/2.10.nix { };
@@ -7539,11 +7562,7 @@ with pkgs;
 
   gnu-efi = callPackage ../development/libraries/gnu-efi { };
 
-  gnutls = gnutls34;
-
-  gnutls34 = callPackage ../development/libraries/gnutls/3.4.nix {
-    guileBindings = config.gnutls.guile or false;
-  };
+  gnutls = gnutls35;
 
   gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
     guileBindings = config.gnutls.guile or false;
@@ -8926,6 +8945,8 @@ with pkgs;
   nanoflann = callPackage ../development/libraries/nanoflann { };
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
+
+  ndpi = callPackage ../development/libraries/ndpi { };
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
@@ -10572,7 +10593,7 @@ with pkgs;
 
   mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
-  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.2.0.nix { };
 
   riak-cs = callPackage ../servers/nosql/riak-cs/2.1.1.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
@@ -10865,7 +10886,8 @@ with pkgs;
     python = python2; # Incompatible with Python 3x
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
-    abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
+    abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
+      or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
   } // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
@@ -11476,6 +11498,8 @@ with pkgs;
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
     seturgent = callPackage ../os-specific/linux/seturgent { };
+
+    sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
     inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
@@ -12330,6 +12354,8 @@ with pkgs;
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
   stix-otf = callPackage ../data/fonts/stix-otf { };
+
+  stix-two = callPackage ../data/fonts/stix-two { };
 
   inherit (callPackages ../data/fonts/gdouros { })
     symbola aegyptus akkadian anatolian maya unidings musica analecta;
@@ -14420,8 +14446,6 @@ with pkgs;
 
   pig = callPackage ../applications/networking/cluster/pig { };
 
-  pijul = callPackage ../applications/version-management/pijul { };
-
   planner = callPackage ../applications/office/planner { };
 
   playonlinux = callPackage ../applications/misc/playonlinux {
@@ -14764,6 +14788,8 @@ with pkgs;
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
 
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
+
+  pymol = callPackage ../applications/science/chemistry/pymol { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
