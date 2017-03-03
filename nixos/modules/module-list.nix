@@ -38,6 +38,7 @@
   ./hardware/network/rtl8192c.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -105,6 +106,7 @@
   ./security/audit.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
