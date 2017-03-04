@@ -119,7 +119,7 @@ self: super: {
   diagrams = dontHaddock super.diagrams;
   either = dontHaddock super.either;
   feldspar-signal = dontHaddock super.feldspar-signal; # https://github.com/markus-git/feldspar-signal/issues/1
-  gl = dontHaddock super.gl;
+  gl = doJailbreak (dontHaddock super.gl); # jailbreak fixed in unreleased (2017-03-01) https://github.com/ekmett/gl/commit/885e08a96aa53d80c3b62e157b20d2f05e34f133
   groupoids = dontHaddock super.groupoids;
   hamlet = dontHaddock super.hamlet;
   HaXml = dontHaddock super.HaXml;
@@ -689,6 +689,10 @@ self: super: {
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = disableHardening (addBuildTool super.pango self.gtk2hs-buildtools) ["fortify"];
+  gtk =
+    if pkgs.stdenv.isDarwin
+    then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
+    else super.gtk;
 
   # https://github.com/commercialhaskell/stack/issues/3001
   stack = doJailbreak super.stack;
@@ -864,4 +868,18 @@ self: super: {
 
   # https://github.com/jswebtools/language-ecmascript/pull/81
   language-ecmascript = doJailbreak super.language-ecmascript;
+
+  # https://github.com/choener/DPutils/pull/1
+  DPutils = doJailbreak super.DPutils;
+
+  # fixed in unreleased (2017-03-01) https://github.com/ekmett/machines/commit/5463cf5a69194faaec2345dff36469b4b7a8aef0
+  machines = doJailbreak super.machines;
+
+  # fixed in unreleased (2017-03-01) https://github.com/choener/OrderedBits/commit/7b9c6c6c61d9acd0be8b38939915d287df3c53ab
+  OrderedBits = doJailbreak super.OrderedBits;
+
+  # https://github.com/haskell-distributed/rank1dynamic/issues/17
+  rank1dynamic = doJailbreak super.rank1dynamic;
+
+  cabal-lenses = doJailbreak super.cabal-lenses;
 }
