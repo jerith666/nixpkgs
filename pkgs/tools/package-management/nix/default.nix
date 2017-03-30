@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -21,7 +21,8 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optional (stdenv.isLinux && lib.versionAtLeast version "1.12pre")
+      ++ lib.optional fromGit brotli # Since 1.12
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
@@ -103,21 +104,21 @@ in rec {
   nix = nixStable;
 
   nixStable = common rec {
-    name = "nix-1.11.7";
+    name = "nix-1.11.8";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "1a6fd2a23f5fde614c3937c0d51eff46d28dd30d245a66d34d59b15fd9bb8f2d";
+      sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
     };
   };
 
   nixUnstable = lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5060_fa125b9";
+    suffix = "pre5110_165786d";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "fa125b9b28bea25a4eeb4d39a71a481563127cb9";
-      sha256 = "1l7prlki3rjw3i119cizqqkpqg4p3hvym103x7hddimwpzwkw756";
+      rev = "165786dbc0ca0b93fadb6e491defac603475b601";
+      sha256 = "0ah68ss5wlpgfpc4k7yl2h3szbwgllyn5d6s464vynaig6b165pz";
     };
     fromGit = true;
   });

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, intltool, curl
+{ stdenv, fetchurl, python2Packages, intltool, curl, file
 , wrapGAppsHook, virtinst, gtkvnc, vte
 , gtk3, gobjectIntrospection, libvirt-glib, gsettings_desktop_schemas, glib
 , avahi, dconf, spiceSupport ? true, spice_gtk, libosinfo, gnome3, system-libvirt
@@ -9,12 +9,12 @@ with python2Packages;
 
 buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.4.0";
+  version = "1.4.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1jnawqjmcqd2db78ngx05x7cxxn3iy1sb4qfgbwcn045qh6a8cdz";
+    sha256 = "0i1rkxz730vw1nqghrp189jhhp53pw81k0h71hhxmyqlkyclkig6";
   };
 
   propagatedBuildInputs =
@@ -27,7 +27,7 @@ buildPythonApplication rec {
       wrapGAppsHook
     ] ++ optional spiceSupport spice_gtk;
 
-  buildInputs = [ dconf avahi intltool ];
+  buildInputs = [ dconf avahi intltool file ];
 
   patchPhase = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
@@ -54,6 +54,6 @@ buildPythonApplication rec {
       manages Xen and LXC (linux containers).
     '';
     license = licenses.gpl2;
-    maintainers = with maintainers; [qknight offline];
+    maintainers = with maintainers; [ qknight offline fpletz ];
   };
 }
