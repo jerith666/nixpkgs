@@ -220,7 +220,7 @@ let
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps ++ optional v.rstp "mstpd.service";
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
-            after = [ "network-pre.target" "mstpd.service" ] ++ deps
+            after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
             before = [ "network-setup.service" (subsystemDevice n) ];
             serviceConfig.Type = "oneshot";
@@ -239,6 +239,10 @@ let
                 ip link set "${i}" master "${n}"
                 ip link set "${i}" up
               '')}
+              # Save list of enslaved interfaces
+              echo "${flip concatMapStrings v.interfaces (i: ''
+                ${i}
+              '')}" > /run/${n}.interfaces
 
               # Enable stp on the interface
               ${optionalString v.rstp ''
@@ -250,7 +254,28 @@ let
             postStop = ''
               ip link set "${n}" down || true
               ip link del "${n}" || true
+              rm -f /run/${n}.interfaces
             '';
+            reload = ''
+              # Un-enslave child interfaces (old list of interfaces)
+              for interface in `cat /run/${n}.interfaces`; do
+                ip link set "$interface" nomaster up
+              done
+
+              # Enslave child interfaces (new list of interfaces)
+              ${flip concatMapStrings v.interfaces (i: ''
+                ip link set "${i}" master "${n}"
+                ip link set "${i}" up
+              '')}
+              # Save list of enslaved interfaces
+              echo "${flip concatMapStrings v.interfaces (i: ''
+                ${i}
+              '')}" > /run/${n}.interfaces
+
+              # (Un-)set stp on the bridge
+              echo ${if v.rstp then "2" else "0"} > /sys/class/net/${n}/bridge/stp_state
+            '';
+            reloadIfChanged = true;
           });
 
         createVswitchDevice = n: v: nameValuePair "${n}-netdev"

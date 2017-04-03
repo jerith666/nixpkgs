@@ -2,7 +2,7 @@
 , qtscriptgenerator, gettext, curl , libxml2, mysql, taglib
 , taglib_extras, loudmouth , kdelibs4, qca2, libmtp, liblastfm, libgpod
 , phonon , strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null
-, lz4, lzo, snappy, libaio, pcre, makeWrapper
+, lz4, lzo, snappy, libaio, pcre
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.server/*libmysqld*/
     taglib taglib_extras loudmouth kdelibs4 phonon strigi soprano qca2
     libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
-    lz4 lzo snappy libaio pcre makeWrapper
+    lz4 lzo snappy libaio pcre
   ];
 
   # This is already fixed upstream, will be release in 2.9
@@ -33,13 +33,6 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
-
-  #this avoids the error
-  #MySQLe query failed! (2000) Can't find messagefile '/not/a/real/dir/share/mysql/errmsg.sys' on init
-  #due to mariadb/default.nix setting DEFAULT_MYSQL_HOME
-  postInstall = ''
-    wrapProgram $out/bin/amarok --set MY_BASEDIR_VERSION ${mysql.out}
-  '';
 
   enableParallelBuilding = true;
 

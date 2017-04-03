@@ -4,6 +4,7 @@
 , xkb_switch, rustracerd, fzf
 , python3, boost, icu
 , ycmd
+, pythonPackages, python3Packages
 , Cocoa ? null
 }:
 
@@ -344,6 +345,18 @@ rec {
 
   };
 
+  ensime-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "ensime-vim-2017-02-06";
+    src = fetchgit {
+      url = "git://github.com/ensime/ensime-vim";
+      rev = "7b5f79c67a078c6e1e5f8c906d4227ce86d33df8";
+      sha256 = "04knizaa4gc1z22gxj41qybjl4ysqpv15rwi28h10l7gk9fb1b41";
+    };
+    dependencies = ["vimproc" "vimshell" "self" "forms"];
+
+    pythonDependencies = with pythonPackages; [ sexpdata websocket_client ];
+  };
+
   extradite = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "extradite-2015-09-22";
     src = fetchgit {
@@ -352,6 +365,17 @@ rec {
       sha256 = "0c89i0spvdm9vi65q15qcmsfmwa9rds2wmaq1kf6s7q7ywvs6w8i";
     };
     dependencies = [];
+
+  };
+
+  forms = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "forms-2012-11-28";
+    src = fetchgit {
+      url = "git://github.com/megaannum/forms";
+      rev = "b601e03fe0a3b8a43766231f4a6217e4492b4f75";
+      sha256 = "19kp1i5c6jmnpbsap9giayqbzlv7vh02mp4mjvicqj9n0nfyay74";
+    };
+    dependencies = ["self"];
 
   };
 
@@ -1154,6 +1178,17 @@ rec {
     '';
   };
 
+  self = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "self-2014-05-28";
+    src = fetchgit {
+      url = "git://github.com/megaannum/self";
+      rev = "2ed666b547eddee6ae1fcc63babca4ba0b66a59f";
+      sha256 = "1gcwn6i5i3msg7hrlzsnv1bs6pm4jz9cff8ppaz2xdj8xv9qy6fn";
+    };
+    dependencies = [];
+
+  };
+
   shabadou-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "shabadou-vim-2016-07-19";
     src = fetchgit {
@@ -1493,11 +1528,11 @@ rec {
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2017-02-27";
+    name = "youcompleteme-2017-03-28";
     src = fetchgit {
       url = "https://github.com/valloric/youcompleteme";
-      rev = "39659caf34c664c7419cadb41cb813158e0749fa";
-      sha256 = "0rl8fxcwcj61bj8b2qcnwfipcnf1nb47bvb52sv68sf9v78qa7sx";
+      rev = "03ba8a80cd04e2e051bb85eacaea802ca3c4d025";
+      sha256 = "1f44bxl4phk79p4n19p0qx5506hkhms77zi4x0sh0gh389xwxmv5";
     };
     dependencies = [];
     buildPhase = ''

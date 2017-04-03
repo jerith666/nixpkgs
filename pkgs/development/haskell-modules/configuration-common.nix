@@ -55,6 +55,7 @@ self: super: {
 
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
+  mysql-haskell = dontCheck super.mysql-haskell;
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
@@ -448,6 +449,16 @@ self: super: {
   apiary-session = dontCheck super.apiary-session;
   apiary-websockets = dontCheck super.apiary-websockets;
 
+  # See instructions provided by Peti in https://github.com/NixOS/nixpkgs/issues/23036
+  purescript = super.purescript.overrideScope (self: super: {
+    # TODO: Re-evaluate the following overrides after the 0.11 release.
+    aeson = self.aeson_0_11_3_0;
+    http-client = self.http-client_0_4_31_2;
+    http-client-tls = self.http-client-tls_0_2_4_1;
+    pipes = self.pipes_4_2_0;
+    websockets = self.websockets_0_9_8_2;
+  });
+
   # HsColour: Language/Unlambda.hs: hGetContents: invalid argument (invalid byte sequence)
   unlambda = dontHyperlinkSource super.unlambda;
 
@@ -470,17 +481,6 @@ self: super: {
 
   # https://github.com/afcowie/locators/issues/1
   locators = dontCheck super.locators;
-
-  # https://github.com/haskell/haddock/issues/378
-  haddock-library = dontCheck super.haddock-library;
-
-  # https://github.com/haskell/haddock/issues/571
-  haddock-api = appendPatch (doJailbreak super.haddock-api) (pkgs.fetchpatch {
-    url = "https://github.com/basvandijk/haddock/commit/f4c5e46ded05a4b8884f5ad6f3102f79ff3bb127.patch";
-    sha256 = "01dawvikzw6y43557sbp9q7z9vw2g3wnzvv5ny0f0ks6ccc0vj0m";
-    stripLen = 2;
-    addPrefixes = true;
-  });
 
   # https://github.com/anton-k/csound-expression-dynamic/issues/1
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
@@ -624,20 +624,6 @@ self: super: {
     haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
 
-  # https://github.com/yesodweb/Shelly.hs/issues/106
-  # https://github.com/yesodweb/Shelly.hs/issues/108
-  # https://github.com/yesodweb/Shelly.hs/issues/130
-  shelly =
-    let drv = appendPatch (dontCheck (doJailbreak super.shelly)) (pkgs.fetchpatch {
-                url = "https://github.com/k0001/Shelly.hs/commit/32a1e290961755e7b2379f59faa49b13d03dfef6.patch";
-                sha256 = "0ccq0qly8bxxv64dk97a44ng6hb01j6ajs0sp3f2nn0hf5j3xv69";
-              });
-    in overrideCabal drv (drv : {
-         # doJailbreak doesn't seem to work for build-depends inside an
-         # if-then-else block so we have to do it manually.
-         postPatch = "sed -i 's/base >=4\.6 \&\& <4\.9\.1/base -any/' shelly.cabal";
-       });
-
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
 
@@ -756,6 +742,9 @@ self: super: {
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
 
+  # fails with sandbox
+  yi-keymap-vim = dontCheck super.yi-keymap-vim;
+
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
 
@@ -828,12 +817,6 @@ self: super: {
   # https://github.com/xmonad/xmonad-extras/issues/3
   xmonad-extras = doJailbreak super.xmonad-extras;
 
-  # https://github.com/bmillwood/pointfree/issues/21
-  pointfree = appendPatch super.pointfree (pkgs.fetchpatch {
-    url = "https://github.com/bmillwood/pointfree/pull/22.patch";
-    sha256 = "04q0b5d78ill2yrpflkphvk2y38qc50si2qff4bllp47wj42aqmp";
-  });
-
   # https://github.com/int-e/QuickCheck-safe/issues/2
   QuickCheck-safe = doJailbreak super.QuickCheck-safe;
 
@@ -876,7 +859,10 @@ self: super: {
   # https://github.com/diagrams/diagrams-lib/issues/288
   diagrams-lib = overrideCabal super.diagrams-lib (drv: { doCheck = !pkgs.stdenv.isi686; });
 
-  # https://github.com/cartazio/arithmoi/issues/49
-  arithmoi = overrideCabal super.arithmoi (drv: { doCheck = !pkgs.stdenv.isi686; });
+  # https://github.com/danidiaz/streaming-eversion/issues/1
+  streaming-eversion = dontCheck super.streaming-eversion;
 
+  # strict-io is too cautious with it's deepseq dependency
+  # strict-io doesn't have a working bug tracker, the author has been emailed however.
+  strict-io = doJailbreak super.strict-io;
 }
