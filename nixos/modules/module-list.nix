@@ -130,6 +130,7 @@
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
   ./services/audio/mopidy.nix
+  ./services/audio/slimserver.nix
   ./services/audio/squeezelite.nix
   ./services/audio/ympd.nix
   ./services/backup/almir.nix
@@ -138,7 +139,6 @@
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
-  ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
@@ -249,6 +249,7 @@
   ./services/mail/rmilter.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
+  ./services/misc/autorandr.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
@@ -457,7 +458,7 @@
   ./services/networking/prayer.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
-  ./services/networking/quagga.nix
+  # ./services/networking/quagga.nix
   ./services/networking/quassel.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -531,6 +532,7 @@
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
+  ./services/system/earlyoom.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
@@ -658,6 +660,7 @@
   ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./tasks/trackpoint.nix
+  ./tasks/powertop.nix
   ./testing/service-runner.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
