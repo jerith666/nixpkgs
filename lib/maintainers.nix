@@ -238,6 +238,7 @@
   jgillich = "Jakob Gillich <jakob@gillich.me>";
   jhhuh = "Ji-Haeng Huh <jhhuh.note@gmail.com>";
   jirkamarsik = "Jirka Marsik <jiri.marsik89@gmail.com>";
+  jlesquembre = "José Luis Lafuente <jl@lafuente.me>";
   joachifm = "Joachim Fasting <joachifm@fastmail.fm>";
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
@@ -451,7 +452,7 @@
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rongcuid = "Rongcui Dong <rongcuid@outlook.com>";
   ronny = "Ronny Pfannschmidt <nixos@ronnypfannschmidt.de>";
-  rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
+  rszibele = "Richard Szibele <richard@szibele.com>";
   rtreffer = "Rene Treffer <treffer+nixos@measite.de>";
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
@@ -461,6 +462,7 @@
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   ryneeverett = "Ryne Everett <ryneeverett@gmail.com>";
+  rzetterberg = "Richard Zetterberg <richard.zetterberg@gmail.com>";
   s1lvester = "Markus Silvester <s1lvester@bockhacker.me>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
