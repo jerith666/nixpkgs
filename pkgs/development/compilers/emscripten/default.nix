@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
 
 let
-  rev = "1.37.3";
+  rev = "1.37.10";
   appdir = "share/emscripten";
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "0pkxm8nd2zv57f2xm0c3n4xsdh2scliyy3zx04xk2bpkvskyzl7x";
+    sha256 = "08f3zagxzsj96i09gjg1djd1bmy1gr1ar8n96mzg3ykaygf82d0s";
     inherit rev;
   };
 

@@ -118,6 +118,8 @@ let
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preBuild = "unset NIX_INDENT_MAKE";
   };
 
 in rec {
@@ -125,18 +127,19 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.8";
+    name = "nix-1.11.9";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
+      sha256 = "0e943e277f37843f9196b0293cc31d828613ad7a328ee77cd5be01935dc6e7e1";
     };
 
-    # 1.11.8 doesn't yet have the patch to work on LLVM 4, so we patch it for now. Take this out once
-    # we move to a higher version. I'd pull the specific patch from upstream but it doesn't apply cleanly.
+    # Until 1.11.9 is released, we do this :)
     patchPhase = ''
       substituteInPlace src/libexpr/json-to-value.cc \
         --replace 'std::less<Symbol>, gc_allocator<Value *>' \
                   'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
+
+      sed -i '/if (settings.readOnlyMode) {/a curSchema = getSchema();' src/libstore/local-store.cc
     '';
   }) // { perl-bindings = nixStable; };
 

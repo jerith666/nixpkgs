@@ -38,7 +38,7 @@ rec {
   /* Merge two attribute sets shallowly, right side trumps left
 
      Example:
-       mergeAttrs { a = 1; b = 2; } // { b = 3; c = 4; }
+       mergeAttrs { a = 1; b = 2; } { b = 3; c = 4; }
        => { a = 1; b = 3; c = 4; }
   */
   mergeAttrs = x: y: x // y;
@@ -121,6 +121,9 @@ rec {
 
   # Flip the order of the arguments of a binary function.
   flip = f: a: b: f b a;
+
+  # Apply function if argument is non-null
+  mapNullable = f: a: if isNull a then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
