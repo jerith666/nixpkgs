@@ -13427,7 +13427,7 @@ with pkgs;
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { webkitgtk2 = null; });
+  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
