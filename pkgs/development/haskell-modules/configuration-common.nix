@@ -229,6 +229,7 @@ self: super: {
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
   postgrest = dontCheck super.postgrest;
+  postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
   sophia = dontCheck super.sophia;
   test-sandbox = dontCheck super.test-sandbox;
@@ -682,6 +683,9 @@ self: super: {
     store-core = self.store-core_0_3;
     store = self.store_0_3_1;
   });
+
+  # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
+  intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
 
   # The latest Hoogle needs versions not yet in LTS Haskell 7.x.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_19_1; };
