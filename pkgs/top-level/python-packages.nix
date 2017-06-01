@@ -640,23 +640,7 @@ in {
   };
 
 
-  alembic = buildPythonPackage rec {
-    name = "alembic-0.8.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/alembic/${name}.tar.gz";
-      sha256 = "1sgwvwylzd5h14130mwr0cbyy0fil0a1bq0d0ki97wqvkic3db7f";
-    };
-
-    buildInputs = with self; [ pytest pytestcov mock coverage ];
-    propagatedBuildInputs = with self; [ Mako sqlalchemy python-editor ];
-
-    meta = {
-      homepage = http://bitbucket.org/zzzeek/alembic;
-      description = "A database migration tool for SQLAlchemy";
-      license = licenses.mit;
-    };
-  };
+  alembic = callPackage ../development/python-modules/alembic {};
 
   ansicolors = buildPythonPackage rec {
     name    = "ansicolors-${version}";
@@ -1154,6 +1138,8 @@ in {
       homepage = "https://github.com/kennethreitz/args";
     };
   };
+
+  argcomplete = callPackage ../development/python-modules/argcomplete { };
 
   area53 = buildPythonPackage (rec {
     name = "Area53-0.94";
@@ -6295,6 +6281,8 @@ in {
       nosetests -v --cover-min-percentage 1
     '';
 
+    doCheck = false;
+
     buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
 
     meta = {
@@ -8197,6 +8185,8 @@ in {
   };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4.nix { };
+
+  Nikola = callPackage ../development/python-modules/Nikola { };
 
   nxt-python = buildPythonPackage rec {
     version = "unstable-20160819";
@@ -10191,28 +10181,10 @@ in {
     };
   };
 
-  django_hijack = buildPythonPackage rec {
-    name = "django-hijack-${version}";
-    version = "2.0.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-hijack/${name}.tar.gz";
-      sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
-    };
-
-    # TODO improve the that multi-override necessity (the fixpoint based python
-    # packages work can be the solution)
-    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
-      django = django_1_9;
-      django_nose = django_nose.override { propagatedBuildInputs = [django_1_9 nose]; };
-    }) ];
-
-    meta = {
-      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
-      homepage = https://github.com/arteria/django-hijack;
-      license = licenses.mit;
-    };
-  };
+  # This package may need an older version of Django.
+  # Override the package set and set e.g. `django = super.django_1_9`.
+  # See the Nixpkgs manual for examples on how to override the package set.
+  django_hijack = callPackage ../development/python-modules/django-hijack { };
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
@@ -11048,30 +11020,7 @@ in {
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
-  flask_migrate = buildPythonPackage rec {
-    name = "Flask-Migrate-${version}";
-    version = "1.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Migrate/Flask-Migrate-1.7.0.tar.gz";
-      sha256 = "16d7vnaj9xmxvb3qbcmhahm3ldfdhzzi6y221h62x4v1v1jayx7v";
-    };
-
-    # When tests run with python3*, tests should run commands as "python3 <args>",
-    # not "python <args>"
-    patchPhase = ''
-      substituteInPlace tests/test_migrate.py --replace "python" "${python.executable}"
-      substituteInPlace tests/test_multidb_migrate.py --replace "python" "${python.executable}"
-    '';
-
-    propagatedBuildInputs = with self ; [ flask flask_sqlalchemy flask_script alembic ];
-
-    meta = {
-      description = "SQLAlchemy database migrations for Flask applications using Alembic";
-      license = licenses.mit;
-      homepage = https://github.com/miguelgrinberg/Flask-Migrate;
-    };
-  };
+  flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
 
@@ -13446,7 +13395,7 @@ in {
     };
   };
 
-  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_39;};
+  llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_4;};
 
   lockfile = buildPythonPackage rec {
     pname = "lockfile";
@@ -15530,26 +15479,7 @@ in {
     };
   };
 
-  emoji = buildPythonPackage rec {
-    name = "emoji-${version}";
-    version = "0.3.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/emoji/${name}.tar.gz";
-      sha256 = "19p5c2nlq0w9972rf9fghyswnijwgig5f8cyzs32kppnmzvzbkxw";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''nosetests'';
-
-    meta = {
-      description = "Emoji for Python";
-      homepage = https://pypi.python.org/pypi/emoji/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ joachifm ];
-    };
-  };
+  emoji = callPackage ../development/python-modules/emoji { };
 
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
@@ -17982,51 +17912,14 @@ in {
     };
   };
 
-  pgcli = buildPythonPackage rec {
-    name = "pgcli-${version}";
-    version = "1.3.1";
-
-    src = pkgs.fetchFromGitHub {
-      sha256 = "18i5pwli36d5d0xh1d7dc80iq85w7vcalphg8hipjclhg2h72bp0";
-      rev = "v${version}";
-      repo = "pgcli";
-      owner = "dbcli";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    checkPhase = ''
-      py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
-    '';
-
-    propagatedBuildInputs = with self; [
-      click configobj humanize prompt_toolkit psycopg2
-      pygments sqlparse pgspecial setproctitle
-    ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-      rm tests/test_rowlimit.py
-    '';
-
-    meta = {
-      description = "Command-line interface for PostgreSQL";
-      longDescription = ''
-        Rich command-line interface for PostgreSQL with auto-completion and
-        syntax highlighting.
-      '';
-      homepage = http://pgcli.com;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
-
   pgspecial = buildPythonPackage rec {
-    name = "pgspecial-${version}";
-    version = "1.6.0";
+    pname = "pgspecial";
+    version = "1.7.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      sha256 = "09ilalpgcl86f79648qsjm87dqi97bc70y51nrf0b3i1py3mhs2m";
-      url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0jnv8mr75pjhj2azb2ljhhkd7s1b0b59f7xps322kqbpmwf26zi9";
     };
 
     buildInputs = with self; [ pytest psycopg2 ];
@@ -18135,7 +18028,7 @@ in {
     # to force it a little.
     installFlags = [ "--ignore-installed" ];
 
-    buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
+    checkInputs = with self; [ mock scripttest virtualenv pretend pytest ];
     # Pip wants pytest, but tests are not distributed
     doCheck = false;
 
@@ -22659,7 +22552,8 @@ in {
       sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
     };
 
-    buildInputs = with self; [ pip pytest ];
+    buildInputs = with self; [ pip ];
+    checkInputs = with self; [ pytest ];
     # Seems to fail due to chroot
     doCheck = false;
 
@@ -22828,30 +22722,7 @@ in {
     };
   };
 
-  simplejson = buildPythonPackage (rec {
-    name = "simplejson-3.8.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/simplejson/${name}.tar.gz";
-      sha256 = "14r4l4rcsyf87p2j4ycsbb017n4vzxfmv285rq2gny4w47rwi2j2";
-    };
-
-    meta = {
-      description = "A simple, fast, extensible JSON encoder/decoder for Python";
-
-      longDescription = ''
-        simplejson is compatible with Python 2.4 and later with no
-        external dependencies.  It covers the full JSON specification
-        for both encoding and decoding, with unicode support.  By
-        default, encoding is done in an encoding neutral fashion (plain
-        ASCII with \uXXXX escapes for unicode characters).
-      '';
-
-      homepage = http://code.google.com/p/simplejson/;
-
-      license = licenses.mit;
-    };
-  });
+  simplejson = callPackage ../development/python-modules/simplejson { };
 
   simpleldap = buildPythonPackage rec {
     version = "0.8";
@@ -24126,32 +23997,7 @@ in {
 
 
 
-  sqlalchemy = buildPythonPackage rec {
-    name = "SQLAlchemy-${version}";
-    version = "1.0.15";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "586f5ccf068211795a89ed22d196c5cc3006b6be00261bcac6f584c0b8e0845a";
-    };
-
-    buildInputs = with self; [ pytest mock pytest_xdist ]
-      ++ stdenv.lib.optional (!isPy3k) pysqlite;
-
-    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
-    # acceptable reason to make all dependents unavailable on Python 3 as well
-    #doCheck = !(isPyPy || isPy3k);
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-      license = licenses.mit;
-    };
-  };
+  sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   SQLAlchemy-ImageAttach = buildPythonPackage rec {
     pname = "SQLAlchemy-ImageAttach";
@@ -27953,23 +27799,21 @@ EOF
   };
 
   ws4py = buildPythonPackage rec {
-    name = "ws4py-${version}";
+    name = "${pname}-${version}";
+    pname = "ws4py";
+    version = "0.4.2";
 
-    version = "git-20130303";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
-      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0zr3254ky6r7q15l3dhdczfa8i723055zdkqssjifsgcwvirriks";
     };
 
-    # python zip complains about old timestamps
-    preConfigure = ''
-      find -print0 | xargs -0 touch
-    '';
+    buildInputs = with self; [ pytest mock ];
+    propagatedBuildInputs = with self; [ asyncio cherrypy gevent tornado ];
 
-    # Tests depend on other packages
-    doCheck = false;
+    checkPhase = ''
+      pytest test
+    '';
 
     meta = {
       homepage = https://ws4py.readthedocs.org;
@@ -28786,6 +28630,9 @@ EOF
 
     buildInputs = with self; [ nose ];
     propagatedBuildInputs = with self; [ decorator ];
+
+    # 17 failures with 3.6 https://github.com/networkx/networkx/issues/2396#issuecomment-304437299
+    doCheck = !(isPy36);
 
     meta = {
       homepage = "https://networkx.github.io/";
