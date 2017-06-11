@@ -1,9 +1,9 @@
-{ stdenv, fetchurl }:
-{ version, artifactId, groupId, sha512, type ? "jar", suffix ? "" }:
+{ stdenv, fetchurl, lib }:
+{ version, artifactId, groupId, sha512, type ? "jar", suffix ? "", classifier ? null }:
 
 let
   name = "${artifactId}-${version}";
-  m2Path = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}";
+  m2Path = "${builtins.replaceStrings ["."] ["/"] groupId}/${artifactId}/${version}" + (lib.optionalString (classifier != null) "-${classifier}");
   m2File = "${name}${suffix}.${type}";
   src = fetchurl rec {
       inherit sha512;
