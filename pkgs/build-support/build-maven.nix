@@ -10,7 +10,7 @@
  * build: A simple build derivation that uses mvn compile and package to build
  *        the project.
  */
-infoFile: let
+src: infoFile: let
   info = lib.importJSON infoFile;
 
   script = writeText "build-maven-repository.sh" ''
@@ -51,18 +51,13 @@ infoFile: let
       <localRepository>${repo}</localRepository>
     </settings>
   '';
-
-  src = dirOf infoFile;
 in {
   inherit repo settings info;
 
   build = stdenv.mkDerivation {
     name = "${info.project.artifactId}-${info.project.version}.jar";
 
-    src = builtins.filterSource (path: type:
-      (toString path) != (toString (src + "/target")) &&
-        (toString path) != (toString (src + "/.git"))
-    ) src;
+    src = src;
 
     buildInputs = [ maven ];
 
