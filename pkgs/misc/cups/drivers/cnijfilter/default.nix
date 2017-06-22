@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
     pushd $out/lib;
     for so_file in *.so.*; do
       ln -s $so_file ''${so_file/.so.*/}.so;
+      patchelf --set-rpath $out/lib $so_file;
     done;
     popd;
   '';
