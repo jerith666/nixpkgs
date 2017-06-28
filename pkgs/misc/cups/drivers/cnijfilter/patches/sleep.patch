@@ -1,13 +1,14 @@
 diff --git a/cnijfilter/src/bjfilter.c b/cnijfilter/src/bjfilter.c
-index cf8212c..84b5e46 100755
+index cf8212c..01dc10e 100755
 --- a/cnijfilter/src/bjfilter.c
 +++ b/cnijfilter/src/bjfilter.c
-@@ -168,6 +168,9 @@ int main( int argc, char *argv[] )
+@@ -168,6 +168,10 @@ int main( int argc, char *argv[] )
  	short				result;		/* return value of ForkLgmon() */
  	DATA_INFO			data_info;
  
 +        fprintf(stderr, "bjfilter.main, pid %d, sleeping for 30s\n", getpid());
 +        sleep(30);
++        fprintf(stderr, "bjfilter.main, pid %d, sleep complete\n", getpid());
 +
  #if DEBUGLOG
  	create_log( );
