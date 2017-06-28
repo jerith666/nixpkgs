@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
                   ghostscript ];
 
   patches = [ ./patches/missing-include.patch
-              ./patches/libpng15.patch ];
+              ./patches/libpng15.patch
+              ./patches/sleep.patch ];
 
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
