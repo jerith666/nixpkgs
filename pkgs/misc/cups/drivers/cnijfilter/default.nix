@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib/cups/filter $out/share/cups/model;
   '';
 
+  dontPatchELF = true;
+
   postInstall = ''
     for pr in mp140 mp210 ip3500 mp520 ip4500 mp610; do
       cd ppd;
