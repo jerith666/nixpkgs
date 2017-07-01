@@ -1,14 +1,23 @@
-# { stdenv, lib, fetchzip, autoconf, automake, cups, glib, libxml2, libusb, libtool
-# , withDebug ? false }:
-
 { stdenv, lib, fetchzip,
   autoconf, automake, libtool,
   cups, popt, libtiff, libpng,
   ghostscript }:
 
+/* this derivation is basically just a transcription of the rpm .spec
+   file included in the tarball */
+
 stdenv.mkDerivation rec {
   name = "cnijfilter-${version}";
 
+  /* important note about versions: cnijfilter packages seem to use
+     versions in a non-standard way.  the version indicates which
+     printers are supported in the package.  so this package should
+     not be "upgraded" in the usual way.
+
+     instead, if you want to include another version supporting your
+     printer, you should try to abstract out the common things (which
+     should be pretty much everything except the version and the 'pr'
+     and 'pr_id' values to loop over). */
   version = "2.80";
 
   src = fetchzip {
@@ -32,8 +41,6 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DDEBUG -DDEBUG_LOG -D__DEBUG__";
-
     cd libs
     ./autogen.sh --prefix=$out;
 
@@ -51,8 +58,6 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p $out/bin $out/lib/cups/filter $out/share/cups/model;
   '';
-
-  dontPatchELF = true;
 
   postInstall = ''
     for pr in mp140 mp210 ip3500 mp520 ip4500 mp610; do
@@ -84,6 +89,16 @@ stdenv.mkDerivation rec {
     done;
     popd;
   '';
+
+  /* the tarball includes some pre-built shared libraries.  we run
+     'patchelf --set-rpath' on them just a few lines above, so that
+     they can find each other.  but that's not quite enough.  some of
+     those libraries load each other in non-standard ways -- they
+     don't list each other in the DT_NEEDED section.  so, if the
+     standard 'patchelf --shrink-rpath' (from
+     pkgs/development/tools/misc/patchelf/setup-hook.sh) is run on
+     them, it undoes the --set-rpath.  this prevents that. */
+  dontPatchELF = true;
 
   meta = with lib; {
     description = "Canon InkJet printer drivers for the MX700 etc.";
