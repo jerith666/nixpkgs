@@ -93,19 +93,19 @@ rec {
 
   ### Eclipse Platform
 
-  eclipse-platform = eclipse-platform-46; # always point to latest
+  eclipse-platform = eclipse-platform-47; # always point to latest
 
-  eclipse-platform-46 = buildEclipse {
-    name = "eclipse-platform-4.6.2";
-    description = "Eclipse Platform Neon 2";
+  eclipse-platform-47 = buildEclipse {
+    name = "eclipse-platform-4.7.0";
+    description = "Eclipse Platform Oxygen";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk-x86_64.tar.gz;
-          sha256 = "1fmpirjkp210angyfz3nr5jp58snjy6784zkkbmdxkiyg9kg2wqq";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk-x86_64.tar.gz;
+          sha512 = "76b12aecede6c6cffc38ffc7a91419cdcd819f19b2d2f49017ce3abc892d8ce0e104c92325146977af0fd3ffed863069f808969443c6b86db1c8fca49b8b9fe8";
         };
       "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/eclipse-platform-4.6.2-linux-gtk.tar.gz;
-          sha256 = "0274g6ypiqsqkch10868ygbm6avc5pa57saz9wd196kdivl1bdpm";
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk.tar.gz;
+          sha512 = "9328a817fbc4c327caa4fe578583e0146d7b97fcc852207b86b6eb93518e9f1de2536af78b8d98901ba82a7a8ef8b970d3e51b6ca2e07e34a9e1b8b4691be8c7";
         };
     };
   };
