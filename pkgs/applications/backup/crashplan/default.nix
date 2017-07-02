@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.2";
+  version = "4.8.3";
   rev = "1"; #tracks unversioned changes that occur on download.code42.com from time to time
   name = "crashplan-${version}-r${rev}";
 
   src = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "0wh8lcm06ilcyncnp4ckg4yhyf9z3gb6v1kr111j4bpgmnd0v1yf";
+    sha256 = "04vi80mb9sqnb6i5gk2h4bhcyvfnf2dy6iw5crmkjaj43pn8fpf2";
   };
 
   meta = with stdenv.lib; {
