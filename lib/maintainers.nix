@@ -141,11 +141,13 @@
   dfoxfranke = "Daniel Fox Franke <dfoxfranke@gmail.com>";
   dgonyeo = "Derek Gonyeo <derek@gonyeo.com>";
   dipinhora = "Dipin Hora <dipinhora+github@gmail.com>";
+  disassembler = "Samuel Leathers <disasm@gmail.com>";
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   DmitryTsygankov = "Dmitry Tsygankov <dmitry.tsygankov@gmail.com>";
   dmjio = "David Johnson <djohnson.m@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   domenkozar = "Domen Kozar <domen@dev.si>";
+  dotlambda = "Robert Schütz <rschuetz17@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   dpaetzel = "David Pätzel <david.a.paetzel@gmail.com>";
   drets = "Dmytro Rets <dmitryrets@gmail.com>";
@@ -181,6 +183,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
+  florianjacob = "Florian Jacob <projects+nixos@florianjacob.de>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
   fmthoma = "Franz Thoma <f.m.thoma@googlemail.com>";
@@ -245,6 +248,7 @@
   jensbin = "Jens Binkert <jensbin@protonmail.com>";
   jerith666 = "Matt McHenry <github@matt.mchenryfamily.org>";
   jfb = "James Felix Black <james@yamtime.com>";
+  jfrankenau = "Johannes Frankenau <johannes@frankenau.net>";
   jgeerds = "Jascha Geerds <jascha@jgeerds.name>";
   jgertm = "Tim Jaeger <jger.tm@gmail.com>";
   jgillich = "Jakob Gillich <jakob@gillich.me>";
@@ -467,6 +471,7 @@
   rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   robbinch = "Robbin C. <robbinch33@gmail.com>";
+  roberth = "Robert Hensing <nixpkgs@roberthensing.nl>";
   robgssp = "Rob Glossop <robgssp@gmail.com>";
   roblabla = "Robin Lambertz <robinlambertz+dev@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
@@ -477,6 +482,7 @@
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
+  rvolosatovs = "Roman Volosatovs <rvolosatovs@riseup.net";
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryansydnor = "Ryan Sydnor <ryan.t.sydnor@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
@@ -547,6 +553,7 @@
   tokudan = "Daniel Frank <git@danielfrank.net>";
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
+  trevorj = "Trevor Joynson <nix@trevor.joynson.io>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
   tstrobel = "Thomas Strobel <4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains>";
   ttuegel = "Thomas Tuegel <ttuegel@mailbox.org>";
