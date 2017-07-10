@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "04vi80mb9sqnb6i5gk2h4bhcyvfnf2dy6iw5crmkjaj43pn8fpf2";
+    sha256 = "c25d87ec1d442a396b668547e39b70d66dcfe02250cc57a25916ebb42a407113";
   };
 
   meta = with stdenv.lib; {
