@@ -105,7 +105,6 @@
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wireshark.nix
-  ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/zsh/oh-my-zsh.nix
@@ -186,6 +185,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/postage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
@@ -325,7 +325,6 @@
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
-  ./services/misc/ripple-rest.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
@@ -518,7 +517,6 @@
   ./services/networking/teamspeak3.nix
   ./services/networking/tinc.nix
   ./services/networking/tftpd.nix
-  ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
