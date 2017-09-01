@@ -273,7 +273,7 @@ let
       lines = [ sep (formatLine labels) (formatLine labelDefaults) sep ];
     in concatStringsSep "\n" lines;
 
-  in formattedLabels + "\n" + concatMapStringsSep "\n" formatLine masterCf + "\n";
+  in formattedLabels + "\n" + concatMapStringsSep "\n" formatLine masterCf + "\n" + cfg.extraMasterConf;
 
   headerCheckOptions = { ... }:
   {
