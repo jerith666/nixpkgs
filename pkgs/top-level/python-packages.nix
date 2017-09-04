@@ -62,7 +62,7 @@ let
 
   graphiteVersion = "0.9.15";
 
-  fetchPypi = {format ? "setuptools", ... } @attrs:
+  fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
     let
       fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
       # Fetch a wheel. By default we fetch an universal wheel.
@@ -78,7 +78,7 @@ let
       fetcher = (if format == "wheel" then fetchWheel
         else if format == "setuptools" then fetchSource
         else throw "Unsupported kind ${kind}");
-    in fetcher (builtins.removeAttrs attrs ["format"]);
+    in fetcher (builtins.removeAttrs attrs ["format"]) );
 
   # This should become part of stdenv!
   sharedLibraryExtension = if stdenv.isDarwin then ".dylib" else ".so";
@@ -518,13 +518,6 @@ in {
 
 
   amqplib = callPackage ../development/python-modules/amqplib {};
-
-  ansible  = self.ansible2;
-  ansible2 = self.ansible_2_3;
-
-  ansible_2_1 = callPackage ../development/python-modules/ansible/2.1.nix {};
-  ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
-  ansible_2_3 = callPackage ../development/python-modules/ansible/2.3.nix {};
 
   apipkg = callPackage ../development/python-modules/apipkg {};
 
@@ -1656,28 +1649,11 @@ in {
     };
   };
 
-  cgroup-utils = buildPythonPackage rec {
-    version = "0.6";
-    name = "cgroup-utils-${version}";
+  cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
+    postPatch = ''
+      substituteInPlace setup.py --replace "argparse" ""
+    '';
 
-    propagatedBuildInputs = with self; [ argparse ];
-    buildInputs = with self; [ pep8 nose ];
-    # Pep8 tests fail...
-    doCheck = false;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "peo3";
-      repo = "cgroup-utils";
-      rev = "v${version}";
-      sha256 = "1ck0aijzrg9xf6hjdxnynkapnyxw0y385jb0q7wyq4jf77ayfszc";
-    };
-
-    meta = {
-      description = "Utility tools for control groups of Linux";
-      maintainers = with maintainers; [ layus ];
-      license = licenses.gpl2;
-    };
-  };
 
   channels = callPackage ../development/python-modules/channels {};
 
@@ -2069,21 +2045,7 @@ in {
 
   blaze = callPackage ../development/python-modules/blaze { };
 
-  # Needed for FlexGet 1.2.337 and calibre 2.76.0
-  html5lib_0_9999999 = self.html5lib.overridePythonAttrs rec {
-    name = "html5lib-${version}";
-    buildInputs = with self; [ nose flake8 ];
-    propagatedBuildInputs = with self; [ six ];
-    checkPhase = ''
-      nosetests
-    '';
-
-    version = "0.9999999";
-    src = pkgs.fetchurl {
-      url = "https://github.com/html5lib/html5lib-python/archive/0.9999999.tar.gz";
-      sha256 = "1s6wdbrjzw5jhyfbskf4nj1i5bjpjqq9f89a7r1rl59rhpwmfhhq";
-    };
-  };
+  html5-parser = callPackage ../development/python-modules/html5-parser {};
 
   httpserver = callPackage ../development/python-modules/httpserver {};
 
@@ -2908,8 +2870,8 @@ in {
       py.test tests
     '';
 
-    # Python 3.5 str/bytes-like errors with reading files
-    doCheck = !isPy3k;
+    # https://github.com/pallets/click/issues/823
+    doCheck = false;
 
     meta = {
       homepage = http://click.pocoo.org/;
@@ -4127,7 +4089,7 @@ in {
     };
   };
 
-  pytest = self.pytest_30;
+  pytest = self.pytest_32;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
 
@@ -4135,7 +4097,14 @@ in {
 
   pytest_29 = callPackage ../development/python-modules/pytest/2_9.nix {};
 
-  pytest_30 = callPackage ../development/python-modules/pytest{
+  pytest_30 = callPackage ../development/python-modules/pytest/3_0.nix {
+    hypothesis = self.hypothesis.override {
+      # hypothesis requires pytest that causes dependency cycle
+      doCheck = false;
+      pytest = null;
+    };
+  };
+  pytest_32 = callPackage ../development/python-modules/pytest{
     hypothesis = self.hypothesis.override {
       # hypothesis requires pytest that causes dependency cycle
       doCheck = false;
@@ -4182,6 +4151,9 @@ in {
 
     checkPhase = "make test";
 
+    # Requires pytest < 3.1
+    doCheck = false;
+
     meta = {
       license = licenses.mit;
       homepage = https://pypi.python.org/pypi/pytest-catchlog/;
@@ -4220,6 +4192,8 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
   pytest-rerunfailures = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -5408,12 +5382,12 @@ in {
 
   dropbox = buildPythonPackage rec {
     name = "dropbox-${version}";
-    version = "3.37";
-    #doCheck = false; # python 2.7.9 does verify ssl certificates
+    version = "8.0.0";
+    doCheck = false; # Set DROPBOX_TOKEN environment variable to a valid token.
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dropbox/${name}.tar.gz";
-      sha256 = "f65c12bd97f09e29a951bc7cb30a74e005fc4b2f8bb48778796be3f73866b173";
+      sha256 = "0bixx80zjq0286dwm4zhg8bdhc8pqlrqy4n2jg7i6m6a4gv4gak5";
     };
 
     propagatedBuildInputs = with self; [ requests urllib3 mock setuptools ];
@@ -5458,7 +5432,7 @@ in {
   };
 
   easydict = callPackage ../development/python-modules/easydict { };
-  
+
   EasyProcess = buildPythonPackage rec {
     name = "EasyProcess-0.2.3";
 
@@ -6222,6 +6196,8 @@ in {
     '';
   };
 
+  gpy = callPackage ../development/python-modules/gpy { };
+
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.6.4";
 
@@ -6756,7 +6732,7 @@ in {
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
   jug = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.6.1";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -6770,7 +6746,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "0s9m34k8w59k32sjcg74qqdz8r492sxhsdmlhca1z7jazdk56dzb";
+      sha256 = "15lv998mz6kpp65kh8wsfnrl5ay02bk1lm07nbbdv2k455bhrn1i";
     };
 
     meta = {
@@ -6781,22 +6757,7 @@ in {
     };
   };
 
-  jsonpatch = buildPythonPackage rec {
-    name = "jsonpatch-1.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonpatch/${name}.tar.gz";
-      sha256 = "22d0bc0f5522a4a03dd9fb4c4cdf7c1f03256546c88be4c61e5ceabd22280e47";
-    };
-
-    propagatedBuildInputs = with self; [ jsonpointer ];
-
-    meta = {
-      description = "Library to apply JSON Patches according to RFC 6902";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
-      license = stdenv.lib.licenses.bsd2; # "Modified BSD license, says pypi"
-    };
-  };
+  jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
     name = "jsonpointer-1.9";
@@ -7284,6 +7245,28 @@ in {
     };
   };
 
+  logfury = buildPythonPackage rec {
+    name = "logfury-${version}";
+    version = "0.1.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/logfury/${name}.tar.gz";
+      sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
+    };
+
+    buildInputs =
+      [ self.funcsigs
+        self.six
+      ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
+      homepage = "https://github.com/ppolewicz/logfury";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ jwiegley ];
+    };
+  };
+
   ndg-httpsclient = buildPythonPackage rec {
     version = "0.4.2";
     name = "ndg-httpsclient-${version}";
@@ -7339,43 +7322,8 @@ in {
     };
   };
 
-  odfpy = buildPythonPackage rec {
-    version = "0.9.6";
-    name = "odfpy-${version}";
+  odfpy = callPackage ../development/python-modules/odfpy { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/odfpy/${name}.tar.gz";
-      sha256 = "e458f969f1ccd7ed77d70a45fe69ad656ac61b39e36e4d32c42d4e3216030891";
-    };
-
-    buildInputs = with self; with pkgs; [ ];
-
-    propagatedBuildInputs = with self; [ ];
-
-    meta = {
-      description = "Python API and tools to manipulate OpenDocument files";
-      homepage = "https://joinup.ec.europa.eu/software/odfpy/home";
-      license = licenses.asl20;
-    };
-  };
-
-  oger = buildPythonPackage rec {
-    name = "oger-${version}";
-    version = "1.1.3";
-    src = pkgs.fetchurl {
-      url = "http://organic.elis.ugent.be/sites/organic.elis.ugent.be/files/Oger-${version}.tar.gz";
-      sha256 = "1k02ys812lz0x0yymljp102amkm8bvfgqsrphnk235xbcrb0akg5";
-    };
-
-    propagatedBuildInputs = with self; [ MDP scipy numpy matplotlib ];
-
-    meta = {
-      homepage = http://organic.elis.ugent.be/organic/engine;
-      description = "Rapidly build, train, and evalue modular learning architectures";
-      maintainers = with maintainers; [ nico202 ];
-      license = licenses.lgpl3;
-    };
-  };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
@@ -7962,23 +7910,7 @@ in {
 
   };
 
-
-  pyramid_beaker = buildPythonPackage rec {
-    name = "pyramid_beaker-0.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_beaker/${name}.tar.gz";
-      sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
-    };
-
-    propagatedBuildInputs = with self; [ beaker pyramid ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
   pyramid_chameleon = buildPythonPackage rec {
     name = "pyramid_chameleon-0.3";
@@ -8183,6 +8115,8 @@ in {
     # way too many dependencies to run tests
     # see https://github.com/getsentry/raven-python/blob/master/setup.py
     doCheck = false;
+
+    propagatedBuildInputs = optionals (!isPy3k) [ self.contextlib2 ];
 
     meta = {
       maintainers = with maintainers; [ primeos ];
@@ -8457,26 +8391,7 @@ in {
   };
 
 
-  pyrtlsdr = buildPythonPackage rec {
-    name = "pyrtlsdr-0.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyrtlsdr/${name}.zip";
-      sha256 = "cbb9086efe4320858c48f4856d09f7face191c4156510b1459ef4e5588935b6a";
-    };
-
-    postPatch = ''
-      sed "s|driver_files =.*|driver_files = ['${pkgs.rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
-    '';
-
-    meta = {
-      description = "Python wrapper for librtlsdr (a driver for Realtek RTL2832U based SDR's)";
-      homepage = https://github.com/roger-/pyrtlsdr;
-      license = licenses.gpl3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ bjornfor ];
-    };
-  };
+  pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
   random2 = self.buildPythonPackage rec {
     name = "random2-1.0.1";
@@ -8807,37 +8722,6 @@ in {
       homepage = https://launchpad.net/python-distutils-extra;
       description = "Enhancements to Python's distutils";
       license = licenses.gpl2;
-    };
-  };
-
-  deluge = buildPythonPackage rec {
-    name = "deluge-${version}";
-    version = "1.3.13";
-
-    src = pkgs.fetchurl {
-      url = "http://download.deluge-torrent.org/source/${name}.tar.bz2";
-      sha256 = "1ig8kv22009f0ny6n77a4lcfddhdsxrdklpmhdqvis1wx8na5crp";
-    };
-
-    propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl service-identity
-    ];
-
-    nativeBuildInputs = [ pkgs.intltool ];
-
-    postInstall = ''
-       mkdir -p $out/share/applications
-       cp -R deluge/data/pixmaps $out/share/
-       cp -R deluge/data/icons $out/share/
-       cp deluge/data/share/applications/deluge.desktop $out/share/applications
-    '';
-
-    meta = {
-      homepage = http://deluge-torrent.org;
-      description = "Torrent client";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ domenkozar ebzzry ];
-      platforms = platforms.all;
     };
   };
 
@@ -9863,23 +9747,7 @@ in {
     };
   };
 
-  flask-pymongo = buildPythonPackage rec {
-    name = "Flask-PyMongo-${version}";
-    version = "0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-PyMongo/${name}.tar.gz";
-      sha256 = "0305qngvjrjyyabf8gxqgqvd9ffh00gr5yfrjf4nncr2my9svbyd";
-    };
-
-    propagatedBuildInputs = with self; [ flask pymongo_2_9_1 ];
-
-    meta = {
-      homepage = "http://flask-pymongo.readthedocs.org/";
-      description = "PyMongo support for Flask applications";
-      license = licenses.bsd2;
-    };
-  };
+  flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
 
   flask-restful = buildPythonPackage rec {
     name = "Flask-RESTful-${version}";
@@ -12223,11 +12091,11 @@ in {
 
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.7.2";
+    name = "lxml-3.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "02j1wf3sh2qmswcz3rh0xvsb8jm63ifaiz2bkng93hyvc1iignar";
+      sha256 = "15nvf6n285n282682qyw3wihsncb0x5amdhyi4b83bfa2nz74vvk";
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
@@ -12515,6 +12383,7 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
@@ -13010,24 +12879,7 @@ in {
     };
   });
 
-  moretools = buildPythonPackage rec {
-    name = "moretools-0.1a41";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/moretools/${name}.tar.gz";
-      sha256 = "1n442wprbl3cmg08233m1sr3g4z0i8hv9g6bhch7kzdmbl21399f";
-    };
-
-    buildInputs = with self; [ six pathpy setuptools ];
-    propagatedBuildInputs = with self; [ decorator ];
-
-    meta = {
-      description = "Many more basic tools for python 2/3 extending itertools, functools, operator and collections";
-      homepage = https://bitbucket.org/userzimmermann/python-moretools;
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-    };
-  };
+  moretools = callPackage ../development/python-modules/moretools { };
 
   moto = buildPythonPackage rec {
     version = "0.4.25";
@@ -14563,12 +14415,16 @@ in {
       sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
     };
 
-    patchPhase = ''
+    postPatch = ''
       substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
+      substituteInPlace setup.py --replace "argparse" ""
     '';
 
     propagatedBuildInputs = with self;
       [ pyptlib argparse twisted pycrypto pyyaml ];
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       description = "A pluggable transport proxy";
@@ -17142,24 +16998,7 @@ in {
   };
 
 
-  py = buildPythonPackage rec {
-    name = "py-${version}";
-    version = "1.4.31";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/py/${name}.tar.gz";
-      sha256 = "a6501963c725fc2554dabfece8ae9a8fb5e149c0ac0a42fd2b02c5c1c57fc114";
-    };
-
-    # Circular dependency on pytest
-    doCheck = false;
-
-    meta = {
-      description = "Library with cross-python path, ini-parsing, io, code, log facilities";
-      homepage = http://pylib.readthedocs.org/;
-      license = licenses.mit;
-    };
-  };
+  py = callPackage ../development/python-modules/py { };
 
 
   pyacoustid = buildPythonPackage rec {
@@ -17921,139 +17760,21 @@ in {
      };
    };
 
-  pyfeed = buildPythonPackage rec {
-    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
-    src = pkgs.fetchurl {
-      inherit url;
-      sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
-    };
-    propagatedBuildInputs = with self; [xe];
+  pyfeed = callPackage ../development/python-modules/pyfeed { };
 
-    # error: invalid command 'test'
-    doCheck = false;
+  pyfftw = callPackage ../development/python-modules/pyfftw { };
 
-    meta = {
-      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
-      description = "Tools for syndication feeds";
-    };
-  };
-
-  pyfftw = buildPythonPackage rec {
-    name = "pyfftw-${version}";
-    version = "0.10.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
-    };
-
-    buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
-
-    propagatedBuildInputs = with self; [ numpy scipy ];
-
-    # Tests cannot import pyfftw. pyfftw works fine though.
-    doCheck = false;
-
-    preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-    '';
-    #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
-    #'';
-
-    meta = {
-      description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
-      license = with licenses; [ bsd2 bsd3 ];
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  pyfiglet = buildPythonPackage rec {
-    name = "pyfiglet-${version}";
-    version = "0.7.5";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/pyfiglet/${name}.tar.gz";
-      sha256 = "04jy4182hn5xfs6jf432gxclfj1rhssd7bsf0b4gymrjzkhr8qa4";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "FIGlet in pure Python";
-      license     = licenses.gpl2Plus;
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  pyfiglet = callPackage ../development/python-modules/pyfiglet { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
-  pyftgl = buildPythonPackage rec {
-    name = "pyftgl-0.4b";
+  pyftgl = callPackage ../development/python-modules/pyftgl { };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "umlaeute";
-      repo = "pyftgl";
-      rev = "0.4b";
-      sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
-    };
-
-    buildInputs = with self; [ boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
-
-    meta = {
-      description = "Python bindings for FTGL (FreeType for OpenGL)";
-      license = licenses.gpl2Plus;
-    };
-  };
-
-  pygeoip = buildPythonPackage rec {
-    name = "pygeoip-0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pygeoip/pygeoip-0.3.2.tar.gz";
-      sha256 = "f22c4e00ddf1213e0fae36dc60b46ee7c25a6339941ec1a975539014c1f9a96d";
-    };
-
-    # requires geoip samples
-    doCheck = false;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Pure Python GeoIP API";
-      homepage = https://github.com/appliedsec/pygeoip;
-      license = licenses.lgpl3Plus;
-    };
-  };
+  pygeoip = callPackage ../development/python-modules/pygeoip {};
 
   PyGithub = callPackage ../development/python-modules/pyGithub {};
 
-  pyglet = buildPythonPackage rec {
-    name = "pyglet-${version}";
-    version = "1.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyglet/pyglet-${version}.tar.gz";
-      sha256 = "9f62ffbbcf2b202d084bf158685e77d28b8f4f5f2738f4c5e63a947a07503445";
-    };
-
-    patchPhase = let
-      libs = [ pkgs.mesa pkgs.xorg.libX11 pkgs.freetype pkgs.fontconfig ];
-      paths = concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
-    in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://www.pyglet.org/";
-      description = "A cross-platform windowing and multimedia library";
-      license = licenses.bsd3;
-      platforms = platforms.mesaPlatforms;
-    };
-  };
+  pyglet = callPackage ../development/python-modules/pyglet {};
 
   pygments = callPackage ../development/python-modules/Pygments { };
 
@@ -18068,28 +17789,7 @@ in {
     };
   });
 
-  pygpgme = buildPythonPackage rec {
-    version = "0.3";
-    name = "pygpgme-${version}";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
-      sha256 = "5fd887c407015296a8fd3f4b867fe0fcca3179de97ccde90449853a3dfb802e1";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pkgs.gpgme ];
-
-    meta = {
-      homepage = "https://launchpad.net/pygpgme";
-      description = "A Python wrapper for the GPGME library";
-      license = licenses.lgpl21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pylint = callPackage ../development/python-modules/pylint { };
 
@@ -18101,42 +17801,9 @@ in {
     proj = null;
   };
 
-  pyrr = buildPythonPackage rec {
-    name = "pyrr-${version}";
-    version = "0.7.2";
+  pyrr = callPackage ../development/python-modules/pyrr { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyrr/pyrr-${version}.tar.gz";
-      sha256 = "04a65a9fb5c746b41209f55b21abf47a0ef80a4271159d670ca9579d9be3b4fa";
-    };
-
-    buildInputs = with self; [ setuptools ];
-    propagatedBuildInputs = with self; [ multipledispatch numpy ];
-
-    meta = {
-      description = "3D mathematical functions using NumPy";
-      homepage = https://github.com/adamlwgriffiths/Pyrr/;
-      license = licenses.bsd2;
-    };
-  };
-
-  pyshp = buildPythonPackage rec {
-    name = "pyshp-${version}";
-    version = "1.2.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyshp/pyshp-${version}.tar.gz";
-      sha256 = "e18cc19659dadc5ddaa891eb780a6958094da0cf105a1efe0f67e75b4fa1cdf9";
-    };
-
-    buildInputs = with self; [ setuptools ];
-
-    meta = {
-      description = "Pure Python read/write support for ESRI Shapefile format";
-      homepage = https://github.com/GeospatialPython/pyshp;
-      license = licenses.mit;
-    };
-  };
+  pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
@@ -18150,6 +17817,9 @@ in {
     };
 
     disabled = !isPy3k;
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       description = "Python package for the generation of PostScript, PDF, and SVG files";
@@ -18284,7 +17954,7 @@ in {
       homepage = https://pypi.python.org/pypi/PyICU/;
       description = "Python extension wrapping the ICU C++ API";
       license = licenses.mit;
-      platforms = platforms.all;
+      platforms = with platforms; allBut darwin;
       maintainers = [ maintainers.rycee ];
     };
   };
@@ -20319,6 +19989,10 @@ in {
       rm "$out/bin/"*.bat
     '';
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "argparse" ""
+    '';
+
     meta = {
       description = "Test data generator for Robot Framework";
       homepage = https://github.com/mkorpela/RoboMachine;
@@ -21014,44 +20688,7 @@ in {
     '';
   };
 
-  setuptools_scm = buildPythonPackage rec {
-    name = "setuptools_scm-${version}";
-    version = "1.15.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
-    };
-
-    buildInputs = with self; [ pip ];
-    checkInputs = with self; [ pytest ];
-    # Seems to fail due to chroot
-    doCheck = false;
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = https://bitbucket.org/pypa/setuptools_scm/;
-      description = "Handles managing your python package versions in scm metadata";
-      license = licenses.mit;
-      maintainers = with maintainers; [ jgeerds ];
-    };
-  };
-
-  setuptools_scm_18 = self.setuptools_scm.override rec {
-    name = "setuptools_scm-${version}";
-    version = "1.8.0";
-
-    # tests fail: ImportError: cannot import name 'find_files'
-    disabled = isPy35;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/setuptools_scm/${name}.tar.bz2";
-      sha256 = "00p60v2yfqy1r58pjcx9wy6dvqd7wkpfs5z1dzwf7y75c1g3dgyx";
-    };
-  };
+  setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptoolsDarcs = buildPythonPackage rec {
     name = "setuptools_darcs-${version}";
@@ -21395,22 +21032,7 @@ in {
     };
   };
 
-  sqlmap = buildPythonPackage {
-    name = "sqlmap-1.0.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.11.tar.gz";
-      sha256 = "1x4amyjqnd9j5g2kp9nvg8pr5sqzbhr8gd0m6d671bshvgj568vr";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      homepage = "http://sqlmap.org";
-      license = licenses.gpl2;
-      description = "Automatic SQL injection and database takeover tool";
-      maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    };
-  };
-
+  sqlmap = callPackage ../development/python-modules/sqlmap { };
   pgpdump = self.buildPythonPackage rec {
     name = "pgpdump-1.5";
 
@@ -22204,6 +21826,8 @@ in {
     doCheck = false;
   };
 
+  sphinxcontrib-websupport = callPackage ../development/python-modules/sphinxcontrib-websupport { };
+
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
@@ -22905,43 +22529,7 @@ in {
     };
   };
 
-  keystoneclient = buildPythonPackage rec {
-    name = "keystoneclient-${version}";
-    version = "1.8.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/openstack/python-keystoneclient/archive/${version}.tar.gz";
-      sha256 = "0lijri0xa5fvmynvq148z13kw4xd3bam4zrfd8aj0gb3lnzh9y6v";
-    };
-
-    PBR_VERSION = "${version}";
-
-    buildInputs = with self; [
-        pbr testtools testresources testrepository requests-mock fixtures pkgs.openssl
-        oslotest pep8 ];
-    propagatedBuildInputs = with self; [
-        oslo-serialization oslo-config oslo-i18n oslo-utils
-        Babel argparse prettytable requests six iso8601 stevedore
-        netaddr debtcollector bandit webob mock pycrypto ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    doCheck = false; # The checkPhase below is broken
-
-    checkPhase = ''
-      patchShebangs run_tests.sh
-      ./run_tests.sh
-    '';
-
-    meta = {
-      homepage = https://github.com/openstack/python-novaclient/;
-      description = "Client library and command line tool for the OpenStack Nova API";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.linux;
-    };
-  };
+  keystoneclient = callPackage ../development/python-modules/keystoneclient { };
 
   keystonemiddleware = buildPythonPackage rec {
     name = "keystonemiddleware-${version}";
@@ -23155,6 +22743,8 @@ in {
       license = licenses.lgpl2;
     };
   };
+
+  tiros = callPackage ../development/python-modules/tiros { };
 
   # Tkinter/tkinter is part of the Python standard library.
   # The Python interpreters in Nixpkgs come without tkinter by default.
@@ -24338,27 +23928,6 @@ EOF
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
-  willie = buildPythonPackage rec {
-    name = "willie-${version}";
-    version = "5.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/willie/${name}.tar.gz";
-      sha256 = "e03dd26ea694b877a2b3b7b4dcca8e79420e7f346abab34292bff43d992a8cc5";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname ];
-    checkPhase = ''
-      py.test test
-    '';
-
-    meta = {
-      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
-      homepage = http://willie.dftba.net/;
-      license = licenses.efl20;
-    };
-  };
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
@@ -24635,6 +24204,8 @@ EOF
       platforms = platforms.all;
     };
   };
+
+  zetup = callPackage ../development/python-modules/zetup { };
 
   zope_broken = buildPythonPackage rec {
     name = "zope.broken-3.6.0";
@@ -25158,7 +24729,7 @@ EOF
     # Disable broken test
     # https://github.com/zeromq/pyzmq/issues/799
     checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send"
+      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send and not test_recv_json_cancelled"
     '';
   };
 
@@ -26294,6 +25865,8 @@ EOF
       paste six
     ];
 
+    disabled = isPy3k; # Judging from SyntaxError
+
     meta = with stdenv.lib; {
       description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
       homepage = "http://pythonpaste.org/wsgiproxy/";
@@ -26467,6 +26040,13 @@ EOF
       url = "mirror://pypi/t/thumbor/${name}.tar.gz";
       sha256 = "0787245x4yci34cdfc9xaxhds0lv60476qgp132pwa78hrpc9m31";
     };
+
+    patches = [
+      (pkgs.fetchurl {
+          url = "https://github.com/thumbor/thumbor/commit/376f688a8a0b82e50388c885d9d733572f2eb3e6.patch";
+          sha256 = "1j2434yqb6pz61d65dsy8w6lvyzvh5ksizadi5hgjzfw6s46v6yn";
+      })
+    ];
 
     prePatch = ''
       substituteInPlace setup.py \
@@ -27066,6 +26646,8 @@ EOF
     };
   };
 
+  torchvision = callPackage ../development/python-modules/torchvision { };
+
   jenkinsapi = buildPythonPackage rec {
     name = "jenkinsapi-${version}";
     version = "0.2.32";
@@ -27456,33 +27038,6 @@ EOF
       description = "Python Import Magic - automagically add, remove and manage imports";
       homepage = http://github.com/alecthomas/importmagic;
       license = "bsd";
-    };
-  };
-
-  bepasty-server = buildPythonPackage rec {
-    name = "bepasty-server-${version}";
-    version = "0.4.0";
-    propagatedBuildInputs = with self;[
-      flask
-      pygments
-      xstatic
-      xstatic-bootbox
-      xstatic-bootstrap
-      xstatic-jquery
-      xstatic-jquery-file-upload
-      xstatic-jquery-ui
-      xstatic-pygments
-    ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bepasty/bepasty-${version}.tar.gz";
-      sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
-    };
-
-    meta = {
-      homepage = http://github.com/bepasty/bepasty-server;
-      description = "Binary pastebin server";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
     };
   };
 
@@ -28419,33 +27974,9 @@ EOF
     propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
-  tempora = buildPythonPackage rec {
-    name = "tempora-${version}";
-    version = "1.4";
+  tempora= callPackage ../development/python-modules/tempora { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tempora/${name}.tar.gz";
-      sha256 = "0ysvns22i5hzhl5ln4n86bq10j8xwvd09z8qw1zjr3s0fj3lynza";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six ];
-  };
-
-  hypchat = buildPythonPackage rec {
-    name = "hypchat-${version}";
-    version = "0.21";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hypchat/${name}.tar.gz";
-      sha256 = "1sd8f3gihagaqd848dqy6xw457fa4f9bla1bfyni7fq3h76sjdzg";
-    };
-
-    propagatedBuildInputs = with self; [ requests six dateutil ];
-  };
+  hypchat = callPackage ../development/python-modules/hypchat { };
 
   pivy = buildPythonPackage rec {
     version = "20101207";
@@ -28459,22 +27990,7 @@ EOF
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 
-  smugpy = buildPythonPackage rec {
-    name    = pname + "-" + version;
-    pname   = "smugpy";
-    version = "20131218";
-
-    src = pkgs.fetchFromGitHub {
-      owner  = "chrishoffman";
-      repo   = pname;
-      rev    = "f698d6749ce446e3d6c7d925b2cd1cd5b3d695ea";
-      sha256 = "029x6hm1744iznv4sw8sfyl974wmx1sqnr1k5dvzzwpk3ja49a1y";
-    };
-
-    doCheck = false; # Tries to login to Smugmug…
-
-    propagatedBuildInputs = with self; [ ];
-  };
+  smugpy = callPackage ../development/python-modules/smugpy { };
 
   smugline = stdenv.mkDerivation rec {
     name    = pname + "-" + version;
@@ -28504,31 +28020,7 @@ EOF
 
   txaio = callPackage ../development/python-modules/txaio { };
 
-  ramlfications = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "ramlfications";
-    version = "0.1.9";
-
-    meta = {
-      description = "A Python RAML parser.";
-      homepage    = "https://ramlfications.readthedocs.org";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    doCheck = false;
-    # [darwin]  AssertionError: Expected 'update_mime_types' to have been called once. Called 0 times.
-
-    buildInputs = with self; [ mock pytest pytest-mock pytest-server-fixtures pytest-localserver ];
-
-    propagatedBuildInputs = with self; [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
-      sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
-    };
-  };
+  ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   yapf = callPackage ../development/python-modules/yapf { };
 
@@ -28577,20 +28069,7 @@ EOF
     };
   };
 
-  ROPGadget = buildPythonPackage rec {
-    name = "ROPGadget-5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
-      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
-    };
-    propagatedBuildInputs = with self; [ capstone ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
-      homepage = "http://shell-storm.org/project/ROPgadget/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
+  ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
@@ -28703,6 +28182,8 @@ EOF
     };
   };
 
+  todoist = callPackage ../development/python-modules/todoist { };
+
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 
   incremental = callPackage ../development/python-modules/incremental { };
@@ -28727,17 +28208,17 @@ EOF
 
   cymem = callPackage ../development/python-modules/cymem { };
 
-  ftfy = callPackage ../development/python-modules/ftfy { };    
+  ftfy = callPackage ../development/python-modules/ftfy { };
 
-  murmurhash = callPackage ../development/python-modules/murmurhash { };      
+  murmurhash = callPackage ../development/python-modules/murmurhash { };
 
-  plac = callPackage ../development/python-modules/plac { };        
-  
+  plac = callPackage ../development/python-modules/plac { };
+
   preshed = callPackage ../development/python-modules/preshed { };
 
-  thinc = callPackage ../development/python-modules/thinc { };  
+  thinc = callPackage ../development/python-modules/thinc { };
 
-  spacy = callPackage ../development/python-modules/spacy { };  
+  spacy = callPackage ../development/python-modules/spacy { };
 });
 
 in fix' (extends overrides packages)
