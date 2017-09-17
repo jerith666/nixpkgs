@@ -1647,6 +1647,8 @@ with pkgs;
 
   dev86 = callPackage ../development/compilers/dev86 { };
 
+  djbdns = callPackage ../tools/networking/djbdns { };
+
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };

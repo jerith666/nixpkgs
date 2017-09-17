@@ -420,6 +420,7 @@
   ./services/networking/ddclient.nix
   ./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
+  ./services/networking/dnscache.nix
   ./services/networking/dnschain.nix
   ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnscrypt-wrapper.nix
@@ -519,6 +520,7 @@
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tinc.nix
+  ./services/networking/tinydns.nix
   ./services/networking/tftpd.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/toxvpn.nix
