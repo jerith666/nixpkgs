@@ -29,13 +29,13 @@ let
 in
 
 buildRustPackage rec {
-  name = "alacritty-unstable-2017-08-28";
+  name = "alacritty-unstable-2017-09-02";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
-    rev = "c4ece6dde3c9dcf825a44aa775535a65c0c376a6";
-    sha256 = "1n1ncz45h0zgprsm2wkj11i9wwpg3kba4wv5mcs1xx793aq16x82";
+    rev = "22fa4260fc9210fbb5288090df79c92e7b3788e4";
+    sha256 = "0jjvvm0fm25p1h1rgfqlnhq4bwrjdxpb2pgnmpik9pl7qwy3q7s1";
   };
 
   depsSha256 = "19lrj4i6vzmf22r6xg99zcwvzjpiar8pqin1m2nvv78xzxx5yvgb";
@@ -46,17 +46,24 @@ buildRustPackage rec {
     pkgconfig
   ] ++ rpathLibs;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
       --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for f in $(find target/release -maxdepth 1 -type f); do
       cp $f $out/bin
     done;
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+
+    mkdir -p $out/share/applications
+    cp Alacritty.desktop $out/share/applications/alacritty.desktop
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;
