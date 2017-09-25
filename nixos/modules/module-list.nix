@@ -92,6 +92,7 @@
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
@@ -156,7 +157,9 @@
   ./services/backup/tarsnap.nix
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
-  ./services/cluster/kubernetes.nix
+  ./services/cluster/kubernetes/default.nix
+  ./services/cluster/kubernetes/dns.nix
+  ./services/cluster/kubernetes/dashboard.nix
   ./services/cluster/panamax.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
@@ -430,7 +433,6 @@
   ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
-  ./services/networking/fan.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox/sync-server.nix
