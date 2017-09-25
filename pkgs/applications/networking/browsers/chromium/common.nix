@@ -117,7 +117,10 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
-      ./patches/chromium-gn-bootstrap-r8.patch
+      ./patches/chromium-gn-bootstrap-r14.patch
+      ./patches/chromium-gcc-r1.patch
+      ./patches/chromium-atk-r1.patch
+      ./patches/chromium-gcc5-r1.patch
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
@@ -228,9 +231,14 @@ let
     '';
 
     buildPhase = let
+      # Build paralelism: on Hydra the build was frequently running into memory
+      # exhaustion, and even other users might be running into similar issues.
+      # -j is halved to avoid memory problems, and -l is slightly increased
+      # so that the build gets slight preference before others
+      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
         ninja -C "${buildPath}"  \
-          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"

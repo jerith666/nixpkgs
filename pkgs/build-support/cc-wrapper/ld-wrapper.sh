@@ -14,10 +14,6 @@ if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-if [ -n "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK"
-fi
-
 source @out@/nix-support/utils.sh
 
 
@@ -28,7 +24,7 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
     rest=()
     nParams=${#params[@]}
     declare -i n=0
-    while [ "$n" -lt "$nParams" ]; do
+    while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
@@ -51,7 +47,8 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
         fi
         n+=1
     done
-    params=("${rest[@]}")
+    # Old bash empty array hack
+    params=(${rest+"${rest[@]}"})
 fi
 
 source @out@/nix-support/add-hardening.sh
@@ -64,7 +61,7 @@ if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
     extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
 fi
 
-extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER $NIX_@infixSalt@_LDFLAGS_HARDEN)
+extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
 
 declare -a libDirs
 declare -A libs
@@ -73,11 +70,12 @@ relocatable=
 # Find all -L... switches for rpath, and relocatable flags for build id.
 if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ]; then
     prev=
-    # Old bash thinks empty arrays are undefined, ugh, so temporarily disable
-    # `set -u`.
-    set +u
-    for p in "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"; do
-        set -u
+    # Old bash thinks empty arrays are undefined, ugh.
+    for p in \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+    do
         case "$prev" in
             -L)
                 libDirs+=("$p")
@@ -119,7 +117,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
-    for dir in "${libDirs[@]}"; do
+    for dir in ${libDirs+"${libDirs[@]}"}; do
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
         fi
@@ -143,6 +141,10 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
             fi
         done
     done
+
+    if [ -n "${NIX_COREFOUNDATION_RPATH:-}" ]; then
+      extraAfter+=(-rpath $NIX_COREFOUNDATION_RPATH)
+    fi
 fi
 
 
@@ -155,20 +157,18 @@ fi
 
 # Optionally print debug info.
 if [ -n "${NIX_DEBUG:-}" ]; then
-    set +u # Old bash workaround, see above.
+    # Old bash workaround, see above.
     echo "extra flags before to @prog@:" >&2
-    printf "  %q\n" "${extraBefore[@]}"  >&2
+    printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
     echo "original flags to @prog@:" >&2
-    printf "  %q\n" "${params[@]}" >&2
+    printf "  %q\n" ${params+"${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
-    printf "  %q\n" "${extraAfter[@]}" >&2
-    set -u
-fi
-
-if [ -n "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK"
+    printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
 PATH="$path_backup"
-set +u # Old bash workaround, see above.
-exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"
+# Old bash workaround, see above.
+exec @prog@ \
+    ${extraBefore+"${extraBefore[@]}"} \
+    ${params+"${params[@]}"} \
+    ${extraAfter+"${extraAfter[@]}"}
