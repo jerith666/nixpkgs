@@ -2,29 +2,26 @@
 
 with lib;
 
-let
-
-  dataFile = pkgs.writeText "tinydns-data" config.services.tinydns.data;
-
-in
-
 {
-
   ###### interface
 
   options = {
     services.tinydns = {
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = "Whether to run the tinydns dns server";
       };
 
       data = mkOption {
+        type = types.lines;
+        default = "";
         description = "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
       ip = mkOption {
         default = "0.0.0.0";
+        type = types.str;
         description = "IP address on which to listen for connections";
       };
     };
@@ -33,37 +30,24 @@ in
   ###### implementation
 
   config = mkIf config.services.tinydns.enable {
-    environment = {
-      systemPackages = [ pkgs.djbdns ];
-    };
+    environment.systemPackages = [ pkgs.djbdns ];
 
-    users = {
-      extraGroups.tinydns = {
-        gid = config.ids.gids.tinydns;
-      };
-
-      extraUsers.tinydns = {
-        uid = config.ids.uids.tinydns;
-        description = "tinydns user";
-        group = "tinydns";
-      };
-    };
+    users.extraUsers.tinydns = {};
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ daemontools djbdns ];
       preStart = ''
-        rm -rf /var/lib/tinydns;
-        tinydns-conf tinydns tinydns /var/lib/tinydns ${config.services.tinydns.ip};
-        cd /var/lib/tinydns/root/;
-        rm data;
-        ln -s ${dataFile} data;
-        tinydns-data;
+        rm -rf /var/lib/tinydns
+        tinydns-conf tinydns tinydns /var/lib/tinydns ${config.services.tinydns.ip}
+        cd /var/lib/tinydns/root/
+        ln -sf ${pkgs.writeText "tinydns-data" config.services.tinydns.data} data
+        tinydns-data
       '';
       script = ''
-        cd /var/lib/tinydns;
-        ./run;
+        cd /var/lib/tinydns
+        exec ./run
       '';
     };
   };

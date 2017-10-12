@@ -808,8 +808,10 @@ with pkgs;
       makeWrapper $exe $out/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
-      mkdir -p $out/share/bash-completion/completions
+      mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
       $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
+      $exe --zsh-completion-script $exe >$out/share/zsh/vendor-completions/_${drv.pname}
+      $exe --fish-completion-script $exe >$out/share/fish/completions/${drv.pname}.fish
     '';
   });
 
@@ -1149,6 +1151,8 @@ with pkgs;
   staccato = callPackage ../tools/text/staccato { };
 
   stagit = callPackage ../development/tools/stagit { };
+
+  bash-supergenpass = callPackage ../tools/security/bash-supergenpass { };
 
   syscall_limiter = callPackage ../os-specific/linux/syscall_limiter {};
 
@@ -1879,6 +1883,8 @@ with pkgs;
 
   epstool = callPackage ../tools/graphics/epstool { };
 
+  epsxe = callPackage ../misc/emulators/epsxe { };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
@@ -2299,11 +2305,11 @@ with pkgs;
 
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
-  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk = python2.pkgs.google-cloud-sdk;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
-  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine {  };
+  google-compute-engine = python2.pkgs.google-compute-engine;
 
   gource = callPackage ../applications/version-management/gource { };
 
@@ -4634,6 +4640,11 @@ with pkgs;
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
+  tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
+    stdenv = stdenvNoCC;
+    tor-browser-unwrapped = firefoxPackages.tor-browser;
+  };
+
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
@@ -5602,8 +5613,8 @@ with pkgs;
     profiledCompiler = false;
   });
 
-  gcj = gcj49;
-  gcj49 = wrapCC (gcc49.cc.override {
+  gcj = gcj6;
+  gcj6 = wrapCC (gcc6.cc.override {
     name = "gcj";
     langJava = true;
     langFortran = false;
@@ -5884,11 +5895,17 @@ with pkgs;
 
   oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
 
+  oraclejdk9 = pkgs.oraclejdk9distro "JDK" false;
+
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
 
   oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
+
+  oraclejre9 = lowPrio (pkgs.oraclejdk9distro "JRE" false);
+
+  oracleserverjre9 = lowPrio (pkgs.oraclejdk9distro "ServerJRE" false);
 
   jrePlugin = jre8Plugin;
 
@@ -5904,12 +5921,17 @@ with pkgs;
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk pluginSupport; });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
+
+  oraclejdk9distro = packageType: pluginSupport:
+    assert supportsJDK;
+    (if pluginSupport then appendToName "with-plugin" else x: x)
+      (callPackage ../development/compilers/oraclejdk/jdk9-linux.nix { inherit packageType pluginSupport; });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -6712,18 +6734,18 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
-  guileCairo = callPackage ../development/guile-modules/guile-cairo { };
+  guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
 
-  guileGnome = callPackage ../development/guile-modules/guile-gnome {
+  guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
     inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
   };
 
-  guile_lib = callPackage ../development/guile-modules/guile-lib { };
+  guile-lib = callPackage ../development/guile-modules/guile-lib { };
 
-  guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
+  guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
 
@@ -7518,7 +7540,7 @@ with pkgs;
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.3.nix { };
+  texinfo6 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
@@ -7575,6 +7597,8 @@ with pkgs;
   vulnix = callPackage ../tools/security/vulnix {
     pythonPackages = python3Packages;
   };
+
+  watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
@@ -9257,6 +9281,8 @@ with pkgs;
 
   libminc = callPackage ../development/libraries/libminc { };
 
+  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { }; 
+  
   libmkv = callPackage ../development/libraries/libmkv { };
 
   libmms = callPackage ../development/libraries/libmms { };
@@ -10381,8 +10407,8 @@ with pkgs;
   resolv_wrapper = callPackage ../development/libraries/resolv_wrapper { };
 
   rhino = callPackage ../development/libraries/java/rhino {
-    javac = gcj;
-    jvm = gcj;
+    javac = jdk;
+    jvm = jre;
   };
 
   rlog = callPackage ../development/libraries/rlog { };
@@ -11373,6 +11399,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
+
   gatling = callPackage ../servers/http/gatling { };
 
   glabels = callPackage ../applications/graphics/glabels { };
@@ -12034,6 +12062,7 @@ with pkgs;
 
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
 
@@ -13165,6 +13194,8 @@ with pkgs;
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
 
+  latinmodern-math = callPackage ../data/fonts/lm-math {};
+
   lato = callPackage ../data/fonts/lato {};
 
   league-of-moveable-type = callPackage ../data/fonts/league-of-moveable-type {};
@@ -13371,6 +13402,8 @@ with pkgs;
   terminus_font = callPackage ../data/fonts/terminus-font { };
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
+
+  tex-gyre-termes-math = callPackage ../data/fonts/tex-gyre-termes-math { };
 
   tipa = callPackage ../data/fonts/tipa { };
 
@@ -14381,6 +14414,8 @@ with pkgs;
   };
 
   gqrx = qt5.callPackage ../applications/misc/gqrx { };
+
+  gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
 
   grass = callPackage ../applications/gis/grass { };
 
@@ -16227,6 +16262,11 @@ with pkgs;
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
+  stupidterm = callPackage ../applications/misc/stupidterm {
+    vte = gnome3.vte;
+    gtk = gtk3;
+  };
+
   styx = callPackage ../applications/misc/styx { };
 
   tecoc = callPackage ../applications/editors/tecoc { };
@@ -16613,6 +16653,8 @@ with pkgs;
   };
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
+
+  testssl = callPackage ../applications/networking/testssl { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -17231,6 +17273,8 @@ with pkgs;
   inherit (python3Packages) you-get;
 
   inherit (pythonPackages) youtube-dl;
+
+  youtube-viewer = perlPackages.WWWYoutubeViewer;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
@@ -18026,6 +18070,8 @@ with pkgs;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
+  numix-solarized-gtk-theme = callPackage ../misc/themes/gtk3/numix-solarized-gtk-theme {  };
+
   numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
 
   theme-vertex = callPackage ../misc/themes/vertex { };
@@ -18552,7 +18598,9 @@ with pkgs;
     sbcl = null;
   };
 
-  mxnet = callPackage ../applications/science/math/mxnet { };
+  mxnet = callPackage ../applications/science/math/mxnet {
+    inherit (linuxPackages) nvidia_x11;
+  };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
@@ -18880,9 +18928,9 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
+  hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
-  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
+  hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
