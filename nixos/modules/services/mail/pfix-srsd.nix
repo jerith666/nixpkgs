@@ -2,12 +2,6 @@
 
 with lib;
 
-let
-
-  secretsFile = pkgs.writeText "pfix-srsd-secrets" config.services.pfix-srsd.secret;
-
-in
-
 {
 
   ###### interface
@@ -17,15 +11,24 @@ in
     services.pfix-srsd = {
       enable = mkOption {
         default = false;
+        type = types.bool;
         description = "Whether to run the postfix sender rewriting scheme daemon.";
       };
 
       domain = mkOption {
         description = "The domain for which to enable srs";
+        type = types.str;
+        example = "example.com";
       };
 
-      secret = mkOption {
-        description = "The secret data used to encode the SRS address";
+      secretsFile = mkOption {
+        description = ''
+          The secret data used to encode the SRS address.
+          to generate, use a command like:
+          <literal>for n in $(seq 5); do dd if=/dev/urandom count=1 bs=1024 status=none | sha256sum | sed 's/  -$//' | sed 's/^/          /'; done</literal>
+        '';
+        type = types.path;
+        default = "/var/lib/pfix-srsd/secrets";
       };
     };
   };
@@ -46,7 +49,7 @@ in
       serviceConfig = {
         Type = "forking";
         PIDFile = "/var/run/pfix-srsd.pid";
-        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /var/run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${secretsFile}";
+        ExecStart = "${pkgs.pfixtools}/bin/pfix-srsd -p /var/run/pfix-srsd.pid -I ${config.services.pfix-srsd.domain} ${config.services.pfix-srsd.secretsFile}";
       };
     };
   };
