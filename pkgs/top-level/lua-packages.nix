@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, which
 }:
 
 let
@@ -154,6 +154,7 @@ let
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
       platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
@@ -270,6 +271,33 @@ let
     };
   };
 
+  luxio = buildLuaPackage rec {
+    name = "luxio-${version}";
+    version = "13";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+    };
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        INSTALL=install
+        );
+    '';
+  };
+
   luazip = buildLuaPackage rec {
     name = "zip-${version}";
     version = "1.2.3";
@@ -285,6 +313,7 @@ let
       homepage = "https://github.com/luaforge/luazip";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
@@ -434,6 +463,7 @@ let
     meta = {
       description = "Lua C extension module for JSON support";
       license = stdenv.lib.licenses.mit;
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 

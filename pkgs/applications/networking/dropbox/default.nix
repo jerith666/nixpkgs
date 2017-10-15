@@ -24,10 +24,10 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "34.4.22";
+  version = "36.4.22";
   sha256 = {
-    "x86_64-linux" = "1ryxj8d5ym2dc18vn2m883jvy9n19xvw5kgfbqxziirb0bip58ba";
-    "i686-linux"   = "1pj7c77196ill8jpwk8f66917v2a7c2xvkd9mssh98c9n321k5j8";
+    "x86_64-linux" = "0hhnigwxqmr00zmlysc1y1k4bzrdrcabcnw44bniarwa2l4fw0v0";
+    "i686-linux"   = "15l7m33b0qlz8m6h7kh1fkxs37dq8jqy04b3qf693ns7wb5l0sqm";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = {
