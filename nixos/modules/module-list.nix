@@ -99,6 +99,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
+  ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
@@ -297,6 +298,7 @@
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoip-updater.nix
+  ./services/misc/gitea.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
@@ -344,6 +346,7 @@
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/taskserver
+  ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
@@ -694,6 +697,7 @@
   ./tasks/filesystems/bcachefs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
+  ./tasks/filesystems/ecryptfs.nix
   ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix

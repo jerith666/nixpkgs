@@ -60,7 +60,7 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
-  graphiteVersion = "0.9.15";
+  graphiteVersion = "1.0.2";
 
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
     let
@@ -95,7 +95,10 @@ in {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
-  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { pythonPackages = self; };
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
+    pythonPackages = self;
+    boost = pkgs.boost160;
+  };
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
@@ -253,6 +256,10 @@ in {
     pythonPackages = self;
   };
 
+  pyqt56 = pkgs.libsForQt56.callPackage ../development/python-modules/pyqt/5.x.nix {
+    pythonPackages = self;
+  };
+
   pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
@@ -274,6 +281,8 @@ in {
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
+
+  python-utils = callPackage ../development/python-modules/python-utils { };
 
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
@@ -534,6 +543,8 @@ in {
       license = licenses.free;
     };
   } else null;
+
+  python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
@@ -1476,7 +1487,10 @@ in {
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
-  boost = pkgs.boost.override {inherit python;};
+  boost = pkgs.boost.override {
+    inherit (self) python numpy;
+    enablePython = true;
+  };
 
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
@@ -1531,7 +1545,6 @@ in {
     python = self.python;
     boost = self.boost;
     numpy = self.numpy;
-    pythonSupport = true;
   };
 
   capstone = buildPythonPackage rec {
@@ -1666,6 +1679,8 @@ in {
   csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
+
+  cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
 
@@ -2576,6 +2591,27 @@ in {
     };
   };
 
+  cntk = buildPythonPackage rec {
+    inherit (pkgs.cntk) name version src meta;
+
+    buildInputs = [ pkgs.cntk pkgs.swig pkgs.openmpi ];
+    propagatedBuildInputs = with self; [ numpy scipy enum34 protobuf pip ];
+
+    CNTK_LIB_PATH = "${pkgs.cntk}/lib";
+    CNTK_COMPONENT_VERSION = pkgs.cntk.version;
+
+    postPatch = ''
+      cd bindings/python
+    '';
+
+    postInstall = ''
+      rm -rf $out/${python.sitePackages}/cntk/libs
+      ln -s ${pkgs.cntk}/lib $out/${python.sitePackages}/cntk/libs
+      # It's not installed for some reason.
+      cp cntk/cntk_py.py $out/${python.sitePackages}/cntk
+    '';
+  };
+
   celery = buildPythonPackage rec {
     name = "celery-${version}";
     version = "4.0.2";
@@ -2908,6 +2944,8 @@ in {
   };
 
   colorama = callPackage ../development/python-modules/colorama { };
+
+  colorlover = callPackage ../development/python-modules/colorlover { };
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
@@ -6648,14 +6686,15 @@ in {
     };
   };
 
-  python-mapnik = buildPythonPackage {
-    name = "python-mapnik-git-2016-08-30";
+  python-mapnik = buildPythonPackage rec {
+    name = "python-mapnik-${version}";
+    version = "3.0.13";
 
     src = pkgs.fetchFromGitHub {
       owner = "mapnik";
       repo = "python-mapnik";
-      rev = "541fd962d4fc99d50ec472af6ddccfdbf98cff37";
-      sha256 = "1d93qjnzggdpbhnmxlmk5jh0zd2jnpfl4n4aip5ypd39ilqibhf3";
+      rev = "v${version}";
+      sha256 = "0biw9bfkbsgfyjihyvkj4abx9s9r3h81rk6dc1y32022rypsqhkp";
     };
 
     disabled = isPyPy;
@@ -8286,14 +8325,14 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
-    name = "django-tagging-0.3.6";
+  django_tagging_0_4_3 = self.django_tagging.overrideAttrs (attrs: rec {
+    name = "django-tagging-0.4.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
-      sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
+      sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
     };
-    propagatedBuildInputs = with self; [ django ];
+    propagatedBuildInputs = with self; [ django_1_8 ];
   });
 
   django_classytags = buildPythonPackage rec {
@@ -11127,14 +11166,12 @@ in {
     };
   });
 
-  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
-    inherit (self) numpy scipy;
-    inherit (pkgs.linuxPackages) nvidia_x11;
-    cudatoolkit = pkgs.cudatoolkit75;
-    clblas = pkgs.clblas-cuda;
+  libgpuarray = callPackage ../development/python-modules/libgpuarray {
+    clblas = pkgs.clblas.override { boost = self.boost; };
+    cudaSupport = pkgs.config.cudaSupport or false;
   };
 
-  libnacl = callPackage ../development/python-modules/libnacl/default.nix {
+  libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
 
@@ -13310,6 +13347,8 @@ in {
       license = licenses.free;
     };
   };
+
+  numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
   numtraits = buildPythonPackage rec {
     pname = "numtraits";
@@ -19833,24 +19872,20 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
-  Theano = self.TheanoWithoutCuda;
+  Theano = callPackage ../development/python-modules/Theano rec {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudnnSupport = cudaSupport;
+  };
 
-  TheanoWithoutCuda = callPackage ../development/python-modules/Theano/theano-without-cuda { };
+  TheanoWithoutCuda = self.Theano.override {
+    cudaSupport = true;
+    cudnnSupport = true;
+  };
 
-  TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
-  let
-    boost = pkgs.boost159.override {
-      inherit (self) python numpy scipy;
-    };
-  in rec {
-    cudatoolkit = pkgs.cudatoolkit75;
-    cudnn = pkgs.cudnn5_cudatoolkit75;
-    inherit (self) numpy scipy;
-    pycuda = self.pycuda.override { inherit boost; };
-    libgpuarray = self.libgpuarray-cuda.override {
-      clblas = pkgs.clblas-cuda.override { inherit boost; };
-    };
-  });
+  TheanoWithCuda = self.Theano.override {
+    cudaSupport = false;
+    cudnnSupport = false;
+  };
 
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
@@ -22250,11 +22285,11 @@ EOF
   };
 
   waitress = buildPythonPackage rec {
-    name = "waitress-0.8.9";
+    name = "waitress-1.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/waitress/${name}.tar.gz";
-      sha256 = "826527dc9d334ed4ed76cdae672fdcbbccf614186657db71679ab58df869458a";
+      sha256 = "0pw6yyxi348r2xpq3ykqnf7gwi881azv2422d2ixb0xi5jws2ky7";
     };
 
     doCheck = false;
@@ -22264,6 +22299,8 @@ EOF
        platforms = platforms.all;
     };
   };
+
+  waitress-django = callPackage ../development/python-modules/waitress-django { };
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
@@ -23457,7 +23494,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/whisper/${name}.tar.gz";
-      sha256 = "1chkphxwnwvy2cs7jc2h2i0lqqvi9jx6vqj3ly88lwk7m35r4ss2";
+      sha256 = "1v1bi3fl1i6p4z4ki692bykrkw6907dn3mfq0151f70lvi3zpns3";
     };
 
     # error: invalid command 'test'
@@ -23524,7 +23561,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carbon/${name}.tar.gz";
-      sha256 = "f01db6d37726c6fc0a8aaa66a7bf14436b0dd0d62ef3c20ecb31605a4d365d2e";
+      sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
@@ -23739,10 +23776,13 @@ EOF
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
-      sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
+      sha256 = "0q8bwlj75jqyzmazfsi5sa26xl58ssa8wdxm2l4j0jqyn8xpfnmc";
     };
 
-    propagatedBuildInputs = with self; [ django django_tagging_0_3 whisper pycairo ldap memcached pytz ];
+    propagatedBuildInputs = with self; [
+      django_1_8 django_tagging_0_4_3 whisper pycairo cairocffi
+      ldap memcached pytz urllib3 scandir
+    ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -23750,10 +23790,20 @@ EOF
     '';
 
     preConfigure = ''
-      substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
-      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
-      cp webapp/graphite/manage.py bin/manage-graphite.py
-      substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
+      # graphite is configured by storing a local_settings.py file inside the
+      # graphite python package. Since that package is stored in the immutable
+      # Nix store we can't modify it. So how do we configure graphite?
+      #
+      # First of all we rename "graphite.local_settings" to
+      # "graphite_local_settings" so that the settings are not looked up in the
+      # graphite package anymore. Secondly we place a directory containing a
+      # graphite_local_settings.py on the PYTHONPATH in the graphite module
+      # <nixpkgs/nixos/modules/services/monitoring/graphite.nix>.
+      substituteInPlace webapp/graphite/settings.py \
+        --replace "graphite.local_settings" " graphite_local_settings"
+
+      substituteInPlace webapp/graphite/settings.py \
+        --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
     '';
 
     # error: invalid command 'test'
@@ -25963,14 +26013,20 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = self.tensorflowWithoutCuda;
-
-  tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
-
-  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
-    cudaSupport = true;
+  tensorflow = callPackage ../development/python-modules/tensorflow rec {
+    bazel = pkgs.bazel_0_4;
+    cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit8;
-    cudnn = pkgs.cudnn60_cudatoolkit80;
+    cudnn = pkgs.cudnn6_cudatoolkit8;
+  };
+
+  tensorflowWithoutCuda = self.tensorflow.override {
+    cudaSupport = false;
+  };
+
+  tensorflowWithCuda = self.tensorflow.override {
+    cudaSupport = true;
   };
 
   tflearn = buildPythonPackage rec {
@@ -26486,7 +26542,12 @@ EOF
 
   stripe = callPackage ../development/python-modules/stripe { };
 
-  uranium = callPackage ../development/python-modules/uranium { };
+  twilio = callPackage ../development/python-modules/twilio { };
+
+  uranium = callPackage ../development/python-modules/uranium {
+    # https://github.com/Ultimaker/Cura/issues/2596
+    pyqt5 = self.pyqt56;
+  };
 
   vine = callPackage ../development/python-modules/vine { };
 
