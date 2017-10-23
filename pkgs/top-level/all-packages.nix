@@ -57,6 +57,13 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
+  ### Evaluating the entire Nixpkgs naively will fail, make failure fast
+  AAAAAASomeThingsFailToEvaluate = throw ''
+    Please be informed that this pseudo-package is not the only part of
+    Nixpkgs that fails to evaluate. You should not evaluate entire Nixpkgs
+    without some special measures to handle failing packages, like those taken
+    by Hydra.
+  '';
 
   ### Nixpkgs maintainer tools
 
@@ -935,6 +942,8 @@ with pkgs;
 
   deisctl = callPackage ../development/tools/deisctl {};
 
+  deja-dup = callPackage ../applications/backup/deja-dup { };
+
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker {};
@@ -1426,6 +1435,8 @@ with pkgs;
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
+  u3-tool = callPackage ../tools/filesystems/u3-tool { };
+
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
@@ -1862,7 +1873,9 @@ with pkgs;
 
   entr = callPackage ../tools/misc/entr { };
 
-  envoy = callPackage ../tools/networking/envoy { };
+  envoy = callPackage ../tools/networking/envoy {
+    bazel = bazel_0_4;
+  };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
@@ -2673,6 +2686,7 @@ with pkgs;
   iperf = iperf3;
 
   ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
@@ -3157,7 +3171,9 @@ with pkgs;
 
   mailhog = callPackage ../servers/mail/mailhog {};
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
+    pythonPackages = python2Packages;
+  };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
@@ -4157,6 +4173,8 @@ with pkgs;
   rng_tools = callPackage ../tools/security/rng-tools { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
+
+  routino = callPackage ../tools/misc/routino { };
 
   rq = callPackage ../development/tools/rq {
     v8 = v8_static;
@@ -5619,10 +5637,9 @@ with pkgs;
     emacsSupport = config.emacsSupport or false;
   };
 
-  gccgo = gccgo49;
-
-  gccgo49 = wrapCC (gcc49.cc.override {
-    name = "gccgo49";
+  gccgo = gccgo6;
+  gccgo6 = wrapCC (gcc6.cc.override {
+    name = "gccgo6";
     langCC = true; #required for go.
     langC = true;
     langGo = true;
@@ -6230,6 +6247,7 @@ with pkgs;
     vala_0_28
     vala_0_32
     vala_0_34
+    vala_0_38
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -6281,8 +6299,9 @@ with pkgs;
 
   yosys = callPackage ../development/compilers/yosys { };
 
-  zulu = callPackage ../development/compilers/zulu { };
-
+  zulu8 = callPackage ../development/compilers/zulu/8.nix { };
+  zulu9 = callPackage ../development/compilers/zulu { };
+  zulu = zulu9;
 
   ### DEVELOPMENT / INTERPRETERS
 
@@ -6628,16 +6647,16 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_7
-    ruby_2_3_4
+    ruby_2_2_8
+    ruby_2_3_5
     ruby_2_4_2;
 
   # Ruby aliases
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_7;
-  ruby_2_3 = ruby_2_3_4;
+  ruby_2_2 = ruby_2_2_8;
+  ruby_2_3 = ruby_2_3_5;
   ruby_2_4 = ruby_2_4_2;
 
   scsh = callPackage ../development/interpreters/scsh { };
@@ -6829,7 +6848,9 @@ with pkgs;
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = callPackage ../development/tools/build-managers/bazel { };
+  bazel_0_4 = callPackage ../development/tools/build-managers/bazel/0.4.nix { };
+  bazel_0_5 = callPackage ../development/tools/build-managers/bazel { };
+  bazel = bazel_0_5;
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
@@ -7547,7 +7568,7 @@ with pkgs;
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_2;
+    ruby = ruby_2_3;
   };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
@@ -8559,7 +8580,10 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { };
 
-  icu = callPackage ../development/libraries/icu { };
+  icu58 = callPackage ../development/libraries/icu/58.nix { };
+  icu59 = callPackage ../development/libraries/icu/59.nix { };
+
+  icu = icu58;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -10672,6 +10696,8 @@ with pkgs;
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  twolame = callPackage ../development/libraries/twolame { };
+
   udns = callPackage ../development/libraries/udns { };
 
   uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
@@ -12594,6 +12620,8 @@ with pkgs;
 
   delve = callPackage ../development/tools/delve { };
 
+  dep = callPackage ../development/tools/dep { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
@@ -13618,6 +13646,8 @@ with pkgs;
 
   bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
 
+  bb =  callPackage ../applications/misc/bb { };
+
   beast = callPackage ../applications/audio/beast {
     inherit (gnome2) libgnomecanvas libart_lgpl;
     guile = guile_1_8;
@@ -13919,11 +13949,11 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_06
-    docker_17_09;
+    docker_17_09
+    docker_17_10;
 
   docker = docker_17_09;
-  docker-edge = docker_17_09;
+  docker-edge = docker_17_10;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -14291,7 +14321,7 @@ with pkgs;
 
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
-  focuswriter = callPackage ../applications/editors/focuswriter { };
+  focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
@@ -14418,6 +14448,7 @@ with pkgs;
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
+      icu = icu59;
     };
   });
 
@@ -15057,7 +15088,7 @@ with pkgs;
 
   keymon = callPackage ../applications/video/key-mon { };
 
-  kgraphviewer = kde4.callPackage ../applications/graphics/kgraphviewer { };
+  kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };
 
@@ -15078,7 +15109,7 @@ with pkgs;
 
   kiwix = callPackage ../applications/misc/kiwix { };
 
-  kmplayer = kde4.callPackage ../applications/video/kmplayer { };
+  kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
@@ -15295,7 +15326,7 @@ with pkgs;
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
-  merkaartor = callPackage ../applications/misc/merkaartor { };
+  merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab { };
 
@@ -15928,6 +15959,8 @@ with pkgs;
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
+  qmapshack = libsForQt5.callPackage ../applications/misc/qmapshack { };
+
   qmetro = callPackage ../applications/misc/qmetro { };
 
   qmidinet = callPackage ../applications/audio/qmidinet { };
@@ -15999,6 +16032,8 @@ with pkgs;
     withGstPlugins = true;
     gst-plugins-bad = null;
   };
+
+  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils pyopengl;
@@ -17980,6 +18015,8 @@ with pkgs;
 
   orion = callPackage ../misc/themes/orion {};
 
+  deepin-gtk-theme = callPackage ../misc/themes/deepin { };
+
   albatross = callPackage ../misc/themes/albatross { };
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
@@ -18892,6 +18929,9 @@ with pkgs;
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
 
+  nix-info = callPackage ../tools/nix/info { };
+  nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
+
   nix-index = callPackage ../tools/package-management/nix-index { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
@@ -18983,7 +19023,7 @@ with pkgs;
 
   pjsip = callPackage ../applications/networking/pjsip { };
 
-  PPSSPP = callPackage ../misc/emulators/ppsspp { SDL = SDL2; };
+  ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
   pt = callPackage ../applications/misc/pt { };
 
