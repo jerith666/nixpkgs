@@ -55,7 +55,13 @@ following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
-    <para></para>
+    <para>
+      Dollar signs in options under <option>services.postfix</option> are
+      passed verbatim to Postfix, which will interpret them as the beginning of
+      a parameter expression. This was already true for string-valued options
+      in the previous release, but not for list-valued options. If you need to
+      pass literal dollar signs through Postfix, double them.
+    </para>
   </listitem>
 </itemizedlist>
 
@@ -71,6 +77,8 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      ZNC option <option>services.znc.mutable</option> now defaults to <literal>true</literal>.
+      That means that old configuration is not overwritten by default when update to the znc options are made.
     </para>
   </listitem>
 </itemizedlist>

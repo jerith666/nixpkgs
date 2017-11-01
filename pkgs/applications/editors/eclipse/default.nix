@@ -114,7 +114,7 @@ rec {
   };
 
   eclipse-platform-47 = buildEclipse {
-    name = "eclipse-platform-4.7";
+    name = "eclipse-platform-4.7.1a";
     description = "Eclipse Platform Oxygen";
     sources = {
       "x86_64-linux" = fetchurl {
@@ -168,7 +168,7 @@ rec {
   };
 
   eclipse-sdk-47 = buildEclipse {
-    name = "eclipse-sdk-4.7";
+    name = "eclipse-sdk-4.7.1a";
     description = "Eclipse Oxygen Classic";
     sources = {
       "x86_64-linux" = fetchurl {

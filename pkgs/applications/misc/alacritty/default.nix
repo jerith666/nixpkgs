@@ -29,16 +29,16 @@ let
 in
 
 buildRustPackage rec {
-  name = "alacritty-unstable-2017-09-02";
+  name = "alacritty-unstable-2017-10-17";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
-    rev = "22fa4260fc9210fbb5288090df79c92e7b3788e4";
-    sha256 = "0jjvvm0fm25p1h1rgfqlnhq4bwrjdxpb2pgnmpik9pl7qwy3q7s1";
+    rev = "5ac42bb13bc68c5cbc44869dc9fc9ac19402a6e6";
+    sha256 = "0h37x12r33xwz9vf1n8y24c0ph5w17lhkpfi5q6lbpgidvbs6fyx";
   };
 
-  depsSha256 = "19lrj4i6vzmf22r6xg99zcwvzjpiar8pqin1m2nvv78xzxx5yvgb";
+  cargoSha256 = "0w3j92kd27pny37pfvlv6qsnbb1lgphmfbhvvng0z96r2b1wjviz";
 
   buildInputs = [
     cmake
@@ -69,6 +69,7 @@ buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
