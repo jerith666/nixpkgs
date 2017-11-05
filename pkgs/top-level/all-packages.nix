@@ -1396,7 +1396,7 @@ with pkgs;
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
     gst_plugins =
-      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ];
+      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
 
   clementineFree = clementine.free;
@@ -2739,6 +2739,8 @@ with pkgs;
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
+  ipmicfg = callPackage ../applications/misc/ipmicfg {};
+
   ipmiview = callPackage ../applications/misc/ipmiview {};
 
   ipcalc = callPackage ../tools/networking/ipcalc {};
@@ -3714,6 +3716,10 @@ with pkgs;
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
+
+  openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
+    stdenv = clangStdenv;
+  };
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
@@ -12262,6 +12268,8 @@ with pkgs;
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
+
+  gmailieer = callPackage ../applications/networking/gmailieer {};
 
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
