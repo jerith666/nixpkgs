@@ -20,9 +20,11 @@ let
 
       enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkgconfig ];
       buildInputs = [ flex bison ]
         ++ lib.optional stdenv.isLinux systemd;
+
+      CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++11";
 
       flags = {
 
@@ -50,7 +52,7 @@ let
 
         ldap = {
           configureFlags = [
-            "--with-ldap"
+            "--with-ldap=/invalid/path"
             "LDAP_DIR=${openldap.dev}"
             "LDAP_INCDIR=${openldap.dev}/include"
             "LDAP_LIBDIR=${openldap.out}/lib"
