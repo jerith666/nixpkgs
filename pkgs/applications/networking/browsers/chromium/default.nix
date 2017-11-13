@@ -35,7 +35,7 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "chromium-browser";
+    name = "chromium";
     exec = "chromium %U";
     icon = "chromium";
     comment = "An open source web browser from Google";
