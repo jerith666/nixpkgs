@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jenkins-${version}";
-  version = "2.86";
+  version = "2.90";
 
   src = fetchurl {
     url = "http://mirrors.jenkins-ci.org/war/${version}/jenkins.war";
-    sha256 = "198fcj2wkz8qxawk3mq29kwl51pxlbd7ivndcpvdvg42g0caqyi0";
+    sha256 = "15h1abcvr8b5n8l4kqivxncvc9dwz66pmdy9ycs3qaz4nrypws8z";
   };
 
   buildCommand = ''
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://jenkins-ci.org;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz ];
+    maintainers = with maintainers; [ coconnor fpletz earldouglas ];
   };
 }

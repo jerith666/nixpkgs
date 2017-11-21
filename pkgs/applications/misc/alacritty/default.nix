@@ -1,5 +1,5 @@
 { stdenv,
-  fetchFromGitHub,
+  fetchgit,
   rustPlatform,
   cmake,
   makeWrapper,
@@ -26,25 +26,28 @@ let
     libXxf86vm
     libXi
   ];
-in
+in buildRustPackage rec {
+  name = "alacritty-unstable-${version}";
+  version = "2017-11-12";
 
-buildRustPackage rec {
-  name = "alacritty-unstable-2017-10-17";
-
-  src = fetchFromGitHub {
-    owner = "jwilm";
-    repo = "alacritty";
-    rev = "5ac42bb13bc68c5cbc44869dc9fc9ac19402a6e6";
-    sha256 = "0h37x12r33xwz9vf1n8y24c0ph5w17lhkpfi5q6lbpgidvbs6fyx";
+  # At the moment we cannot handle git dependencies in buildRustPackage.
+  # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
+  src = fetchgit {
+    url = https://github.com/Mic92/alacritty.git;
+    rev = "rev-${version}";
+    sha256 = "0096fzrfzj0a2n2n531r4b6c8rlfj5qc90d6i4iin5axalk3i1h4";
+    fetchSubmodules = true;
   };
 
-  cargoSha256 = "0w3j92kd27pny37pfvlv6qsnbb1lgphmfbhvvng0z96r2b1wjviz";
+  cargoSha256 = "10blch8pzk1zk3w27sbcszhcnq908xh1q55vqgy8iv5x47rpl02q";
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
     makeWrapper
     pkgconfig
-  ] ++ rpathLibs;
+  ];
+
+  buildInputs = rpathLibs;
 
   postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
@@ -54,14 +57,10 @@ buildRustPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    for f in $(find target/release -maxdepth 1 -type f); do
-      cp $f $out/bin
-    done;
+    install -D target/release/alacritty $out/bin/alacritty
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
 
-    mkdir -p $out/share/applications
-    cp Alacritty.desktop $out/share/applications/alacritty.desktop
+    install -D Alacritty.desktop $out/share/applications/alacritty.desktop
 
     runHook postInstall
   '';
@@ -69,7 +68,6 @@ buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    broken = true;
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];
