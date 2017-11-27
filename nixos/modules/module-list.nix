@@ -226,6 +226,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/fwupd.nix
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
@@ -485,6 +486,7 @@
   ./services/networking/networkmanager.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
+  ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
@@ -608,6 +610,7 @@
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix
+  ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
