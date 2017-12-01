@@ -16,7 +16,8 @@ let
 
     buildInputs = [ makeWrapper retroarch zlib ] ++ a.extraBuildInputs or [];
 
-    buildPhase = "make -f Makefile.libretro";
+    makefile = "Makefile.libretro";
+
     installPhase = ''
       COREDIR="$out/lib/retroarch/cores"
       mkdir -p $out/bin
@@ -203,7 +204,7 @@ in
     description = "Enhanced Genesis Plus libretro port";
   };
 
-  mame = mkLibRetroCore {
+  mame = (mkLibRetroCore {
     core = "mame";
     src = fetchRetro {
       repo = "mame";
@@ -213,6 +214,12 @@ in
     description = "Port of MAME to libretro";
 
     extraBuildInputs = [ alsaLib mesa portaudio python27 xorg.libX11 ];
+  }).override {
+    postPatch = ''
+      # Prevent the failure during the parallel building of:
+      # make -C 3rdparty/genie/build/gmake.linux -f genie.make obj/Release/src/host/lua-5.3.0/src/lgc.o
+      mkdir -p 3rdparty/genie/build/gmake.linux/obj/Release/src/host/lua-5.3.0/src
+    '';
   };
 
   mgba = mkLibRetroCore rec {
