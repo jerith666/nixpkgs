@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, fetchpatch
+, perl, which, pkgconfig, patch, procps
 , pcre, cacert, llvm
 , Security, Foundation, bash
 , makeWrapper, git, subversion, mercurial, bazaar }:
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ];
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
+    ++ optionals stdenv.isLinux [ procps ];
   buildInputs = [ pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
@@ -118,11 +119,8 @@ stdenv.mkDerivation rec {
       ./ssl-cert-file-1.9.patch
       ./creds-test.patch
       ./remove-test-pie-1.9.patch
-
-      (fetchpatch {
-        url = "https://github.com/golang/go/commit/29415eb2b92e78481897c4161ba99f5b09fa6102.patch";
-        sha256 = "01jkm4b2dazzjnfla7rdd0w2clzplga3zza6ybpmkjkk3i4bp73d";
-      })
+      ./go-1.9-skip-flaky-19608.patch
+      ./go-1.9-skip-flaky-20072.patch
     ];
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -153,6 +151,7 @@ stdenv.mkDerivation rec {
     export GOROOT=$out/share/go
     export GOBIN=$GOROOT/bin
     export PATH=$GOBIN:$PATH
+    ulimit -a
   '';
 
   postConfigure = optionalString stdenv.isDarwin ''

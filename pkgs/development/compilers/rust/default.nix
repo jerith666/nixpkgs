@@ -6,7 +6,7 @@
 
 let
   rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
-  version = "1.20.0";
+  version = "1.21.0";
 in
 rec {
   rustc = callPackage ./rustc.nix {
@@ -18,12 +18,14 @@ rec {
 
     src = fetchurl {
       url = "https://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-      sha256 = "0542y4rnzlsrricai130mqyxl8r6rd991frb4qsnwb27yigqg91a";
+      sha256 = "1yj8lnxybjrybp00fqhxw8fpr641dh8wcn9mk44xjnsb4i1c21qp";
     };
 
     patches = [
       ./patches/0001-Disable-fragile-tests-libstd-net-tcp-on-Darwin-Linux.patch
-    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
+    ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch
+      # https://github.com/rust-lang/rust/issues/45410
+      ++ stdenv.lib.optional stdenv.isAarch64 ./patches/aarch64-disable-test_loading_cosine.patch;
 
   };
 

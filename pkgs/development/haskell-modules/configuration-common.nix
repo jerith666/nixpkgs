@@ -41,7 +41,7 @@ self: super: {
 
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
@@ -95,7 +95,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "14449sllp81d23mnjwn1m658kzry5qvww2ykxkbkdcrlz6kl6dy0";
+      sha256 = "1bnnrwamw3d37fz7cwykxhi1ryy22dq8r6ld59gsbgcv23drqzax";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -152,7 +152,7 @@ self: super: {
     extraLibraries = [ pkgs.openblasCompat ];
   });
 
-  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_1; };
+  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_2; };
 
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
@@ -452,8 +452,10 @@ self: super: {
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
-  # https://github.com/purescript/purescript/pull/3041
-  purescript = doJailbreak super.purescript;
+  # https://github.com/NixOS/nixpkgs/issues/32138
+  purescript = super.purescript.override {
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
+  };
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
@@ -505,6 +507,21 @@ self: super: {
   pandoc = overrideCabal super.pandoc (drv: {
     preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
   });
+
+  # pandoc 2 dependency resolution
+  hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
+  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
+  texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
+  pandoc_2_0_4 = super.pandoc_2_0_4.override {
+    doctemplates = self.doctemplates_0_2_1;
+    pandoc-types = self.pandoc-types_1_17_3;
+    skylighting = self.skylighting_0_4_4_1;
+    texmath = self.texmath_0_10;
+  };
+  pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
+    pandoc = self.pandoc_2_0_4;
+    pandoc-types = self.pandoc-types_1_17_3;
+  };
 
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
@@ -727,13 +744,8 @@ self: super: {
     '';
   });
 
-  # test suite cannot find its own "idris" binary
+  # The standard libraries are compiled separately
   idris = doJailbreak (dontCheck super.idris);
-
-  idris_1_1_1 = overrideCabal (doJailbreak (dontCheck super.idris_1_1_1)) (drv: {
-    # The standard libraries are compiled separately
-    configureFlags = (drv.configureFlags or []) ++ [ "-fexeconly" ];
-  });
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
@@ -956,12 +968,6 @@ self: super: {
     optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
 
-  # Break "hpack >=0.17.0 && <0.19".
-  stack = doJailbreak super.stack;
-
-  # https://github.com/mgajda/json-autotype/issues/15
-  json-autotype = doJailbreak super.json-autotype;
-
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
@@ -986,5 +992,27 @@ self: super: {
       sha256 = "0hyrcyssclkdfcw2kgcark8jl869snwnbrhr9k0a9sbpk72wp7nz";
     };
   }).override { language-c = self.language-c_0_7_0; };
+
+  # Needs pginit to function and pgrep to verify.
+  tmp-postgres = overrideCabal super.tmp-postgres (drv: {
+    libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.postgresql];
+    testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
+  });
+
+  # Newer hpack's needs newer HUnit, but we cannot easily override the version
+  # used in the build, so we take the easy way out and disable the test suite.
+  hpack_0_20_0 = dontCheck super.hpack_0_20_0;
+  hpack_0_21_0 = dontCheck super.hpack_0_21_0;
+
+  # Stack 1.6.1 needs newer versions than LTS-9 provides.
+  stack = super.stack.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_7_1_1;
+    ansi-wl-pprint = self.ansi-wl-pprint_0_6_8_1;
+    extra = dontCheck super.extra_1_6_2;
+    hpack = super.hpack_0_20_0;
+    path = dontCheck super.path_0_6_1;
+    path-io = self.path-io_1_3_3;
+    unliftio = self.unliftio_0_2_0_0;
+  });
 
 }
