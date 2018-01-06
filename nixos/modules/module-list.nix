@@ -71,6 +71,7 @@
   ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
+  ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
@@ -91,6 +92,7 @@
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/qt5ct.nix
+  ./programs/rootston.nix
   ./programs/screen.nix
   ./programs/slock.nix
   ./programs/shadow.nix
@@ -104,6 +106,7 @@
   ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/vim.nix
+  ./programs/way-cooler.nix
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
@@ -355,6 +358,7 @@
   ./services/misc/taskserver
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
+  ./services/misc/xmr-stak.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
@@ -401,7 +405,9 @@
   ./services/monitoring/vnstat.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
+  ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
+  ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix
   ./services/network-filesystems/glusterfs.nix
   ./services/network-filesystems/kbfs.nix
@@ -749,6 +755,4 @@
   ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
   ./virtualisation/xe-guest-utilities.nix
-  ./virtualisation/openstack/keystone.nix
-  ./virtualisation/openstack/glance.nix
 ]

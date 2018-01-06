@@ -95,6 +95,14 @@ following incompatible changes:</para>
       <link xlink:href="https://search.nix.gsc.io/?q=stateVersion">here</link>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal>has been split in two; there is now also a <literal>bintools-wrapper</literal>.
+      The most commonly used files in <filename>nix-support</filename> are now split between the two wrappers.
+      Some commonly used ones, like <filename>nix-support/dynamic-linker</filename>, are duplicated for backwards compatability, even though they rightly belong only in <literal>bintools-wrapper</literal>.
+      Other more obscure ones are just moved.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
@@ -135,6 +143,14 @@ following incompatible changes:</para>
     <para>
       The option <option>services.logstash.listenAddress</option> is now <literal>127.0.0.1</literal> by default.
       Previously the default behaviour was to listen on all interfaces.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>services.btrfs.autoScrub</literal> has been added, to
+      periodically check btrfs filesystems for data corruption.
+      If there's a correct copy available, it will automatically repair
+      corrupted blocks.
     </para>
   </listitem>
 </itemizedlist>

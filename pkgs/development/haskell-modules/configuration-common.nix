@@ -15,13 +15,6 @@ with haskellLib;
 
 self: super: {
 
-  attoparsec-time_1 = super.attoparsec-time_1.override {
-    doctest = super.doctest_0_13_0;
-  };
-  attoparsec-data = super.attoparsec-data.override {
-    attoparsec-time = self.attoparsec-time_1;
-  };
-
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
@@ -39,9 +32,8 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
-  # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
+  # hackage-security's test suite does not compile with Cabal 2.x.
+  # See https://github.com/haskell/hackage-security/issues/188.
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
@@ -64,6 +56,7 @@ self: super: {
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
+  vector-builder = dontCheck super.vector-builder;
 
   # https://github.com/gilith/hol/pull/1
   hol = appendPatch (doJailbreak super.hol) (pkgs.fetchpatch {
@@ -88,14 +81,12 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideCabal (super.git-annex.overrideScope (self: super: {
-      optparse-applicative = self.optparse-applicative_0_14_0_0;
-    })) (drv: {
+  git-annex = (overrideCabal super.git-annex (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1bnnrwamw3d37fz7cwykxhi1ryy22dq8r6ld59gsbgcv23drqzax";
+      sha256 = "1fd7lyrwr60dp55swc5iwl0mkkzmdzpmj9qmx1qca2r7y9wc5w5k";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -151,8 +142,6 @@ self: super: {
     '';
     extraLibraries = [ pkgs.openblasCompat ];
   });
-
-  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_2; };
 
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
@@ -452,11 +441,6 @@ self: super: {
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
-  # https://github.com/NixOS/nixpkgs/issues/32138
-  purescript = super.purescript.override {
-    optparse-applicative = self.optparse-applicative_0_14_0_0;
-  };
-
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
@@ -502,26 +486,6 @@ self: super: {
 
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
-
-  # Relax overspecified constraints. Unfortunately, jailbreak won't work.
-  pandoc = overrideCabal super.pandoc (drv: {
-    preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
-  });
-
-  # pandoc 2 dependency resolution
-  hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
-  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
-  texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
-  pandoc_2_0_4 = super.pandoc_2_0_4.override {
-    doctemplates = self.doctemplates_0_2_1;
-    pandoc-types = self.pandoc-types_1_17_3;
-    skylighting = self.skylighting_0_4_4_1;
-    texmath = self.texmath_0_10;
-  };
-  pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
-    pandoc = self.pandoc_2_0_4;
-    pandoc-types = self.pandoc-types_1_17_3;
-  };
 
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
@@ -627,6 +591,19 @@ self: super: {
   # https://github.com/lens/lens-aeson/issues/18
   lens-aeson = dontCheck super.lens-aeson;
 
+  # Install icons and metadata, remove broken hgettext dependency.
+  # https://github.com/vasylp/hgettext/issues/10
+  bustle = overrideCabal super.bustle (drv: {
+    configureFlags = drv.configureFlags or [] ++ ["-f-hgettext"];
+    executableHaskellDepends = pkgs.lib.remove self.hgettext drv.executableHaskellDepends;
+    buildDepends = [ pkgs.libpcap ];
+    buildTools = with pkgs; [ gettext perl help2man intltool ];
+    doCheck = false; # https://github.com/wjt/bustle/issues/6
+    postInstall = ''
+      make install PREFIX=$out
+    '';
+  });
+
   # Byte-compile elisp code for Emacs.
   ghc-mod = overrideCabal super.ghc-mod (drv: {
     preCheck = "export HOME=$TMPDIR";
@@ -641,7 +618,8 @@ self: super: {
     '';
   });
 
-  # Fine-tune the build.
+  # Build the latest git version instead of the official release. This isn't
+  # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
@@ -662,9 +640,7 @@ self: super: {
       mkdir -p $data/share/emacs
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
-  };
+  }));
 
   # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
@@ -676,9 +652,7 @@ self: super: {
       ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
-  })).override {
-    haskell-src-exts = self.haskell-src-exts_1_19_1;
-  };
+  }));
 
   # https://github.com/bos/configurator/issues/22
   configurator = dontCheck super.configurator;
@@ -899,9 +873,6 @@ self: super: {
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
 
-  # build liquidhaskell with the proper (new) aeson version
-  liquidhaskell = super.liquidhaskell.override { aeson = dontCheck self.aeson_1_2_3_0; };
-
   # Test suite fails: https://github.com/lymar/hastache/issues/46.
   # Don't install internal mkReadme tool.
   hastache = overrideCabal super.hastache (drv: {
@@ -930,18 +901,8 @@ self: super: {
   # missing dependencies: doctest ==0.12.*
   html-entities = doJailbreak super.html-entities;
 
-  # Needs a version that's newer than what we have in lts-9.
-  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
-
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
-
-  # https://github.com/alpmestan/taggy/issues/{19,20}
-  taggy = appendPatch super.taggy (pkgs.fetchpatch {
-    name = "blaze-markup.patch";
-    url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
-    sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
-  });
 
   # cryptol-2.5.0 doesn't want happy 1.19.6+.
   cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
@@ -952,28 +913,12 @@ self: super: {
   # https://github.com/graknlabs/grakn-haskell/pull/1
   grakn = dontCheck (doJailbreak super.grakn);
 
-  # cryptonite == 0.24.x, protolude == 0.2.x
-  wai-secure-cookies = super.wai-secure-cookies.override {
-    cryptonite = super.cryptonite_0_24;
-    protolude = super.protolude_0_2;
-  };
-
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
-
-  # This tool needs the latest hackage-db version. Using the latest version of
-  # optparse-applicative allows us to generate completions for fish and zsh.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: {
-    hackage-db = self.hackage-db_2_0;
-    optparse-applicative = self.optparse-applicative_0_14_0_0;
-  });
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
-
-  # depends on amqp >= 0.17
-  amqp-utils = super.amqp-utils.override { amqp = dontCheck super.amqp_0_18_1; };
 
   # Build with gi overloading feature disabled.
   ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
@@ -999,20 +944,82 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # Newer hpack's needs newer HUnit, but we cannot easily override the version
-  # used in the build, so we take the easy way out and disable the test suite.
-  hpack_0_20_0 = dontCheck super.hpack_0_20_0;
-  hpack_0_21_0 = dontCheck super.hpack_0_21_0;
+  # https://github.com/fpco/stackage/issues/3126
+  stack = doJailbreak super.stack;
 
-  # Stack 1.6.1 needs newer versions than LTS-9 provides.
-  stack = super.stack.overrideScope (self: super: {
-    ansi-terminal = self.ansi-terminal_0_7_1_1;
-    ansi-wl-pprint = self.ansi-wl-pprint_0_6_8_1;
-    extra = dontCheck super.extra_1_6_2;
-    hpack = super.hpack_0_20_0;
-    path = dontCheck super.path_0_6_1;
-    path-io = self.path-io_1_3_3;
-    unliftio = self.unliftio_0_2_0_0;
-  });
+  # Hoogle needs a newer version than lts-10 provides.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+
+  # These packages depend on each other, forming an infinite loop.
+  scalendar = markBroken (super.scalendar.override { SCalendar = null; });
+  SCalendar = markBroken (super.SCalendar.override { scalendar = null; });
+
+  # Needs QuickCheck <2.10, which we don't have.
+  edit-distance = doJailbreak super.edit-distance;
+  blaze-markup = doJailbreak super.blaze-markup;
+  blaze-html = doJailbreak super.blaze-html;
+  attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
+  int-cast = doJailbreak super.int-cast;
+  nix-derivation = doJailbreak super.nix-derivation;
+  graphviz = doJailbreak super.graphviz;
+
+  # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
+  pointfree = doJailbreak super.pointfree;
+
+  # Needs time<1.7
+  taffybar = doJailbreak super.taffybar;
+
+  # Needs tasty-quickcheck ==0.8.*, which we don't have.
+  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+  cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
+  cryptohash-md5 = doJailbreak super.cryptohash-md5;
+  text-short = doJailbreak super.text-short;
+
+  # https://github.com/aisamanra/config-ini/issues/12
+  config-ini = dontCheck super.config-ini;
+
+  # doctest >=0.9 && <0.12
+  genvalidity-property = doJailbreak super.genvalidity-property;
+  path = dontCheck super.path;
+
+  # Duplicate instance with smallcheck.
+  store = dontCheck super.store;
+
+  # With ghc-8.2.x haddock would time out for unknown reason
+  # See https://github.com/haskell/haddock/issues/679
+  language-puppet = dontHaddock super.language-puppet;
+
+  # Missing FlexibleContexts in testsuite
+  # https://github.com/EduardSergeev/monad-memo/pull/4
+  monad-memo =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/EduardSergeev/monad-memo/pull/4.patch;
+            sha256 = "14mf9940arilg6v54w9bc4z567rfbmm7gknsklv965fr7jpinxxj";
+          };
+    in appendPatch super.monad-memo patch;
+
+  # https://github.com/alphaHeavy/protobuf/issues/34
+  protobuf = dontCheck super.protobuf;
+
+  # https://github.com/strake/lenz.hs/issues/2
+  lenz =
+    let patch = pkgs.fetchpatch
+          { url = https://github.com/strake/lenz.hs/commit/4b9b79104759b9c6b24484455e1eb0d962eb3cff.patch;
+            sha256 = "02i0w9i55a4r251wgjzl5vbk6m2qhilwl7bfp5jwmf22z66sglyn";
+          };
+    in overrideCabal super.lenz (drv:
+      { patches = (drv.patches or []) ++ [ patch ];
+        editedCabalFile = null;
+      });
+
+  # https://github.com/haskell/cabal/issues/4969
+  haddock-library_1_4_4 = dontHaddock super.haddock-library_1_4_4;
+  haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
+
+  # Jailbreak "unix-compat >=0.1.2 && <0.5".
+  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' darcs.cabal"; });
+
+  # https://github.com/Twinside/Juicy.Pixels/issues/149
+  JuicyPixels = dontHaddock super.JuicyPixels;
 
 }

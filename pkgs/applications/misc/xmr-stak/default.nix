@@ -1,28 +1,30 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
 , devDonationLevel ? "0.0"
-, cudaSupport ? false  # doesn't work currently
+, cudaSupport ? false
+, openclSupport ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "xmr-stak-${version}";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "fireice-uk";
     repo = "xmr-stak";
     rev = "v${version}";
-    sha256 = "1gsp5d2qmc8qwbfm87c2vnak6ks6y9csfjbsi0570pdciapaf8vs";
+    sha256 = "0n21y37d8khgfk9965mrhnh6y5ag7w0s6as1fmf76yx6vajvajsn";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
 
-  cmakeFlags = lib.optional (!cudaSupport) "-DCUDA_ENABLE=OFF";
+  cmakeFlags = lib.optional (!cudaSupport) "-DCUDA_ENABLE=OFF"
+    ++ lib.optional (!openclSupport) "-DOpenCL_ENABLE=OFF";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [ libmicrohttpd openssl opencl-headers ocl-icd hwloc ]
-    ++ lib.optional cudaSupport cudatoolkit;
+  buildInputs = [ libmicrohttpd openssl hwloc ]
+    ++ lib.optional cudaSupport cudatoolkit
+    ++ lib.optionals openclSupport [ opencl-headers ocl-icd ];
 
   postPatch = ''
     substituteInPlace xmrstak/donate-level.hpp \
