@@ -5,7 +5,7 @@
 with lib;
 
 let
-  memtest86 = pkgs.memtest86;
+  memtest86 = pkgs.memtest86plus;
   cfg = config.boot.loader.grub.memtest86;
 in
 
