@@ -60,6 +60,7 @@ mapAliases (rec {
   gettextWithExpat = gettext; # 2016-02-19
   gdb-multitarget = gdb; # added 2017-11-13
   git-hub = gitAndTools.git-hub; # added 2016-04-29
+  go-pup = pup; # added 2017-12-19
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gst_ffmpeg = gst-ffmpeg;  # added 2017-02
@@ -78,7 +79,7 @@ mapAliases (rec {
   htmlTidy = html-tidy;  # added 2014-12-06
   iana_etc = iana-etc;  # added 2017-03-08
   idea = jetbrains; # added 2017-04-03
-  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
+  inherit (haskell.compiler) uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
@@ -159,6 +160,7 @@ mapAliases (rec {
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
+  winusb = woeusb; # added 2017-12-22
   x11 = xlibsWrapper; # added 2015-09
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
