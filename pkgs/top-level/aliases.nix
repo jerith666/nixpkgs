@@ -95,6 +95,7 @@ mapAliases (rec {
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
   libcap_progs = libcap.out; # added 2016-04-29
   libjson_rpc_cpp = libjson-rpc-cpp; # added 2017-02-28
+  libmysql = mysql.connector-c; # added # 2017-12-28, this was a misnomer refering to libmysqlclient
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
@@ -153,6 +154,8 @@ mapAliases (rec {
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  transmission_gtk = transmission-gtk; # added 2018-01-06
+  transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
