@@ -225,7 +225,6 @@
   ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
-  ./services/hardware/amd-hybrid-graphics.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
@@ -447,6 +446,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnschain.nix
+  ./services/networking/dnscrypt-proxy.nix
   ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
@@ -634,6 +634,7 @@
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
+  ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/phpfpm/default.nix

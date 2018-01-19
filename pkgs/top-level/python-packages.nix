@@ -316,10 +316,6 @@ in {
     pythonPackages = self;
   };
 
-  pyqt56 = pkgs.libsForQt56.callPackage ../development/python-modules/pyqt/5.x.nix {
-    pythonPackages = self;
-  };
-
   pyqt5 = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt/5.x.nix {
     pythonPackages = self;
   };
@@ -358,7 +354,7 @@ in {
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
-  salmon = callPackage ../development/python-modules/salmon { };
+  salmon-mail = callPackage ../development/python-modules/salmon-mail { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -1308,7 +1304,6 @@ in {
       homepage = https://github.com/AmesCornish/buttersink/wiki;
       license = licenses.gpl3;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ nckx ];
     };
 
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
@@ -2397,7 +2392,6 @@ in {
         composable way, with as little code as necessary.
       '';
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -3391,30 +3385,7 @@ in {
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
-  pytest-rerunfailures = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "pytest-rerunfailures";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "1zzxlswbny8dp3c1sbhpyms1xkknxb6qfji3y3azc7gc95324xsv";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "pytest plugin to re-run tests to eliminate flaky failures.";
-      homepage = https://github.com/pytest-dev/pytest-rerunfailures;
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ jgeerds ];
-      platforms = platforms.all;
-    };
-  };
+  pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
@@ -3974,33 +3945,7 @@ in {
     };
   });
 
-  nose-parameterized = buildPythonPackage (rec {
-    name = "nose-parameterized-${version}";
-    version = "0.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-parameterized/${name}.tar.gz";
-      sha256 = "a11c41b0cf8218e7cdc19ab7a1bdf5c141d161cd2350daee819473cc63cd0685";
-    };
-
-    # Tests require some python3-isms but code works without.
-    doCheck = isPy3k;
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ nose pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ self.six ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-
-    meta = {
-      description = "Parameterized testing with any Python test framework";
-      homepage = https://pypi.python.org/pypi/nose-parameterized;
-      license = licenses.bsd3;
-    };
-  });
+  nose-parameterized = callPackage ../development/python-modules/nose-parameterized {};
 
   neurotools = buildPythonPackage (rec {
     name = "NeuroTools-${version}";
@@ -4450,29 +4395,7 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  elasticsearch = buildPythonPackage (rec {
-    pname = "elasticsearch";
-    version = "6.0.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "029q603g95fzkh87xkbxxmjfq5s9xkr9y27nfik6d4prsl0zxmlz";
-    };
-
-    # Check is disabled because running them destroy the content of the local cluster!
-    # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
-    doCheck = false;
-    propagatedBuildInputs = with self; [ urllib3 requests ];
-    buildInputs = with self; [ nosexcover mock ];
-
-    meta = {
-      description = "Official low-level client for Elasticsearch";
-      homepage = https://github.com/elasticsearch/elasticsearch-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
+  elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
@@ -5999,6 +5922,8 @@ in {
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
+  netdisco = callPackage ../development/python-modules/netdisco { };
+
   Nikola = callPackage ../development/python-modules/Nikola { };
 
   nxt-python = buildPythonPackage rec {
@@ -6962,6 +6887,24 @@ in {
   };
 
   schema = callPackage ../development/python-modules/schema {};
+
+  stem = buildPythonPackage rec {
+    name = "stem-${version}";
+    version = "1.6.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/stem/${name}.tar.gz";
+      sha256 = "1va9p3ij7lxg6ixfsvaql06dn11l3fgpxmss1dhlvafm7sqizznp";
+    };
+
+    meta = {
+      description = "Controller library that allows applications to interact with Tor (https://www.torproject.org/";
+      homepage = https://stem.torproject.org/;
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ phreedom ];
+    };
+
+  };
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
@@ -8451,7 +8394,6 @@ in {
       homepage = https://github.com/terencehonles/fusepy;
       license = licenses.isc;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8545,7 +8487,6 @@ in {
       homepage = https://github.com/dsoprea/GDriveFS;
       license = licenses.gpl2;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -8678,7 +8619,6 @@ in {
       '';
       homepage = http://gehrcke.de/gipc;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -9992,7 +9932,7 @@ in {
     };
   });
 
-  ltc_scrypt = callPackage ../development/python-modules/ltc_scrypt/default.nix { };
+  py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
 
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
@@ -11389,6 +11329,8 @@ in {
   };
 
   nilearn = callPackage ../development/python-modules/nilearn {};
+
+  nimfa = callPackage ../development/python-modules/nimfa {};
 
   nipy = buildPythonPackage rec {
     version = "0.4.0";
@@ -12913,7 +12855,6 @@ in {
       description = "Meta-commands handler for Postgres Database";
       homepage = https://pypi.python.org/pypi/pgspecial;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -14627,6 +14568,8 @@ in {
     };
   });
 
+  progressbar2 = callPackage ../development/python-modules/progressbar2 { };
+
   ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
@@ -15111,7 +15054,6 @@ in {
       # From the README: "pythonwifi is licensed under LGPLv2+, however, the
       # examples (e.g. iwconfig.py and iwlist.py) are licensed under GPLv2+."
       license = with licenses; [ lgpl2Plus gpl2Plus ];
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -15504,7 +15446,6 @@ in {
       inherit (src.meta) homepage;
       description = "Check the status of code repositories under a root directory";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -16289,29 +16230,6 @@ in {
       homepage = https://pypi.python.org/pypi/SimpleParse;
       platforms = platforms.all;
       maintainers = with maintainers; [ ];
-    };
-  };
-
-  sigal = buildPythonPackage rec {
-    name = "sigal-1.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sigal/${name}.tar.gz";
-      sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click blinker ];
-
-    # No tests included
-    doCheck = false;
-
-
-    meta = {
-      description = "Yet another simple static gallery generator";
-      homepage = http://sigal.saimon.org/en/latest/index.html;
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -17386,7 +17304,6 @@ in {
       '';
       homepage = https://github.com/andialbrecht/sqlparse;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -17671,23 +17588,7 @@ in {
     };
   };
 
-  terminado = buildPythonPackage rec {
-    name = "terminado-${version}";
-    version = "0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/terminado/${name}.tar.gz";
-      sha256 = "2c0ba1f624067dccaaead7d2247cfe029806355cef124dc2ccb53c83229f0126";
-    };
-
-    propagatedBuildInputs = with self; [ ptyprocess tornado ];
-
-    meta = {
-      description = "Terminals served to term.js using Tornado websockets";
-      homepage = https://github.com/takluyver/terminado;
-      license = licenses.bsd2;
-    };
-  };
+  terminado = callPackage ../development/python-modules/terminado { };
 
   terminaltables = buildPythonPackage rec {
     name = "terminaltables-${version}";
@@ -17820,6 +17721,8 @@ in {
   texttable = callPackage ../development/python-modules/texttable { };
 
   tiros = callPackage ../development/python-modules/tiros { };
+
+  tifffile = callPackage ../development/python-modules/tifffile { };
 
   # Tkinter/tkinter is part of the Python standard library.
   # The Python interpreters in Nixpkgs come without tkinter by default.
@@ -18178,6 +18081,8 @@ in {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  ua-parser = callPackage ../development/python-modules/ua-parser { };
+
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = buildPythonPackage rec {
@@ -18397,6 +18302,8 @@ in {
       maintainers = with maintainers; [ profpatsch ];
     };
   };
+
+  user-agents = callPackage ../development/python-modules/user-agents { };
 
   pyuv = buildPythonPackage rec {
     name = "pyuv-1.2.0";
@@ -18694,7 +18601,6 @@ EOF
       '';
       homepage = https://github.com/jquast/wcwidth;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -20782,7 +20688,6 @@ EOF
 
   datadiff = buildPythonPackage rec {
     name = "datadiff-1.1.6";
-    disabled = ! isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/datadiff/datadiff-1.1.6.zip";
@@ -21976,23 +21881,7 @@ EOF
     };
   };
 
-  send2trash = buildPythonPackage (rec {
-    name = "Send2Trash-1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Send2Trash/${name}.tar.gz";
-      sha256 = "1zjq5ki02l0vl4f1xymsnqyxipx6q81a435p46db07l3mqg4dx1k";
-    };
-
-    # no tests
-    doCheck = false;
-
-    meta = {
-      description = "Send file to trash natively under macOS, Windows and Linux";
-      homepage = https://github.com/hsoft/send2trash;
-      license = licenses.bsd3;
-    };
-  });
+  send2trash = callPackage ../development/python-modules/send2trash { };
 
   sigtools = buildPythonPackage rec {
     name = "sigtools-${version}";
@@ -22584,10 +22473,9 @@ EOF
 
   twilio = callPackage ../development/python-modules/twilio { };
 
-  uranium = callPackage ../development/python-modules/uranium {
-    # https://github.com/Ultimaker/Cura/issues/2596
-    pyqt5 = self.pyqt56;
-  };
+  uranium = callPackage ../development/python-modules/uranium { };
+
+  versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
 
