@@ -205,6 +205,8 @@ in {
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
+  diff_cover = callPackage ../development/python-modules/diff_cover { };
+
   emcee = callPackage ../development/python-modules/emcee { };
 
   email_validator = callPackage ../development/python-modules/email-validator { };
@@ -280,6 +282,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
+
+  pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
   pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
 
@@ -592,7 +596,7 @@ in {
   async = buildPythonPackage rec {
     name = "async-0.6.1";
     disabled = isPy3k;
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     buildInputs = with self; [ pkgs.zlib ];
     doCheck = false;
@@ -2047,7 +2051,7 @@ in {
 
   bunch = buildPythonPackage (rec {
     name = "bunch-1.0.1";
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bunch/${name}.tar.gz";
@@ -2913,15 +2917,15 @@ in {
 
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
-    version = "0.10.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tablib/tablib-${version}.tar.gz";
-      sha256 = "14wc8bmz60g35r6gsyhdzfvgfqpd3gw9lfkq49z5bxciykbxmhj1";
+      sha256 = "11wxchj0qz77dn79yiq30k4b4gsm429f4bizk4lm4rb63nk51kxq";
     };
 
-    buildInputs = with self; [ pytest ];
-
+    buildInputs = with self; [ pytest unicodecsv pandas ];
+    propagatedBuildInputs = with self; [ xlwt openpyxl pyyaml xlrd odfpy ];
     meta = with stdenv.lib; {
       description = "Tablib: format-agnostic tabular dataset library";
       homepage = "http://python-tablib.org";
@@ -4704,6 +4708,8 @@ in {
     };
   };
 
+  fritzconnection = callPackage ../development/python-modules/fritzconnection { };
+
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
 
@@ -5002,7 +5008,7 @@ in {
 
     meta = {
       description = "Git Object Database";
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       homepage = https://github.com/gitpython-developers/gitdb;
       license = licenses.bsd3;
     };
@@ -5028,7 +5034,7 @@ in {
 
     meta = {
       description = "Python Git Library";
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       homepage = https://github.com/gitpython-developers/GitPython;
       license = licenses.bsd3;
     };
@@ -5964,6 +5970,12 @@ in {
       url = "mirror://pypi/p/pamela/${name}.tar.gz";
       sha256 = "0ssxbqsshrm8p642g3h6wsq20z1fsqhpdvqdm827gn6dlr38868y";
     };
+
+    postUnpack = ''
+      substituteInPlace $sourceRoot/pamela.py --replace \
+        'find_library("pam")' \
+        '"${getLib pkgs.pam}/lib/libpam.so"'
+    '';
 
     doCheck = false;
 
@@ -9469,6 +9481,8 @@ in {
     };
   };
 
+  jinja2_pluralize = callPackage ../development/python-modules/jinja2_pluralize { };
+
   jmespath = buildPythonPackage rec {
     name = "jmespath-0.9.0";
 
@@ -9502,6 +9516,8 @@ in {
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
+
+  jupyterhub = callPackage ../development/python-modules/jupyterhub { };
 
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
@@ -9758,6 +9774,8 @@ in {
       flask pyopenssl ndg-httpsclient pkgs.glibcLocales
     ];
   };
+
+  python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
@@ -10060,6 +10078,26 @@ in {
       description = "A documentation builder";
       homepage = https://pypi.python.org/pypi/manuel;
       license = licenses.zpl20;
+    };
+  };
+
+  mapsplotlib = buildPythonPackage rec {
+    name = "mapsplotlib-${version}";
+    version = "1.0.6";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mapsplotlib/${name}.tar.gz";
+      sha256 = "09gpws3x0jd88n636baxx5izjffrpjy4j6jl8l7vj29yzvrdr2bp";
+    };
+
+    propagatedBuildInputs = with self; [ matplotlib scipy pandas requests pillow ];
+
+    meta = {
+      description = "Custom Python plots on a Google Maps background";
+      homepage = https://github.com/tcassou/mapsplotlib;
+      maintainers = [ maintainers.rob ];
     };
   };
 
@@ -11911,7 +11949,7 @@ in {
 
   offtrac = buildPythonPackage rec {
     name = "offtrac-0.1.0";
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/offtrac/${name}.tar.gz";
@@ -13712,11 +13750,6 @@ in {
     preConfigure = ''
       substituteInPlace setup.py --replace '--static-libs' '--libs'
       export PYCURL_SSL_LIBRARY=openssl
-    '';
-
-    #TODO no idea why this is needed
-    postInstall = ''
-      ln -s ${pkgs.openssl.out}/lib/libcrypto* $out/lib/
     '';
 
     meta = {
@@ -17810,7 +17843,7 @@ in {
   smmap = buildPythonPackage rec {
     name = "smmap-0.9.0";
     disabled = isPyPy;  # This fails the tests if built with pypy
-    meta.maintainers = with maintainers; [ mornfall ];
+    meta.maintainers = with maintainers; [ ];
 
     buildInputs = with self; [ nosexcover ];
 
@@ -22567,6 +22600,8 @@ EOF
   voluptuous = callPackage ../development/python-modules/voluptuous { };
 
   pysigset = callPackage ../development/python-modules/pysigset { };
+
+  us = callPackage ../development/python-modules/us { };
 });
 
 in fix' (extends overrides packages)
