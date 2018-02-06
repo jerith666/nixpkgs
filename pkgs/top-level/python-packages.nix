@@ -774,12 +774,12 @@ in {
   in buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "awscli";
-    version = "1.11.108";
+    version = "1.14.22";
     namePrefix = "";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1wz76hkljc25zzfa2l5jv0mbr5vx6d9ixq4sq0p3zf3l45ql6mdf";
+      sha256 = "13pivyyivwb3xy0l45083gcman2b0xiv00fl9ww0m8jccgxsdzd0";
     };
 
     # No tests included
@@ -2106,13 +2106,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.4";
+    version = "1.4.8";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
+      sha256 = "11ysd7a9l5y98q7b7az56phsj2m7w90abf4jabwrknp2c43sq9bi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -2126,9 +2126,6 @@ in {
       nosetests -d tests/unit --verbose
       runHook postCheck
     '';
-
-    # Network access
-    doCheck = false;
 
     meta = {
       homepage = https://github.com/boto/boto3;
@@ -2145,11 +2142,11 @@ in {
   botocore = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "botocore";
-    version = "1.5.71";
+    version = "1.8.26";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1fgg28halsy4g43wjpkbd6l0wqiwyzkd4zjrzbbyzw4dxbsf3xfm";
+      sha256 = "09j3b80l401hwc3ha0s2c2qq6z45x846an09ybc9y8cb1ky0kdlv";
     };
 
     propagatedBuildInputs =
@@ -3399,16 +3396,15 @@ in {
 
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
-    version = "0.10.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tablib/tablib-${version}.tar.gz";
-      sha256 = "14wc8bmz60g35r6gsyhdzfvgfqpd3gw9lfkq49z5bxciykbxmhj1";
+      sha256 = "11wxchj0qz77dn79yiq30k4b4gsm429f4bizk4lm4rb63nk51kxq";
     };
 
-    buildInputs = with self; [ pytest ];
-
-    disabled = isPy3k;
+    buildInputs = with self; [ pytest unicodecsv pandas ];
+    propagatedBuildInputs = with self; [ xlwt openpyxl pyyaml xlrd odfpy ];
 
     meta = with stdenv.lib; {
       description = "Tablib: format-agnostic tabular dataset library";
@@ -4068,23 +4064,7 @@ in {
     doCheck = false;
   };
 
-  pytestquickcheck = buildPythonPackage rec {
-    name = "pytest-quickcheck-0.8.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-quickcheck/pytest-quickcheck-0.8.2.tar.gz";
-      sha256 = "047w4zwdsnlzmsc5f3rapzbzd2frlvz9nnp8v4b48fjmqmxassh3";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ pytestflakes pytestpep8 tox ];
-
-    meta = {
-      license = licenses.asl20;
-      homepage = "https://pypi.python.org/pypi/pytest-quickcheck";
-      description = "pytest plugin to generate random data inspired by QuickCheck";
-    };
-  };
+  pytestquickcheck = callPackage ../development/python-modules/pytest-quickcheck { };
 
   pytest-server-fixtures = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -5121,28 +5101,7 @@ in {
 
   edward = callPackage ../development/python-modules/edward { };
 
-  elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/elasticsearch/${name}.tar.gz";
-      sha256 = "091s60ziwhyl9kjfm833i86rcpjx46v9h16jkgjgkk5441dln3gb";
-    };
-
-    # Check is disabled because running them destroy the content of the local cluster!
-    # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
-    doCheck = false;
-    propagatedBuildInputs = with self; [ urllib3 requests ];
-    buildInputs = with self; [ nosexcover mock ];
-
-    meta = {
-      description = "Official low-level client for Elasticsearch";
-      homepage = https://github.com/elasticsearch/elasticsearch-py;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ desiderius ];
-    };
-  });
-
+  elasticsearch = callPackage ../development/python-modules/elasticsearch { };
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
@@ -5165,6 +5124,8 @@ in {
       maintainers = with maintainers; [ desiderius ];
     };
   });
+
+  elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
@@ -6313,7 +6274,7 @@ in {
     meta = {
       description = "A Task-Based Parallelization Framework";
       license = licenses.mit;
-      url = https://jug.readthedocs.io/;
+      homepage = https://jug.readthedocs.io/;
       maintainers = with maintainers; [ luispedro ];
     };
   };
@@ -6357,6 +6318,8 @@ in {
       maintainers = [ stdenv.lib.maintainers.joachifm ];
     };
   };
+
+  jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix {};
 
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
@@ -7510,37 +7473,7 @@ in {
 
   pysrt = callPackage ../development/python-modules/pysrt { };
 
-  pytools = buildPythonPackage rec {
-    name = "pytools-${version}";
-    version = "2017.4";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "inducer";
-      repo = "pytools";
-      rev = "8078e74265bb5a3c9676c698595ab5450cd2bfe7";
-      sha256 = "17q61l79fcxkj5jxg3fnymi652sdjp5s6kpsabgxp22kma9crr28";
-    };
-
-    buildInputs = with self; [
-      decorator
-      appdirs
-      six
-      numpy
-      pytest
-    ];
-
-    checkPhase = ''
-      py.test -k 'not test_persistent_dict'
-    '';
-
-    meta = {
-      homepage = https://github.com/inducer/pytools/;
-      description = "Miscellaneous Python lifesavers.";
-      license = licenses.mit;
-      maintainers = with maintainers; [ artuuge ];
-    };
-
-  };
+  pytools = callPackage ../development/python-modules/pytools { };
 
   pytun = buildPythonPackage rec {
     name = "pytun-${version}";
@@ -8341,6 +8274,8 @@ in {
   # Override the package set and set e.g. `django = super.django_1_9`.
   # See the Nixpkgs manual for examples on how to override the package set.
   django_hijack = callPackage ../development/python-modules/django-hijack { };
+
+  django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
@@ -11329,7 +11264,7 @@ in {
     };
   });
 
-  ltc_scrypt = callPackage ../development/python-modules/ltc_scrypt/default.nix { };
+  py_scrypt = callPackage ../development/python-modules/py_scrypt/default.nix { };
 
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
@@ -12814,7 +12749,7 @@ in {
     patches = [
       (pkgs.fetchpatch {
         url = https://github.com/drkjam/netaddr/commit/2ab73f10be7069c9412e853d2d0caf29bd624012.patch;
-        sha256 = "08rn1s3w9424jhandy4j9sksy852ny00088zh15nirw5ajqg1dn7";
+        sha256 = "0s1cdn9v5alpviabhcjmzc0m2pnpq9dh2fnnk2x96dnry1pshg39";
       })
     ];
 
@@ -16675,26 +16610,6 @@ in {
     };
   };
 
-  pyelasticsearch = buildPythonPackage (rec {
-    name = "pyelasticsearch-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyelasticsearch/${name}.tar.gz";
-      sha256 = "18wp6llfjv6hvyhr3f6i8dm9wc5rf46wiqsfxwpvnf6mdrvk6xr7";
-    };
-
-    # Tests require a local instance of elasticsearch
-    doCheck = false;
-    propagatedBuildInputs = with self; [ elasticsearch six simplejson certifi ];
-    buildInputs = with self; [ nose mock ];
-
-    meta = {
-      description = "A clean, future-proof, high-scale API to elasticsearch";
-      homepage = https://pyelasticsearch.readthedocs.org;
-      license = licenses.bsd3;
-    };
-  });
-
   pyelftools = buildPythonPackage rec {
     pname = "pyelftools";
     version = "0.24";
@@ -18546,7 +18461,7 @@ in {
       description = "Download files using requests and save them to a target path";
       homepage = https://www.github.com/takluyver/requests_download;
       license = licenses.mit;
-      maintainer = maintainers.fridh;
+      maintainers = [ maintainers.fridh ];
     };
   };
 
@@ -19461,12 +19376,12 @@ in {
   };
 
   s3transfer = buildPythonPackage rec {
-    version = "0.1.10";
+    version = "0.1.12";
     name = "s3transfer-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
+      sha256 = "07hjj1cy62sc3rh5lhna9mhylp7h7aak4v6mf6809q4nc8j1p28h";
     };
 
     foo = 1;
@@ -20850,6 +20765,8 @@ in {
     };
   });
 
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
+
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
@@ -22125,7 +22042,7 @@ in {
       description = "Collection of utilities for interacting with PyPI";
       homepage = https://github.com/pypa/twine;
       license = licenses.asl20;
-      maintainer = with maintainers; [ fridh ];
+      maintainers = with maintainers; [ fridh ];
     };
   };
 
@@ -26991,7 +26908,7 @@ EOF
       description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
       homepage = https://gitlab.com/takluyver/zipfile36;
       license = licenses.psfl;
-      maintainer = maintainers.fridh;
+      maintainers = [ maintainers.fridh ];
     };
   };
 
@@ -27029,7 +26946,7 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
-  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
   thinc = callPackage ../development/python-modules/thinc { };
 
@@ -27038,11 +26955,12 @@ EOF
   behave = callPackage ../development/python-modules/behave { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
- 
+
   parse = callPackage ../development/python-modules/parse { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
+  voluptuous = callPackage ../development/python-modules/voluptuous { };
 });
 
 in fix' (extends overrides packages)

@@ -707,11 +707,22 @@ with pkgs;
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
-  inherit (callPackages ../misc/logging/beats { })
+  inherit (callPackages ../misc/logging/beats/5.x.nix { })
     filebeat
     heartbeat
     metricbeat
     packetbeat;
+
+  inherit (let beats6 = callPackages ../misc/logging/beats/6.x.nix { }; in {
+    filebeat6   = beats6.filebeat;
+    heartbeat6  = beats6.heartbeat;
+    metricbeat6 = beats6.metricbeat;
+    packetbeat6 = beats6.packetbeat;
+  })
+    filebeat6
+    heartbeat6
+    metricbeat6
+    packetbeat6;
 
   bfr = callPackage ../tools/misc/bfr { };
 
@@ -1857,11 +1868,13 @@ with pkgs;
   evemu = callPackage ../tools/system/evemu { };
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
-  elk5Version = "5.6.1";
+  elk5Version = "5.6.6";
+  elk6Version = "6.1.2";
 
   elasticsearch = callPackage ../servers/search/elasticsearch { };
   elasticsearch2 = callPackage ../servers/search/elasticsearch/2.x.nix { };
   elasticsearch5 = callPackage ../servers/search/elasticsearch/5.x.nix { };
+  elasticsearch6 = callPackage ../servers/search/elasticsearch/6.x.nix { };
 
   elasticsearchPlugins = recurseIntoAttrs (
     callPackage ../servers/search/elasticsearch/plugins.nix { }
@@ -2336,10 +2349,7 @@ with pkgs;
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
 
-  gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
-    # Using pypy provides significant performance improvements (~2x)
-    pythonPackages = pypyPackages;
-  };
+  gprof2dot = callPackage ../development/tools/profiling/gprof2dot { };
 
   graphviz = callPackage ../tools/graphics/graphviz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -2819,6 +2829,7 @@ with pkgs;
 
   kibana  = callPackage ../development/tools/misc/kibana { };
   kibana5 = callPackage ../development/tools/misc/kibana/5.x.nix { };
+  kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
@@ -2884,6 +2895,7 @@ with pkgs;
 
   logstash  = callPackage ../tools/misc/logstash { };
   logstash5 = callPackage ../tools/misc/logstash/5.x.nix { };
+  logstash6 = callPackage ../tools/misc/logstash/6.x.nix { };
 
   logstash-contrib = callPackage ../tools/misc/logstash/contrib.nix { };
 
@@ -3010,6 +3022,10 @@ with pkgs;
   nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix {
     libtool = darwin.cctools;
     enableNpm = false;
+  };
+
+  nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
+    nodejs = pkgs.nodejs-8_x;
   };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
@@ -5332,6 +5348,11 @@ with pkgs;
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
     useMacosReexportHack = true;
+    binutils = darwin.binutils.override {
+      cctools = darwin.cctools.override {
+        enableDumpNormalizedLibArgs = true;
+      };
+    };
   };
 
   clang_5  = llvmPackages_5.clang;
@@ -6063,7 +6084,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
 
+  mono48 = lowPrio (callPackage ../development/compilers/mono/4.8.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  });
+
   mono50 = lowPrio (callPackage ../development/compilers/mono/5.0.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  });
+
+  mono54 = lowPrio (callPackage ../development/compilers/mono/5.4.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   });
@@ -6131,6 +6162,12 @@ with pkgs;
   rustStable = callPackage ../development/compilers/rust {
     inherit (llvmPackages_4) llvm;
   };
+
+  rust121bin = lowPrio (callPackage ../development/compilers/rust/1.21.0-bin.nix {
+     buildRustPackage = callPackage ../build-support/rust {
+       rust = rust121bin;
+     };
+  });
   rustBeta = lowPrio (recurseIntoAttrs (callPackage ../development/compilers/rust/beta.nix {}));
 
   rustNightly = rustBeta;
@@ -6661,17 +6698,17 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_8
-    ruby_2_3_5
-    ruby_2_4_2;
+    ruby_2_2_9
+    ruby_2_3_6
+    ruby_2_4_3;
 
   # Ruby aliases
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_8;
-  ruby_2_3 = ruby_2_3_5;
-  ruby_2_4 = ruby_2_4_2;
+  ruby_2_2 = ruby_2_2_9;
+  ruby_2_3 = ruby_2_3_6;
+  ruby_2_4 = ruby_2_4_3;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -6681,7 +6718,7 @@ with pkgs;
 
   spark = spark_21;
   spark_16 = callPackage ../applications/networking/cluster/spark { version = "1.6.3"; };
-  spark_21 = callPackage ../applications/networking/cluster/spark { version = "2.1.0"; };
+  spark_21 = callPackage ../applications/networking/cluster/spark { version = "2.1.2"; };
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
@@ -8189,6 +8226,8 @@ with pkgs;
 
   gettext = callPackage ../development/libraries/gettext { };
 
+  gflags = callPackage ../development/libraries/gflags { };
+
   gf2x = callPackage ../development/libraries/gf2x {};
 
   gd = callPackage ../development/libraries/gd {
@@ -8325,6 +8364,10 @@ with pkgs;
   gperftools = callPackage ../development/libraries/gperftools { };
 
   grib-api = callPackage ../development/libraries/grib-api { };
+
+  grpc = callPackage ../development/libraries/grpc {
+    protobuf = protobuf3_4;
+  };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = pkgs.newScope (pkgs // { libav = pkgs.ffmpeg; });
@@ -8588,6 +8631,10 @@ with pkgs;
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
+
+  hwloc-nox = callPackage ../development/libraries/hwloc {
+    x11Support = false;
+  };
 
   hydra = callPackage ../development/tools/misc/hydra { };
 
@@ -10113,6 +10160,7 @@ with pkgs;
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
   protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
+  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
@@ -11710,6 +11758,7 @@ with pkgs;
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
+  prometheus-rabbitmq-exporter = callPackage ../servers/monitoring/prometheus/rabbitmq-exporter.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
@@ -12253,7 +12302,6 @@ with pkgs;
     kernelPatches = with kernelPatches; [
       kernelPatches.bridge_stp_helper
       kernelPatches.modinst_arg_list_too_long
-      kernelPatches.cpu-cgroup-v2."4.11"
       kernelPatches.tag_hardened
     ];
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
@@ -12331,6 +12379,21 @@ with pkgs;
         # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+  linux_4_15 = callPackage ../os-specific/linux/kernel/linux-4.15.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        # kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -12482,10 +12545,8 @@ with pkgs;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    inherit (callPackage ../os-specific/linux/spl {
-      configFile = "kernel";
-      inherit kernel;
-    }) splStable splUnstable;
+    inherit (callPackage ../os-specific/linux/spl {})
+      splStable splUnstable;
 
     spl = splStable;
 
@@ -12524,7 +12585,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_14;
+  linuxPackages_latest = linuxPackages_4_15;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -12535,6 +12596,7 @@ with pkgs;
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_13);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
+  linuxPackages_4_15 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_15);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -12816,10 +12878,6 @@ with pkgs;
   smem = callPackage ../os-specific/linux/smem { };
 
   statifier = callPackage ../os-specific/linux/statifier { };
-
-  inherit (callPackage ../os-specific/linux/spl {
-    configFile = "user";
-  }) splStable splUnstable;
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -14059,7 +14117,7 @@ with pkgs;
 
   ekho = callPackage ../applications/audio/ekho { };
 
-  electron-cash = callPackage ../applications/misc/electron-cash { };
+  electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
   electrum = callPackage ../applications/misc/electrum { };
 
@@ -14489,6 +14547,8 @@ with pkgs;
       python = python2;
       gnused = gnused_422;
       icu = icu59;
+      cargo = rust121bin.cargo;
+      rustc = rust121bin.rustc;
     };
   });
 
@@ -15419,7 +15479,9 @@ with pkgs;
 
   monero = callPackage ../applications/misc/monero { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
+  xmr-stak = callPackage ../applications/misc/xmr-stak {
+    hwloc = hwloc-nox;
+  };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -19176,6 +19238,7 @@ with pkgs;
     terraform_0_8
     terraform_0_9
     terraform_0_10
+    terraform_0_11
     ;
 
   # Terraform with all the plugins, both to get Hydra to build all plugins for us and for

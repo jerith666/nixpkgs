@@ -199,6 +199,7 @@
   fadenb = "Tristan Helmich <tristan.helmich+nixos@gmail.com>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
   falsifian = "James Cook <james.cook@utoronto.ca>";
+  flokli = "Florian Klink <flokli@flokli.de>";
   florianjacob = "Florian Jacob <projects+nixos@florianjacob.de>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
@@ -391,6 +392,7 @@
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
+  moredread = "André-Patrick Bubel <code@apb.name>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";

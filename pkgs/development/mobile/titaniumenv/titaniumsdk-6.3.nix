@@ -1,14 +1,14 @@
 {stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
-  name = "mobilesdk-5.2.3.GA";
+  name = "mobilesdk-6.3.1.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com/mobile/5_2_X/mobilesdk-5.2.3.v20160404160237-linux.zip;
-    sha256 = "1acvkj3nrkgf9ch4js0pnjnwq5x6ddc15pkcanshp1zlc41z16gj";
+    url = http://builds.appcelerator.com/mobile/6_3_X/mobilesdk-6.3.1.v20171101154403-linux.zip;
+    sha256 = "0g8dqqf5ffa7ll3rqm5naywipnv2vvfxcj9fmqg1wnvvxf0rflqj";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com/mobile/5_2_X/mobilesdk-5.2.3.v20160404160237-osx.zip;
-    sha256 = "04l7mrwiy3il2kzxz6sbfmczkqlkcrnwwndfzi8h5dzgh1672b7d";
+    url = http://builds.appcelerator.com/mobile/6_3_X/mobilesdk-6.3.1.v20171101154403-osx.zip;
+    sha256 = "00bm8vv70mg4kd7jvmxd1bfqafv6zdpdx816i0hvf801zwnak4nj";
   }
   else throw "Platform: ${stdenv.system} not supported!";
   
@@ -21,12 +21,13 @@ stdenv.mkDerivation {
     
     # Rename ugly version number
     cd mobilesdk/*
-    mv * 5.2.3.GA
+    mv * 6.3.1.GA
     cd *
-    
-    # Hack to make dx.jar work with new build-tools
-    #sed -i -e "s|path.join(dir, 'platform-tools', 'lib', 'dx.jar')|path.join(dir, 'build-tools', 'android-6.0', 'lib', 'dx.jar')|" $out/mobilesdk/*/*/node_modules/titanium-sdk/lib/android.js
-    
+    ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+      # Fixes a bad archive copying error when generating an IPA file
+      sed -i -e "s|cp -rf|/bin/cp -rf|" iphone/cli/commands/_build.js
+    ''}
+
     # Patch some executables
     
     ${if stdenv.system == "i686-linux" then

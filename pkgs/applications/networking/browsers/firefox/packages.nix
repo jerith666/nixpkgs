@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub }:
 
 let common = opts: callPackage (import ./common.nix opts); in
 
@@ -6,18 +6,14 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "56.0.2";
+    version = "58.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "35f81e8163a254b7e134fc073acbcff63aa1025b9c6392377650a8f2d0a5f0c77211adb0ae3d8ac85f036bb387246934b8847f14a03fceb7fcbc5b3cf94c9392";
+      sha512 = "08xgv1qm2xx5wjczqg1ldf0yqm939zsghhr4acbkwnymv5apfak3vx0kcr9iwqkmdqjdjmggxz439kjn510f92fik33zjfsjn7sd9k5";
     };
 
     patches =
-      [ ./no-buildconfig.patch ]
-      ++ lib.optional stdenv.isi686 (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-      });
+      [ ./no-buildconfig.patch ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -32,10 +28,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.5.2esr";
+    version = "52.6.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "bbc7dcc4cb392f06fe2e963a3b6372efcfbbcc1ca7218a3ef05885285fe00c9e87e0f8d307bd9363668327eb43542c0600443bd9e6744de64494b96dd00efa5a";
+      sha512 = "cf583df34272b7ff8841c3b093ca0819118f9c36d23c6f9b3135db298e84ca022934bcd189add6473922b199b47330c0ecf14c303ab4177c03dbf26e64476fa4";
     };
 
     meta = firefox.meta // {
