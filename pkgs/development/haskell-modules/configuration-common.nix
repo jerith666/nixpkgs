@@ -280,6 +280,7 @@ self: super: {
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
   hath = dontCheck super.hath;
+  haxl = dontCheck super.haxl;                          # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook;        # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
@@ -605,7 +606,7 @@ self: super: {
   };
 
   # Need newer versions of their dependencies than the ones we have in LTS-10.x.
-  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_22_0; };
+  cabal2nix = super.cabal2nix.override { hpack = self.hpack_0_24_0; };
   hlint = super.hlint.overrideScope (self: super: { haskell-src-exts = self.haskell-src-exts_1_20_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -964,37 +965,37 @@ self: super: {
   hledger = overrideCabal super.hledger (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-ui = overrideCabal super.hledger-ui (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
   hledger-web = overrideCabal super.hledger-web (drv: {
     postInstall = ''
       for i in $(seq 1 9); do
-        for j in $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/.otherdocs/*.$i; do
+        for j in $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.$i $data/share/${self.ghc.name}/*-${self.ghc.name}/*/.otherdocs/*.$i; do
           mkdir -p $out/share/man/man$i
           cp $j $out/share/man/man$i/
         done
       done
-      mkdir $out/share/info
-      cp $data/share/${self.ghc.name}/${pkgs.stdenv.system}-${self.ghc.name}/*/*.info $out/share/info/
+      mkdir -p $out/share/info
+      cp $data/share/${self.ghc.name}/*-${self.ghc.name}/*/*.info $out/share/info/
     '';
   });
 
