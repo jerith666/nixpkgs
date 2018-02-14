@@ -111,6 +111,7 @@
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
@@ -531,6 +532,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
   ./services/networking/rpcbind.nix
+  ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/searx.nix
   ./services/networking/seeks.nix
