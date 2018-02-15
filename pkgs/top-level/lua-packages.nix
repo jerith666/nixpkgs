@@ -8,8 +8,8 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, libmysql, postgresql, cyrus_sasl
-, fetchFromGitHub, libmpack, which
+, mysql, postgresql, cyrus_sasl
+, fetchFromGitHub, libmpack, which, fetchpatch
 }:
 
 let
@@ -210,7 +210,7 @@ let
     };
     sourceRoot = ".";
 
-    buildInputs = [ libmysql postgresql sqlite ];
+    buildInputs = [ mysql.connector-c postgresql sqlite ];
 
     preConfigure = ''
       substituteInPlace Makefile --replace CC=gcc CC=cc
@@ -220,7 +220,8 @@ let
     '';
 
     NIX_CFLAGS_COMPILE = [
-      "-I${libmysql.dev}/include/mysql"
+      "-I${mysql.connector-c}/include/mysql"
+      "-L${mysql.connector-c}/lib/mysql"
       "-I${postgresql}/include/server"
     ];
 
@@ -401,7 +402,7 @@ let
       description = "Network support for Lua";
       homepage = "http://w3.impa.br/~diego/software/luasocket/";
       license = licenses.mit;
-      maintainers = with maintainers; [ mornfall ];
+      maintainers = with maintainers; [ ];
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
     };
   };
@@ -669,6 +670,14 @@ let
     preBuild = ''
       sed -i "s|/usr/local|$out|" lgi/Makefile
     '';
+
+    patches = [
+        (fetchpatch {
+            name = "lgi-find-cairo-through-typelib.patch";
+            url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
+            sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
+        })
+    ];
 
     meta = with stdenv.lib; {
       description = "GObject-introspection based dynamic Lua binding to GObject based libraries";
