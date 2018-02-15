@@ -92,6 +92,10 @@ with pkgs;
       }
     '');
 
+  # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
+  # ValueError: ZIP does not support timestamps before 1980
+  ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
+
   updateAutotoolsGnuConfigScriptsHook = makeSetupHook
     { substitutions = { gnu_config = gnu-config;}; }
     ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
@@ -867,6 +871,8 @@ with pkgs;
   };
 
   btfs = callPackage ../os-specific/linux/btfs { };
+
+  buildah = callPackage ../development/tools/buildah { };
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
@@ -1668,7 +1674,7 @@ with pkgs;
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
 
   cloc = callPackage ../tools/misc/cloc {
-    inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
+    inherit (perlPackages) perl AlgorithmDiff ParallelForkManager RegexpCommon;
   };
 
   cloog = callPackage ../development/libraries/cloog {
@@ -6904,8 +6910,8 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php71;
-  phpPackages = php71Packages;
+  php = php72;
+  phpPackages = php72Packages;
 
   php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php56;
@@ -6930,13 +6936,17 @@ with pkgs;
     php71
     php72;
 
-  php-embed = php71-embed;
+  php-embed = php72-embed;
 
   php71-embed = php71.override {
     config.php.embed = true;
     config.php.apxs2 = false;
   };
 
+  php72-embed = php72.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -10174,23 +10184,6 @@ with pkgs;
       };
   });
 
-  # interception-tools needs this. This should be removed when there is a new
-  # release of libyamlcpp, i.e. when the version of libyamlcpp is newer than
-  # 0.5.3.
-  libyamlcppWithoutBoost = libyamlcpp.overrideAttrs (oldAttrs: rec {
-    name = "libyaml-cpp-${version}";
-    version = "2017-08-25";
-
-    src = fetchFromGitHub {
-      owner = "jbeder";
-      repo = "yaml-cpp";
-      rev = "beb44b872c07c74556314e730c6f20a00b32e8e5";
-      sha256 = "1qkr3i5lin6m36w5rbimc7pjx3nx686xnjb6lw00xf67iqrl4h4m";
-    };
-
-    buildInputs = [ cmake ];
-  });
-
   libykneomgr = callPackage ../development/libraries/libykneomgr { };
 
   libytnef = callPackage ../development/libraries/libytnef { };
@@ -10411,7 +10404,8 @@ with pkgs;
   };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {};
+  nix-plugins = callPackage ../development/libraries/nix-plugins
+    { nix = nixUnstable; };
 
   nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
@@ -13394,6 +13388,8 @@ with pkgs;
   govers = callPackage ../development/tools/govers { };
 
   gotools = callPackage ../development/tools/gotools { };
+
+  gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
@@ -16526,7 +16522,7 @@ with pkgs;
 
   mupdf = callPackage ../applications/misc/mupdf { };
 
-  diffpdf = callPackage ../applications/misc/diffpdf { };
+  diffpdf = libsForQt5.callPackage ../applications/misc/diffpdf { };
 
   diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
 
@@ -18204,6 +18200,8 @@ with pkgs;
 
   inherit (gnome3) yelp;
 
+  yokadi = python3Packages.callPackage ../applications/misc/yokadi {};
+
   yoshimi = callPackage ../applications/audio/yoshimi { };
 
   inherit (pythonPackages) youtube-dl;
@@ -19826,7 +19824,7 @@ with pkgs;
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
-    llvm = llvm_4;
+    llvm = llvm_5;
   };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
