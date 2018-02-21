@@ -75,6 +75,7 @@
   ./programs/cdemu.nix
   ./programs/chromium.nix
   ./programs/command-not-found/command-not-found.nix
+  ./programs/criu.nix
   ./programs/dconf.nix
   ./programs/environment.nix
   ./programs/fish.nix
@@ -92,6 +93,7 @@
   ./programs/nano.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/plotinus.nix
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
@@ -102,6 +104,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
+  ./programs/systemtap.nix
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
@@ -114,6 +117,7 @@
   ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
+  ./programs/zsh/zsh-autoenv.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
@@ -201,6 +205,7 @@
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/geoclue2.nix
+  ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
@@ -690,6 +695,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/boot/binfmt.nix
   ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix
