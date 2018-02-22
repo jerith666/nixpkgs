@@ -1,15 +1,18 @@
 { stdenv, lib, bundlerEnv, ruby }:
 
-bundlerEnv {
-  name = "timetrap-1.10.0";
+bundlerEnv rec {
+  name = "timetrap-${version}";
 
+  version = (import gemset).timetrap.version;
   inherit ruby;
   gemdir = ./.;
+  gemset = ./gemset.nix;
 
-  meta = {
+  meta = with lib; {
     description = "A simple command line time tracker written in ruby";
     homepage = https://github.com/samg/timetrap;
-    license = lib.licenses.mit;
+    license = licenses.mit;
+    maintainers = [ maintainers.jerith666 ];
     priority = 10; # resolves collision with bundler
   };
 }
