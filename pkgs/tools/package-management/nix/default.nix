@@ -30,7 +30,7 @@ let
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals fromGit [ brotli ] # Since 1.12
-      ++ lib.optional (stdenv.isLinux && !hostPlatform.isRiscV) libseccomp
+      ++ lib.optional (hostPlatform.isSeccomputable) libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
             apis = ["s3"];
@@ -57,7 +57,7 @@ let
           hostPlatform != buildPlatform && hostPlatform ? nix && hostPlatform.nix ? system
       ) ''--with-system=${hostPlatform.nix.system}''
          # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
-      ++ lib.optional hostPlatform.isRiscV "--disable-seccomp-sandboxing";
+      ++ lib.optional (!hostPlatform.isSeccomputable) "--disable-seccomp-sandboxing";
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
 
@@ -116,7 +116,7 @@ in rec {
 
   nix = nixStable;
 
-  nixStable = (common rec {
+  nix1 = (common rec {
     name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
@@ -124,14 +124,22 @@ in rec {
     };
   }) // { perl-bindings = nixStable; };
 
+  nixStable = (common rec {
+    name = "nix-2.0";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+    };
+  }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
+
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-2.0${suffix}";
-    suffix = "pre5951_690ac7c9";
+    suffix = "pre5968_a6c0b773";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "690ac7c90b5bf3c599e210c53365c7d229c8b0ff";
-      sha256 = "1yn2p38kp1i67makbawr1rhdiwihgnvk2zwrz0gvf6q65mj2k89c";
+      rev = "a6c0b773b72d4e30690e01f1f1dcffc28f2d9ea1";
+      sha256 = "0i8wcblcjw3291ba6ki4llw3fgm8ylp9q52kajkyr58dih537346";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

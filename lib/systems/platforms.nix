@@ -545,6 +545,13 @@ rec {
     name = "riscv-multiplatform";
     kernelArch = "riscv";
     bfdEmulation = "elf${bits}lriscv";
+    kernelTarget = "vmlinux";
+    kernelAutoModules = true;
+    kernelBaseConfig = "defconfig";
+    kernelExtraConfig = ''
+      FTRACE n
+      SERIAL_OF_PLATFORM y
+    '';
   };
 
   selectBySystem = system: {
@@ -554,6 +561,6 @@ rec {
       "armv6l-linux" = raspberrypi;
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
-      "mips64el-linux" = fuloong2f_n32;
+      "mipsel-linux" = fuloong2f_n32;
     }.${system} or pcBase;
 }

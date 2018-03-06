@@ -31,6 +31,7 @@
   ./hardware/ckb.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/digitalbitbox.nix
   ./hardware/sensor/iio.nix
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
@@ -60,6 +61,7 @@
   ./misc/extra-arguments.nix
   ./misc/ids.nix
   ./misc/lib.nix
+  ./misc/label.nix
   ./misc/locate.nix
   ./misc/meta.nix
   ./misc/nixpkgs.nix
@@ -77,6 +79,7 @@
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
   ./programs/dconf.nix
+  ./programs/digitalbitbox/default.nix
   ./programs/environment.nix
   ./programs/fish.nix
   ./programs/freetds.nix
@@ -108,6 +111,7 @@
   ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/udevil.nix
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/way-cooler.nix
@@ -156,6 +160,7 @@
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
+  ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
@@ -244,6 +249,7 @@
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
+  ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
@@ -341,6 +347,7 @@
   ./services/misc/nix-optimise.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/osrm.nix
@@ -433,6 +440,7 @@
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/network-filesystems/xtreemfs.nix
+  ./services/network-filesystems/ceph.nix
   ./services/networking/amuled.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
@@ -510,6 +518,7 @@
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
+  ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
@@ -633,8 +642,7 @@
   ./services/web-apps/nixbot.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
-  ./services/web-apps/piwik.nix
-  ./services/web-apps/pump.io.nix
+  ./services/web-apps/matomo.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
