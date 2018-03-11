@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
-, glib, gtk3, libXtst, jdk, gsettings_desktop_schemas
+, glib, gtk3, libXtst, jdk, gsettings-desktop-schemas
 , webkitgtk ? null # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
@@ -15,7 +15,7 @@ rec {
 
   buildEclipse = import ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
-            jdk glib gtk3 libXtst gsettings_desktop_schemas webkitgtk
+            jdk glib gtk3 libXtst gsettings-desktop-schemas webkitgtk
             makeWrapper;
   };
 
