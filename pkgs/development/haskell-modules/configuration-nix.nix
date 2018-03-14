@@ -227,6 +227,12 @@ self: super: builtins.intersectAttrs super {
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
+
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
     postPatch = ''
@@ -458,7 +464,7 @@ self: super: builtins.intersectAttrs super {
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
   # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_15; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
