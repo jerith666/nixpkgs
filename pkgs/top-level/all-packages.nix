@@ -6340,6 +6340,11 @@ with pkgs;
         inherit (gnome2) GConf gnome_vfs;
       };
 
+  openjdk10 = callPackage ../development/compilers/openjdk/10.nix {
+    bootjdk = openjdk9;
+    inherit (gnome2) GConf gnome_vfs;
+  };
+
   openjdk = openjdk8;
 
   jdk7 = openjdk7 // { outputs = [ "out" ]; };
@@ -6374,6 +6379,20 @@ with pkgs;
       lib.setName "openjre-${lib.getVersion pkgs.openjdk9.jre}-headless"
         (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
           ((openjdk9.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
+
+  jdk10 = if stdenv.isArm || stdenv.isAarch64 then oraclejdk10 else openjdk10 // { outputs = [ "out" ]; };
+  jre10 = if stdenv.isArm || stdenv.isAarch64 then oraclejre10 else lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}"
+    (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+      (openjdk10.jre // { outputs = [ "jre" ]; }));
+  jre10_headless =
+    if stdenv.isArm || stdenv.isAarch64 then
+      oraclejre10
+    else if stdenv.isDarwin then
+      jre10
+    else
+      lib.setName "openjre-${lib.getVersion pkgs.openjdk10.jre}-headless"
+        (lib.addMetaAttrs { outputsToInstall = [ "jre" ]; }
+          ((openjdk10.override { minimal = true; }).jre // { outputs = [ "jre" ]; }));
 
   jdk = jdk8;
   jre = jre8;
