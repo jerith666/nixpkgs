@@ -629,9 +629,9 @@ with pkgs;
 
   encryptr = callPackage ../tools/security/encryptr {
     gconf = gnome2.GConf;
- };
+  };
 
- enchive = callPackage ../tools/security/enchive { };
+  enchive = callPackage ../tools/security/enchive { };
 
   enpass = callPackage ../tools/security/enpass { };
 
@@ -1052,6 +1052,8 @@ with pkgs;
   coursier = callPackage ../development/tools/coursier {};
 
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
+
+  crip = callPackage ../applications/audio/crip { };
 
   crunch = callPackage ../tools/security/crunch { };
 
@@ -1603,7 +1605,7 @@ with pkgs;
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
 
-  clementineFree = clementine.free;
+  clementineUnfree = clementine.unfree;
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
 
@@ -2034,6 +2036,8 @@ with pkgs;
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
+
+  duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
     gnupg = gnupg1;
@@ -3178,6 +3182,8 @@ with pkgs;
 
   kore = callPackage ../development/web/kore { };
 
+  krakenx = callPackage ../tools/system/krakenx { };
+
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
@@ -4236,6 +4242,8 @@ with pkgs;
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
+
   pdd = python3Packages.callPackage ../tools/misc/pdd { };
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
@@ -4715,11 +4723,15 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
+  safeeyes = callPackage ../applications/misc/safeeyes { };
+
   salt = callPackage ../tools/admin/salt {};
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   samplicator = callPackage ../tools/networking/samplicator { };
+
+  sasview = callPackage ../applications/science/misc/sasview {};
 
   scanbd = callPackage ../tools/graphics/scanbd { };
 
@@ -7896,6 +7908,10 @@ with pkgs;
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
+
+  iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
+  iaca_3_0 = callPackage ../development/tools/iaca/3.0.nix { };
+  iaca = iaca_3_0;
 
   icestorm = callPackage ../development/tools/icestorm { };
 
@@ -11565,7 +11581,9 @@ with pkgs;
 
   t1lib = callPackage ../development/libraries/t1lib { };
 
-  tachyon = callPackage ../development/libraries/tachyon {};
+  tachyon = callPackage ../development/libraries/tachyon {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+  };
 
   taglib = callPackage ../development/libraries/taglib { };
   taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
@@ -12759,6 +12777,8 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
+  restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
+
   restya-board = callPackage ../servers/web-apps/restya-board { };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
@@ -13171,6 +13191,8 @@ with pkgs;
   };
 
   gpm-ncurses = gpm.override { inherit ncurses; };
+
+  gpu-switch = callPackage ../os-specific/linux/gpu-switch { };
 
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
@@ -14512,6 +14534,8 @@ with pkgs;
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
 
+  scheherazade = callPackage ../data/fonts/scheherazade { };
+
   signwriting = callPackage ../data/fonts/signwriting { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
@@ -14864,6 +14888,8 @@ with pkgs;
   backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
 
   backintime = backintime-qt4;
+
+  balsa = callPackage ../applications/networking/mailreaders/balsa { };
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
@@ -15219,10 +15245,11 @@ with pkgs;
 
   # go 1.9 pin until https://github.com/moby/moby/pull/35739
   inherit (callPackage ../applications/virtualization/docker { go = go_1_9; })
-    docker_18_03;
+    docker_18_03
+    docker_18_04;
 
   docker = docker_18_03;
-  docker-edge = docker_18_03;
+  docker-edge = docker_18_04;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -16217,6 +16244,8 @@ with pkgs;
 
   i3status-rust = callPackage ../applications/window-managers/i3/status-rust.nix { };
 
+  i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icewm = callPackage ../applications/window-managers/icewm {};
@@ -16631,6 +16660,11 @@ with pkgs;
     flavour = "git";
   };
 
+  luakit = callPackage ../applications/networking/browsers/luakit {
+    inherit (lua51Packages) luafilesystem;
+    lua5 = lua5_1;
+  };
+
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   lumail = callPackage ../applications/networking/mailreaders/lumail {
@@ -16766,6 +16800,8 @@ with pkgs;
   };
 
   xmrig = callPackage ../applications/misc/xmrig { };
+
+  xmrig-proxy = callPackage ../applications/misc/xmrig-proxy { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16947,6 +16983,8 @@ with pkgs;
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = callPackage ../applications/networking/ostinato { };
+
+  p4v = libsForQt5.callPackage ../applications/version-management/p4v { };
 
   panamax_api = callPackage ../applications/networking/cluster/panamax/api { };
   panamax_ui = callPackage ../applications/networking/cluster/panamax/ui { };
@@ -17224,6 +17262,8 @@ with pkgs;
   pflask = callPackage ../os-specific/linux/pflask {};
 
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
+
+  photoflow = callPackage ../applications/graphics/photoflow { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
@@ -17922,7 +17962,7 @@ with pkgs;
 
   tagainijisho = callPackage ../applications/office/tagainijisho {};
 
-  tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
+  tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
   tailor = callPackage ../applications/version-management/tailor {};
 
@@ -18031,6 +18071,8 @@ with pkgs;
   };
 
   tnef = callPackage ../applications/misc/tnef { };
+
+  todiff = callPackage ../applications/misc/todiff { };
 
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
@@ -18490,6 +18532,7 @@ with pkgs;
       ++ optional (config.kodi.enableSteamLauncher or false) steam-launcher
       ++ optional (config.kodi.enablePVRHTS or false) pvr-hts
       ++ optional (config.kodi.enablePVRHDHomeRun or false) pvr-hdhomerun
+      ++ optional (config.kodi.enablePVRIPTVSimple or false) pvr-iptvsimple
       );
   };
 
@@ -18967,6 +19010,8 @@ with pkgs;
   egoboo = callPackage ../games/egoboo { };
 
   endless-sky = callPackage ../games/endless-sky { };
+
+  enyo-doom = libsForQt5.callPackage ../games/enyo-doom { };
 
   eternity = callPackage ../games/eternity-engine { };
 
@@ -19992,6 +20037,7 @@ with pkgs;
   lean = callPackage ../applications/science/logic/lean {};
   lean2 = callPackage ../applications/science/logic/lean2 {};
   lean3 = lean;
+  elan = callPackage ../applications/science/logic/elan {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {
      ocaml = ocamlPackages_4_01_0.ocaml;};
@@ -20343,6 +20389,8 @@ with pkgs;
 
   calaos_installer = libsForQt5.callPackage ../misc/calaos/installer {};
 
+  click = callPackage ../applications/networking/cluster/click { };
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
@@ -20379,6 +20427,8 @@ with pkgs;
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
+
+  cups-brother-hl1110 = callPackage_i686 ../misc/cups/drivers/hl1110 { };
 
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
@@ -20562,6 +20612,8 @@ with pkgs;
 
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
+  openzwave = callPackage ../development/libraries/openzwave { };
+
   mongoc = callPackage ../development/libraries/mongoc { };
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
@@ -20595,6 +20647,8 @@ with pkgs;
   nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
 
   nix-index = callPackage ../tools/package-management/nix-index { };
+
+  nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   inherit (callPackages ../tools/package-management/nix-prefetch-scripts { })
     nix-prefetch-bzr
@@ -20745,6 +20799,8 @@ with pkgs;
   shc = callPackage ../tools/security/shc { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
+
+  hll2390dw-cups = callPackage ../misc/cups/drivers/hll2390dw-cups { };
 
   mfcj470dw-cupswrapper = callPackage ../misc/cups/drivers/mfcj470dwcupswrapper { };
   mfcj470dwlpr = callPackage_i686 ../misc/cups/drivers/mfcj470dwlpr { };

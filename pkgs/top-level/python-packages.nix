@@ -1278,6 +1278,8 @@ in {
     enablePython = true;
   });
 
+  bumps = callPackage ../development/python-modules/bumps {};
+
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
 
@@ -6218,34 +6220,7 @@ in {
 
   };
 
-  py3status = buildPythonPackage rec {
-    version = "3.7";
-    name = "py3status-${version}";
-    src = pkgs.fetchFromGitHub {
-      owner = "ultrabug";
-      repo = "py3status";
-      rev = version;
-      sha256 = "1khrvxjjcm1bsswgrdgvyrdrimxx92yhql4gmji6a0kpp59dp541";
-    };
-    doCheck = false;
-    propagatedBuildInputs = with self; [ requests ];
-    buildInputs = with pkgs; [ file ];
-    prePatch = ''
-      sed -i -e "s|'file|'${pkgs.file}/bin/file|" py3status/parse_config.py
-      sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
-      sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
-      sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
-      sed -i -e "s|'amixer|'${pkgs.alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
-      sed -i -e "s|'i3-nagbar|'${pkgs.i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
-      sed -i -e "s|'free|'${pkgs.procps}/bin/free|" py3status/modules/sysdata.py
-      sed -i -e "s|'sensors|'${pkgs.lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
-      sed -i -e "s|'setxkbmap|'${pkgs.xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
-      sed -i -e "s|'xset|'${pkgs.xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
-    '';
-    meta = {
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  py3status = callPackage ../development/python-modules/py3status {};
 
   multi_key_dict = buildPythonPackage rec {
     name = "multi_key_dict-${version}";
@@ -7414,9 +7389,7 @@ in {
     };
   };
 
-  # py3k disabled, see https://travis-ci.org/NixOS/nixpkgs/builds/48759067
-  graph-tool = if isPy3k then throw "graph-tool in Nix doesn't support py3k yet"
-    else callPackage ../development/python-modules/graph-tool/2.x.x.nix { boost = pkgs.boost159; };
+  graph-tool = callPackage ../development/python-modules/graph-tool/2.x.x.nix { };
 
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
@@ -8934,6 +8907,8 @@ in {
   };
 
   python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
+
+  python_openzwave = callPackage ../development/python-modules/python_openzwave { };
 
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";
@@ -11752,6 +11727,8 @@ in {
     };
   };
 
+    periodictable = callPackage ../development/python-modules/periodictable { };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
@@ -11892,7 +11869,11 @@ in {
   pika-pool = callPackage ../development/python-modules/pika-pool { };
   platformio = callPackage ../development/python-modules/platformio { };
 
-  kmsxx = callPackage ../development/libraries/kmsxx { };
+  kmsxx = (callPackage ../development/libraries/kmsxx {
+    inherit (pkgs.kmsxx) stdenv;
+  }).overrideAttrs (oldAttrs: {
+    name = "${python.libPrefix}-${pkgs.kmsxx.name}";
+  });
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
 
@@ -14630,6 +14611,8 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
+  sasmodels = callPackage ../development/python-modules/sasmodels { };
+
   scapy = callPackage ../development/python-modules/scapy { };
 
   scipy = callPackage ../development/python-modules/scipy { };
@@ -16640,7 +16623,9 @@ in {
     };
   };
 
-  uritemplate_py = buildPythonPackage rec {
+    unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+    uritemplate_py = buildPythonPackage rec {
     name = "uritemplate.py-${version}";
     version = "3.0.0";
 

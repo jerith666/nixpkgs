@@ -41,6 +41,7 @@
   ./hardware/pcmcia.nix
   ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
+  ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -86,6 +87,7 @@
   ./programs/freetds.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
+  ./programs/iftop.nix
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
@@ -159,6 +161,7 @@
   ./services/audio/ympd.nix
   ./services/backup/bacula.nix
   ./services/backup/borgbackup.nix
+  ./services/backup/duplicati.nix
   ./services/backup/crashplan.nix
   ./services/backup/crashplan-small-business.nix
   ./services/backup/mysql-backup.nix
@@ -364,6 +367,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/serviio.nix
+  ./services/misc/safeeyes.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
