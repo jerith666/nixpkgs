@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk3, libXtst, jdk, gsettings-desktop-schemas
-, webkitgtk ? null # for internal web browser
+, webkitgtk ? null  # for internal web browser
 , buildEnv, writeText, runCommand
 , callPackage
 }:

@@ -113,7 +113,7 @@ let
       rm -rf $out/lib/openjdk/demo
       ${lib.optionalString minimal ''
         for d in $out/lib/openjdk/lib $jre/lib/openjdk/jre/lib; do
-          rm ''${d}/{libjsound,libjsoundalsa,libawt*,libfontmanager}.so
+          rm ''${d}/{libjsound,libjsoundalsa,libfontmanager}.so
         done
       ''}
 
@@ -134,13 +134,6 @@ let
           ln -sfn $jre/lib/openjdk/jre/bin/$i $out/lib/openjdk/bin/$i
         fi
       done
-
-      # Generate certificates.
-      (
-        cd $jre/lib/openjdk/jre/lib/security
-        rm cacerts
-        perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
-      )
 
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
