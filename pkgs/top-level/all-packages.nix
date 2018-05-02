@@ -1358,6 +1358,8 @@ with pkgs;
 
   ps_mem = callPackage ../tools/system/ps_mem { };
 
+  psstop = callPackage ../tools/system/psstop { };
+
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
   socklog = callPackage ../tools/system/socklog { };
@@ -2104,6 +2106,8 @@ with pkgs;
   eid-viewer = callPackage ../tools/security/eid-viewer { };
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
+
+  tealdeer = callPackage ../tools/misc/tealdeer/default.nix { };
 
   uudeview = callPackage ../tools/misc/uudeview { };
 
@@ -3879,9 +3883,7 @@ with pkgs;
 
   netcat = netcat-openbsd;
 
-  netcat-gnu = callPackage ../tools/networking/netcat-gnu { };
-
-  netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
+  netcat-gnu = callPackage ../tools/networking/netcat { };
 
   nethogs = callPackage ../tools/networking/nethogs { };
 
@@ -4285,6 +4287,8 @@ with pkgs;
   fmodex = callPackage ../games/zandronum/fmod.nix { };
 
   pdfmod = callPackage ../applications/misc/pdfmod { };
+
+  pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
@@ -5222,7 +5226,7 @@ with pkgs;
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
-  toxvpn = callPackage ../tools/networking/toxvpn { };
+  toxvpn = callPackage ../tools/networking/toxvpn { libtoxcore = libtoxcore_0_1; };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
@@ -5733,6 +5737,8 @@ with pkgs;
   libxfs = xfsprogs.dev;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
+
+  xmlformat = callPackage ../tools/text/xml/xmlformat { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
 
@@ -8951,6 +8957,10 @@ with pkgs;
     gtk = self.gtk2;
   };
 
+  gegl_0_4 = callPackage ../development/libraries/gegl/4.0.nix {
+    gtk = self.gtk2;
+  };
+
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
@@ -10360,9 +10370,12 @@ with pkgs;
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
 
+  # this is still the new version of the old API
   libtoxcore-new = callPackage ../development/libraries/libtoxcore/new-api.nix { };
 
-  libtoxcore = callPackage ../development/libraries/libtoxcore { };
+  inherit (callPackages ../development/libraries/libtoxcore {})
+    libtoxcore_0_1 libtoxcore_0_2;
+  libtoxcore = libtoxcore_0_2;
 
   libtap = callPackage ../development/libraries/libtap { };
 
@@ -15910,16 +15923,14 @@ with pkgs;
 
   ghq = gitAndTools.ghq;
 
-  gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
-    webkit = null;
+  gimp = callPackage ../applications/graphics/gimp {
+    gegl = gegl_0_4;
     lcms = lcms2;
+    inherit (gnome3) gexiv2;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
 
-  gimp = gimp_2_8;
-
   gimp-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
-    gimp = gimp_2_8;
     plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
   };
 
@@ -16027,6 +16038,8 @@ with pkgs;
   gnumeric = callPackage ../applications/office/gnumeric { };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
+
+  gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
 
   gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix { });
 
@@ -17082,6 +17095,8 @@ with pkgs;
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
+  mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
+
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
   micro = callPackage ../applications/editors/micro { };
@@ -17426,8 +17441,6 @@ with pkgs;
     inherit (darwin.stubs) rez setfile;
   };
 
-  qemu-riscv = lowPrio (callPackage ../applications/virtualization/qemu/riscv.nix {});
-
   qgis = callPackage ../applications/gis/qgis {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
@@ -17467,7 +17480,7 @@ with pkgs;
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
-  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { ffmpeg = ffmpeg_2; };
+  qtox = libsForQt5.callPackage ../applications/networking/instant-messengers/qtox { };
 
   qtpass = libsForQt5.callPackage ../applications/misc/qtpass { };
 
@@ -18224,7 +18237,7 @@ with pkgs;
 
   vimNox = lowPrio (vim_configurable.override { source = "vim-nox"; });
 
-  qpdfview = callPackage ../applications/misc/qpdfview {};
+  qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile {
     inherit (xorg) libxcb;
@@ -19455,6 +19468,8 @@ with pkgs;
 
   tremulous = callPackage ../games/tremulous { };
 
+  tuxpaint = callPackage ../games/tuxpaint { };
+
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
@@ -20636,7 +20651,7 @@ with pkgs;
 
   hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
-  hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
+  hplipWithPlugin_3_16_11 = hplip_3_16_11.override { withPlugin = true; };
 
   hyperfine = callPackage ../tools/misc/hyperfine { };
 
@@ -21385,5 +21400,5 @@ with pkgs;
                       mount wall hostname more sysctl;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
-          netbsd openbsd;
+          netbsd;
 }
