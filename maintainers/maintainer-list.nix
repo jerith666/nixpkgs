@@ -1740,6 +1740,11 @@
     github = "jdagilliland";
     name = "Jason Gilliland";
   };
+  jD91mZM2 = {
+    email = "me@krake.one";
+    github = "jD91mZM2";
+    name = "jD91mZM2";
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
@@ -1759,6 +1764,11 @@
     email = "james@yamtime.com";
     github = "tftio";
     name = "James Felix Black";
+  };
+  jflanglois = {
+    email = "yourstruly@julienlanglois.me";
+    github = "jflanglois";
+    name = "Julien Langlois";
   };
   jfrankenau = {
     email = "johannes@frankenau.net";
@@ -3978,6 +3988,11 @@
     email = "elisp.vim@gmail.com";
     github = "vyp";
     name = "vyp";
+  };
+  wchresta = {
+    email = "wchresta.nix@chrummibei.ch";
+    github = "wchresta";
+    name = "wchresta";
   };
   wedens = {
     email = "kirill.wedens@gmail.com";
