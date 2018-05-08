@@ -15370,6 +15370,12 @@ with pkgs;
     jdk = jdk10;
   });
 
+  eclipsesJdk8 = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
+    jdk = jdk8;
+    gtk3 = gtk2;
+    webkitgtk = null;
+  });
+
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
   ed = callPackage ../applications/editors/ed { };
