@@ -400,6 +400,8 @@ with pkgs;
 
   ### TOOLS
 
+  _1password = callPackage ../applications/misc/1password { };
+
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
   a2ps = callPackage ../tools/text/a2ps { };
@@ -655,6 +657,8 @@ with pkgs;
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
+  pacparser = callPackage ../tools/networking/pacparser { };
+
   pass = callPackage ../tools/security/pass { };
 
   passExtensions = recurseIntoAttrs pass.extensions;
@@ -830,6 +834,8 @@ with pkgs;
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
+
+  bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
   libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
 
@@ -2108,8 +2114,6 @@ with pkgs;
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
-  eid-viewer = callPackage ../tools/security/eid-viewer { };
-
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
   tealdeer = callPackage ../tools/misc/tealdeer/default.nix { };
@@ -3145,9 +3149,7 @@ with pkgs;
 
   go-jira = callPackage ../applications/misc/go-jira { };
 
-  john = callPackage ../tools/security/john {
-    gcc = gcc49; # doesn't build with gcc5
-  };
+  john = callPackage ../tools/security/john { };
 
   journalbeat = callPackage ../tools/system/journalbeat { };
 
@@ -3337,8 +3339,6 @@ with pkgs;
   most = callPackage ../tools/misc/most { };
 
   motion = callPackage ../applications/video/motion { };
-
-  mkcast = callPackage ../applications/video/mkcast { };
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
@@ -3540,6 +3540,8 @@ with pkgs;
   libreswan = callPackage ../tools/networking/libreswan { };
 
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
+
+  limesuite = callPackage ../applications/misc/limesuite { };
 
   limesurvey = callPackage ../servers/limesurvey { };
 
@@ -5147,6 +5149,8 @@ with pkgs;
 
   telepresence = callPackage ../tools/networking/telepresence { };
 
+  termplay = callPackage ../tools/misc/termplay { };
+
   tewisay = callPackage ../tools/misc/tewisay { };
 
   texmacs = if stdenv.isDarwin
@@ -5582,6 +5586,8 @@ with pkgs;
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
 
+  xscast = callPackage ../applications/video/xscast { };
+
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
 
   xsensors = callPackage ../os-specific/linux/xsensors { };
@@ -5775,6 +5781,8 @@ with pkgs;
   xmpppy = pythonPackages.xmpppy;
 
   xiccd = callPackage ../tools/misc/xiccd { };
+
+  xidlehook = callPackage ../tools/X11/xidlehook {};
 
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
@@ -6850,7 +6858,7 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
-  cargo-vendor = callPackage ../build-support/rust/cargo-vendor {};
+  cargo-vendor = callPackage ../build-support/rust/cargo-vendor { };
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix { };
 
@@ -6874,6 +6882,8 @@ with pkgs;
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
+
+  cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
@@ -7115,6 +7125,7 @@ with pkgs;
   love_0_8 = callPackage ../development/interpreters/love/0.8.nix { lua=lua5_1; };
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
+  love_11 = callPackage ../development/interpreters/love/11.1.nix { };
   love = love_0_10;
 
   ### LUA MODULES
@@ -11233,6 +11244,8 @@ with pkgs;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    alkimia = callPackage ../development/libraries/alkimia { };
+
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     qgpgme = callPackage ../development/libraries/gpgme { };
@@ -11527,6 +11540,30 @@ with pkgs;
   };
 
   snappy = callPackage ../development/libraries/snappy { };
+
+  soapyairspy = callPackage ../applications/misc/soapyairspy { };
+
+  soapybladerf = callPackage ../applications/misc/soapybladerf { };
+
+  soapyhackrf = callPackage ../applications/misc/soapyhackrf { };
+
+  soapysdr = callPackage ../applications/misc/soapysdr { inherit (python3Packages) python numpy; };
+
+  soapyremote = callPackage ../applications/misc/soapyremote { };
+
+  soapysdr-with-plugins = callPackage ../applications/misc/soapysdr {
+    inherit (python3Packages) python numpy;
+    extraPackages = [
+      limesuite
+      soapyairspy
+      soapybladerf
+      soapyhackrf
+      soapyremote
+      soapyuhd
+    ];
+  };
+
+  soapyuhd = callPackage ../applications/misc/soapyuhd { };
 
   socket_wrapper = callPackage ../development/libraries/socket_wrapper { };
 
@@ -13028,6 +13065,7 @@ with pkgs;
 
   zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
   zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
+  zabbix34 = callPackage ../servers/monitoring/zabbix/3.4.nix { };
 
   zipkin = callPackage ../servers/monitoring/zipkin { };
 
@@ -14426,6 +14464,8 @@ with pkgs;
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
+
   inconsolata = callPackage ../data/fonts/inconsolata {};
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
@@ -14896,6 +14936,8 @@ with pkgs;
   parity-ui = self.altcoins.parity-ui;
 
   stellar-core = self.altcoins.stellar-core;
+
+  particl-core = self.altcoins.particl-core;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -16534,6 +16576,11 @@ with pkgs;
 
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
+  kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
+    inherit (kdeApplications) kidentitymanagement;
+    inherit (kdeFrameworks) kdewebkit;
+  };
+
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
@@ -17915,7 +17962,6 @@ with pkgs;
   };
 
   spotify = callPackage ../applications/audio/spotify {
-    inherit (gnome2) GConf;
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
     curl = curl.override {
@@ -19580,7 +19626,7 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth { };
 
-  wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
+  wesnoth-dev = wesnoth;
 
   widelands = callPackage ../games/widelands {
     lua = lua5_2;
@@ -19937,11 +19983,13 @@ with pkgs;
     # great feature, but it's of limited use with pre-built binaries
     # coming from a central build farm.
     tolerateCpuTimingInaccuracy = true;
-    liblapack = liblapack_3_5_0WithoutAtlas;
+    liblapack = liblapackWithoutAtlas;
     withLapack = false;
   };
 
   blas = callPackage ../development/libraries/science/math/blas { };
+
+  brial = callPackage ../development/libraries/science/math/brial { };
 
   clblas = callPackage ../development/libraries/science/math/clblas {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo OpenCL;
@@ -19960,10 +20008,7 @@ with pkgs;
   # without atlas. Etc.
   liblapackWithAtlas = callPackage ../development/libraries/science/math/liblapack {};
   liblapackWithoutAtlas = liblapackWithAtlas.override { atlas = null; };
-  liblapack_3_5_0WithAtlas = callPackage ../development/libraries/science/math/liblapack/3.5.0.nix {};
-  liblapack_3_5_0WithoutAtlas = liblapack_3_5_0WithAtlas.override { atlas = null; };
   liblapack = liblapackWithAtlas;
-  liblapack_3_5_0 = liblapack_3_5_0WithAtlas;
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
@@ -21159,6 +21204,7 @@ with pkgs;
       fontconfigSupport = true;
       alsaSupport = true;
       openglSupport = true;
+      vulkanSupport = stdenv.isLinux;
       tlsSupport = true;
       cupsSupport = true;
       dbusSupport = true;
