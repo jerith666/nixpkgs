@@ -484,6 +484,7 @@ with pkgs;
 
   alacritty = callPackage ../applications/misc/alacritty {
     inherit (xorg) libXcursor libXxf86vm libXi;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreServices CoreText Foundation OpenGL;
   };
 
   amazon-glacier-cmd-interface = callPackage ../tools/backup/amazon-glacier-cmd-interface { };
@@ -1445,6 +1446,8 @@ with pkgs;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
+  mongodb-compass = callPackage ../tools/misc/mongodb-compass { };
+  
   mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mozlz4a = callPackage ../tools/compression/mozlz4a {
@@ -2970,6 +2973,8 @@ with pkgs;
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
   hping = callPackage ../tools/networking/hping { };
+
+  html-proofer = callPackage ../tools/misc/html-proofer { };
 
   htpdate = callPackage ../tools/networking/htpdate { };
 
@@ -5717,6 +5722,8 @@ with pkgs;
   wimlib = callPackage ../tools/archivers/wimlib { };
 
   wipe = callPackage ../tools/security/wipe { };
+
+  wireguard-go = callPackage ../tools/networking/wireguard-go { };
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf {
     overrideDerivation = lib.overrideDerivation;
@@ -15783,6 +15790,8 @@ with pkgs;
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
+  gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
+
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
@@ -21259,6 +21268,8 @@ with pkgs;
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xbps = callPackage ../tools/package-management/xbps { };
+
   xcftools = callPackage ../tools/graphics/xcftools { };
 
   xhyve = callPackage ../applications/virtualization/xhyve {
@@ -21470,4 +21481,7 @@ with pkgs;
 
   inherit (recurseIntoAttrs (callPackages ../os-specific/bsd { }))
           netbsd;
+
+  yrd = callPackage ../tools/networking/yrd { };
+
 }
