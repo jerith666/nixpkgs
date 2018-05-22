@@ -9,6 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
+  ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
@@ -101,6 +102,7 @@
   ./programs/qt5ct.nix
   ./programs/rootston.nix
   ./programs/screen.nix
+  ./programs/sedutil.nix
   ./programs/slock.nix
   ./programs/shadow.nix
   ./programs/shell.nix
@@ -120,6 +122,7 @@
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/xss-lock.nix
   ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
@@ -214,6 +217,7 @@
   ./services/desktops/accountsservice.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
+  ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
@@ -381,6 +385,7 @@
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/sysprof.nix
   ./services/misc/taskserver
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
@@ -567,6 +572,7 @@
   ./services/networking/strongswan.nix
   ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/stunnel.nix
+  ./services/networking/stubby.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
@@ -650,6 +656,7 @@
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix
+  ./services/web-apps/youtrack.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
@@ -781,6 +788,7 @@
   ./virtualisation/hyperv-guest.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/rkt.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
