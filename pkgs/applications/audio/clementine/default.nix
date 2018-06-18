@@ -72,7 +72,7 @@ let
     name = "clementine-free-${version}";
     inherit src patches nativeBuildInputs postPatch;
 
-    buildInputs = buildInputs ++ [ makeWrapper ];
+    buildInputs = buildInputs ++ [ makeWrapper gst_plugins ];
 
     cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
 
@@ -104,7 +104,7 @@ let
       ./clementine-spotify-blob.patch
     ];
 
-    buildInputs = buildInputs ++ [ libspotify makeWrapper gst_plugins ];
+    buildInputs = buildInputs ++ [ libspotify makeWrapper ];
     # Only build and install the Spotify blob
     preBuild = ''
       cd ext/clementine-spotifyblob
