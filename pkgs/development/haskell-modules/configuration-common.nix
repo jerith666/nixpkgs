@@ -82,7 +82,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1w0gzqk70ymlpvh9zqkg1cd3ipaw4n85k4zsf49xl6kjp4vbcmwj";
+      sha256 = "0cz044zjp067xjx0dw1yg3n7vnrkn1j3rvnk9i3jf1aqfvm1szwy";
     };
   })).overrideScope (self: super: {
     aws = dontCheck (self.aws_0_18);
@@ -250,7 +250,7 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # https://github.com/jwiegley/hnix/issues/98 - tied to an older deriving-compat
-  hnix = doJailbreak (overrideCabal super.hnix (old: {
+  hnix = (overrideCabal super.hnix (old: {
     patches = old.patches or [] ++ [
       # should land in hnix-5.2
       (pkgs.fetchpatch {
@@ -331,6 +331,7 @@ self: super: {
   hgdbmi = dontCheck super.hgdbmi;
   hi = dontCheck super.hi;
   hierarchical-clustering = dontCheck super.hierarchical-clustering;
+  hlibgit2 = disableHardening super.hlibgit2 [ "format" ];
   hmatrix-tests = dontCheck super.hmatrix-tests;
   hquery = dontCheck super.hquery;
   hs2048 = dontCheck super.hs2048;
@@ -340,11 +341,13 @@ self: super: {
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
+  http-link-header = dontCheck super.http-link-header; # non deterministic failure https://hydra.nixos.org/build/75041105
   ihaskell = dontCheck super.ihaskell;
   influxdb = dontCheck super.influxdb;
   itanium-abi = dontCheck super.itanium-abi;
   katt = dontCheck super.katt;
   language-slice = dontCheck super.language-slice;
+  language-nix = if pkgs.stdenv.isi686 then dontCheck super.language-nix else super.language-nix;
   ldap-client = dontCheck super.ldap-client;
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
@@ -434,18 +437,15 @@ self: super: {
   # https://github.com/evanrinehart/mikmod/issues/1
   mikmod = addExtraLibrary super.mikmod pkgs.libmikmod;
 
-  # Version 0.21.2 calls its doctest suite with incorrect paths.
-  haskell-gi = appendPatch super.haskell-gi (pkgs.fetchpatch {
-    url = https://github.com/haskell-gi/haskell-gi/pull/163/commits/b876c4f351893370d4ae597aab6ecc0422e7f665.patch;
-    sha256 = "03vzpvnr3vnz2zgsr504iyf0n9aw6mkz8rkj6zhazfixl3dzfkyd";
-  });
-
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
+
+  # Should not appear in nixpkgs yet (broken anyway)
+  yarn2nix = throw "yarn2nix is not yet packaged for nixpkgs. See https://github.com/Profpatsch/yarn2nix#yarn2nix";
 
   # no haddock since this is an umbrella package.
   cloud-haskell = dontHaddock super.cloud-haskell;
@@ -653,6 +653,7 @@ self: super: {
   # Need newer versions of their dependencies than the ones we have in LTS-11.x.
   cabal2nix = super.cabal2nix.overrideScope (self: super: { hpack = self.hpack_0_28_2; hackage-db = self.hackage-db_2_0_1; });
   dbus-hslogger = super.dbus-hslogger.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
+  graphviz = (addBuildTool super.graphviz pkgs.graphviz).overrideScope (self: super: { wl-pprint-text = self.wl-pprint-text_1_2_0_0; base-compat = self.base-compat_0_10_1; });
   status-notifier-item = super.status-notifier-item.overrideScope (self: super: { dbus = self.dbus_1_0_1; });
 
   # https://github.com/bos/configurator/issues/22
@@ -778,9 +779,6 @@ self: super: {
   # Still needed as HUnit < 1.5
   lifted-base = doJailbreak super.lifted-base;
 
-  # https://github.com/aslatter/parsec/issues/68
-  parsec = doJailbreak super.parsec;
-
   # Don't depend on chell-quickcheck, which doesn't compile due to restricting
   # QuickCheck to versions ">=2.3 && <2.9".
   system-filepath = dontCheck super.system-filepath;
@@ -798,7 +796,7 @@ self: super: {
 
   # https://github.com/haskell/fgl/issues/60
   # Needed for QuickCheck < 2.10
-  fgl = doJailbreak super.fgl;
+  fgl = dontCheck super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
 
   # The tests spuriously fail
@@ -888,13 +886,12 @@ self: super: {
   attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
   int-cast = doJailbreak super.int-cast;
   nix-derivation = doJailbreak super.nix-derivation;
-  graphviz = doJailbreak super.graphviz;
 
   # Needs QuickCheck <2.10, HUnit <1.6 and base <4.10
   pointfree = doJailbreak super.pointfree;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
+  cryptohash-sha256 = dontCheck super.cryptohash-sha256;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
@@ -937,7 +934,8 @@ self: super: {
   haddock-api = super.haddock-api.override { haddock-library = self.haddock-library_1_4_4; };
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
-  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' darcs.cabal"; });
+  # Jailbreak "graphviz >=2999.18.1 && <2999.20".
+  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' darcs.cabal"; });
 
   # https://github.com/Twinside/Juicy.Pixels/issues/149
   JuicyPixels = dontHaddock super.JuicyPixels;

@@ -16,24 +16,23 @@
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+  enableIntegerSimple ? !(gmp.meta.available or false), gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? targetPlatform != hostPlatform
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
-  enableShared ?
-    !(targetPlatform.isDarwin
-      # On iOS, dynamic linking is not supported
-      && (targetPlatform.isAarch64 || targetPlatform.isAarch32))
+  enableShared ? true
+
+, # What flavour to build. An empty string indicates no
+  # specific flavour and falls back to ghc default values.
+  ghcFlavour ? stdenv.lib.optionalString (targetPlatform != hostPlatform) "perf-cross"
 , # Whether to backport https://phabricator.haskell.org/D4388 for
   # deterministic profiling symbol names, at the cost of a slightly
   # non-standard GHC API
   deterministicProfiling ? false
 }:
-
-assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
@@ -44,11 +43,14 @@ let
     "${targetPlatform.config}-";
 
   buildMK = ''
+    BuildFlavour = ${ghcFlavour}
+    ifneq \"\$(BuildFlavour)\" \"\"
+    include mk/flavours/\$(BuildFlavour).mk
+    endif
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     INTEGER_LIBRARY = integer-simple
   '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
-    BuildFlavour = perf-cross
     Stage1Only = YES
     HADDOCK_DOCS = NO
     BUILD_SPHINX_HTML = NO
@@ -95,7 +97,8 @@ stdenv.mkDerivation rec {
     (fetchpatch { # Backport of https://phabricator.haskell.org/D4388 for more determinism
       url = "https://github.com/shlevy/ghc/commit/fec1b8d3555c447c0d8da0e96b659be67c8bb4bc.patch";
       sha256 = "1lyysz6hfd1njcigpm8xppbnkadqfs0kvrp7s8vqgb38pjswj5hg";
-    });
+    })
+    ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch;
 
   postPatch = "patchShebangs .";
 
@@ -147,12 +150,13 @@ stdenv.mkDerivation rec {
     "--disable-large-address-space"
   ];
 
-  # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
-  # masss-rebuild.
-  crossConfig = true;
+  # Make sure we never relax`$PATH` and hooks support for compatability.
+  strictDeps = true;
 
-  nativeBuildInputs = [ alex autoconf autoreconfHook automake ghc happy hscolour perl python3 sphinx ];
+  nativeBuildInputs = [
+    autoconf autoreconfHook automake perl python3 sphinx
+    ghc alex happy hscolour
+  ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
@@ -170,11 +174,15 @@ stdenv.mkDerivation rec {
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
+  doCheck = false; # fails with "testsuite/tests: No such file or directory.  Stop."
 
-  # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
-  # treat that as a unary `{x,y,z,..}` repetition.
+  hardeningDisable = [ "format" ];
+
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    for bin in "$out"/lib/${name}/bin/*; do
+      isELF "$bin" || continue
+      paxmark m "$bin"
+    done
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc

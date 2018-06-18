@@ -127,6 +127,7 @@
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
+  ./programs/zsh/zsh-autosuggestions.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
   ./rename.nix
   ./security/acme.nix
@@ -150,6 +151,7 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
+  ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -514,6 +516,7 @@
   ./services/networking/miniupnpd.nix
   ./services/networking/mosquitto.nix
   ./services/networking/monero.nix
+  ./services/networking/morty.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
@@ -667,6 +670,7 @@
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
+  ./services/web-servers/meguca.nix
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/nginx/default.nix
@@ -786,6 +790,7 @@
   ./virtualisation/lxd.nix
   ./virtualisation/amazon-options.nix
   ./virtualisation/hyperv-guest.nix
+  ./virtualisation/kvmgt.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/qemu-guest-agent.nix

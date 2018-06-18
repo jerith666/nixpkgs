@@ -214,6 +214,11 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.3") ''
     DRM_I915_KMS y
   ''}
+  # iGVT-g support
+  ${optionalString (versionAtLeast version "4.16") ''
+    DRM_I915_GVT y
+    DRM_I915_GVT_KVMGT m
+  ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
@@ -458,6 +463,7 @@ with stdenv.lib;
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
   RC_DEVICES? y # Enable IR devices
+  RT2800USB_RT53XX y
   RT2800USB_RT55XX y
   SCHED_AUTOGROUP y
   CFS_BANDWIDTH y

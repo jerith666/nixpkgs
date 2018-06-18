@@ -162,12 +162,15 @@ let
     extraPaths = [ make.src ] ++ make.extraPaths;
   };
 
-  compat = netBSDDerivation {
+  compat = netBSDDerivation rec {
     path = "tools/compat";
     sha256 = "17phkfafybxwhzng44k5bhmag6i55br53ky1nwcmw583kg2fa86z";
     version = "7.1.2";
 
-    setupHook = ./compat-setup-hook.sh;
+    setupHooks = [
+      ../../../build-support/setup-hooks/role.bash
+      ./compat-setup-hook.sh
+    ];
 
     # override defaults to prevent infinite recursion
     nativeBuildInputs = [ makeMinimal ];
@@ -178,6 +181,8 @@ let
     makeFlags = [ "INSTALL=${coreutils}/bin/install" ];
     installFlags = [];
     RENAME = "-D";
+
+    patches = [ ./compat.patch ];
 
     postInstall = ''
       mv $out/include/compat/* $out/include
@@ -200,6 +205,12 @@ let
       install -D $NETBSDSRCDIR/include/rpc/types.h $out/include/rpc/types.h
       install -D $NETBSDSRCDIR/include/utmpx.h $out/include/utmpx.h
       install -D $NETBSDSRCDIR/include/tzfile.h $out/include/tzfile.h
+      install -D $NETBSDSRCDIR/sys/sys/tree.h $out/include/sys/tree.h
+
+      mkdir -p $out/lib/pkgconfig
+      substitute ${./libbsd-overlay.pc} $out/lib/pkgconfig/libbsd-overlay.pc \
+        --subst-var-by out $out \
+        --subst-var-by version ${version}
 
       # Remove lingering /usr references
       if [ -d $out/usr ]; then
@@ -270,7 +281,10 @@ let
 
       runHook postInstall
     '';
-    setupHook = ./fts-setup-hook.sh;
+    setupHooks = [
+      ../../../build-support/setup-hooks/role.bash
+      ./fts-setup-hook.sh
+    ];
   };
 
   stat = netBSDDerivation {
@@ -584,6 +598,13 @@ in rec {
     version = "7.1.2";
     sha256 = "1vyn30js14nnadlls55mg7g1gz8h14l75rbrrh8lgn49qg289665";
     makeFlags = [ "BINDIR=/share" ];
+  };
+
+  locale = netBSDDerivation {
+    path = "usr.bin/locale";
+    version = "7.1.2";
+    sha256 = "0kk6v9k2bygq0wf9gbinliqzqpzs9bgxn0ndyl2wcv3hh2bmsr9p";
+    patches = [ ./locale.patch ];
   };
 
 }
