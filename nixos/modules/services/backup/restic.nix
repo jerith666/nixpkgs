@@ -154,7 +154,7 @@ with lib;
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}" ] ++ pruneCmd;
+            ExecStart = [ "${pkgs.bash}/bin/bash -c '${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}'" ] ++ pruneCmd;
             User = backup.user;
           };
         } // optionalAttrs backup.initialize {
