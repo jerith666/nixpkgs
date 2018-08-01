@@ -1125,4 +1125,6 @@ self: super: {
   # Tests require a browser: https://github.com/ku-fpg/blank-canvas/issues/73
   blank-canvas = dontCheck super.blank-canvas;
   blank-canvas_0_6_2 = dontCheck super.blank-canvas_0_6_2;
+
+  language-ecmascript = doJailbreak super.language-ecmascript;
 }
