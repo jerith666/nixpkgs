@@ -589,6 +589,8 @@ with pkgs;
 
   awless = callPackage ../tools/virtualization/awless { };
 
+  brakeman = callPackage ../development/tools/analysis/brakeman { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -681,6 +683,8 @@ with pkgs;
   httperf = callPackage ../tools/networking/httperf { };
 
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
+
+  ipgrep = callPackage ../tools/networking/ipgrep { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
@@ -866,6 +870,8 @@ with pkgs;
 
   bitbucket-cli = python2Packages.bitbucket-cli;
 
+  bittornado = callPackage ../tools/networking/p2p/bittornado { };
+
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -966,6 +972,8 @@ with pkgs;
   btfs = callPackage ../os-specific/linux/btfs { };
 
   buildah = callPackage ../development/tools/buildah { };
+
+  bukubrow = callPackage ../tools/networking/bukubrow { };
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
@@ -2797,6 +2805,8 @@ with pkgs;
 
   gparted = callPackage ../tools/misc/gparted { };
 
+  ldmtool = callPackage ../tools/misc/ldmtool { };
+
   gpodder = callPackage ../applications/audio/gpodder { };
 
   gpp = callPackage ../development/tools/gpp { };
@@ -2996,6 +3006,8 @@ with pkgs;
   half = callPackage ../development/libraries/half { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
+
+  halide = callPackage ../development/compilers/halide {};
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
@@ -5006,6 +5018,10 @@ with pkgs;
 
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
+  };
+
+  scrcpy = callPackage ../misc/scrcpy {
+    inherit (androidenv) platformTools;
   };
 
   screen-message = callPackage ../tools/X11/screen-message { };
@@ -7068,6 +7084,7 @@ with pkgs;
   cargo-release = callPackage ../tools/package-management/cargo-release { };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
 
+  cargo-asm = callPackage ../development/tools/rust/cargo-asm { };
   cargo-fuzz = callPackage ../development/tools/rust/cargo-fuzz { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
@@ -7423,14 +7440,6 @@ with pkgs;
   php = php72;
   phpPackages = php72Packages;
 
-  php56Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php56;
-  });
-
-  php70Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php70;
-  });
-
   php71Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php71;
   });
@@ -7441,8 +7450,6 @@ with pkgs;
 
 
   inherit (callPackages ../development/interpreters/php { })
-    php56
-    php70
     php71
     php72;
 
@@ -8109,6 +8116,8 @@ with pkgs;
   emma = callPackage ../development/tools/analysis/emma { };
 
   epm = callPackage ../development/tools/misc/epm { };
+
+  eresi = callPackage ../development/tools/analysis/eresi { };
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
 
@@ -10494,6 +10503,8 @@ with pkgs;
   libksba = callPackage ../development/libraries/libksba { };
 
   libksi = callPackage ../development/libraries/libksi { };
+
+  liblinear = callPackage ../development/libraries/liblinear { };
 
   libmad = callPackage ../development/libraries/libmad { };
 
@@ -14621,6 +14632,8 @@ with pkgs;
 
   cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
+  capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
+
   carlito = callPackage ../data/fonts/carlito {};
 
   comfortaa = callPackage ../data/fonts/comfortaa {};
@@ -14759,6 +14772,8 @@ with pkgs;
 
   hanazono = callPackage ../data/fonts/hanazono { };
 
+  ia-writer-duospace = callPackage ../data/fonts/ia-writer-duospace { };
+
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
@@ -14767,6 +14782,9 @@ with pkgs;
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
+
+  inriafonts = callPackage ../data/fonts/inriafonts { };
+
 
   iosevka = callPackage ../data/fonts/iosevka {
     nodejs = nodejs-8_x;
@@ -14863,6 +14881,8 @@ with pkgs;
   mro-unicode = callPackage ../data/fonts/mro-unicode { };
 
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
+
+  mustache-go = callPackage ../development/tools/mustache-go { };
 
   myrica = callPackage ../data/fonts/myrica { };
 
@@ -15470,6 +15490,8 @@ with pkgs;
   chirp = callPackage ../applications/misc/chirp {
     inherit (pythonPackages) pyserial pygtk;
   };
+
+  browsh = callPackage ../applications/networking/browsers/browsh { };
 
   chromium = callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
@@ -18047,6 +18069,8 @@ with pkgs;
 
   rapcad = libsForQt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
+  rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
+
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
   ratmen = callPackage ../tools/X11/ratmen {};
@@ -18394,6 +18418,8 @@ with pkgs;
 
   stp = callPackage ../applications/science/logic/stp {};
 
+  stumpish = callPackage ../applications/window-managers/stumpish {};
+
   stumpwm = callPackage ../applications/window-managers/stumpwm {
     version = "latest";
   };
@@ -18525,9 +18551,11 @@ with pkgs;
     vte = gnome3.vte;
   };
 
-  termite = callPackage ../applications/misc/termite {
+  termite-unwrapped = callPackage ../applications/misc/termite {
     vte = gnome3.vte-ng;
   };
+
+  termite = callPackage ../applications/misc/termite/wrapper.nix { termite = termite-unwrapped; };
 
   termtosvg = callPackage ../tools/misc/termtosvg { };
 

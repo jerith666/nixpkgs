@@ -186,6 +186,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  aspy-yaml = callPackage ../development/python-modules/aspy.yaml { };
+
   astral = callPackage ../development/python-modules/astral { };
 
   astropy = callPackage ../development/python-modules/astropy {  };
@@ -492,6 +494,8 @@ in {
   sip = callPackage ../development/python-modules/sip { };
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
+
+  slackclient = callPackage ../development/python-modules/slackclient { };
 
   spglib = callPackage ../development/python-modules/spglib { };
 
@@ -1520,6 +1524,8 @@ in {
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
+  cfgv = callPackage ../development/python-modules/cfgv { };
+
   cftime = callPackage ../development/python-modules/cftime {};
 
   cjson = callPackage ../development/python-modules/cjson { };
@@ -2211,6 +2217,8 @@ in {
 
   easydict = callPackage ../development/python-modules/easydict { };
 
+  easygui = callPackage ../development/python-modules/easygui { };
+
   EasyProcess = callPackage ../development/python-modules/easyprocess { };
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
@@ -2545,6 +2553,8 @@ in {
       license = licenses.asl20;
     };
   };
+
+  fluent-logger = callPackage ../development/python-modules/fluent-logger {};
 
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
@@ -3045,6 +3055,8 @@ in {
   };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
+
+  identify = callPackage ../development/python-modules/identify { };
 
   ijson = callPackage ../development/python-modules/ijson {};
 
@@ -3947,6 +3959,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pymediainfo = callPackage ../development/python-modules/pymediainfo { };
+
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
@@ -4010,6 +4024,8 @@ in {
       license = licenses.gpl3Plus;
     };
   };
+
+  pyprind = callPackage ../development/python-modules/pyprind { };
 
   python-axolotl = callPackage ../development/python-modules/python-axolotl { };
 
@@ -4197,6 +4213,8 @@ in {
   junos-eznc = callPackage ../development/python-modules/junos-eznc {};
 
   raven = callPackage ../development/python-modules/raven { };
+
+  rawkit = callPackage ../development/python-modules/rawkit { };
 
   rethinkdb = buildPythonPackage rec {
     name = "rethinkdb-${version}";
@@ -5273,6 +5291,8 @@ in {
 
   fastimport = callPackage ../development/python-modules/fastimport { };
 
+  fastpair = callPackage ../development/python-modules/fastpair { };
+
   fastrlock = callPackage ../development/python-modules/fastrlock {};
 
   feedgen = callPackage ../development/python-modules/feedgen { };
@@ -6158,6 +6178,10 @@ in {
   google_cloud_speech = callPackage ../development/python-modules/google_cloud_speech { };
 
   gpgme = toPythonModule (pkgs.gpgme.override { withPython=true; });
+
+  gphoto2 = callPackage ../development/python-modules/gphoto2 {
+    inherit (pkgs) pkgconfig;
+  };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -8425,6 +8449,8 @@ in {
   nipype = callPackage ../development/python-modules/nipype {
     inherit (pkgs) which;
   };
+
+  nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   nose = buildPythonPackage rec {
     version = "1.3.7";
@@ -17472,18 +17498,6 @@ EOF
     buildInputs = with self; [ setuptools_scm ];
 
     propagatedBuildInputs = with self; [ six ];
-  };
-
-  slackclient = buildPythonPackage rec {
-    name = "slackclient-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/slackclient/${name}.tar.gz";
-      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
-    };
-
-    propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
   tempora= callPackage ../development/python-modules/tempora { };
