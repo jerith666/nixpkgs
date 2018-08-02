@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , buildPythonPackage
-, isPy3k, isPy35, isPy36, pythonOlder
+, isPy3k, isPy36, pythonOlder
 , astor
 , gast
 , numpy
@@ -71,7 +71,7 @@ in buildPythonPackage rec {
   lib.optionalString (stdenv.isLinux) ''
     rrPath="$out/${python.sitePackages}/tensorflow/:${rpath}"
     internalLibPath="$out/${python.sitePackages}/tensorflow/python/_pywrap_tensorflow_internal.so"
-    find $out -name '*.${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
+    find $out -name '*${stdenv.hostPlatform.extensions.sharedLibrary}' -exec patchelf --set-rpath "$rrPath" {} \;
   '';
 
 

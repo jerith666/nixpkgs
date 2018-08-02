@@ -1,19 +1,20 @@
-{ stdenv, fetchgit, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl, cacert,
-  makeWrapper, less, openssl }:
+{ stdenv, autoPatchelfHook, fetchzip, libunwind, libuuid, icu, curl,
+  makeWrapper, less, openssl, pam, lttng-ust }:
 
 let platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
     platformSha = if stdenv.isDarwin then "1ga4p8xmrxa54v2s6i0q1q7lx2idcmp1jwm0g4jxr54fyn5ay3lf"
-                     else if stdenv.isLinux then "000mmv5iblnmwydfdvg5izli3vpb6l14xy4qy3smcikpf0h87fhl"
+                     else if stdenv.isLinux then "1bv1yjk3rm1czibqagmh719m4r1x8j8bmh3nw40x7izm2sx0qg7v"
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
                      else throw "unsupported platform";
+    libraries = [ libunwind libuuid icu curl openssl lttng-ust ] ++ (if stdenv.isLinux then [ pam ] else []);
 in
 stdenv.mkDerivation rec {
   name = "powershell-${version}";
-  version = "6.0.2";
+  version = "6.0.3";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-x64.tar.gz";
@@ -21,8 +22,8 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildInputs = [ autoPatchelfHook makeWrapper ];
-  propagatedBuildInputs = [ libunwind libuuid icu curl cacert less openssl ];
+  buildInputs = [ less ] ++ libraries;
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
 
   # TODO: remove PAGER after upgrading to v6.1.0-preview.1 or later as it has been addressed in
   # https://github.com/PowerShell/PowerShell/pull/6144
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/powershell
     cp -r * $out/share/powershell
     rm $out/share/powershell/DELETE_ME_TO_DISABLE_CONSOLEHOST_TELEMETRY
-    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath [ libunwind libuuid icu openssl curl ]}" \
+    makeWrapper $out/share/powershell/pwsh $out/bin/pwsh --prefix ${platformLdLibraryPath} : "${stdenv.lib.makeLibraryPath libraries}" \
                                            --set PAGER ${less}/bin/less --set TERM xterm
   '';
 
