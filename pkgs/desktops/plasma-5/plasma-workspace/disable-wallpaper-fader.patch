@@ -1,0 +1,14 @@
+diff --git a/lookandfeel/contents/lockscreen/LockScreenUi.qml b/lookandfeel/contents/lockscreen/LockScreenUi.qml
+index c3e87f13..4e8a4bb1 100644
+--- a/lookandfeel/contents/lockscreen/LockScreenUi.qml
++++ b/lookandfeel/contents/lockscreen/LockScreenUi.qml
+@@ -154,7 +154,7 @@ PlasmaCore.ColorScope {
+ 
+         WallpaperFader {
+             anchors.fill: parent
+-            state: lockScreenRoot.uiVisible ? "on" : "off"
++            state: "off"
+             source: wallpaper
+             mainStack: mainStack
+             footer: footer
+
