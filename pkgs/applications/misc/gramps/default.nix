@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, gtk3, pythonPackages, intltool, gnome3,
-  pango, gsettings-desktop-schemas, gobjectIntrospection, wrapGAppsHook,
+  pango, gobjectIntrospection, wrapGAppsHook,
 # Optional packages:
  enableOSM ? true, osm-gps-map
  }:
@@ -51,7 +51,7 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Genealogy software";
-    homepage = http://gramps-project.org;
+    homepage = https://gramps-project.org;
     license = licenses.gpl2;
   };
 }

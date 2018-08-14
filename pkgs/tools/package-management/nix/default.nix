@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, boost
-, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox-sandbox-shell
+, autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns
+, busybox-sandbox-shell
 , hostPlatform, buildPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
+, withLibseccomp ? libseccomp.meta.available, libseccomp
 }:
 
 let
@@ -25,15 +26,15 @@ let
     nativeBuildInputs =
       [ pkgconfig ]
       ++ lib.optionals (!is20) [ curl perl ]
-      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
+      ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns ];
 
     buildInputs = [ curl openssl sqlite xz bzip2 ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
       ++ lib.optionals is20 [ brotli ] # Since 1.12
-      ++ lib.meta.enableIfAvailable libseccomp
+      ++ lib.optional withLibseccomp libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is20)
           (aws-sdk-cpp.override {
-            apis = ["s3"];
+            apis = ["s3" "transfer"];
             customMemoryManagement = false;
           })
       ++ lib.optional fromGit boost;
@@ -41,7 +42,7 @@ let
     propagatedBuildInputs = [ boehmgc ];
 
     # Seems to be required when using std::atomic with 64-bit types
-    NIX_LDFLAGS = lib.optionalString (stdenv.system == "armv6l-linux") "-latomic";
+    NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
     configureFlags =
       [ "--with-store-dir=${storeDir}"
@@ -70,7 +71,9 @@ let
     doInstallCheck = true; # not cross
 
     # socket path becomes too long otherwise
-    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+    preInstallCheck = lib.optional stdenv.isDarwin ''
+      export TMPDIR=$NIX_BUILD_TOP
+    '';
 
     separateDebugInfo = stdenv.isLinux;
 
@@ -95,16 +98,19 @@ let
     passthru = { inherit fromGit; };
   };
 
-  perl-bindings = { nix }: stdenv.mkDerivation {
+  perl-bindings = { nix, needsBoost ? false }: stdenv.mkDerivation {
     name = "nix-perl-" + nix.version;
 
     inherit (nix) src;
 
     postUnpack = "sourceRoot=$sourceRoot/perl";
 
+    # This is not cross-compile safe, don't have time to fix right now
+    # but noting for future travellers.
     nativeBuildInputs =
       [ perl pkgconfig curl nix libsodium ]
-      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ];
+      ++ lib.optionals nix.fromGit [ autoreconfHook autoconf-archive ]
+      ++ lib.optional needsBoost boost;
 
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
@@ -129,23 +135,26 @@ in rec {
   }) // { perl-bindings = nixStable; };
 
   nixStable = (common rec {
-    name = "nix-2.0";
+    name = "nix-2.0.4";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "7024d327314bf92c1d3e6cccd944929828a44b24093954036bfb0115a92f5a14";
+      sha256 = "166540ff7b8bb41449586b67e5fc6ab9e25525f6724b6c6bcbfb0648fbd6496b";
     };
   }) // { perl-bindings = perl-bindings { nix = nixStable; }; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-2.0${suffix}";
-    suffix = "pre6137_e3cdcf89";
+    name = "nix-2.1${suffix}";
+    suffix = "pre6338_45bcf541";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "e3cdcf89b0ef42f81c9df5899776ea225f1ecae0";
-      sha256 = "1s9w7ixc2qra3x9545f9a634654rvdqsf38jp9b7wr6xx6qqx60s";
+      rev = "45bcf5416a0ce53361fd37c6b27ba4ef6a34ce96";
+      sha256 = "0ps45n78wnczz99dd9fs54ydxwh2cjq73zbvmak0y49nhc3p0vvv";
     };
     fromGit = true;
-  })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
+  })) // { perl-bindings = perl-bindings {
+    nix = nixUnstable;
+    needsBoost = true;
+  }; };
 
 }

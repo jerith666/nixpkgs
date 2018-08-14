@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
+{ stdenv, fetchurl, libgpgerror, gnupg, pkgconfig, glib, pth, libassuan
 , file, which
 , autoreconfHook
 , git
@@ -11,11 +11,11 @@ let inherit (stdenv) lib system; in
 
 stdenv.mkDerivation rec {
   name = "gpgme-${version}";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${name}.tar.bz2";
-    sha256 = "14q619lxbk64vz7lih5gjb928qm28jrnn1h3yhsrrff3jw8yv3qs";
+    sha256 = "0vxx5xaag3rhp4g2arp5qm77gvz4kj0m3hnpvhkdvqyjfhbi26rd";
   };
 
   outputs = [ "out" "dev" "info" ];

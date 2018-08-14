@@ -5,8 +5,8 @@ with lib;
 let
   cfg = config.virtualisation.virtualbox.host;
 
-  virtualbox = pkgs.virtualbox.override {
-    inherit (cfg) enableHardening headless;
+  virtualbox = cfg.package.override {
+    inherit (cfg) enableExtensionPack enableHardening headless;
   };
 
   kernelModules = config.boot.kernelPackages.virtualbox.override {
@@ -17,9 +17,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
+    enable = mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
@@ -30,6 +28,15 @@ in
       '';
     };
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.virtualbox;
+      defaultText = "pkgs.virtualbox";
+      description = ''
+        Which VirtualBox package to use.
+      '';
+    };
+
     addNetworkInterface = mkOption {
       type = types.bool;
       default = true;
@@ -37,6 +44,8 @@ in
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
+
+    enableExtensionPack = mkEnableOption "VirtualBox extension pack";
 
     enableHardening = mkOption {
       type = types.bool;
@@ -86,7 +95,7 @@ in
       "VirtualBox"
     ]));
 
-    users.extraGroups.vboxusers.gid = config.ids.gids.vboxusers;
+    users.groups.vboxusers.gid = config.ids.gids.vboxusers;
 
     services.udev.extraRules =
       ''
