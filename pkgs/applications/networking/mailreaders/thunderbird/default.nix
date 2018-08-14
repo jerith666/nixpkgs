@@ -6,6 +6,7 @@
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, libpulseaudio
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
@@ -46,6 +47,7 @@ in stdenv.mkDerivation rec {
       xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
+      libpulseaudio
     ]
     ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
 
@@ -69,6 +71,7 @@ in stdenv.mkDerivation rec {
     # "--enable-system-cairo"
     "--enable-startup-notification"
     "--disable-crashreporter"
+    "--disable-tests"
     "--disable-updater"
     "--enable-jemalloc"
     "--disable-gconf"
