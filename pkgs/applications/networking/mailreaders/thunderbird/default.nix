@@ -7,6 +7,7 @@
 , autoconf213, which, m4
 , writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
 , cargo, rustc, llvmPackages
+, libpulseaudio
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
 , debugBuild ? false
@@ -37,18 +38,15 @@ in stdenv.mkDerivation rec {
       xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification /* cairo */
       icu libpng jemalloc
+      libpulseaudio
     ]
     ++ lib.optionals enableGTK3 [ gtk3 gnome3.defaultIconTheme ];
 
   # from firefox + m4 + wrapperTool
   nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
 
-  configureFlags =
-    [ # from firefox, but without sound libraries (alsa, libvpx, pulseaudio)
-      "--enable-application=comm/mail"
-      "--disable-alsa"
-      "--disable-pulseaudio"
-
+  configureFlags = [
+    "--enable-application=comm/mail"
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
@@ -62,11 +60,10 @@ in stdenv.mkDerivation rec {
       "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
-      #"--enable-system-cairo"
+    # "--enable-system-cairo"
       "--enable-startup-notification"
       "--disable-crashreporter"
       "--disable-tests"
-      "--disable-necko-wifi" # maybe we want to enable this at some point
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
