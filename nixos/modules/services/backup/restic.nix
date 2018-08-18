@@ -157,7 +157,7 @@ with lib;
         let
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
-          filesFromTmpFile = "/tmp/restic-backup-${name}-files";
+          filesFromTmpFile = "/run/restic-backups-${name}/includes";
           preStartInit = if backup.initialize
                          then "${resticCmd} snapshots || ${resticCmd} init"
                          else "";
@@ -194,7 +194,7 @@ with lib;
             Type = "oneshot";
             ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ] ++ pruneCmd;
             User = backup.user;
-            PrivateTmp = true;
+            RuntimeDirectory = "restic-backups-${name}";
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };
