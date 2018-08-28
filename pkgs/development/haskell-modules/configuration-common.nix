@@ -1072,16 +1072,15 @@ self: super: {
 
   # cabal2nix requires hpack >= 0.29.6 but the LTS has hpack-0.28.2.
   # Lets remove this once the LTS has upraded to 0.29.6.
-  hpack = super.hpack_0_29_6;
+  hpack = super.hpack_0_29_7;
 
-  cabal2nix =
-    # The test suite does not know how to find the 'cabal2nix' binary.
-    overrideCabal super.cabal2nix (drv: {
-      preCheck = ''
-        export PATH="$PWD/dist/build/cabal2nix:$PATH"
-        export HOME="$TMPDIR/home"
-      '';
-    });
+  # The test suite does not know how to find the 'cabal2nix' binary.
+  cabal2nix = overrideCabal super.cabal2nix (drv: {
+    preCheck = ''
+      export PATH="$PWD/dist/build/cabal2nix:$PATH"
+      export HOME="$TMPDIR/home"
+    '';
+  });
 
   # Break out of "aeson <1.3, temporary <1.3".
   stack = doJailbreak super.stack;
@@ -1121,4 +1120,10 @@ self: super: {
 
   # https://github.com/MarcWeber/hasktags/issues/52
   hasktags = dontCheck super.hasktags;
+
+  # https://github.com/haskell/hoopl/issues/50
+  hoopl = dontCheck super.hoopl;
+
+  # https://github.com/snapframework/xmlhtml/pull/37
+  xmlhtml = doJailbreak super.xmlhtml;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
