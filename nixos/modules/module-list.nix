@@ -247,6 +247,7 @@
   ./services/desktops/gnome3/tracker-miners.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
+  ./services/desktops/zeitgeist.nix
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
   ./services/editors/emacs.nix
@@ -280,6 +281,7 @@
   ./services/hardware/upower.nix
   ./services/hardware/usbmuxd.nix
   ./services/hardware/thermald.nix
+  ./services/hardware/undervolt.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
@@ -408,6 +410,7 @@
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
+  ./services/monitoring/datadog-agent.nix
   ./services/monitoring/dd-agent/dd-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix

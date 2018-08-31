@@ -83,7 +83,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -106,7 +106,7 @@ let
     let
       configEvaled = import lib/eval-config.nix config;
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -291,6 +291,7 @@ in rec {
   tests.firefox = callTest tests/firefox.nix {};
   tests.flatpak = callTest tests/flatpak.nix {};
   tests.firewall = callTest tests/firewall.nix {};
+  tests.fsck = callTest tests/fsck.nix {};
   tests.fwupd = callTest tests/fwupd.nix {};
   tests.gdk-pixbuf = callTest tests/gdk-pixbuf.nix {};
   #tests.gitlab = callTest tests/gitlab.nix {};

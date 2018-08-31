@@ -230,6 +230,8 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
+  browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
+
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
@@ -251,6 +253,8 @@ in {
   diff_cover = callPackage ../development/python-modules/diff_cover { };
 
   docrep = callPackage ../development/python-modules/docrep { };
+
+  dominate = callPackage ../development/python-modules/dominate { };
 
   emcee = callPackage ../development/python-modules/emcee { };
 
@@ -377,6 +381,8 @@ in {
   pycairo = callPackage ../development/python-modules/pycairo { };
 
   pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
+
+  pycrc = callPackage ../development/python-modules/pycrc { };
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
@@ -1377,7 +1383,7 @@ in {
       sha256 = "1aqmy3psn12lxgp659d0zsxkirxzy5lnbnzxf9xjq1a93s3qm704";
     };
 
-    buildInputs = with self; [ pkgs.libev cython ] ++ optionals doCheck [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
+    buildInputs = with self; [ pkgs.libev cython ];
 
     propagatedBuildInputs = with self; [ futures six ];
 
@@ -1389,6 +1395,8 @@ in {
       ${python.interpreter} setup.py gevent_nosetests
       ${python.interpreter} setup.py eventlet_nosetests
     '';
+
+    checkInputs = [ scales eventlet twisted mock gevent nose pytz pyyaml sure ];
 
     # Could not get tests running
     doCheck = false;
@@ -2440,6 +2448,11 @@ in {
     doCheck = (!isPyPy);  # https://github.com/fabric/fabric/issues/11891
     propagatedBuildInputs = with self; [ paramiko pycrypto ];
     buildInputs = with self; [ fudge_9 nose ];
+    meta = {
+      description = "Pythonic remote execution";
+      homepage    = https://www.fabfile.org/;
+      license     = licenses.bsd2;
+    };
   };
 
   faulthandler = if ! isPy3k
@@ -2534,6 +2547,8 @@ in {
       platforms = platforms.unix;
     };
   };
+
+  fastcache = callPackage ../development/python-modules/fastcache { };
 
   functools32 = if isPy3k then null else buildPythonPackage rec {
     name = "functools32-${version}";
@@ -5359,11 +5374,15 @@ in {
 
   flask = callPackage ../development/python-modules/flask { };
 
+  flask-api = callPackage ../development/python-modules/flask-api { };
+
   flask_assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
+
+  flask-bootstrap = callPackage ../development/python-modules/flask-bootstrap { };
 
   flask-caching = callPackage ../development/python-modules/flask-caching { };
 
@@ -5388,6 +5407,8 @@ in {
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
+
+  flask-paginate = callPackage ../development/python-modules/flask-paginate { };
 
   flask_principal = callPackage ../development/python-modules/flask-principal { };
 
@@ -7774,26 +7795,7 @@ in {
 
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
-  multiprocess = buildPythonPackage rec {
-    name = "multiprocess-${version}";
-    version = "0.70.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/multiprocess/${name}.tgz";
-      sha256 = "73f8b9b7009860e3c3c8b9bdcad7e8366b130929775f89c114d4346a9cfcb31b";
-    };
-
-    propagatedBuildInputs = with self; [ dill ];
-
-    # Python-version dependent tests
-    doCheck = false;
-
-    meta = {
-      description = "Better multiprocessing and multithreading in python";
-      homepage = https://github.com/uqfoundation;
-      license = licenses.bsd3;
-    };
-  };
+  multiprocess = callPackage ../development/python-modules/multiprocess { };
 
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
@@ -7880,6 +7882,8 @@ in {
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mypy = callPackage ../development/python-modules/mypy { };
+
+  mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
   mwclient = buildPythonPackage rec {
     version = "0.8.3";
@@ -8825,6 +8829,8 @@ in {
       maintainers = with maintainers; [ garbas ];
     };
   };
+
+  orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-otr = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -10670,35 +10676,7 @@ in {
     };
   };
 
-  pyjwt = buildPythonPackage rec {
-    version = "1.5.3";
-    name = "pyjwt-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "progrium";
-      repo = "pyjwt";
-      rev = version;
-      sha256 = "109zb3ka2lvp00r9nawa0lmljfikvhcj5yny19kcipz8mqia1gs8";
-    };
-
-    buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
-    propagatedBuildInputs = with self; [ cryptography ecdsa ];
-
-    # We don't need this specific version
-    postPatch = ''
-      substituteInPlace setup.py --replace "pytest==2.7.3" "pytest"
-    '';
-
-    meta = {
-      description = "JSON Web Token implementation in Python";
-      longDescription = "A Python implementation of JSON Web Token draft 01";
-      homepage = https://github.com/progrium/pyjwt;
-      downloadPage = https://github.com/progrium/pyjwt/releases;
-      license = licenses.mit;
-      maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.unix;
-    };
-  };
+  pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = buildPythonPackage rec {
     name = "pykickstart-${version}";
@@ -17295,9 +17273,13 @@ EOF
 
   uranium = callPackage ../development/python-modules/uranium { };
 
+  uuid = callPackage ../development/python-modules/uuid { };
+
   versioneer = callPackage ../development/python-modules/versioneer { };
 
   vine = callPackage ../development/python-modules/vine { };
+
+  visitor = callPackage ../development/python-modules/visitor { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 
