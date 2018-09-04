@@ -425,6 +425,11 @@
     github = "Baughn";
     name = "Svein Ove Aas";
   };
+  bb010g = {
+    email = "me@bb010g.com";
+    github = "bb010g";
+    name = "Brayden Banks";
+  };
   bbarker = {
     email = "brandon.barker@gmail.com";
     github = "bbarker";
@@ -3694,6 +3699,11 @@
     email = "langston.barrett@gmail.com";
     github = "siddharthist";
     name = "Langston Barrett";
+  };
+  siers = {
+    email = "veinbahs+nixpkgs@gmail.com";
+    github = "siers";
+    name = "Raitis Veinbahs";
   };
   sifmelcara = {
     email = "ming@culpring.com";
