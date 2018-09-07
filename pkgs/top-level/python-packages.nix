@@ -2009,6 +2009,8 @@ in {
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
 
+  requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
+
   howdoi = callPackage ../development/python-modules/howdoi {};
 
   neurotools = callPackage ../development/python-modules/neurotools {};
@@ -4581,6 +4583,10 @@ in {
     gdal = self.gdal;
   };
 
+  django_2_1 = callPackage ../development/python-modules/django/2_1.nix {
+    gdal = self.gdal;
+  };
+
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.18";
@@ -6926,6 +6932,8 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
+
+  libkeepass = callPackage ../development/python-modules/libkeepass { };
 
   librepo = toPythonModule (pkgs.librepo.override {
     inherit python;
