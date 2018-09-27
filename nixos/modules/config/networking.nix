@@ -236,7 +236,7 @@ in
             '' + optionalString config.services.nscd.enable ''
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
-              libc_restart='${pkgs.glibc.bin}/bin/nscd --invalidate hosts 2> /dev/null'
+              libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString (length resolvconfOptions > 0) ''
               # Options as described in resolv.conf(5)
               resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
