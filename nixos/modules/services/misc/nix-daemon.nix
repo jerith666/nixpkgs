@@ -347,7 +347,6 @@ in
         type = types.listOf types.str;
         default =
           [
-            "$HOME/.nix-defexpr/channels"
             "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
@@ -439,7 +438,7 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars //
-      { NIX_PATH = concatStringsSep ":" cfg.nixPath;
+      { NIX_PATH = cfg.nixPath;
       };
 
     environment.extraInit = optionalString (!isNix20)
@@ -448,6 +447,10 @@ in
         # Nix daemon.
         if [ "$USER" != root -o ! -w /nix/var/nix/db ]; then
             export NIX_REMOTE=daemon
+        fi
+      '' + ''
+        if [ -e "$HOME/.nix-defexpr/channels" ]; then
+          export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
         fi
       '';
 
