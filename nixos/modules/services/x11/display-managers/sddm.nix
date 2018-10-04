@@ -206,8 +206,6 @@ in
       }
     ];
 
-    services.xserver.displayManager.slim.enable = false;
-
     services.xserver.displayManager.job = {
       logToFile = true;
 
@@ -265,7 +263,9 @@ in
     };
 
     environment.etc."sddm.conf".source = cfgFile;
-    environment.pathsToLink = [ "/share/sddm/themes" ];
+    environment.pathsToLink = [ 
+      "/share/sddm" 
+    ];
 
     users.groups.sddm.gid = config.ids.gids.sddm;
 

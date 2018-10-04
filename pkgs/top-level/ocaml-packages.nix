@@ -1,6 +1,8 @@
-{ lib, callPackage, newScope, pkgs, config, system }:
+{ lib, callPackage, newScope, pkgs, config }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) system;
+
   mkOcamlPackages = ocaml: overrides:
     let
       packageSet = self:
@@ -218,6 +220,12 @@ let
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
 
+    doc-ock =  callPackage ../development/ocaml-modules/doc-ock { };
+
+    doc-ock-html =  callPackage ../development/ocaml-modules/doc-ock-html { };
+
+    doc-ock-xml =  callPackage ../development/ocaml-modules/doc-ock-xml { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
@@ -232,13 +240,13 @@ let
 
     eliom = callPackage ../development/ocaml-modules/eliom { };
 
+    elpi = callPackage ../development/ocaml-modules/elpi { };
+
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
     erm_xml = callPackage ../development/ocaml-modules/erm_xml { };
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
-
-    erm_xmpp_0_3 = callPackage ../development/ocaml-modules/erm_xmpp/0.3.nix { };
 
     estring = callPackage ../development/ocaml-modules/estring { };
 
@@ -533,6 +541,8 @@ let
 
     octavius = callPackage ../development/ocaml-modules/octavius { };
 
+    odoc = callPackage ../development/ocaml-modules/odoc { };
+
     ojquery = callPackage ../development/ocaml-modules/ojquery { };
 
     omd = callPackage ../development/ocaml-modules/omd { };
@@ -561,6 +571,8 @@ let
     re2_p4 = callPackage ../development/ocaml-modules/re2 { };
 
     result = callPackage ../development/ocaml-modules/ocaml-result { };
+
+    seq = callPackage ../development/ocaml-modules/seq { };
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
@@ -610,9 +622,6 @@ let
       else null;
 
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
-    ocaml_extlib_maximal = callPackage ../development/ocaml-modules/extlib {
-      minimal = false;
-    };
 
     ocb-stubblr = callPackage ../development/ocaml-modules/ocb-stubblr { };
 
@@ -1075,10 +1084,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_07;
 
-  ocamlPackages =
-    # OCaml 4.05 is broken on aarch64
-    if system == "aarch64-linux" then
-      ocamlPackages_4_06
-    else
-      ocamlPackages_4_05;
+  ocamlPackages = ocamlPackages_4_06;
 }

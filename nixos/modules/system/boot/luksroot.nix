@@ -11,19 +11,30 @@ let
       exit 1
     }
 
+    dev_exist() {
+      local target="$1"
+      if [ -e $target ]; then
+        return 0
+      else
+        local uuid=$(echo -n $target | sed -e 's,UUID=\(.*\),\1,g')
+        local dev=$(blkid --uuid $uuid)
+        return $?
+      fi
+    }
+
     wait_target() {
         local name="$1"
         local target="$2"
         local secs="''${3:-10}"
         local desc="''${4:-$name $target to appear}"
 
-        if [ ! -e $target ]; then
+        if ! dev_exist $target; then
             echo -n "Waiting $secs seconds for $desc..."
             local success=false;
             for try in $(seq $secs); do
                 echo -n "."
                 sleep 1
-                if [ -e $target ]; then
+                if dev_exist $target; then
                     success=true
                     break
                 fi
@@ -324,7 +335,7 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
 
-          (if pkgs.stdenv.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
+          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).

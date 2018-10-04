@@ -34,22 +34,22 @@ let
     builder = ./builder.sh;
 
     src =
-      if stdenv.system == "i686-linux" then
+      if stdenv.hostPlatform.system == "i686-linux" then
         fetchurl {
           url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
           sha256 = sha256_32bit;
         }
-      else if stdenv.system == "x86_64-linux" then
+      else if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
-      else throw "nvidia-x11 does not support platform ${stdenv.system}";
+      else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
     inherit prePatch;
     inherit version useGLVND useProfiles;
-    inherit (stdenv) system;
+    inherit (stdenv.hostPlatform) system;
 
     outputs = [ "out" ] ++ optional (!libsOnly) "bin";
     outputDev = if libsOnly then null else "bin";
@@ -62,7 +62,7 @@ let
     dontStrip = true;
     dontPatchELF = true;
 
-    libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr zlib stdenv.cc.cc ];
+    libPath = makeLibraryPath [ xorg.libXext xorg.libX11 xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc ];
 
     nativeBuildInputs = [ perl nukeReferences ]
       ++ optionals (!libsOnly) kernel.moduleBuildDependencies;

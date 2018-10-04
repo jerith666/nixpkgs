@@ -81,6 +81,7 @@ in
           kconfig
           kconfigwidgets
           kcoreaddons
+          kdoctools
           kdbusaddons
           kdeclarative
           kded
@@ -174,7 +175,10 @@ in
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
 
-      environment.pathsToLink = [ "/share" ];
+      environment.pathsToLink = [ 
+        # FIXME: modules should link subdirs of `/share` rather than relying on this
+        "/share" 
+      ];
 
       environment.etc = singleton {
         source = xcfg.xkbDir;

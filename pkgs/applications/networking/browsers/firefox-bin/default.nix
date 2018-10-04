@@ -59,7 +59,7 @@ let
     "x86_64-linux" = "linux-x86_64";
   };
 
-  arch = mozillaPlatforms.${stdenv.system};
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
   isPrefixOf = prefix: string:
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha512; };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
   libPath = stdenv.lib.makeLibraryPath
     [ stdenv.cc.cc
@@ -142,8 +142,8 @@ stdenv.mkDerivation {
   dontPatchELF = true;
 
   patchPhase = ''
-    sed -i -e '/^pref("app.update.channel",/d' defaults/pref/channel-prefs.js
-    echo 'pref("app.update.channel", "non-existing-channel")' >> defaults/pref/channel-prefs.js
+    # Don't download updates from Mozilla directly
+    echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
   '';
 
   installPhase =
