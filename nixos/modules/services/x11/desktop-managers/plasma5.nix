@@ -185,10 +185,8 @@ in
         target = "X11/xkb";
       };
 
-      environment.variables = {
-        # Enable GTK applications to load SVG icons
-        GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-      };
+      # Enable GTK applications to load SVG icons
+      services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
       fonts.fonts = with pkgs; [ noto-fonts hack-font ];
       fonts.fontconfig.defaultFonts = {
@@ -225,29 +223,8 @@ in
       security.pam.services.sddm.enableKwallet = true;
       security.pam.services.slim.enableKwallet = true;
 
-      # Update the start menu for each user that has `isNormalUser` set.
-      # Silence normal output from the command, incl. grep exit-code hackery
-      # Avoid attempting to run it when the data it wants to update is encrypted
-      system.activationScripts.plasmaSetup = stringAfter [ "users" "groups" ]
-        (concatStringsSep "\n"
-          (mapAttrsToList (name: value: ''
-            if [ -h /home/${name}/.ecryptfs ]; then
-              echo warning: KDE menus not updated for user ${name} due to an ecryptfs home directory. \
-              have that user run kbuildsycoca5 manually.
-            else
-              ${pkgs.su}/bin/su \
-                -s ${pkgs.bash}/bin/bash \
-                ${name} \
-                -c ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5 \
-              2>&1 \
-              | \
-              ( ${pkgs.gnugrep}/bin/egrep \
-                  -v 'XDG_RUNTIME_DIR not set, defaulting to|^kbuildsycoca5 running...$' \
-                || [[ $? == 1 ]]
-              )
-            fi;
-          '')
-            (filterAttrs (n: v: v.isNormalUser) config.users.users)));
+      # Update the start menu for each user that is currently logged in
+      system.userActivationScripts.plasmaSetup = "${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5";
     })
   ];
 
