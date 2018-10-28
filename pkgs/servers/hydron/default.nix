@@ -3,15 +3,15 @@
 
 buildGoPackage rec {
   name = "hydron-unstable-${version}";
-  version = "2018-07-30";
+  version = "2018-09-25";
   goPackagePath = "github.com/bakape/hydron";
   goDeps = ./deps.nix;
 
   src = fetchFromGitHub {
     owner = "bakape";
     repo = "hydron";
-    rev = "586af9da1e551b2a7128c154200e2e2e32d1af7e";
-    sha256 = "1lif63kcllsbmv06n3b8ayx89k90lximyp23108blcq456wrf0zi";
+    rev = "ad88ec03e5c7a527fddebb6b54909f50ecaae00c";
+    sha256 = "074bzl38f4y4xs4vavbn7mgi4srv1fbzkcx4p17mrqipzk6ffbca";
   };
 
   enableParallelBuilding = true;

@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.27.3";
+  version = "0.27.5";
   name = "libgit2-${version}";
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "044dzwgl8zf1i1mk2g1z07hzxz46gma9sh63x09hswhw8j6zqx61";
+    sha256 = "1f6jxgw4pf6jln439v1pj8a0kgym5sq5xry8x0gq18dr5gv3wims";
   };
 
   cmakeFlags = [ "-DTHREADSAFE=ON" ];

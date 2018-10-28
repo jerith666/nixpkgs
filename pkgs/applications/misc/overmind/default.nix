@@ -1,21 +1,21 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, tmux, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, tmux, which, makeWrapper }:
 
 buildGoPackage rec {
   name = "overmind-${version}";
-  version = "2.0.0.beta1";
+  version = "1.2.1";
   goPackagePath = "github.com/DarthSim/overmind";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$bin/bin/overmind" --prefix PATH : "${stdenv.lib.makeBinPath [ tmux ]}"
+    wrapProgram "$bin/bin/overmind" --prefix PATH : "${stdenv.lib.makeBinPath [ tmux which ]}"
   '';
 
   src = fetchFromGitHub {
     owner = "DarthSim";
     repo = "overmind";
     rev = "v${version}";
-    sha256 = "15fch3qszdm8bj1m9hxky9zgk6f5gpbswwfslg84qdjf4iwr5drq";
+    sha256 = "11ws9rsy8ladjp1y3b6vva9sjmw4s24xc1w18lyhfz63xc908nfw";
   };
 
   meta = with stdenv.lib; {

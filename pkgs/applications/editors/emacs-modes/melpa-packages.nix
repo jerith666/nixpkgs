@@ -59,8 +59,11 @@ self:
         inherit (self.melpaPackages) easy-kill;
       };
 
-      # missing git
-      egg = markBroken super.egg;
+      egg = super.egg.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
 
       # upstream issue: missing file header
       elmine = markBroken super.elmine;
@@ -146,6 +149,24 @@ self:
           (attrs.nativeBuildInputs or []) ++ [ external.git ];
       });
 
+      magithub = super.magithub.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-svn = super.magit-svn.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
+      magit-todos = super.magit-todos.overrideAttrs (attrs: {
+        # searches for Git at build time
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or []) ++ [ external.git ];
+      });
+
       # missing OCaml
       merlin = markBroken super.merlin;
 
@@ -201,6 +222,12 @@ self:
 
       # missing OCaml
       utop = markBroken super.utop;
+
+      vdiff-magit =
+        (super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        }));
 
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;

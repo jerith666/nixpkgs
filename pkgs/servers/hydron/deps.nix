@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/Masterminds/squirrel";
-      rev = "b127ed9be03443fe3c0877e391130e3dd3f3107a";
-      sha256 = "04vgwm5g5486188656hiw1x56mrkv27s5g2s8mc1lz7z1ig5g5bg";
+      rev = "3b6e9e96624526bce05b577b76ca726a20bb3c83";
+      sha256 = "16jw3af3lyb5x9yn7anx0rb3mz70bivnixkvh8dzrq16wkkn760h";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/bakape/thumbnailer";
-      rev = "93664eb81b19dcb232062bf55f92cf4d7c805a7f";
-      sha256 = "0jdkb776f6gk0g8zi7r1vcfs6w0i33mn2327x6960jybli7bcfsp";
+      rev = "326c44736983c316d20c036ce34ca79ce9b96b01";
+      sha256 = "1a1dniz0zbihk7971z2ln6hlsbvkk13lghgjz346lw4lfc105kxk";
     };
   }
   {
@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/dimfeld/httptreemux";
-      rev = "7f532489e7739b3d49df5c602bf63549881fe753";
-      sha256 = "0hkw04rsvljvx8ynqjgz9cb743x09fd2xiiycrgz5vbsa8q9iyyk";
+      rev = "a53c8f73d4b7d82c30b7e5ab6aa155b981c42fb5";
+      sha256 = "08s90ggydcwz2683bbsrc33h2b7x2q5ws104gva838b573xzrhqj";
     };
   }
   {
@@ -32,8 +32,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gorilla/handlers";
-      rev = "7e0847f9db758cdebd26c149d0ae9d5d0b9c98ce";
-      sha256 = "0mnw81ayjm4d8462qg8spmcwxmchn24158bf93zxjab51pg8n9gm";
+      rev = "7e0369fae54b097612a946bc6709f3a3fbccb3de";
+      sha256 = "00i2is2z7101igf7sr8prmd8m59x7k7xdkhm5h4bjs37k157zm38";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/lann/builder";
-      rev = "1b87b36280d04fe7882d1512bf038ea2967ad534";
-      sha256 = "015q46awbyp47vld07yi7d27i0lkd82r7qn5230bb9qxl4mcfiqc";
+      rev = "47ae307949d02aa1f1069fdafc00ca08e1dbabac";
+      sha256 = "1kg9jy1rciznj627hafpq2mi7hr5d3ssgqcpwrm3bnlk9sqnydil";
     };
   }
   {
@@ -59,17 +59,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/lib/pq";
-      rev = "90697d60dd844d5ef6ff15135d0203f65d2f53b8";
-      sha256 = "0hb4bfsk8g5473yzbf3lzrb373xicakjznkf0v085xgimz991i9r";
-    };
-  }
-  {
-    goPackagePath = "github.com/mailru/easyjson";
-    fetch = {
-      type = "git";
-      url = "https://github.com/mailru/easyjson";
-      rev = "03f2033d19d5860aef995fe360ac7d395cd8ce65";
-      sha256 = "0r62ym6m1ijby7nwplq0gdnhak8in63njyisrwhr3xpx9vkira97";
+      rev = "4ded0e9383f75c197b3a2aaa6d590ac52df6fd79";
+      sha256 = "1zqnnyczaf00xi6xh53vq758v5bdlf0iz7kf22l02cal4i6px47i";
     };
   }
   {
@@ -77,8 +68,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mattn/go-sqlite3";
-      rev = "b3511bfdd742af558b54eb6160aca9446d762a19";
-      sha256 = "1v41is0h05p4jgv8nal3l8lcdcggylsyblq0ihycnprkdzwls808";
+      rev = "e85a2792f3166972d6619b7051f01a2df254192a";
+      sha256 = "088bckqifg61xdda0f0hrcyzm3dslr3jzcsgdyk8ccjmjv2112sd";
     };
   }
   {
@@ -86,8 +77,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/valyala/bytebufferpool";
-      rev = "e746df99fe4a3986f4d4f79e13c1e0117ce9c2f7";
-      sha256 = "01lqzjddq6kz9v41nkky7wbgk7f1cw036sa7ldz10d82g5klzl93";
+      rev = "cdfbe9377474227bb42120c1e22fd4433e7f69bf";
+      sha256 = "0c6cixd85dvl2gvs7sdh0k2wm8r3grl4fw0jg4w7d78cp8s2k7ag";
     };
   }
   {
@@ -95,8 +86,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/valyala/quicktemplate";
-      rev = "a91e0946457b6583004fbfc159339b8171423aed";
-      sha256 = "1z89ang5pkq5qs5b2nwhzyrw0zjlsas539l9kix374fhka49n8yc";
+      rev = "dc50ff9977a68a543145ce34e0e0030bebcc89be";
+      sha256 = "1980q2c5w4jhrlhf1pimc8yrkz005x3jbsi7hk4hnx6d5iy5lmb6";
     };
   }
   {
@@ -104,8 +95,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "49c15d80dfbc983ea25246ee959d970efe09ec09";
-      sha256 = "1knkww5jfn73frm8m939ck91jkjfapk798xwscm4g991mpcd6j4v";
+      rev = "f04abc6bdfa7a0171a8a0c9fd2ada9391044d056";
+      sha256 = "0mygvmprcssixj3bm2djl3xzdnyh4zqhkwhynzml5rha8mvrxknd";
     };
   }
 ]

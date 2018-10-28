@@ -179,7 +179,7 @@ let
         fi
       done
 
-      if [ -z "${toString pkgs.stdenv.isCross}" ]; then
+      if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
@@ -251,9 +251,9 @@ let
     postInstall = ''
       echo checking syntax
       # check both with bash
-      ${pkgs.bash}/bin/sh -n $target
+      ${pkgs.buildPackages.bash}/bin/sh -n $target
       # and with ash shell, just in case
-      ${extraUtils}/bin/ash -n $target
+      ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
     inherit udevRules extraUtils modulesClosure;

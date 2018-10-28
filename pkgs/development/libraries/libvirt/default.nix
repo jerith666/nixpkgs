@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, jansson
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 }:
@@ -16,26 +16,26 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${name}.tar.xz";
-        sha256 = "0rj0azi766g0xdxydvkq9nj95hhsiwqgclzzmyxvk2axhb8nrb5l";
+        sha256 = "1r37aw1xxlwjkk4n6k503mw1caldijz8n7x86xdaq90n6bvpkhlj";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "1lv1s93k056wylrlc7j4q45zir9z4qshzcl454spy2wb8cdn3h4s";
+        sha256 = "17byylhx0bny4b771hqv92d87a5dg21a5qjv861y50sckgwwi6f1";
         fetchSubmodules = true;
       };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap jansson
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
@@ -58,10 +58,6 @@ in stdenv.mkDerivation rec {
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
-
-    [ -f ${jansson}/lib/libjansson.so.4 ] || exit 1
-    substituteInPlace src/util/virjsoncompat.c \
-      --replace '"libjansson.so.4"' '"${jansson}/lib/libjansson.so.4"'
 
     patchShebangs . # fixes /usr/bin/python references
   '';

@@ -6,9 +6,10 @@
 # compiler and the linker just "work".
 
 { name ? ""
-, stdenvNoCC, nativeTools, propagateDoc ? !nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, bintools ? null, libc ? null
-, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, stdenvNoCC
+, bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
+, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, propagateDoc ? bintools != null && bintools ? man
 , extraPackages ? [], extraBuildCommands ? ""
 , buildPackages ? {}
 , useMacosReexportHack ? false
@@ -171,7 +172,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isWindows then "pe"
       else "elf" + toString targetPlatform.parsed.cpu.bits;
     endianPrefix = if targetPlatform.isBigEndian then "big" else "little";
-    sep = optionalString (!targetPlatform.isMips) "-";
+    sep = optionalString (!targetPlatform.isMips && !targetPlatform.isPower) "-";
     arch =
       /**/ if targetPlatform.isAarch64 then endianPrefix + "aarch64"
       else if targetPlatform.isAarch32     then endianPrefix + "arm"
@@ -183,7 +184,7 @@ stdenv.mkDerivation {
           "mips64"   = "btsmip";
           "mips64el" = "ltsmip";
         }.${targetPlatform.parsed.cpu.name}
-      else if targetPlatform.isPowerPC then "powerpc"
+      else if targetPlatform.isPower then if targetPlatform.isBigEndian then "ppc" else "lppc"
       else if targetPlatform.isSparc then "sparc"
       else throw "unknown emulation for platform: " + targetPlatform.config;
     in targetPlatform.platform.bfdEmulation or (fmt + sep + arch);
@@ -268,8 +269,8 @@ stdenv.mkDerivation {
       ##
 
       mkdir -p $man/nix-support $info/nix-support
-      printWords ${bintools.man or ""} >> $man/nix-support/propagated-build-inputs
-      printWords ${bintools.info or ""} >> $info/nix-support/propagated-build-inputs
+      echo ${bintools.man or ""} >> $man/nix-support/propagated-user-env-packages
+      echo ${bintools.info or ""} >> $info/nix-support/propagated-user-env-packages
     ''
 
     + ''

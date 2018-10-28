@@ -1,19 +1,19 @@
-{ stdenv, fetchgit, autoreconfHook, readline, python3Packages }:
+{ stdenv, fetchgit, autoreconfHook, coreutils, readline, python3Packages }:
 
 let
   ell = fetchgit {
      url = https://git.kernel.org/pub/scm/libs/ell/ell.git;
-     rev = "0.7";
-     sha256 = "095psnpfdy107z5qgi5zw0icqxa44dfx02lza3pd8j4ybj57n0l7";
+     rev = "0.11";
+     sha256 = "0nifa5w6fxy7cagyas2a0zhcppi83yrcsnnp70ls2rc90x4r1ip8";
   };
 in stdenv.mkDerivation rec {
   name = "iwd-${version}";
-  version = "0.4";
+  version = "0.9";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "1hib256jm70k6jlx486jrcv0iip52divbzhvb0f455yh28qfk0hs";
+    sha256 = "1l1jbwsshjbz32s4rf0zfcn3fd16si4y9qa0zaxp00bfzflnpcd4";
   };
 
   nativeBuildInputs = [
@@ -35,8 +35,9 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-dbus-datadir=$(out)/etc/"
-    "--localstatedir=/var"
-    "--disable-systemd-service"
+    "--with-dbus-busdir=$(out)/usr/share/dbus-1/system-services/"
+    "--with-systemd-unitdir=$(out)/lib/systemd/system/"
+    "--localstatedir=/var/"
   ];
 
   postUnpack = ''
@@ -53,6 +54,11 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapPythonPrograms
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/usr/share/dbus-1/system-services/net.connman.iwd.service \
+                      --replace /bin/false ${coreutils}/bin/false
   '';
 
   meta = with stdenv.lib; {

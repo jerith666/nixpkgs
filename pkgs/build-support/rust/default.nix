@@ -1,12 +1,14 @@
-{ stdenv, cacert, git, rust, cargo-vendor }:
+{ stdenv, cacert, git, rust, cargo-vendor, python3 }:
 let
   fetchcargo = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust cargo-vendor;
+    inherit stdenv cacert git rust cargo-vendor python3;
   };
 in
 { name, cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, cargoPatches ? []
+, patches ? []
 , sourceRoot ? null
 , logLevel ? ""
 , buildInputs ? []
@@ -23,6 +25,7 @@ let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
         inherit name src srcs sourceRoot cargoUpdateHook;
+        patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
@@ -44,6 +47,8 @@ in stdenv.mkDerivation (args // {
 
   buildInputs = [ cacert git rust.cargo rust.rustc ] ++ buildInputs;
 
+  patches = cargoPatches ++ patches;
+
   configurePhase = args.configurePhase or ''
     runHook preConfigure
     # noop
@@ -56,14 +61,12 @@ in stdenv.mkDerivation (args // {
     ${setupVendorDir}
 
     mkdir .cargo
-    cat >.cargo/config <<-EOF
-      [source.crates-io]
-      registry = 'https://github.com/rust-lang/crates.io-index'
-      replace-with = 'vendored-sources'
-
-      [source.vendored-sources]
-      directory = '$(pwd)/$cargoDepsCopy'
-    EOF
+    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    if [[ ! -e $config ]]; then
+      config=${./fetchcargo-default-config.toml};
+    fi;
+    substitute $config .cargo/config \
+    --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     unset cargoDepsCopy
 

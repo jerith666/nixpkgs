@@ -258,7 +258,7 @@ let
     Formula = [ pkgs.gmp ];
     geoCount = [ pkgs.gsl_1 ];
     gdtools = [ pkgs.cairo.dev pkgs.fontconfig.lib pkgs.freetype.dev ];
-    git2r = [ pkgs.zlib.dev pkgs.openssl.dev ];
+    git2r = [ pkgs.zlib.dev pkgs.openssl.dev pkgs.libssh2.dev ];
     GLAD = [ pkgs.gsl_1 ];
     glpkAPI = [ pkgs.gmp pkgs.glpk ];
     gmp = [ pkgs.gmp.dev ];
@@ -273,6 +273,7 @@ let
     igraph = [ pkgs.gmp pkgs.libxml2.dev ];
     JavaGD = [ pkgs.jdk ];
     jpeg = [ pkgs.libjpeg.dev ];
+    jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
     libamtrack = [ pkgs.gsl_1 ];
@@ -366,6 +367,7 @@ let
     tkrplot = [ pkgs.xorg.libX11 pkgs.tk.dev ];
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
+    units = [ pkgs.udunits ];
     V8 = [ pkgs.v8_3_14 ];
     VBLPCM = [ pkgs.gsl_1 ];
     WhopGenome = [ pkgs.zlib.dev ];
@@ -413,6 +415,7 @@ let
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
     JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
     mwaved = [ pkgs.pkgconfig ];
@@ -776,6 +779,12 @@ let
       '';
     });
 
+    jqr = old.jqr.overrideDerivation (attrs: {
+      preConfigure = ''
+        patchShebangs configure
+        '';
+    });
+
     pbdZMQ = old.pbdZMQ.overrideDerivation (attrs: {
       postPatch = lib.optionalString stdenv.isDarwin ''
         for file in R/*.{r,r.in}; do
@@ -896,6 +905,14 @@ let
         export TCLLIBPATH="${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}"
       '';
       TCLLIBPATH = "${pkgs.bwidget}/lib/bwidget${pkgs.bwidget.version}";
+    });
+
+    RPostgres = old.RPostgres.overrideDerivation (attrs: {
+      preConfigure = ''
+        export INCLUDE_DIR=${pkgs.postgresql}/include
+        export LIB_DIR=${pkgs.postgresql.lib}/lib
+        patchShebangs configure
+        '';
     });
 
     OpenMx = old.OpenMx.overrideDerivation (attrs: {

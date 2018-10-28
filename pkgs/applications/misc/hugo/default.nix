@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   name = "hugo-${version}";
-  version = "0.46";
+  version = "0.47.1";
 
   goPackagePath = "github.com/gohugoio/hugo";
 
@@ -10,8 +10,15 @@ buildGoPackage rec {
     owner  = "gohugoio";
     repo   = "hugo";
     rev    = "v${version}";
-    sha256 = "0w5xkb6s03hprb4v151gdk8zzsgvy0i406363j1w03bic8ajwgmj";
+    sha256 = "0n27vyg66jfx4lwswsmdlybly8c9gy5rk7yhy7wzs3rwzlqv1jzj";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gohugoio/hugo/commit/b137ad4dbd6d14d0a9af68c044aaee61f2c87fe5.diff";
+      sha256 = "0w1gpg11idqywqcpwzvx4xabn02kk8y4jmyz4h67mc3yh2dhq3ll";
+    })
+  ];
 
   goDeps = ./deps.nix;
 

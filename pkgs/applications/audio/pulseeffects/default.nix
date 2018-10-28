@@ -4,6 +4,7 @@
 , ninja
 , pkgconfig
 , itstool
+, python3
 , libxml2
 , desktop-file-utils
 , wrapGAppsHook
@@ -29,6 +30,7 @@
 , zam-plugins
 , rubberband
 , mda_lv2
+, hicolor-icon-theme
 }:
 
 let
@@ -42,13 +44,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   name = "pulseeffects-${version}";
-  version = "4.2.6";
+  version = "4.3.7";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "1b5h760bb1wgn4avirjjri5fcfqvnsr076qnhrdiqcic3vgircsm";
+    sha256 = "1x1jnbpbc9snya9k2xq39gssf0k4lnd1hr4cjrnwscg5rqybxqsk";
   };
 
   nativeBuildInputs = [
@@ -57,6 +59,7 @@ in stdenv.mkDerivation rec {
     pkgconfig
     libxml2
     itstool
+    python3
     desktop-file-utils
     wrapGAppsHook
   ];
@@ -79,6 +82,7 @@ in stdenv.mkDerivation rec {
     boost
     fftwFloat
     zita-convolver
+    hicolor-icon-theme
   ];
 
   postPatch = ''

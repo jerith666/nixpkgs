@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , libiconv, openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
@@ -22,14 +22,14 @@ galeraLibs = buildEnv {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.16";
+  version = "10.2.17";
 
   src = fetchurl {
     urls = [
       "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
       "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
     ];
-    sha256 = "1i2dwpp96ywjk147qqpcad8vqcy4rxmfbv2cb8ww3sffpa9yx0n1";
+    sha256 = "09xy6mgnz22mz8zgqlnddn8nzgs9xlz8lai4a7aa8x78in7hgcz7";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -221,11 +221,14 @@ connector-c = stdenv.mkDerivation rec {
 
 galera = stdenv.mkDerivation rec {
   name = "mariadb-galera-${version}";
-  version = "25.3.23";
+  version = "25.3.24";
 
-  src = fetchurl {
-    url = "https://mirrors.nxthost.com/mariadb/mariadb-10.2.14/galera-${version}/src/galera-${version}.tar.gz";
-    sha256 = "11pfc85z29jk0h6g6bmi3hdv4in4yb00xsr2r0qm1b0y7m2wq3ra";
+  src = fetchFromGitHub {
+    owner = "codership";
+    repo = "galera";
+    rev = "release_${version}";
+    sha256 = "1yx3rqy7r4w2l3hnrri30hvsa296v8xidi18p5fdzcpmnhnlwjbi";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ asio boost check openssl scons ];
