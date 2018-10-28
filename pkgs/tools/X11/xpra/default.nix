@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, python2Packages, pkgconfig
+{ stdenv, lib, fetchurl, callPackage, python2Packages, pkgconfig
 , xorg, gtk2, glib, pango, cairo, gdk_pixbuf, atk
 , makeWrapper, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg, x264, libvpx, libwebp
@@ -10,13 +10,15 @@ with lib;
 
 let
   inherit (python2Packages) cython buildPythonApplication;
+
+  xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
-  name = "xpra-${version}";
-  version = "2.3.3";
+  pname = "xpra";
+  version = "2.3.4";
 
   src = fetchurl {
-    url = "https://xpra.org/src/${name}.tar.xz";
-    sha256 = "1azvvddjfq7lb5kmbn0ilgq2nf7pmymsc3b9lhbjld6w156qdv01";
+    url = "https://xpra.org/src/${pname}-${version}.tar.xz";
+    sha256 = "0wa3kx54himy3i1b2801hlzfilh3cf4kjk40k1cjl0ds28m5hija";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -73,6 +75,7 @@ in buildPythonApplication rec {
   #  sed -i '4iexport PATH=${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux ]}\${PATH:+:}\$PATH' $out/bin/xpra
   #'';
 
+  passthru = { inherit xf86videodummy; };
 
   meta = {
     homepage = http://xpra.org/;
@@ -80,7 +83,7 @@ in buildPythonApplication rec {
     downloadURLRegexp = "xpra-.*[.]tar[.]xz$";
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel offline ];
     license = licenses.gpl2;
+    maintainers = with maintainers; [ tstrobel offline numinit ];
   };
 }
