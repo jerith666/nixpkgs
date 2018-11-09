@@ -24,7 +24,7 @@ git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nix
 
 nixos-rebuild build -I nixpkgs=$wt;
 
-nix-build -I nixpkgs=$wt pkgs.client-ip-echo;
+nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 
 nix-shell -I nixpkgs=$wt ~/git/elbum/shell.nix --run true;
 
