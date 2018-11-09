@@ -7,6 +7,7 @@ let
   integerSimpleExcludes = [
     "ghc7103Binary"
     "ghc821Binary"
+    "ghc844"
     "ghcjs"
     "ghcjs82"
     "ghcjs84"
@@ -57,6 +58,11 @@ in {
       llvmPackages = pkgs.llvmPackages_5;
     };
     ghc861 = callPackage ../development/compilers/ghc/8.6.1.nix {
+      bootPkgs = packages.ghc822;
+      buildLlvmPackages = buildPackages.llvmPackages_6;
+      llvmPackages = pkgs.llvmPackages_6;
+    };
+    ghc862 = callPackage ../development/compilers/ghc/8.6.2.nix {
       bootPkgs = packages.ghc822;
       buildLlvmPackages = buildPackages.llvmPackages_6;
       llvmPackages = pkgs.llvmPackages_6;
@@ -126,6 +132,11 @@ in {
     ghc861 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc861;
       ghc = bh.compiler.ghc861;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
+    };
+    ghc862 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc862;
+      ghc = bh.compiler.ghc862;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.6.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
