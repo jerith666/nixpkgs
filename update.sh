@@ -24,6 +24,8 @@ git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nix
 
 nixos-rebuild build -I nixpkgs=$wt;
 
+mv -iv result system-result;
+
 nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 
 nix-shell -I nixpkgs=$wt ~/git/elbum/shell.nix --run true;
@@ -32,7 +34,7 @@ echo;
 echo "rebuild complete, computing changes";
 echo;
 
-nox-update --quiet /run/current-system result | \
+nox-update --quiet /run/current-system system-result | \
     grep -v '\.drv : $' | \
     sed 's|^ */nix/store/[a-z0-9]*-||' | \
     sort -u > \
@@ -40,10 +42,10 @@ nox-update --quiet /run/current-system result | \
 
 popd;
 
-mv $wt/update-$d.txt .;
+mv -iv $wt/update-$d.txt .;
 
 #prevent gc while changes are reviewed
-nix-store --add-root result-$d --indirect -r $(readlink -e $wt/result);
+nix-store --add-root result-$d --indirect -r $(readlink -e $wt/system-result);
 
 rm -rf $wt;
 git worktree prune;
