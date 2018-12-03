@@ -15,6 +15,8 @@ let
     name = "apcu-4.0.11";
     sha256 = "002d1gklkf0z170wkbhmm2z1p9p5ghhq3q1r9k54fq1sq4p30ks5";
     buildInputs = [ pkgs.pcre ];
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+    outputs = [ "out" "dev" ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
@@ -24,6 +26,14 @@ let
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+    outputs = [ "out" "dev" ];
+  };
+
+  apcu_bc = buildPecl {
+    name = "apcu_bc-1.0.4";
+    sha256 = "1raww7alwayg9nk0akly1mdrjypxlwg8safnmaczl773cwpw5cbw";
+    buildInputs = [ apcu pkgs.pcre ];
   };
 
   ast = assert isPhp7; buildPecl {
@@ -390,11 +400,11 @@ let
 
   php-cs-fixer = pkgs.stdenv.mkDerivation rec {
     name = "php-cs-fixer-${version}";
-    version = "2.12.2";
+    version = "2.13.1";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "19cq04x1wi489259vyad15zy6y0k3qd7dj77pcf74gxqw92hgg5c";
+      sha256 = "0yy9q140jd63h9qz5jvplh7ls3j7y1hf25dkxk0h4mx9cbxdzkq4";
     };
 
     phases = [ "installPhase" ];

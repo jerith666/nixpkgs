@@ -17,6 +17,8 @@ let
 
     buildOcaml = callPackage ../build-support/ocaml { };
 
+    buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
@@ -735,6 +737,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    visitors = callPackage ../development/ocaml-modules/visitors { };
+
     wasm = callPackage ../development/ocaml-modules/wasm { };
 
     wtf8 = callPackage ../development/ocaml-modules/wtf8 { };
@@ -752,6 +756,10 @@ let
     zarith = callPackage ../development/ocaml-modules/zarith { };
 
     zed = callPackage ../development/ocaml-modules/zed { };
+
+    zmq = callPackage ../development/ocaml-modules/zmq { };
+
+    zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
 
     ocsigen_deriving = callPackage ../development/ocaml-modules/ocsigen-deriving {
       oasis = ocaml_oasis;
@@ -1019,12 +1027,6 @@ let
     trv = callPackage ../development/tools/misc/trv { };
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
-
-    verasco = callPackage ../development/tools/analysis/verasco (
-      if system == "x86_64-linux"
-      then { tools = pkgs.pkgsi686Linux.stdenv.cc; }
-      else {}
-    );
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 

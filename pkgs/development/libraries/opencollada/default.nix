@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "opencollada-${version}";
 
-  version = "1.6.63";
+  version = "1.6.66";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenCOLLADA";
     rev = "v${version}";
-    sha256 = "1x8hz5nkz4lxsf17jv8sdl92dmbbpkqck8jkkc6g32d8gbs3gha1";
+    sha256 = "0gplw4qa5faphl29ksj9lkzdsnkbgs018n8rz1khhwsqypchygyw";
   };
 
   nativeBuildInputs = [ pkgconfig ];

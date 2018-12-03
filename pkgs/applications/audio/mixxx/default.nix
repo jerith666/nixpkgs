@@ -1,26 +1,27 @@
 { stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
+, opusfile
 , pkgconfig, portaudio, portmidi, protobuf, qt4, rubberband, scons, sqlite
 , taglib, upower, vampSDK
 }:
 
 stdenv.mkDerivation rec {
   name = "mixxx-${version}";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1q1px4033marraprvgr5yq9jlz943kcc10fdkn7py2ma8cfgnipq";
+    sha256 = "0h14pwglz03sdmgzviypv1qa1xfjclrnhyqaq5nd60j47h4z39dr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
-    libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4
+    libusb1 libvorbis opusfile pkgconfig portaudio portmidi protobuf qt4
     rubberband scons sqlite taglib upower vampSDK
   ];
 
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     "build=release"
     "qtdir=${qt4}"
     "faad=1"
+    "opus=1"
   ];
 
   buildPhase = ''
