@@ -7918,6 +7918,8 @@ in
   python37Packages = recurseIntoAttrs python37.pkgs;
   pypyPackages = pypy.pkgs;
 
+  update-python-libraries = callPackage ../development/interpreters/python/update-python-libraries { };
+
   # Should eventually be moved inside Python interpreters.
   python-setup-hook = callPackage ../development/interpreters/python/setup-hook.nix { };
 
@@ -11124,6 +11126,8 @@ in
   liboop = callPackage ../development/libraries/liboop { };
 
   libopus = callPackage ../development/libraries/libopus { };
+
+  libopusenc = callPackage ../development/libraries/libopusenc { };
 
   libosinfo = callPackage ../development/libraries/libosinfo {
     inherit (gnome3) libsoup;
