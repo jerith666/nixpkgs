@@ -98,6 +98,34 @@ with lib;
             Create the repository if it doesn't exist.
           '';
         };
+
+        pruneOpts = mkOption {
+          type = types.listOf types.str;
+          default = [];
+          description = ''
+            A list of options (--keep-* et al.) for 'restic forget
+            --prune', to automatically prune old snapshots.  The
+            'forget' command is run *after* the 'backup' command, so
+            keep that in mind when constructing the --keep-* options.
+          '';
+          example = [
+            "--keep-daily 7"
+            "--keep-weekly 5"
+            "--keep-monthly 12"
+            "--keep-yearly 75"
+          ];
+        };
+
+        dynamicFilesFrom = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            A script that produces a list of files to back up.  The
+            results of this command are given to the '--files-from'
+            option.
+          '';
+          example = "find /home/matt/git -type d -name .git";
+        };
       };
     }));
     default = {};
@@ -129,6 +157,30 @@ with lib;
         let
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
+          filesFromTmpFile = "/run/restic-backups-${name}/includes";
+          preStartInit = if backup.initialize
+                         then "${resticCmd} snapshots || ${resticCmd} init"
+                         else "";
+          dynamicFilesFromScript = pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom;
+          preStartFiles = if backup.dynamicFilesFrom != null
+                          then "${dynamicFilesFromScript} > ${filesFromTmpFile}"
+                          else "";
+          preStartAttr = if (backup.initialize || backup.dynamicFilesFrom != null)
+                         then {
+                           preStart = ''
+                             ${preStartInit}
+                             ${preStartFiles}
+                           '';
+                         }
+                         else {};
+          backupPaths = if (backup.dynamicFilesFrom == null)
+                        then concatStringsSep " " backup.paths
+                        else "--files-from ${filesFromTmpFile}";
+          pruneCmd = if (builtins.length backup.pruneOpts > 0)
+                     then [ ( resticCmd + " forget --prune " +
+                              (concatStringsSep " " backup.pruneOpts) )
+                            ( resticCmd + " check" ) ]
+                     else [];
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
@@ -140,14 +192,17 @@ with lib;
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${concatStringsSep " " backup.paths}";
+            ExecStart = [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ] ++ pruneCmd;
             User = backup.user;
+            RuntimeDirectory = "restic-backups-${name}";
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };
-        } // optionalAttrs backup.initialize {
-          preStart = ''
-            ${resticCmd} snapshots || ${resticCmd} init
+        }
+        // preStartAttr
+        // optionalAttrs (backup.dynamicFilesFrom != null) {
+          postStart = ''
+            rm ${filesFromTmpFile}
           '';
         })
       ) config.services.restic.backups;
