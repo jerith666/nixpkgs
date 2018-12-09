@@ -159,7 +159,7 @@ with lib;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
           preStartInit = if backup.initialize
-                         then "${resticCmd} snapshots || ${resticCmd} init"
+                         then "${resticCmd} snapshots > /dev/null || ${resticCmd} init"
                          else "";
           dynamicFilesFromScript = pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom;
           preStartFiles = if backup.dynamicFilesFrom != null
