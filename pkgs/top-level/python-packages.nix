@@ -422,6 +422,8 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
+  manhole = callPackage ../development/python-modules/manhole { };
+
   markerlib = callPackage ../development/python-modules/markerlib { };
 
   matchpy = callPackage ../development/python-modules/matchpy { };
@@ -713,6 +715,8 @@ in {
   slackclient = callPackage ../development/python-modules/slackclient { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
+
+  slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
   snapcast = callPackage ../development/python-modules/snapcast { };
 
@@ -1175,6 +1179,8 @@ in {
   cassandra-driver = callPackage ../development/python-modules/cassandra-driver { };
 
   cccolutils = callPackage ../development/python-modules/cccolutils {};
+
+  cchardet = callPackage ../development/python-modules/cchardet { };
 
   CDDB = callPackage ../development/python-modules/cddb { };
 
@@ -2570,7 +2576,10 @@ in {
 
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
-  gpgme = toPythonModule (pkgs.gpgme.override { pythonSupport=true; });
+  gpgme = toPythonModule (pkgs.gpgme.override {
+    pythonSupport = true;
+    inherit python;
+  });
 
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
@@ -2705,6 +2714,8 @@ in {
   jedi = callPackage ../development/python-modules/jedi { };
 
   jellyfish = callPackage ../development/python-modules/jellyfish { };
+
+  jeepney = callPackage ../development/python-modules/jeepney { };
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
@@ -4637,9 +4648,7 @@ in {
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  neovim = callPackage ../development/python-modules/neovim {};
-
-  neovim_gui = callPackage ../development/python-modules/neovim_gui { };
+  pynvim = callPackage ../development/python-modules/pynvim {};
 
   typogrify = callPackage ../development/python-modules/typogrify { };
 
