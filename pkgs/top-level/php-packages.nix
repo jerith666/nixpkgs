@@ -27,9 +27,9 @@ let
   };
 
   ast = buildPecl {
-    name = "ast-0.1.5";
+    name = "ast-1.0.0";
 
-    sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
+    sha256 = "0abccvwif1pih222lbj2z4cf9ibciz48xj35lfixyry163vabkck";
   };
 
   couchbase = buildPecl rec {
@@ -216,15 +216,15 @@ let
   };
 
   redis = buildPecl {
-    name = "redis-3.1.4";
-    sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
+    name = "redis-4.2.0";
+    sha256 = "105k2rfz97svrqzdhd0a0668mn71c8v0j7hks95832fsvn5dhmbn";
   };
 
   v8 = buildPecl rec {
-    version = "0.1.9";
+    version = "0.2.2";
     name = "v8-${version}";
 
-    sha256 = "0bj77dfmld5wfwl4wgqnpa0i4f3mc1mpsp9dmrwqv050gs84m7h1";
+    sha256 = "103nys7zkpi1hifqp9miyl0m1mn07xqshw3sapyz365nb35g5q71";
 
     buildInputs = [ pkgs.v8_6_x ];
     configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
@@ -242,11 +242,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.7.2";
+    version = "1.8.0";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "03km8qw3nshj7qzk5pidziha2ldx1l2yxhh2s7vpg25f9782hd7c";
+      sha256 = "19pg9ip2mpyf5cyq34fld7qwl77mshqw3c4nif7sxmpnar6sh089";
     };
 
     unpackPhase = ":";
@@ -357,11 +357,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "3.3.2";
+    version = "3.4.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "0np3bsj32mwyrcccw5pgypz7wchd5l89bq951w9a7bxh80gjhak9";
+      sha256 = "1d6zf0ab76r5ibb80q46silhy87hrwh50gfvhd0i25wzad7r09mw";
     };
 
     phases = [ "installPhase" ];
@@ -384,11 +384,11 @@ let
 
   phpcbf = pkgs.stdenv.mkDerivation rec {
     name = "phpcbf-${version}";
-    version = "3.3.2";
+    version = "3.4.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "1qxcd7lkqrfjibkrqq1f5szrcjmd6682mwaxha7v93pj9f92wgn4";
+      sha256 = "0iscs4hg1msk8198pmkdmbxn1g53gbq3i5qgszs0bi6hz3ng9ag9";
     };
 
     phases = [ "installPhase" ];

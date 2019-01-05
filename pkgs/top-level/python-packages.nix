@@ -26,7 +26,7 @@ let
   isPy35 = python.pythonVersion == "3.5";
   isPy36 = python.pythonVersion == "3.6";
   isPy37 = python.pythonVersion == "3.7";
-  isPyPy = python.executable == "pypy";
+  isPyPy = strings.substring 0 4 python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.pythonVersion == "3";
 
   callPackage = pkgs.newScope self;
@@ -288,6 +288,8 @@ in {
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
+  chalice = callPackage ../development/python-modules/chalice { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   cozy = callPackage ../development/python-modules/cozy { };
@@ -356,6 +358,8 @@ in {
 
   filterpy = callPackage ../development/python-modules/filterpy { };
 
+  fints = callPackage ../development/python-modules/fints { };
+
   fire = callPackage ../development/python-modules/fire { };
 
   fdint = callPackage ../development/python-modules/fdint { };
@@ -409,6 +413,8 @@ in {
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  jwcrypto = callPackage ../development/python-modules/jwcrypto { };
 
   lammps-cython = callPackage ../development/python-modules/lammps-cython {
     mpi = pkgs.openmpi;
@@ -609,6 +615,13 @@ in {
     pythonPackages = self;
   };
 
+  /*
+    `pyqt5_with_qtwebkit` should not be used by python libraries in
+    pkgs/development/python-modules/*. Putting this attribute in
+    `propagatedBuildInputs` may cause collisions.
+  */
+  pyqt5_with_qtwebkit = self.pyqt5.override { withWebKit = true; };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
@@ -642,6 +655,7 @@ in {
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-lz4 = callPackage ../development/python-modules/python-lz4 { };
+  lz4 = self.python-lz4; # alias 2018-12-05
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
@@ -697,6 +711,8 @@ in {
   seekpath = callPackage ../development/python-modules/seekpath { };
 
   selectors2 = callPackage ../development/python-modules/selectors2 { };
+
+  sepaxml = callPackage ../development/python-modules/sepaxml { };
 
   serversyncstorage = callPackage ../development/python-modules/serversyncstorage {};
 
@@ -1113,6 +1129,8 @@ in {
 
   blockdiag = callPackage ../development/python-modules/blockdiag { };
 
+  blockdiagcontrib-cisco = callPackage ../development/python-modules/blockdiagcontrib-cisco { };
+
   bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
@@ -1423,6 +1441,8 @@ in {
 
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
+  pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
+
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
@@ -1611,11 +1631,10 @@ in {
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
-  eccodes = disabledIf (!isPy27)
-    (toPythonModule (pkgs.eccodes.override {
-      enablePython = true;
-      pythonPackages = self;
-    }));
+  eccodes = toPythonModule (pkgs.eccodes.override {
+    enablePython = true;
+    pythonPackages = self;
+  });
 
   EditorConfig = callPackage ../development/python-modules/editorconfig { };
 
@@ -1668,6 +1687,10 @@ in {
   faulthandler = if ! isPy3k
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
+
+  flexmock = callPackage ../development/python-modules/flexmock { };
+
+  fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
   flit = callPackage ../development/python-modules/flit { };
 
@@ -1862,6 +1885,8 @@ in {
 
   jupyterlab = callPackage ../development/python-modules/jupyterlab {};
 
+  jupytext = callPackage ../development/python-modules/jupytext { };
+
   PyLTI = callPackage ../development/python-modules/pylti { };
 
   lmdb = callPackage ../development/python-modules/lmdb { };
@@ -1869,6 +1894,8 @@ in {
   logilab_astng = callPackage ../development/python-modules/logilab_astng { };
 
   lpod = callPackage ../development/python-modules/lpod { };
+
+  ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
 
   luftdaten = callPackage ../development/python-modules/luftdaten { };
 
@@ -2198,7 +2225,7 @@ in {
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_4_3 = if
-       self.django.version != "1.8.18"
+       self.django.version != "1.8.19"
   then throw "django_tagging_0_4_3 should be build with django_1_8"
   else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
     pname = "django-tagging";
@@ -2397,6 +2424,10 @@ in {
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
+
+  pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
+
+  opt-einsum = callPackage ../development/python-modules/opt-einsum {};
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -2605,6 +2636,8 @@ in {
 
   gspread = callPackage ../development/python-modules/gspread { };
 
+  gym = callPackage ../development/python-modules/gym { };
+
   gyp = callPackage ../development/python-modules/gyp { };
 
   guessit = callPackage ../development/python-modules/guessit { };
@@ -2670,6 +2703,8 @@ in {
   inifile = callPackage ../development/python-modules/inifile { };
 
   interruptingcow = callPackage ../development/python-modules/interruptingcow {};
+
+  iocapture = callPackage ../development/python-modules/iocapture { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -2802,6 +2837,8 @@ in {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  libarcus = callPackage ../development/python-modules/libarcus { };
+
   libcloud = callPackage ../development/python-modules/libcloud { };
 
   libgpuarray = callPackage ../development/python-modules/libgpuarray {
@@ -2819,6 +2856,8 @@ in {
   libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
+
+  libsavitar = callPackage ../development/python-modules/libsavitar { };
 
   libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
@@ -3074,6 +3113,8 @@ in {
 
   namebench = callPackage ../development/python-modules/namebench { };
 
+  namedlist = callPackage ../development/python-modules/namedlist { };
+
   nameparser = callPackage ../development/python-modules/nameparser { };
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
@@ -3119,6 +3160,8 @@ in {
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose-focus = callPackage ../development/python-modules/nose-focus { };
+
+  nose-randomly = callPackage ../development/python-modules/nose-randomly { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
@@ -3196,6 +3239,8 @@ in {
 
   ordereddict = callPackage ../development/python-modules/ordereddict { };
 
+  od = callPackage ../development/python-modules/od { };
+
   orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-otr = callPackage ../development/python-modules/python-otr { };
@@ -3242,8 +3287,6 @@ in {
   logutils = callPackage ../development/python-modules/logutils { };
 
   ldappool = callPackage ../development/python-modules/ldappool { };
-
-  lz4 = callPackage ../development/python-modules/lz4 { };
 
   retrying = callPackage ../development/python-modules/retrying { };
 
@@ -3700,7 +3743,7 @@ in {
 
   pythonnet = callPackage ../development/python-modules/pythonnet {
     # `mono >= 4.6` required to prevent crashes encountered with earlier versions.
-    mono = pkgs.mono46;
+    mono = pkgs.mono4;
   };
 
   pytz = callPackage ../development/python-modules/pytz { };
@@ -3708,6 +3751,8 @@ in {
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
   pyutil = callPackage ../development/python-modules/pyutil { };
+
+  pywal = callPackage ../development/python-modules/pywal { };
 
   pywebkitgtk = callPackage ../development/python-modules/pywebkitgtk { };
 
@@ -3913,6 +3958,8 @@ in {
 
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
+  snscrape = callPackage ../development/python-modules/snscrape { };
+
   snug = callPackage ../development/python-modules/snug { };
 
   snuggs = callPackage ../development/python-modules/snuggs { };
@@ -4027,6 +4074,8 @@ in {
   uritools = callPackage ../development/python-modules/uritools { };
 
   update_checker = callPackage ../development/python-modules/update_checker {};
+
+  update-copyright = callPackage ../development/python-modules/update-copyright {};
 
   uritemplate = callPackage ../development/python-modules/uritemplate { };
 
@@ -4232,7 +4281,9 @@ in {
 
   blessings = callPackage ../development/python-modules/blessings { };
 
-  secretstorage = callPackage ../development/python-modules/secretstorage { };
+  secretstorage = if isPy3k
+    then callPackage ../development/python-modules/secretstorage { }
+    else callPackage ../development/python-modules/secretstorage/2.nix { };
 
   semantic = callPackage ../development/python-modules/semantic { };
 
@@ -4318,8 +4369,6 @@ in {
     py = python.override{x11Support=true;};
   in callPackage ../development/python-modules/tkinter { py = py; };
 
-  tlslite = throw "deprecated 2018-12-10; use pythonPackages.tlslite-ng instead";
-
   tlslite-ng = callPackage ../development/python-modules/tlslite-ng { };
 
   qrcode = callPackage ../development/python-modules/qrcode { };
@@ -4350,11 +4399,11 @@ in {
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 
+  unidiff = callPackage ../development/python-modules/unidiff { };
+
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
-
-  uritemplate_py = callPackage ../development/python-modules/uritemplate_py { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
@@ -4408,6 +4457,8 @@ in {
 
   zope_contenttype = callPackage ../development/python-modules/zope_contenttype { };
 
+  zope-deferredimport = callPackage ../development/python-modules/zope-deferredimport { };
+
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
   zope_event = callPackage ../development/python-modules/zope_event { };
@@ -4415,6 +4466,8 @@ in {
   zope_exceptions = callPackage ../development/python-modules/zope_exceptions { };
 
   zope_filerepresentation = callPackage ../development/python-modules/zope_filerepresentation { };
+
+  zope-hookable = callPackage ../development/python-modules/zope-hookable { };
 
   zope_i18n = callPackage ../development/python-modules/zope_i18n { };
 
@@ -4455,13 +4508,13 @@ in {
 
   python-libarchive = callPackage ../development/python-modules/python-libarchive { };
 
-  libarchive-c = callPackage ../development/python-modules/libarchive-c { };
+  libarchive-c = callPackage ../development/python-modules/libarchive-c {
+    inherit (pkgs) libarchive;
+  };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
     inherit (pkgs) libasyncns pkgconfig;
   };
-
-  libarcus = callPackage ../development/python-modules/libarcus { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
 
@@ -5056,6 +5109,8 @@ in {
 
   simpy = callPackage ../development/python-modules/simpy { };
 
+  x256 = callPackage ../development/python-modules/x256 { };
+
   yattag = callPackage ../development/python-modules/yattag { };
 
   z3 = (toPythonModule (pkgs.z3.override {
@@ -5081,6 +5136,22 @@ in {
   pymssql = callPackage ../development/python-modules/pymssql { };
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
+
+  importlib-metadata = callPackage ../development/python-modules/importlib-metadata {};
+
+  importlib-resources = callPackage ../development/python-modules/importlib-resources {};
+
+  srptools = callPackage ../development/python-modules/srptools { };
+
+  curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
+
+  pyatv = callPackage ../development/python-modules/pyatv { };
+
+  pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pytado = callPackage ../development/python-modules/pytado { };
+
+  casttube = callPackage ../development/python-modules/casttube { };
 
 });
 

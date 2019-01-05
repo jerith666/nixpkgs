@@ -256,6 +256,11 @@
     github = "AndrewMorsillo";
     name = "Andrew Morsillo";
   };
+  andersk = {
+    email = "andersk@mit.edu";
+    github = "andersk";
+    name = "Anders Kaseorg";
+  };
   AndersonTorres = {
     email = "torres.anderson.85@protonmail.com";
     github = "AndersonTorres";
@@ -385,6 +390,11 @@
     email = "asppsa@gmail.com";
     github = "asppsa";
     name = "Alastair Pharo";
+  };
+  astro = {
+    email = "astro@spaceboyz.net";
+    github = "astro";
+    name = "Astro";
   };
   astsmtl = {
     email = "astsmtl@yandex.ru";
@@ -1324,6 +1334,11 @@
     github = "ellis";
     name = "Ellis Whitehead";
   };
+  elohmeier = {
+    email = "elo-nixos@nerdworks.de";
+    github = "elohmeier";
+    name = "Enno Lohmeier";
+  };
   elseym = {
     email = "elseym@me.com";
     github = "elseym";
@@ -1927,6 +1942,11 @@
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
     name = "Arseniy Seroka";
+  };
+  jakelogemann = {
+    email = "jake.logemann@gmail.com";
+    github = "jakelogemann";
+    name = "Jake Logemann";
   };
   jammerful = {
     email = "jammerful@gmail.com";
@@ -3424,6 +3444,11 @@
     github = "pkmx";
     name = "Chih-Mao Chen";
   };
+  plchldr = {
+    email = "mail@oddco.de";
+    github = "plchldr";
+    name = "Jonas Beyer";
+  };
   plcplc = {
     email = "plcplc@gmail.com";
     github = "plcplc";
@@ -4656,6 +4681,11 @@
     email = "vklquevs@gmail.com";
     github = "vklquevs";
     name = "vklquevs";
+  };
+  vlaci = {
+    email = "laszlo.vasko@outlook.com";
+    github = "vlaci";
+    name = "László Vaskó";
   };
   vlstill = {
     email = "xstill@fi.muni.cz";
