@@ -524,6 +524,11 @@ self: super: {
   # https://github.com/RaphaelJ/friday/issues/34
   friday = doJailbreak super.friday;
 
+  # QuickCheck >=2.3 && <2.12,
+  # fgl >=5.5.0.0 && <5.7,
+  # hspec >=2.1 && <2.6 all too tight
+  graphviz = doJailbreak super.graphviz;
+
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
   MissingH = dontCheck super.MissingH;
@@ -940,7 +945,10 @@ self: super: {
 
   # Jailbreak "unix-compat >=0.1.2 && <0.5".
   # Jailbreak "graphviz >=2999.18.1 && <2999.20".
-  darcs = overrideCabal super.darcs (drv: { preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' darcs.cabal"; });
+  darcs = overrideCabal super.darcs (drv: {
+    preConfigure = "sed -i -e 's/unix-compat .*,/unix-compat,/' -e 's/fgl .*,/fgl,/' -e 's/graphviz .*,/graphviz,/' -e 's/base .*,/base,/' -e 's/network .*,/network,/' -e 's/stm .*,/stm,/' -e 's/zip-archive .*,/zip-archive,/' darcs.cabal";
+    patches = [ ./patches/darcs-monadfail.patch ];
+  });
 
   # aarch64 and armv7l fixes.
   happy = if (pkgs.stdenv.hostPlatform.isAarch32 || pkgs.stdenv.hostPlatform.isAarch64) then dontCheck super.happy else super.happy; # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062

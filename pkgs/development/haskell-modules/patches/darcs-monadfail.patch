@@ -1,0 +1,35 @@
+diff -rN -u old-darcs.net/src/Darcs/UI/Commands/Util/Tree.hs new-darcs.net/src/Darcs/UI/Commands/Util/Tree.hs
+--- old-darcs.net/src/Darcs/UI/Commands/Util/Tree.hs	2019-01-05 09:40:33.179792041 -0500
++++ new-darcs.net/src/Darcs/UI/Commands/Util/Tree.hs	2019-01-05 09:40:33.179792041 -0500
+@@ -52,7 +52,10 @@
+ existsAnycase (AnchoredPath []) = return True
+ existsAnycase (AnchoredPath (x:xs)) = do
+      wd <- TM.currentDirectory
+-     Just tree <- gets (flip findTree wd . TM.tree)
++     mTree <- gets (flip findTree wd . TM.tree)
++     let tree = case mTree of
++                     Just tree' -> tree'
++                     Nothing -> error "unexpected Nothing in existsAnycase"
+      let subs = [ AnchoredPath [n] | (n, _) <- listImmediate tree,
+                                           eqAnycase n x ]
+      or `fmap` forM subs (\path -> do
+diff -rN -u old-darcs.net/src/Darcs/Util/Tree.hs new-darcs.net/src/Darcs/Util/Tree.hs
+--- old-darcs.net/src/Darcs/Util/Tree.hs	2019-01-05 09:40:33.179792041 -0500
++++ new-darcs.net/src/Darcs/Util/Tree.hs	2019-01-05 09:40:33.180792030 -0500
+@@ -434,9 +434,13 @@
+ partiallyUpdateTree fun predi t' = go (AnchoredPath []) t'
+   where go path t = do
+           items' <- M.fromList <$> mapM (maybeupdate path) (listImmediate t)
+-          SubTree t'' <- fun . SubTree $ t { items = items'
+-                                          , treeHash = NoHash }
+-          return t''
++          treeItem <- fun . SubTree $ t { items = items'
++                                       , treeHash = NoHash }
++          let t''' = case treeItem of
++                       SubTree t'' -> t''
++                       File _ -> error "unexpected File in partiallyUpdateTree"
++                       Stub _ _ -> error "unexpected Stub in partiallyUpdateTree"
++          return t'''
+         maybeupdate path (k, item) = if predi (path `appendPath` k) item
+           then update (path `appendPath` k) (k, item)
+           else return (k, item)
