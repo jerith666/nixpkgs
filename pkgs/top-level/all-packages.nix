@@ -3485,6 +3485,8 @@ in
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
+  inxi = callPackage ../tools/system/inxi { };
+
   iodine = callPackage ../tools/networking/iodine { };
 
   ioping = callPackage ../tools/system/ioping { };
@@ -4710,7 +4712,9 @@ in
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
-  pakcs = callPackage ../development/compilers/pakcs {};
+  pakcs = callPackage ../development/compilers/pakcs {
+    haskellPackages = haskell.packages.ghc844;
+  };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -4884,6 +4888,8 @@ in
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
+
+  pipreqs = callPackage ../tools/misc/pipreqs { };
 
   pius = callPackage ../tools/security/pius { };
 
@@ -6813,7 +6819,7 @@ in
   # built with, and use, that cross-compiled libc.
   gccCrossStageStatic = assert stdenv.targetPlatform != stdenv.hostPlatform; let
     libcCross1 =
-      if stdenv.targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
+      if stdenv.targetPlatform.libc == "msvcrt" then windows.mingw_w64_headers
       else if stdenv.targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
     binutils1 = wrapBintoolsWith {
@@ -8839,6 +8845,8 @@ in
   go-md2man = callPackage ../development/tools/misc/md2man {};
 
   mage = callPackage ../development/tools/build-managers/mage { };
+
+  mbed-cli = callPackage ../development/tools/mbed-cli { };
 
   minify = callPackage ../development/web/minify { };
 
@@ -21253,6 +21261,7 @@ in
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
     impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
     mediaplayer = callPackage ../desktops/gnome-3/extensions/mediaplayer { };
@@ -22227,6 +22236,8 @@ in
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
   epson_201207w = callPackage ../misc/drivers/epson_201207w { };
+
+  epson-workforce-635-nx625-series = callPackage ../misc/drivers/epson-workforce-635-nx625-series { };
 
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
