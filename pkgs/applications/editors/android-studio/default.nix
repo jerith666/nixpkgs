@@ -12,15 +12,26 @@ let
     build = "182.5199772";
     sha256Hash = "0dracganibnkyapn2pk2qqnxpwmii57371ycri4nccaci9v9pcjw";
   };
-  betaVersion = stableVersion;
+  betaVersion = {
+    version = "3.4.0.10"; # "Android Studio 3.4 Beta 1"
+    build = "183.5217543";
+    sha256Hash = "0yd9l4py82i3gl1nvfwlhfx12hzf1mih8ylgdl3r85hhlqs7w2dm";
+  };
   latestVersion = { # canary & dev
-    version = "3.4.0.9"; # "Android Studio 3.4 Canary 10"
-    build = "183.5202479";
-    sha256Hash = "067mkf8n7bwv0f900d6d2hwxdhcgnp6dxqf6v81y1hf285ybymld";
+    version = "3.5.0.0"; # "Android Studio 3.5 Canary 1"
+    build = "183.5215047";
+    sha256Hash = "1f7lllj85fia02hgy4ksbqh80sdcml16fv1g892jc6lwykjrdw5y";
   };
 in rec {
-  # Old alias
-  preview = beta;
+  # Old alias (TODO @primeos: Remove after 19.03 is branched off):
+  preview = throw ''
+    The attributes "android-studio-preview" and "androidStudioPackages.preview"
+    are now deprecated and will be removed soon, please use
+    "androidStudioPackages.beta" instead. This attribute corresponds to the
+    beta channel, if you want the latest release you can use
+    "androidStudioPackages.dev" or "androidStudioPackages.canary" instead
+    (currently, there is no difference between both channels).
+  '';
 
   # Attributes are named by their corresponding release channels
 
@@ -31,7 +42,7 @@ in rec {
 
   beta = mkStudio (betaVersion // {
     channel = "beta";
-    pname = "android-studio-preview";
+    pname = "android-studio-beta";
   });
 
   dev = mkStudio (latestVersion // {

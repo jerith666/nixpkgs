@@ -428,6 +428,8 @@ in {
 
   logster = callPackage ../development/python-modules/logster { };
 
+  logzero = callPackage ../development/python-modules/logzero { };
+
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
   manhole = callPackage ../development/python-modules/manhole { };
@@ -509,6 +511,8 @@ in {
   plantuml = callPackage ../tools/misc/plantuml { };
 
   poetry = callPackage ../development/python-modules/poetry { };
+
+  pprintpp = callPackage ../development/python-modules/pprintpp { };
 
   progress = callPackage ../development/python-modules/progress { };
 
@@ -770,6 +774,8 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
+  tenacity = callPackage ../development/python-modules/tenacity { };
+
   tokenserver = callPackage ../development/python-modules/tokenserver {};
 
   toml = callPackage ../development/python-modules/toml { };
@@ -933,6 +939,8 @@ in {
 
   atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
 
+  audio-metadata = callPackage ../development/python-modules/audio-metadata { };
+
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = callPackage ../development/python-modules/audiotools { };
@@ -996,6 +1004,8 @@ in {
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
+  bidict = callPackage ../development/python-modules/bidict { };
+
   binwalk = callPackage ../development/python-modules/binwalk { };
 
   binwalk-full = appendToName "full" (self.binwalk.override {
@@ -1003,6 +1013,8 @@ in {
   });
 
   bitmath = callPackage ../development/python-modules/bitmath { };
+
+  bitstruct = callPackage ../development/python-modules/bitstruct { };
 
   caldavclientlibrary-asynk = callPackage ../development/python-modules/caldavclientlibrary-asynk { };
 
@@ -1246,6 +1258,8 @@ in {
 
   click-completion = callPackage ../development/python-modules/click-completion {};
 
+  click-default-group = callPackage ../development/python-modules/click-default-group { };
+
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean {};
 
   click-log = callPackage ../development/python-modules/click-log {};
@@ -1273,14 +1287,6 @@ in {
   colorlover = callPackage ../development/python-modules/colorlover { };
 
   CommonMark = callPackage ../development/python-modules/commonmark { };
-
-  CommonMark_54 = self.CommonMark.overridePythonAttrs (oldAttrs: rec {
-    version = "0.5.4";
-    src = oldAttrs.src.override {
-      inherit version;
-      sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
-    };
-  });
 
   coilmq = callPackage ../development/python-modules/coilmq { };
 
@@ -1522,6 +1528,8 @@ in {
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
 
   cssutils = callPackage ../development/python-modules/cssutils { };
+
+  css-parser = callPackage ../development/python-modules/css-parser { };
 
   darcsver = callPackage ../development/python-modules/darcsver { };
 
@@ -1782,6 +1790,12 @@ in {
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
+
+  google-music = callPackage ../development/python-modules/google-music { };
+
+  google-music-proto = callPackage ../development/python-modules/google-music-proto { };
+
+  google-music-utils = callPackage ../development/python-modules/google-music-utils { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
@@ -2790,6 +2804,10 @@ in {
 
   journalwatch = callPackage ../tools/system/journalwatch {
     inherit (self) systemd pytest;
+  };
+
+  jq = callPackage ../development/python-modules/jq {
+    inherit (pkgs) jq;
   };
 
   jsondate = callPackage ../development/python-modules/jsondate { };
