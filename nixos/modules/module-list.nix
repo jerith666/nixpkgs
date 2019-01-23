@@ -11,6 +11,8 @@
   ./config/xdg/icons.nix
   ./config/xdg/menus.nix
   ./config/xdg/mime.nix
+  ./config/appstream.nix
+  ./config/xdg/sounds.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
@@ -34,6 +36,7 @@
   ./config/vpnc.nix
   ./config/zram.nix
   ./hardware/all-firmware.nix
+  ./hardware/bladeRF.nix
   ./hardware/brightnessctl.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
@@ -64,7 +67,6 @@
   ./i18n/input-method/ibus.nix
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
-  ./installer/tools/auto-upgrade.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
@@ -104,8 +106,10 @@
   ./programs/less.nix
   ./programs/light.nix
   ./programs/mosh.nix
+  ./programs/mininet.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/plotinus.nix
@@ -150,6 +154,7 @@
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
+  ./security/google_oslogin.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
   ./security/misc.nix
@@ -212,6 +217,7 @@
   ./services/databases/aerospike.nix
   ./services/databases/cassandra.nix
   ./services/databases/clickhouse.nix
+  ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
@@ -242,10 +248,12 @@
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
   ./services/desktops/gnome3/evolution-data-server.nix
+  ./services/desktops/gnome3/file-roller.nix
   ./services/desktops/gnome3/gnome-disks.nix
   ./services/desktops/gnome3/gnome-documents.nix
   ./services/desktops/gnome3/gnome-keyring.nix
   ./services/desktops/gnome3/gnome-online-accounts.nix
+  ./services/desktops/gnome3/gnome-remote-desktop.nix
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
@@ -297,6 +305,7 @@
   ./services/hardware/usbmuxd.nix
   ./services/hardware/thermald.nix
   ./services/hardware/undervolt.nix
+  ./services/hardware/vdr.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
@@ -331,12 +340,15 @@
   ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
+  ./services/mail/rss2email.nix
   ./services/mail/rmilter.nix
+  ./services/mail/roundcube.nix
   ./services/mail/nullmailer.nix
   ./services/misc/airsonic.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
+  ./services/misc/bees.nix
   ./services/misc/bepasty.nix
   ./services/misc/canto-daemon.nix
   ./services/misc/calibre-server.nix
@@ -422,6 +434,7 @@
   ./services/misc/uhub.nix
   ./services/misc/weechat.nix
   ./services/misc/xmr-stak.nix
+  ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
   ./services/monitoring/apcupsd.nix
@@ -560,6 +573,7 @@
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
+  ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix
@@ -622,6 +636,7 @@
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
   ./services/networking/syncthing.nix
+  ./services/networking/syncthing-relay.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tinc.nix
@@ -683,7 +698,7 @@
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
   ./services/system/localtime.nix
-  ./services/system/kerberos.nix
+  ./services/system/kerberos/default.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
   ./services/system/uptimed.nix
@@ -708,7 +723,6 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
-  ./services/web-apps/quassel-webserver.nix
   ./services/web-apps/virtlyst.nix
   ./services/web-apps/youtrack.nix
   ./services/web-servers/apache-httpd/default.nix
@@ -803,6 +817,7 @@
   ./system/boot/timesyncd.nix
   ./system/boot/tmp.nix
   ./system/etc/etc.nix
+  ./tasks/auto-upgrade.nix
   ./tasks/bcache.nix
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
