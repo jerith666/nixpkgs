@@ -999,6 +999,9 @@ self: super: {
     '';
   });
 
+  # base >=4.7 && <4.10, tasty >=0.11 && <0.15
+  qif = doJailbreak super.qif;
+
   # https://github.com/haskell-rewriting/term-rewriting/issues/11
   term-rewriting = dontCheck (doJailbreak super.term-rewriting);
 
