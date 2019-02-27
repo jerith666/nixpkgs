@@ -19,14 +19,15 @@ let
 
   major = "11";
   update = ".0.2";
-  repover = "jdk-${major}${update}-ga";
+  build = "9";
+  repover = "jdk-${major}${update}+${build}";
 
   openjdk = stdenv.mkDerivation {
-    name = "openjdk-${major}${update}-ga";
+    name = "openjdk-${major}${update}-b${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "0xcb0i6j3qrihmq4klx2lkwhd6xmk4xxcvk1dkc5z15vvh937l8b";
+      sha256 = "0xc7nksvj72cgw8zrmvlcwaasinpij1j1959398a4nqvzpvpxg30";
     };
 
     nativeBuildInputs = [ pkgconfig ];

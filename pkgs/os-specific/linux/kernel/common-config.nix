@@ -203,6 +203,7 @@ let
       SND_HDA_RECONFIG    = yes; # Support reconfiguration of jack functions
       # Support configuring jack functions via fw mechanism at boot
       SND_HDA_PATCH_LOADER = yes;
+      SND_OSSEMUL         = yes;
       SND_USB_CAIAQ_INPUT = yes;
       # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
       PSS_MIXER           = whenOlder "4.12" yes;
@@ -590,6 +591,8 @@ let
       B43_PCMCIA = { optional=true; tristate = whenOlder "4.4" "y";};
 
       BLK_DEV_INTEGRITY       = yes;
+
+      BLK_SED_OPAL = whenAtLeast "4.14" yes;
 
       BSD_PROCESS_ACCT_V3 = yes;
 
