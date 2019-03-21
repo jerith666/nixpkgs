@@ -15,6 +15,8 @@ nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 
 nix-shell -I nixpkgs=$wt ~/git/elbum/shell.nix --run true;
 
+nix-shell -I nixpkgs=$wt ~/git/bills-automation/shell.nix --run true;
+
 echo;
 echo "rebuild complete, computing changes";
 echo;
