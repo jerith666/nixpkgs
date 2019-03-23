@@ -523,6 +523,11 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  balsoft = {
+    email = "balsoft75@gmail.com";
+    github = "balsoft";
+    name = "Alexander Bantyev";
+  };
   bandresen = {
     email = "bandresen@gmail.com";
     github = "bandresen";
@@ -2658,6 +2663,11 @@
     github = "limeytexan";
     name = "Michael Brantley";
   };
+  linarcx = {
+    email = "linarcx@gmail.com";
+    github = "linarcx";
+    name = "Kaveh Ahangar";
+  };
   linc01n = {
     email = "git@lincoln.hk";
     github = "linc01n";
@@ -2869,6 +2879,11 @@
     email = "mathnerd314.gph+hs@gmail.com";
     github = "mathnerd314";
     name = "Mathnerd314";
+  };
+  matklad = {
+    email = "aleksey.kladov@gmail.com";
+    github = "matklad";
+    name = "matklad";
   };
   matthewbauer = {
     email = "mjbauer95@gmail.com";

@@ -237,6 +237,8 @@ in
 
   mod = callPackage ../development/tools/mod { };
 
+  broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
+
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
@@ -870,6 +872,10 @@ in
 
   avahi = callPackage ../development/libraries/avahi (config.avahi or {});
 
+  avahi-compat = callPackage ../development/libraries/avahi ((config.avahi or {}) // {
+    withLibdnssdCompat = true;
+  });
+
   avro-c = callPackage ../development/libraries/avro-c { };
 
   avro-cpp = callPackage ../development/libraries/avro-c++ { boost = boost160; };
@@ -1249,6 +1255,8 @@ in
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
+
+  csvkit = callPackage ../tools/text/csvkit { };
 
   cucumber = callPackage ../development/tools/cucumber {};
 
@@ -2672,6 +2680,8 @@ in
 
   ferm = callPackage ../tools/networking/ferm { };
 
+  ffsend = callPackage ../tools/misc/ffsend { };
+
   fgallery = callPackage ../tools/graphics/fgallery { };
 
   flannel = callPackage ../tools/networking/flannel { };
@@ -3641,6 +3651,8 @@ in
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
+
+  jumpapp = callPackage ../tools/X11/jumpapp {};
 
   jucipp = callPackage ../applications/editors/jucipp { };
 
@@ -4628,6 +4640,8 @@ in
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
+  odyssey = callPackage ../tools/misc/odyssey { };
+
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
@@ -5449,6 +5463,10 @@ in
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
 
+  shadowsocks-rust = callPackage ../tools/networking/shadowsocks-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   sharutils = callPackage ../tools/archivers/sharutils { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
@@ -5747,6 +5765,8 @@ in
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
+
+  tayga = callPackage ../tools/networking/tayga { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
 
@@ -6157,6 +6177,8 @@ in
   wast-refmt = nodePackages."@webassemblyjs/wast-refmt";
 
   welkin = callPackage ../tools/graphics/welkin {};
+
+  wf-recorder = callPackage ../applications/video/wf-recorder { };
 
   whipper = callPackage ../applications/audio/whipper { };
 
@@ -10525,6 +10547,8 @@ in
 
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
+  jcal = callPackage ../development/libraries/jcal { };
+
   jbigkit = callPackage ../development/libraries/jbigkit { };
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
@@ -12741,12 +12765,12 @@ in
 
   sqlite-replication = sqlite.overrideAttrs (oldAttrs: rec {
     name = "sqlite-${version}";
-    version = "3.24.0+replication3";
+    version = "3.27.2+replication3";
     src = pkgs.fetchFromGitHub {
       owner = "CanonicalLtd";
       repo = "sqlite";
       rev = "version-${version}";
-      sha256 = "19557b7aick1pxk0gw013cf5jy42i7539qn1ziza8dzy16a6zs8b";
+      sha256 = "1aw1naa5y25ial251f74h039pgcz92p4b3994jvfzqpjlz06qwvw";
     };
     nativeBuildInputs = [ pkgs.tcl ];
     configureFlags = oldAttrs.configureFlags ++ [
@@ -12755,8 +12779,8 @@ in
       "--disable-tcl"
     ];
     preConfigure = ''
-      echo "D 2018-08-01T13:22:18" > manifest
-      echo -n "c94dbda1a570c1ab180e7694afd3cc7116268c06" > manifest.uuid
+      echo "D 2019-03-09T15:45:46" > manifest
+      echo -n "8250984a368079bb1838d48d99f8c1a6282e00bc" > manifest.uuid
     '';
   });
 
@@ -14141,7 +14165,7 @@ in
 
   sambaFull = samba4Full;
 
-  shairplay = callPackage ../servers/shairplay { };
+  shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
 
@@ -14885,7 +14909,7 @@ in
   });
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_14;
+  linuxPackages = linuxPackages_4_19;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -17967,6 +17991,8 @@ in
 
   kanboard = callPackage ../applications/misc/kanboard { };
 
+  kanshi = callPackage ../tools/misc/kanshi { };
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
@@ -18091,8 +18117,6 @@ in
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   caps = callPackage ../applications/audio/caps { };
-
-  lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
@@ -18501,9 +18525,7 @@ in
   multimon-ng = callPackage ../applications/radio/multimon-ng { };
 
   inherit (callPackages ../applications/networking/mumble {
-      avahi = avahi.override {
-        withLibdnssdCompat = true;
-      };
+      avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
@@ -18511,9 +18533,7 @@ in
     }) mumble mumble_git murmur;
 
   inherit (callPackages ../applications/networking/mumble {
-      avahi = avahi.override {
-        withLibdnssdCompat = true;
-      };
+      avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
       pulseSupport = config.pulseaudio or false;
@@ -19509,7 +19529,9 @@ in
 
   soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
-  sox = callPackage ../applications/misc/audio/sox { };
+  sox = callPackage ../applications/misc/audio/sox {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
@@ -19520,7 +19542,6 @@ in
   spotify = callPackage ../applications/audio/spotify {
     libgcrypt = libgcrypt_1_5;
     libpng = libpng12;
-    ffmpeg = ffmpeg_2;
     curl = curl.override {
       sslSupport = false; gnutlsSupport = true;
     };
