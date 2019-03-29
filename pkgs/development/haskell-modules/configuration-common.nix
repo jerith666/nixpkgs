@@ -48,7 +48,6 @@ self: super: {
 
   # Break infinite recursions.
   attoparsec-varword = super.attoparsec-varword.override { bytestring-builder-varword = dontCheck self.bytestring-builder-varword; };
-  clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-core = super.hspec-core.override { silently = dontCheck self.silently; temporary = dontCheck self.temporary; };
@@ -1038,6 +1037,11 @@ self: super: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
+  arbtt = overrideCabal super.arbtt (drv: {
+    preCheck = ''
+      for n in $PWD/dist/build/*; do PATH+=":$n"; done
+    '';
+  });
 
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
@@ -1049,6 +1053,8 @@ self: super: {
 
   # https://github.com/dmwit/encoding/pull/3
   encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
+
+  clock = dontCheck (appendPatch super.clock ./patches/clock-0.7.2.patch);
 
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
@@ -1165,10 +1171,6 @@ self: super: {
   # https://github.com/kcsongor/generic-lens/pull/65
   generic-lens = dontCheck super.generic-lens;
 
-  xmonad-extras = doJailbreak super.xmonad-extras;
-
-  arbtt = doJailbreak super.arbtt;
-
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
@@ -1229,8 +1231,8 @@ self: super: {
 
   # Use latest pandoc despite what LTS says.
   # Test suite fails in both 2.5 and 2.6: https://github.com/jgm/pandoc/issues/5309.
-  pandoc = doDistribute super.pandoc_2_7;
-  pandoc-citeproc = self.pandoc-citeproc_0_16_1_3;
+  pandoc = doDistribute super.pandoc_2_7_1;
+  pandoc-citeproc = doDistribute super.pandoc-citeproc_0_16_1_3;
 
   # https://github.com/qfpl/tasty-hedgehog/issues/24
   tasty-hedgehog = dontCheck super.tasty-hedgehog;

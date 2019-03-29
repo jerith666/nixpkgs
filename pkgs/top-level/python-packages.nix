@@ -388,6 +388,8 @@ in {
 
   face = callPackage ../development/python-modules/face { };
 
+  fastparquet = callPackage ../development/python-modules/fastparquet { };
+
   fastpbkdf2 = callPackage ../development/python-modules/fastpbkdf2 {  };
 
   favicon = callPackage ../development/python-modules/favicon {  };
@@ -997,8 +999,6 @@ in {
 
   astor = callPackage ../development/python-modules/astor {};
 
-  asyncio = callPackage ../development/python-modules/asyncio {};
-
   asyncssh = callPackage ../development/python-modules/asyncssh { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
@@ -1195,8 +1195,6 @@ in {
 
   csscompressor = callPackage ../development/python-modules/csscompressor {};
 
-  csvkit =  callPackage ../development/python-modules/csvkit { };
-
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
@@ -1325,9 +1323,10 @@ in {
   canmatrix = callPackage ../development/python-modules/canmatrix {};
 
 
-  cairocffi = let
-    inherit (callPackage ../development/python-modules/cairocffi {}) cairocffi_1_0 cairocffi_0_9;
-  in if isPy3k then cairocffi_1_0 else cairocffi_0_9;
+  cairocffi = if isPy3k then
+    callPackage ../development/python-modules/cairocffi {}
+  else
+    callPackage ../development/python-modules/cairocffi/0_9.nix {};
 
   cairosvg = if isPy3k then
     callPackage ../development/python-modules/cairosvg {}
