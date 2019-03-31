@@ -16827,7 +16827,7 @@ in
   echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk11;
+    jdk = jdk12;
   });
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
