@@ -22,6 +22,10 @@ pushd $wt
 
 git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nixos-unstable'";
 
+for commit in "$@"; do
+    git cherry-pick -x $commit;
+done
+
 ./rebuild-update.sh "$d" "$wt";
 
 popd;
