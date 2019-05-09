@@ -45,6 +45,5 @@ echo "less update-$d.txt";
 echo;
 echo "to switch to new system:";
 echo;
-echo "git merge --ff-only update-$d";
-echo "sudo nixos-rebuild boot -I nixpkgs=$(pwd)";
+echo "git merge --ff-only update-$d && sudo nixos-rebuild boot -I nixpkgs=$(pwd)";
 echo;
