@@ -537,6 +537,25 @@ rec {
     };
   };
 
+  mat = buildEclipseUpdateSite rec {
+    name = "mat-${version}";
+    version = "1.8.1";
+    date = "201809100846";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/mat/${version}/MemoryAnalyzer-${version}.${date}.zip";
+      sha256 = "15kbgzyxijqax4wgcsz11alp09kvpn7yad144i2w76qbnw6lyxsp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.eclipse.org/mat/;
+      description = "The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption";
+      license = licenses.epl10;
+      platforms = platforms.all;
+    };
+  };
+
   rustdt = buildEclipseUpdateSite rec {
     name = "rustdt-${version}";
     version = "0.6.2";
