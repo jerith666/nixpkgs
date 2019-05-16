@@ -22,6 +22,10 @@ pushd $wt
 
 git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nixos-unstable'";
 
+for commit in "$@"; do
+    git cherry-pick -x $commit;
+done
+
 ./rebuild-update.sh "$d" "$wt";
 
 popd;
@@ -41,6 +45,5 @@ echo "less update-$d.txt";
 echo;
 echo "to switch to new system:";
 echo;
-echo "git merge --ff-only update-$d";
-echo "sudo nixos-rebuild boot -I nixpkgs=$(pwd)";
+echo "git merge --ff-only update-$d && sudo nixos-rebuild boot -I nixpkgs=$(pwd)";
 echo;

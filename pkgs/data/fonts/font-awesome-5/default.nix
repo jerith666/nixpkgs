@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 let
-  version = "5.7.2";
+  version = "5.8.2";
 in fetchzip rec {
   name = "font-awesome-${version}";
 
@@ -12,7 +12,7 @@ in fetchzip rec {
     unzip -j $downloadedFile "Font-Awesome-${version}/otfs/*.otf" -d $out/share/fonts/opentype
   '';
 
-  sha256 = "0b3syzz8baxmwzjgz09dnamm4nzmyvb2yddlrm94ww5j9bjk25al";
+  sha256 = "1h0qhvkfyfs4579jvrk3gwc7dp4i9s46bkj406b493dvmxxhv986";
 
   meta = with stdenv.lib; {
     description = "Font Awesome - OTF font";

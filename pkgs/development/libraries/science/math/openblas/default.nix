@@ -58,6 +58,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
+      NO_AVX512 = true;
       USE_OPENMP = true;
     };
   };
@@ -127,7 +128,12 @@ stdenv.mkDerivation rec {
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
     HOSTCC = "cc";
     # Makefile.system only checks defined status
-    NO_BINARY_MODE = toString (stdenv.hostPlatform != stdenv.buildPlatform);
+    # This seems to be a bug in the openblas Makefile:
+    # on x86_64 it expects NO_BINARY_MODE=
+    # but on aarch64 it expects NO_BINARY_MODE=0
+    NO_BINARY_MODE = if stdenv.isx86_64
+        then toString (stdenv.hostPlatform != stdenv.buildPlatform)
+        else stdenv.hostPlatform != stdenv.buildPlatform;
   });
 
   doCheck = true;

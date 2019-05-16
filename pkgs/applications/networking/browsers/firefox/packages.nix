@@ -1,19 +1,26 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3 }:
+{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch, python3, overrideCC, gccStdenv, gcc6 }:
 
 let
 
   common = opts: callPackage (import ./common.nix opts) {};
 
+  # Needed on older branches since rustc: 1.32.0 -> 1.33.0
+  missing-documentation-patch = fetchurl {
+    name = "missing-documentation.patch";
+    url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
+        + "?h=firefox-esr&id=03bdd01f9cf";
+    sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
+  };
 in
 
 rec {
 
   firefox = common rec {
     pname = "firefox";
-    ffversion = "66.0";
+    ffversion = "66.0.5";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1izxikivz0jb8kzq4cd040a70s3j83nw324yvvbmi7g808s7s6b8ljia5allbrkqcgrvrx3rq4w09kwffwmwd43jxgc1bfl8af3v8d9";
+      sha512 = "18bcpbwzhc2fi6cqhxhh6jiw5akhzr7qqs6s8irjbvh7q8f3z2n046vrlvpblhbkc2kv1n0s14n49yzv432adqwa9qi8d57jnxyfqkf";
     };
 
     patches = [
@@ -40,7 +47,7 @@ rec {
   # the web, there are many old useful plugins targeting offline
   # activities (e.g. ebook readers, syncronous translation, etc) that
   # will probably never be ported to WebExtensions API.
-  firefox-esr-52 = common rec {
+  firefox-esr-52 = (common rec {
     pname = "firefox-esr";
     ffversion = "52.9.0esr";
     src = fetchurl {
@@ -58,14 +65,17 @@ rec {
       description = "A web browser built from Firefox Extended Support Release source tree";
       knownVulnerabilities = [ "Support ended in August 2018." ];
     };
+  }).override {
+    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
+    gtk3Support = false;
   };
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.6.0esr";
+    ffversion = "60.6.3esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "14vymgczx37q3yj8ndxq6wmmachaf08kx6n3wgjd0qqg5xr18abns999f7ng51abnfrribkrpzmn22vc061sm6wldszawwq6w5r2lg4";
+      sha512 = "3zg75djd7mbr9alhkp7zqrky7g41apyf6ka0acv500dmpnhvn5v5i0wy9ks8v6vh7kcgw7bngf6msb7vbbps6whwdcqv3v4dqbg6yr2";
     };
 
     patches = [
@@ -74,6 +84,8 @@ rec {
       # this one is actually an omnipresent bug
       # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
       ./fix-pa-context-connect-retval.patch
+
+      missing-documentation-patch
     ];
 
     meta = firefox.meta // {
@@ -139,6 +151,7 @@ in rec {
 
     patches = [
       ./no-buildconfig.patch
+      missing-documentation-patch
     ];
   };
 
@@ -232,17 +245,21 @@ in rec {
   };
 
   tor-browser-8-0 = tbcommon rec {
-    ffversion = "60.5.1esr";
-    tbversion = "8.0.6";
+    ffversion = "60.6.1esr";
+    tbversion = "8.0.9";
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      # branch "tor-browser-60.5.1esr-8.0-1-slnos"
-      rev   = "89be91fc7cbc420b7c4a3bfc36d2b0d500dd3ccf";
-      sha256 = "022zjfwsdl0dkg6ck2kha4nf91xm3j9ag5n21zna98szg3x82dj1";
+      # branch "tor-browser-60.6.1esr-8.0-1-r2-slnos"
+      rev   = "d311540ce07f1f4f5e5789f9107f6e6ecc23988d";
+      sha256 = "0nz8vxv53vnqyk3ahakrr5xg6sgapvlmsb6s1pwwsb86fxk6pm5f";
     };
+
+    patches = [
+      missing-documentation-patch
+    ];
   };
 
   tor-browser = tor-browser-8-0;

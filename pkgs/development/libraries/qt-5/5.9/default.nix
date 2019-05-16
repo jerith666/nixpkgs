@@ -38,12 +38,14 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ./qtbase-fixguicmake.patch ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qttools = [ ./qttools.patch ];
-    qtwebengine = [ ./qtwebengine-no-build-skip.patch ];
+    qtwebengine = [ ./qtwebengine-no-build-skip.patch ]
+      ++ optional stdenv.cc.isClang ./qtwebengine-clang-fix.patch
+      ++ optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [ ./qtwebkit.patch ];
     qtvirtualkeyboard = [
       (fetchpatch {
