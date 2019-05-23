@@ -19,6 +19,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
@@ -144,6 +145,7 @@
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
   ./programs/yabar.nix
+  ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
@@ -792,7 +794,6 @@
   ./services/web-servers/traefik.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
-  ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/colord.nix
   ./services/x11/compton.nix
