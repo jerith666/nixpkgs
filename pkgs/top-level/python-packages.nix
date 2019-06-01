@@ -335,6 +335,8 @@ in {
 
   cozy = callPackage ../development/python-modules/cozy { };
 
+  curio = callPackage ../development/python-modules/curio { };
+
   dendropy = callPackage ../development/python-modules/dendropy { };
 
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
@@ -606,6 +608,8 @@ in {
   pdfx = callPackage ../development/python-modules/pdfx { };
 
   perf = callPackage ../development/python-modules/perf { };
+
+  perfplot = callPackage ../development/python-modules/perfplot { };
 
   phonopy = callPackage ../development/python-modules/phonopy { };
 
@@ -977,6 +981,8 @@ in {
 
   vega = callPackage ../development/python-modules/vega { };
 
+  accupy = callPackage ../development/python-modules/accupy { };
+
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -1283,9 +1289,9 @@ in {
   cufflinks = callPackage ../development/python-modules/cufflinks { };
 
   cupy = callPackage ../development/python-modules/cupy {
-    cudatoolkit = pkgs.cudatoolkit_8;
-    cudnn = pkgs.cudnn6_cudatoolkit_8;
-    nccl = pkgs.nccl;
+    cudatoolkit = pkgs.cudatoolkit_10_0;
+    cudnn = pkgs.cudnn_cudatoolkit_10_0;
+    nccl = pkgs.nccl_cudatoolkit_10;
   };
 
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
@@ -2334,6 +2340,8 @@ in {
 
   pyspf = callPackage ../development/python-modules/pyspf { };
 
+  pysptk = callPackage ../development/python-modules/pysptk { };
+
   pysrim = callPackage ../development/python-modules/pysrim { };
 
   pysrt = callPackage ../development/python-modules/pysrt { };
@@ -2451,6 +2459,8 @@ in {
   django_2_1 = callPackage ../development/python-modules/django/2_1.nix {
     gdal = self.gdal;
   };
+
+  django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
   django_1_8 = callPackage ../development/python-modules/django/1_8.nix { };
 
@@ -3725,6 +3735,8 @@ in {
     glibcLocales = pkgs.glibcLocales;
   };
 
+  pipdate = callPackage ../development/python-modules/pipdate { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
@@ -3892,6 +3904,8 @@ in {
   pyext = callPackage ../development/python-modules/pyext { };
 
   pyfantom = callPackage ../development/python-modules/pyfantom { };
+
+  pyfma = callPackage ../development/python-modules/pyfma { };
 
   pyfftw = callPackage ../development/python-modules/pyfftw { };
 
@@ -4501,6 +4515,8 @@ in {
   virtual-display = callPackage ../development/python-modules/virtual-display { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
+
+  weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webassets = callPackage ../development/python-modules/webassets { };
 
@@ -5190,6 +5206,8 @@ in {
     xgboost = pkgs.xgboost;
   };
 
+  xhtml2pdf = callPackage ../development/python-modules/xhtml2pdf { };
+
   xkcdpass = callPackage ../development/python-modules/xkcdpass { };
 
   xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
@@ -5268,7 +5286,11 @@ in {
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 
+  annoy = callPackage ../development/python-modules/annoy { };
+
   clize = callPackage ../development/python-modules/clize { };
+
+  rl-coach = callPackage ../development/python-modules/rl-coach { };
 
   zerobin = callPackage ../development/python-modules/zerobin { };
 
@@ -5501,6 +5523,8 @@ in {
   warrant = callPackage ../development/python-modules/warrant { };
 
   textacy = callPackage ../development/python-modules/textacy { };
+
+  tld = callPackage ../development/python-modules/tld { };
 
   tldextract = callPackage ../development/python-modules/tldextract { };
 

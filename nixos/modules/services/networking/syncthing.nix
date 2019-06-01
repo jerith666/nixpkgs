@@ -18,7 +18,10 @@ let
     fsWatcherEnabled = folder.watch;
     fsWatcherDelayS = folder.watchDelay;
     ignorePerms = folder.ignorePerms;
-  }) cfg.declarative.folders;
+  }) (filterAttrs (
+    _: folder:
+    folder.enable
+  ) cfg.declarative.folders);
 
   # get the api key by parsing the config.xml
   getApiKey = pkgs.writers.writeDash "getAPIKey" ''
@@ -102,13 +105,12 @@ in {
           description = ''
             Peers/devices which syncthing should communicate with.
           '';
-          example = [
-            {
-              name = "bigbox";
+          example = {
+            bigbox = {
               id = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
               addresses = [ "tcp://192.168.0.10:51820" ];
-            }
-          ];
+            };
+          };
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
 
@@ -166,8 +168,24 @@ in {
           description = ''
             folders which should be shared by syncthing.
           '';
+          example = {
+            "/home/user/sync" = {
+              id = "syncme";
+              devices = [ "bigbox" ];
+            };
+          };
           type = types.attrsOf (types.submodule ({ config, ... }: {
             options = {
+
+              enable = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  share this folder.
+                  This option is useful when you want to define all folders
+                  in one place, but not every machine should share all folders.
+                '';
+              };
 
               path = mkOption {
                 type = types.str;
@@ -408,7 +426,9 @@ in {
           '';
         };
       };
-      syncthing-init = {
+      syncthing-init = mkIf (
+        cfg.declarative.devices != {} || cfg.declarative.folders != {}
+      ) {
         after = [ "syncthing.service" ];
         wantedBy = [ "multi-user.target" ];
 
