@@ -53,6 +53,9 @@ let
 
       configureFlagsArray=(
         "--with-boot-jdk=${bootjdk.home}"
+        "--with-update-version=${major}${update}"
+        "--with-build-number=${build}"
+        "--with-milestone=fcs"
         "--enable-unlimited-crypto"
         "--disable-debug-symbols"
         "--with-zlib=system"
