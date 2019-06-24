@@ -350,8 +350,10 @@ rec {
     name = "drools-${version}";
     version = "7.17.0.Final";
 
+    srcUrl = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+
     src = fetchzip {
-      url = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
+      url = srcUrl;
       sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
       extraPostFetch = ''
         # work around https://github.com/NixOS/nixpkgs/issues/38649
@@ -363,6 +365,26 @@ rec {
         rmdir sources;
         mv binaries/org.drools.updatesite/* .;
         rmdir binaries/org.drools.updatesite binaries;
+      '';
+    };
+
+    #the plugin's preferences must be configured to point to this
+    #recommended mechanism to make it available is by setting
+    #environment.etc.droolsruntime.source = eclipses.plugins.drools.runtime;
+    #in configuration.nix
+    runtime = fetchzip {
+      url = srcUrl;
+      sha512 = "17id5biqgfjxv7qfjx4i6x1dkp4b2lsr42sgxyy8dp71ankajjiwhz499wmyl869873n1kgz790la04jya8b0nkdqsq4vyr3i591l07";
+      extraPostFetch = ''
+        chmod go-w $out;
+
+        #runtime is comingled with update site, separate it out as above
+        cd $out;
+        find . -type f -not -path ./binaries/\* -exec rm {} \;
+        rm -rf binaries/org.drools.updatesite;
+        rmdir sources;
+        mv binaries/* .;
+        rmdir binaries;
       '';
     };
 
