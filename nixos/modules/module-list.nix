@@ -19,6 +19,7 @@
   ./config/iproute2.nix
   ./config/krb5/default.nix
   ./config/ldap.nix
+  ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
   ./config/nsswitch.nix
@@ -83,6 +84,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./misc/nixops-autoluks.nix
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/autojump.nix
@@ -90,9 +92,11 @@
   ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
+  ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
   ./programs/chromium.nix
+  ./programs/clickshare.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
   ./programs/dconf.nix
@@ -144,6 +148,7 @@
   ./programs/xonsh.nix
   ./programs/xss-lock.nix
   ./programs/yabar.nix
+  ./programs/zmap.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-autoenv.nix
@@ -180,6 +185,7 @@
   ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
+  ./services/audio/jack.nix
   ./services/audio/icecast.nix
   ./services/audio/liquidsoap.nix
   ./services/audio/mpd.nix
@@ -322,6 +328,7 @@
   ./services/hardware/tcsd.nix
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
+  ./services/hardware/throttled.nix
   ./services/hardware/trezord.nix
   ./services/hardware/triggerhappy.nix
   ./services/hardware/u2f.nix
@@ -438,7 +445,6 @@
   ./services/misc/packagekit.nix
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
-  ./services/misc/phd.nix
   ./services/misc/plex.nix
   ./services/misc/tautulli.nix
   ./services/misc/pykms.nix
@@ -535,10 +541,10 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
   ./services/networking/bind.nix
+  ./services/networking/bitcoind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
   ./services/networking/bitlbee.nix
-  ./services/networking/btsync.nix
   ./services/networking/charybdis.nix
   ./services/networking/chrony.nix
   ./services/networking/cjdns.nix
@@ -607,6 +613,7 @@
   ./services/networking/morty.nix
   ./services/networking/miredo.nix
   ./services/networking/mstpd.nix
+  ./services/networking/mtprotoproxy.nix
   ./services/networking/murmur.nix
   ./services/networking/mxisd.nix
   ./services/networking/namecoind.nix
@@ -755,10 +762,12 @@
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
   ./services/web-apps/codimd.nix
+  ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
+  ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/miniflux.nix
   ./services/web-apps/nextcloud.nix
@@ -792,7 +801,6 @@
   ./services/web-servers/traefik.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
-  ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/colord.nix
   ./services/x11/compton.nix

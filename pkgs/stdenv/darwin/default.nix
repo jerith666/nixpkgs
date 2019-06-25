@@ -81,7 +81,7 @@ in rec {
         bintools     = { name = "${name}-binutils"; outPath = bootstrapTools; };
       };
 
-      cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
+      cc = if last == null then "/dev/null" else import ../../build-support/cc-wrapper {
         inherit shell;
         inherit (last) stdenvNoCC;
 
@@ -199,7 +199,6 @@ in rec {
       ninja = super.ninja.override { buildDocs = false; };
       darwin = super.darwin // {
         cctools = super.darwin.cctools.override {
-          llvm = null;
           enableTapiSupport = false;
         };
       };

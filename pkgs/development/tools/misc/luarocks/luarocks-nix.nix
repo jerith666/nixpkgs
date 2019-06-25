@@ -4,7 +4,7 @@ luarocks.overrideAttrs(old: {
   src = fetchFromGitHub {
     owner = "teto";
     repo = "luarocks";
-    rev = "8fb03a9bc8f4fa079d26c0f02804139bb2578848";
-    sha256 = "09iwjvs9sbk6vwhrh7sijmfpji6wvg5bbdraw7l5lpnr9jj5wy91";
+    rev = "595456f1246d66e5bdce0de838d0d6188274991c";
+    sha256 = "14nn0n5a0m516lnbwljy85h7y98zwnfbcyz7hgsm6fn4p8316yz2";
   };
 })

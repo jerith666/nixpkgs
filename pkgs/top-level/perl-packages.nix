@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 {config, pkgs, fetchurl, fetchFromGitHub, stdenv, gnused, perl, overrides,
-  buildPackages}:
+  buildPerl}:
 
 # cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.2 or above
 assert stdenv.lib.versionAtLeast perl.version "5.28.2";
@@ -37,7 +37,7 @@ let
     });
 
   buildPerlPackage = callPackage ../development/perl-modules/generic {
-    inherit toPerlModule;
+    inherit buildPerl;
   };
 
   # Helper functions for packages that use Module::Build to build.
@@ -1153,6 +1153,20 @@ let
     };
     meta = {
       description = "Report errors from perspective of caller of a \"clan\" of modules";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Carton = buildPerlPackage rec {
+    name = "Carton-v1.0.34";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "77d42b92732bcfc18a59d341e56ce476205b1c4d380eab3a07224f5745c23e45";
+    };
+    propagatedBuildInputs = [ ClassTiny MenloLegacy ModuleCPANfile PathTiny TryTiny ];
+    meta = {
+      homepage = https://github.com/perl-carton/carton;
+      description = "Perl module dependency manager (aka Bundler for Perl)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -2776,6 +2790,21 @@ let
     propagatedBuildInputs = [ CompressBzip2 DataCompare ModuleSignature ];
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CPANCommonIndex = buildPerlPackage rec {
+    name = "CPAN-Common-Index-0.010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "c43ddbb22fd42b06118fe6357f53700fbd77f531ba3c427faafbf303cbf4eaf0";
+    };
+    buildInputs = [ TestDeep TestFailWarnings TestFatal ];
+    propagatedBuildInputs = [ CPANDistnameInfo ClassTiny TieHandleOffset URI ];
+    meta = {
+      homepage = https://github.com/Perl-Toolchain-Gang/CPAN-Common-Index;
+      description = "Common library for searching CPAN modules, authors and distributions";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -7566,6 +7595,20 @@ let
      };
   };
 
+  HTTPTinyish = buildPerlPackage rec {
+    name = "HTTP-Tinyish-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "5d65f0ee20a9e4744acdb3ef12edae78c121f53dcbc9cf00867c5725c4513aa5";
+    };
+    propagatedBuildInputs = [ FileWhich IPCRun3 ];
+    meta = {
+      homepage = https://github.com/miyagawa/HTTP-Tinyish;
+      description = "HTTP::Tiny compatible HTTP client wrappers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   iCalParser = buildPerlPackage rec {
     name = "iCal-Parser-1.21";
     src = fetchurl {
@@ -8016,11 +8059,11 @@ let
 
   ImageExifTool = buildPerlPackage rec {
     name = "Image-ExifTool-${version}";
-    version = "11.30";
+    version = "11.50";
 
     src = fetchurl {
       url = "https://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-      sha256 = "0vkjb2c1a3jdlq8rx1jywx4p3f1bmgjn7rzfwx6dxgij2lx76lrs";
+      sha256 = "0d8v48y94z8maxkmw1rv7v9m0jg2dc8xbp581njb6yhr7abwqdv3";
     };
 
     meta = with stdenv.lib; {
@@ -8029,11 +8072,11 @@ let
 
       longDescription = ''
         ExifTool is a platform-independent Perl library plus a command-line
-        application for reading, writing and editing meta information in
-        image, audio and video files.  ExifTool supports many different types
-        of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
-        Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
-        notes of many digital cameras by Canon, Casio, DJI, FLIR, FujiFilm, HP,
+        application for reading, writing and editing meta information in a wide
+        variety of files. ExifTool supports many different metadata formats
+        including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC Profile, Photoshop
+        IRB, FlashPix, AFCP and ID3, as well as the maker notes of many digital
+        cameras by Canon, Casio, DJI, FLIR, FujiFilm, GE, GoPro, HP,
         JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Motorola, Nikon,
         Nintendo, Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Phase One,
         Reconyx, Ricoh, Samsung, Sanyo, Sigma/Foveon and Sony.
@@ -9606,6 +9649,34 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/neilb/Memoize-ExpireLRU";
      };
+  };
+
+  Menlo = buildPerlPackage rec {
+    name = "Menlo-1.9019";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "3b573f68e7b3a36a87c860be258599330fac248b518854dfb5657ac483dca565";
+    };
+    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo CPANMetaCheck CaptureTiny ClassTiny ExtUtilsConfig ExtUtilsHelpers ExtUtilsInstallPaths FileWhich Filepushd HTTPTinyish ModuleCPANfile ParsePMFile StringShellQuote URI Win32ShellQuote locallib ];
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "A CPAN client";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MenloLegacy = buildPerlPackage rec {
+    name = "Menlo-Legacy-1.9022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "a6acac3fee318a804b439de54acbc7c27f0b44cfdad8551bbc9cd45986abc201";
+    };
+    propagatedBuildInputs = [ Menlo ];
+    meta = {
+      homepage = https://github.com/miyagawa/cpanminus;
+      description = "Legacy internal and client support for Menlo";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MetaBuilder = buildPerlModule {
@@ -11426,6 +11497,18 @@ let
     };
   };
 
+  NetNetmask = buildPerlPackage rec {
+    name = "Net-Netmask-1.9104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/${name}.tar.gz";
+      sha256 = "17li2svymz49az35xl6galp4b9qcnb985gzklhikkvkn9da6rz3y";
+    };
+    buildInputs = [ Test2Suite TestUseAllModules ];
+    meta = {
+      description = "Parse, manipulate and lookup IP network blocks";
+    };
+  };
+
   NetOAuth = buildPerlModule {
     name = "Net-OAuth-0.28";
     src = fetchurl {
@@ -11656,6 +11739,22 @@ let
       description = "A perl interface to the Twitter API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+  };
+
+  NetWhoisIP = buildPerlPackage rec {
+    name = "Net-Whois-IP-1.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BS/BSCHMITZ/${name}.tar.gz";
+      sha256 = "08kj2h9qiyfvv3jfz619xl796j93cslg7d96919mnrnjy6hdz6zh";
+    };
+
+    propagatedBuildInputs = [ RegexpIPv6 LWPProtocolhttps ];
+    doCheck = false;
+
+    # https://rt.cpan.org/Public/Bug/Display.html?id=99377
+    postPatch = ''
+      substituteInPlace IP.pm --replace " AutoLoader" ""
+    '';
   };
 
   NetWorks = buildPerlPackage {
@@ -12610,32 +12709,36 @@ let
   };
 
   Po4a = buildPerlPackage rec {
-    name = "po4a-0.47";
+    name = "po4a-${version}";
+    version = "0.55";
     src = fetchurl {
-      url = "https://alioth.debian.org/frs/download.php/file/4142/po4a-0.47.tar.gz";
-      sha256 = "5010e1b7df1115cbd475f46587fc05fefc97301f9bba0c2f15106005ca017507";
+      url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
+      sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
     };
-    nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl pkgs.docbook_xsl_ns ];
-    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
-    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.jade ];
-    LC_ALL="en_US.UTF-8";
+    nativeBuildInputs = [ pkgs.docbook_xsl pkgs.docbook_xsl_ns ModuleBuild ];
+    propagatedBuildInputs = [ TextWrapI18N LocaleGettext TermReadKey SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];
+    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.opensp ];
+    LC_ALL = "en_US.UTF-8";
     SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
     preConfigure = ''
       touch Makefile.PL
       export PERL_MB_OPT="--install_base=$out --prefix=$out"
-      substituteInPlace Po4aBuilder.pm --replace "\$self->install_sets(\$self->installdirs)->{'bindoc'}" "'$out/share/man/man1'"
     '';
-
     buildPhase = "perl Build.PL --install_base=$out --install_path=\"lib=$out/${perl.libPrefix}\"; ./Build build";
-    installPhase = "./Build install";
     checkPhase = ''
       export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
       ./Build test
     '';
+    installPhase = ''
+      ./Build install
+      for f in $out/bin/*; do
+        substituteInPlace $f --replace "#! /usr/bin/env perl" "#!${perl}/bin/perl"
+      done
+    '';
     meta = {
-      homepage = https://po4a.alioth.debian.org/;
-      description = "tools for helping translation of documentation";
-      license = with stdenv.lib.licenses; [ gpl2 ];
+      homepage = "https://po4a.org/";
+      description = "Tools for helping translation of documentation";
+      license = stdenv.lib.licenses.gpl2;
     };
   };
 
@@ -14141,6 +14244,14 @@ let
     };
   };
 
+  StringRandom = buildPerlModule rec {
+    name = "String-Random-0.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "06xdpyjc53al0a4ib2lw1m388v41z97hzqbdkd00w3nmjsdrn4w1";
+    };
+  };
+
   StringRewritePrefix = buildPerlPackage {
     name = "String-RewritePrefix-0.007";
     src = fetchurl {
@@ -14513,7 +14624,6 @@ let
       sha256 = "1r6976bs86j7zp51m5vh42xlyah951jgdlkimv202413kjvqc2i5";
     };
     buildInputs = stdenv.lib.optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
-    meta.broken = true; # src.url is 404
   };
 
   SysHostnameLong = buildPerlPackage rec {
@@ -14821,8 +14931,8 @@ let
 
     # use native libraries from the host when running build commands
     postConfigure = if cross then let
-      host_perl = buildPackages.perl;
-      host_self = buildPackages.perlPackages.TermReadKey;
+      host_perl = buildPerl;
+      host_self = buildPerl.pkgs.TermReadKey;
       perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
       self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
     in ''
@@ -14831,7 +14941,7 @@ let
 
     # TermReadKey uses itself in the build process
     nativeBuildInputs = if cross then [
-      buildPackages.perlPackages.TermReadKey
+      buildPerl.pkgs.TermReadKey
     ] else [];
   };
 
@@ -14877,6 +14987,20 @@ let
     meta = {
       description = "a modified version of T::RL::Perl with several new nonstandard features specific to TTYtter";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TermShell = buildPerlModule rec {
+    name = "Term-Shell-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "7d1f824c2db22769b60000b5b9ca2ad469c154939f9ec1cd3f0e06e9c967dda3";
+    };
+    propagatedBuildInputs = [ TermReadKey TextAutoformat ];
+    meta = with stdenv.lib; {
+      homepage = http://metacpan.org/release/Term-Shell;
+      description = "A simple command-line shell framework";
+      license = with licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -16693,6 +16817,19 @@ let
     };
   };
 
+  TextNSP = buildPerlPackage rec {
+    name = "Text-NSP-1.31";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TP/TPEDERSE/${name}.tar.gz";
+      sha256 = "a01201beb29636b3e41ecda2a6cf6522fd265416bd6d994fad02f59fb49cf595";
+    };
+    meta = {
+      description = "Extract collocations and Ngrams from text";
+      license = stdenv.lib.licenses.free;
+      maintainers = [ maintainers.bzizou ];
+    };
+  };
+
   TextvFileasData = buildPerlPackage rec {
     name = "Text-vFile-asData-0.08";
     src = fetchurl {
@@ -16841,6 +16978,19 @@ let
     meta = {
       description = "Ordered associative arrays for Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TieHandleOffset = buildPerlPackage rec {
+    name = "Tie-Handle-Offset-0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "ee9f39055dc695aa244a252f56ffd37f8be07209b337ad387824721206d2a89e";
+    };
+    meta = {
+      homepage = https://github.com/dagolden/tie-handle-offset;
+      description = "Tied handle that hides the beginning of a file";
+      license = stdenv.lib.licenses.asl20;
     };
   };
 
@@ -17467,6 +17617,18 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
       sha256 = "1xsjylbxxcbkjazqms49ipi94j1hd2ykdikk29cq7dscil5p9r5l";
+    };
+  };
+
+  Win32ShellQuote = buildPerlPackage rec {
+    name = "Win32-ShellQuote-0.003001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
+      sha256 = "aa74b0e3dc2d41cd63f62f853e521ffd76b8d823479a2619e22edb4049b4c0dc";
+    };
+    meta = {
+      description = "Quote argument lists for Win32";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

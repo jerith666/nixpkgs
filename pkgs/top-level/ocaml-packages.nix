@@ -1,8 +1,6 @@
 { lib, newScope, pkgs, config }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-
   liftJaneStreet = self: super: super.janeStreet // super;
 
   mkOcamlPackages = ocaml:
@@ -216,8 +214,6 @@ let
     dune = callPackage ../development/tools/ocaml/dune { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
-
-    earley_ocaml = callPackage ../development/ocaml-modules/earley_ocaml { };
 
     easy-format = callPackage ../development/ocaml-modules/easy-format { };
 
@@ -784,8 +780,8 @@ let
     janeStreet = import ../development/ocaml-modules/janestreet {
       inherit janePackage ocamlbuild angstrom ctypes cryptokit;
       inherit magic-mime num ocaml-migrate-parsetree octavius ounit;
-      inherit ppx_deriving re zarith ppxlib;
-      inherit (pkgs) stdenv openssl;
+      inherit ppx_deriving re ppxlib;
+      inherit (pkgs) openssl;
     };
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {

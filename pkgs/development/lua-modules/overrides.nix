@@ -1,4 +1,4 @@
-{ pkgs,  ... }@args:
+{ pkgs,  ... }:
 self: super:
 with super;
 {
@@ -32,6 +32,10 @@ with super;
   lrexlib-gnu = super.lrexlib-gnu.override({
     buildInputs = [ pkgs.gnulib ];
   });
+  lua-zlib = super.lua-zlib.override({
+    buildInputs = [ pkgs.zlib.dev ];
+    disabled=luaOlder "5.1" || luaAtLeast "5.4";
+  });
   luaevent = super.luaevent.override({
     buildInputs = with pkgs; [ libevent.dev libevent ];
     propagatedBuildInputs = [ luasocket ];
@@ -46,7 +50,19 @@ with super;
   lua-iconv = super.lua-iconv.override({
     buildInputs = [ pkgs.libiconv ];
   });
+  luazip = super.luazip.override({
+    buildInputs = [ pkgs.zziplib ];
+  });
   luv = super.luv.overrideAttrs(oa: {
+    # Use system libuv instead of building local and statically linking
+    # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
+    # should be possible but I'm unable to make work.
+    # While at it, remove bundled libuv source entirely to be sure.
+    # We may wish to drop bundled lua submodules too...
+    preBuild = ''
+     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+     rm -rf deps/libuv
+    '';
     propagatedBuildInputs = oa.propagatedBuildInputs ++ [ pkgs.libuv ];
   });
 
@@ -56,7 +72,7 @@ with super;
     '';
   });
 
-  luuid = super.luuid.override({
+  luuid = super.luuid.override(oa: {
     buildInputs = [ pkgs.libuuid ];
     extraConfig = ''
       variables = {
@@ -64,7 +80,7 @@ with super;
         LIBUUID_LIBDIR="${pkgs.lib.getLib pkgs.libuuid}/lib";
       }
     '';
-    meta = {
+    meta = oa.meta // {
       platforms = pkgs.lib.platforms.linux;
     };
   });
@@ -75,4 +91,27 @@ with super;
       sed -i '/set(CMAKE_C_FLAGS/d' CMakeLists.txt
     '';
   });
- }
+
+  binaryheap = super.binaryheap.overrideAttrs(oa: {
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
+
+  http = super.http.overrideAttrs(oa: {
+    patches = oa.patches or [] ++ [
+      (pkgs.fetchpatch {
+        name = "invalid-state-progression.patch";
+        url = "https://github.com/daurnimator/lua-http/commit/cb7b59474a.diff";
+        sha256 = "1vmx039n3nqfx50faqhs3wgiw28ws416rhw6vh6srmh9i826dac7";
+      })
+    ];
+    /* TODO: separate docs derivation? (pandoc is heavy)
+    nativeBuildInputs = [ pandoc ];
+    makeFlags = [ "-C doc" "lua-http.html" "lua-http.3" ];
+    */
+    meta = oa.meta // {
+      maintainers = with pkgs.lib.maintainers; oa.meta.maintainers ++ [ vcunat ];
+    };
+  });
+}

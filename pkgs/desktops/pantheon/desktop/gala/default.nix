@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
 , desktop-file-utils, gettext, libxml2, gtk3, granite, libgee, bamf, libcanberra
-, libcanberra-gtk3, gnome-desktop, mutter, clutter, plank, gobject-introspection
-, elementary-icon-theme, elementary-settings-daemon, wrapGAppsHook }:
+, libcanberra-gtk3, gnome-desktop, mutter, clutter, plank, elementary-icon-theme
+, elementary-settings-daemon, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "unstable-2019-02-09"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
+  version = "unstable-2019-05-14"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "1a96644c6aac405927499dacb308dea13512e919";
-    sha256 = "1zi7xyzhsypf52zzfwf7dwcxgd0skxbsssv1vsxgmswszg23p7i3";
+    rev = "3ae100da4bbd9dabe353f468778ef63ef2dcd5d7";
+    sha256 = "08xcj4z9mq511w8hdpr60nmd6j1cj7rs7rgs4s5ivyg11kg5w17b";
   };
 
   passthru = {
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     desktop-file-utils
     gettext
-    gobject-introspection
     libxml2
     meson
     ninja

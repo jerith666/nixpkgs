@@ -17,7 +17,7 @@ let
   defaultDir = "/var/lib/${user}";
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
-  useCustomDir = !(builtins.isNull cfg.storageDir);
+  useCustomDir = cfg.storageDir != null;
 
   socket = "/run/phpfpm/${dirName}.sock";
 
@@ -228,6 +228,8 @@ in {
 
               location / {
                 try_files $uri $uri/ /index.php?$args =404;
+
+                rewrite ^/skins/.*/css/fonts/(.*)$ /fonts/$1 permanent;
 
                 location ~ /api/(css|img|ico) {
                   rewrite ^/api(.+)$ /api/app/webroot/$1 break;

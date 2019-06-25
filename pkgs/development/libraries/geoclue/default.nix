@@ -7,14 +7,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "geoclue";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "1zk6n28q030a9v03whad928b9zwq16d30ch369qv2c0994axdr5p";
+    sha256 = "1wbpi74dw3p7izxwd57irz2i1g55r7wzl5h2yf0ns0hgq2njdfsg";
   };
 
   patches = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     "-Ddemo-agent=${if withDemoAgent then "true" else "false"}"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    "-Ddbus-srv-user=geoclue"
   ] ++ optionals stdenv.isDarwin [
     "-D3g-source=false"
     "-Dcdma-source=false"

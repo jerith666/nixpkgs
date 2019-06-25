@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch/?h=c4d966e7cb0c7b87c55d52dc6f46518433a2a0a2";
       sha256 = "0pqbbsx8mriwny422s9mp3z5d095cnam32sm62q4mxk8g8jb9vm9";
     })
+
+    # https://trac.sagemath.org/ticket/28007
+    ./patches/threejs-offline.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
@@ -140,6 +143,14 @@ stdenv.mkDerivation rec {
       name = "R-3.6.0.patch";
       url = "https://git.sagemath.org/sage.git/patch/?h=8b7dbd0805d02d0e8674a272e161ceb24a637966";
       sha256 = "1c81f13z1w62s06yvp43gz6vkp8mxcs289n6l4gj9xj10slimzff";
+    })
+
+    # https://trac.sagemath.org/ticket/26932
+    (fetchSageDiff {
+      name = "givaro-4.1.0_fflas-ffpack-2.4.0_linbox-1.6.0.patch";
+      base = "8.8.beta4";
+      rev = "c11d9cfa23ff9f77681a8f12742f68143eed4504";
+      sha256 = "0xzra7mbgqvahk9v45bjwir2mqz73hrhhy314jq5nxrb35ysdxyi";
     })
   ];
 

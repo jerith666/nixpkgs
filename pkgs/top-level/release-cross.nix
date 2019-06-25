@@ -31,7 +31,7 @@ let
     buildPackages.gcc = nativePlatforms;
     coreutils = nativePlatforms;
     haskell.packages.ghcHEAD.hello = nativePlatforms;
-    haskell.packages.ghc844.hello = nativePlatforms;
+    haskellPackages.hello = nativePlatforms;
   };
 
   linuxCommon = lib.recursiveUpdate gnuCommon {
@@ -107,7 +107,6 @@ in
     mapTestEqual = lib.mapAttrsRecursive testEqual;
 
   in mapTestEqual {
-    androidndk = nativePlatforms;
     boehmgc = nativePlatforms;
     libffi = nativePlatforms;
     libiconv = nativePlatforms;
