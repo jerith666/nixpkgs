@@ -179,10 +179,9 @@ in
 
       requestEncryptionCredentials = mkOption {
         type = types.bool;
-        default = config.boot.zfs.enableUnstable;
+        default = true;
         description = ''
           Request encryption keys or passwords for all encrypted datasets on import.
-          Dataset encryption is only supported in zfsUnstable at the moment.
           For root pools the encryption key can be supplied via both an
           interactive prompt (keylocation=prompt) and from a file
           (keylocation=file://). Note that for data pools the encryption key can
@@ -313,10 +312,6 @@ in
         {
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
-        }
-        {
-          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
-          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
         }
       ];
 
