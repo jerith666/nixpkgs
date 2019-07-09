@@ -538,13 +538,13 @@ rec {
 
   mat = buildEclipseUpdateSite rec {
     name = "mat-${version}";
-    version = "1.8.1";
-    date = "201809100846";
+    version = "1.9.0";
+    date = "201906050844";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/mat/${version}/MemoryAnalyzer-${version}.${date}.zip";
-      sha256 = "15kbgzyxijqax4wgcsz11alp09kvpn7yad144i2w76qbnw6lyxsp";
+      sha256 = "1q95pvwr23xzbs6b2gbrjdc0lnj6yv82qd955zycqlhiabknxldv";
     };
 
     meta = with stdenv.lib; {
