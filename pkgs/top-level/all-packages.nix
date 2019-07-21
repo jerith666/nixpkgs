@@ -1433,6 +1433,8 @@ in
 
   dislocker = callPackage ../tools/filesystems/dislocker { };
 
+  distgen = callPackage ../development/tools/distgen {};
+
   distrobuilder = callPackage ../tools/virtualization/distrobuilder { };
 
   ditaa = callPackage ../tools/graphics/ditaa { };
@@ -1847,6 +1849,8 @@ in
   roundcube = callPackage ../servers/roundcube { };
 
   roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
+
+  routinator = callPackage ../servers/routinator { };
 
   rsbep = callPackage ../tools/backup/rsbep { };
 
@@ -3443,6 +3447,8 @@ in
   groonga = callPackage ../servers/search/groonga { };
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
+
+  grpcui = callPackage ../tools/networking/grpcui { };
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
@@ -10291,6 +10297,10 @@ in
 
   directfb = callPackage ../development/libraries/directfb { };
 
+  discord-rpc = callPackage ../development/libraries/discord-rpc {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
+
   dlib = callPackage ../development/libraries/dlib { };
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
@@ -13009,6 +13019,8 @@ in
 
   qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
+  qtpbfimageplugin = libsForQt5.callPackage ../development/libraries/qtpbfimageplugin { };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
@@ -13138,6 +13150,8 @@ in
   SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
 
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
+
+  SDL_gpu = callPackage ../development/libraries/SDL_gpu { };
 
   SDL_image = callPackage ../development/libraries/SDL_image { };
 
@@ -14302,8 +14316,6 @@ in
   firebird = callPackage ../servers/firebird { icu = null; stdenv = gcc5Stdenv; };
   firebirdSuper = firebird.override { icu = icu58; superServer = true; stdenv = gcc5Stdenv; };
 
-  foswiki = callPackage ../servers/foswiki { };
-
   frab = callPackage ../servers/web-apps/frab { };
 
   freepops = callPackage ../servers/mail/freepops { };
@@ -14976,11 +14988,24 @@ in
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
 
-  zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
+  zabbixFor = version: rec {
+    agent = (callPackages ../servers/monitoring/zabbix/agent.nix {}).${version};
+    proxy-mysql = (callPackages ../servers/monitoring/zabbix/proxy.nix { mysqlSupport = true; }).${version};
+    proxy-pgsql = (callPackages ../servers/monitoring/zabbix/proxy.nix { postgresqlSupport = true; }).${version};
+    proxy-sqlite = (callPackages ../servers/monitoring/zabbix/proxy.nix { sqliteSupport = true; }).${version};
+    server-mysql = (callPackages ../servers/monitoring/zabbix/server.nix { mysqlSupport = true; }).${version};
+    server-pgsql = (callPackages ../servers/monitoring/zabbix/server.nix { postgresqlSupport = true; }).${version};
+    web = (callPackages ../servers/monitoring/zabbix/web.nix {}).${version};
 
-  zabbix20 = callPackage ../servers/monitoring/zabbix/2.0.nix { };
-  zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
-  zabbix34 = callPackage ../servers/monitoring/zabbix/3.4.nix { };
+    # backwards compatibility
+    server = server-pgsql;
+  };
+
+  zabbix42 = zabbixFor "v42";
+  zabbix40 = zabbixFor "v40";
+  zabbix30 = zabbixFor "v30";
+
+  zabbix = zabbix42;
 
   zipkin = callPackage ../servers/monitoring/zipkin { };
 
@@ -17208,7 +17233,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  cdrtools = callPackage ../applications/misc/cdrtools { };
+  cdrtools = callPackage ../applications/misc/cdrtools {
+    inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
+  };
 
   centerim = callPackage ../applications/networking/instant-messengers/centerim { };
 

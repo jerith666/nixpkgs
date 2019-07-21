@@ -831,6 +831,8 @@ in {
 
   pytest-env = callPackage ../development/python-modules/pytest-env { };
 
+  pytest-flask = callPackage ../development/python-modules/pytest-flask { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
@@ -838,6 +840,8 @@ in {
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
+
+  pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
 
   python-binance = callPackage ../development/python-modules/python-binance { };
 
@@ -4398,7 +4402,7 @@ in {
 
   scipy = let
     scipy_ = callPackage ../development/python-modules/scipy { };
-    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: {
+    scipy_1_2 = scipy_.overridePythonAttrs(oldAttrs: rec {
       version = "1.2.1";
       src = oldAttrs.src.override {
         inherit version;
