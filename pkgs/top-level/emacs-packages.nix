@@ -312,7 +312,7 @@ let
     postInstall = ''
       mkdir -p $out
       mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
-      rm -rf $out/share/emacs/site-lisp/*/server
+      rm -rf $out/share/emacs/site-lisp/elpa/*/server
     '';
     preCheck = ''
       cd source/server
@@ -320,7 +320,7 @@ let
     dontUseCmakeBuildDir = true;
     doCheck = true;
     packageRequires = [ emacs ];
-    nativeBuildInputs = [ external.cmake external.llvmPackages.llvm ];
+    nativeBuildInputs = [ external.cmake external.llvmPackages.llvm external.llvmPackages.clang ];
     meta = {
       homepage = "https://melpa.org/#/irony";
       license = lib.licenses.gpl3;
@@ -334,7 +334,7 @@ let
     version = "2.12";
     src = external.rtags.src;
 
-    configurePhase = ":";
+    dontConfigure = true;
 
     propagatedUserEnvPkgs = [ external.rtags ];
     recipe = writeText "recipe" ''
