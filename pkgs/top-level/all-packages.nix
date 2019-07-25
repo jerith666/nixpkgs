@@ -7724,12 +7724,22 @@ in
         inherit (gnome2) GConf gnome_vfs;
       };
 
+  openjfx12 =
+    if stdenv.isDarwin then
+      null
+    else
+      callPackage ../development/compilers/openjdk/openjfx/12.nix {
+        openjdk = openjdk12;
+        bootjdk = openjdk11;
+      };
+
   /* current JDK */
   openjdk12 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin/default.nix { }
     else
       callPackage ../development/compilers/openjdk/default.nix {
+        openjfx = openjfx12;
         inherit (gnome2) GConf gnome_vfs;
         bootjdk = openjdk11;
       };
