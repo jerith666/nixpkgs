@@ -142,6 +142,7 @@ in
     ../build-support/setup-hooks/gog-unpack.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
+  buildEnvTest = callPackage ../build-support/buildenv/test.nix { };
 
   buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
 
