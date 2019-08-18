@@ -1281,4 +1281,7 @@ self: super: {
   # https://github.com/sol/hpack/issues/366
   hpack = dontCheck super.hpack;
 
+  amazonka-core = doJailbreak super.amazonka-core;
+  amazonka = doJailbreak super.amazonka;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
