@@ -1,4 +1,4 @@
-{ stdenv
+{ mkDerivation
 , lib
 , fetchurl
 , extra-cmake-modules
@@ -18,7 +18,7 @@
 , kwayland
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "kdeconnect";
   version = "1.3.4";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
 
   postInstall = ''
-    wrapProgram $out/lib/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
+    wrapProgram $out/libexec/kdeconnectd --prefix PATH : ${lib.makeBinPath [ sshfs ]}
   '';
 
   enableParallelBuilding = true;
