@@ -4,6 +4,7 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
+, enableJavaFX ? true, openjfx
 , enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
 }:
 
@@ -18,7 +19,7 @@ let
     else "amd64";
 
   major = "12";
-  update = "";
+  update = ".0.2";
   build = "ga";
   repover = "jdk-${major}${update}-${build}";
 
@@ -27,7 +28,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/${repover}.tar.gz";
-      sha256 = "1gyq4y13s4h13d9w66s35q2gr8w380bzvbyipp6xkl77kprz776s";
+      sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
     };
 
     nativeBuildInputs = [ pkgconfig ];
@@ -43,6 +44,7 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
+      ./increase-javadoc-heap.patch
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
       # so grab the work-around from
@@ -72,6 +74,7 @@ let
     ''
     + lib.optionalString (architecture == "amd64") " \"--with-jvm-features=zgc\""
     + lib.optionalString minimal " \"--enable-headless-only\""
+    + lib.optionalString (!minimal && enableJavaFX) " \"--with-import-modules=${openjfx}\""
     + ");"
     # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
     # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
