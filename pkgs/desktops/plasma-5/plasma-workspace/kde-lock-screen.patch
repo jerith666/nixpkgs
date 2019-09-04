@@ -1,0 +1,16 @@
+--- a/lookandfeel/contents/components/WallpaperFader.qml	1969-12-31 19:00:01.000000000 -0500
++++ b/lookandfeel/contents/components/WallpaperFader.qml	2018-08-07 10:35:21.004515903 -0400
+@@ -113,11 +113,11 @@
+             }
+             PropertyChanges {
+                 target: wallpaperFader
+-                factor: 1
++                factor: 0
+             }
+             PropertyChanges {
+                 target: clock.shadow
+-                opacity: 0
++                opacity: 1
+             }
+         },
+         State {

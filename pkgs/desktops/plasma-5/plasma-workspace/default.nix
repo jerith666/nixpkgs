@@ -69,6 +69,7 @@ mkDerivation {
   # ./plasma-workspace.patch.
   patches = [
     ./plasma-workspace.patch
+    ./kde-lock-screen.patch
   ];
 
   preConfigure = ''
