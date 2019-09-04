@@ -94,12 +94,12 @@ let
         envVars.NIX_CHROMIUM_PLUGIN_PATH_WIDEVINE = "@out@/lib";
       }}
     '';
-    
+
     meta.platforms = platforms.x86_64;
   };
 
   flash = stdenv.mkDerivation rec {
-    name = "flashplayer-ppapi-${version}";
+    pname = "flashplayer-ppapi";
     version = "32.0.0.238";
 
     src = fetchzip {
@@ -135,7 +135,7 @@ let
     '';
 
     dontStrip = true;
-    
+
     meta.platforms = platforms.x86_64;
   };
 

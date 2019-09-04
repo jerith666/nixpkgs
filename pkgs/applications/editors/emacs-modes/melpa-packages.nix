@@ -6,8 +6,8 @@ To update the list of packages from MELPA,
 
 1. Run ./update-melpa
 2. Check for evaluation errors:
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaStablePackages
-env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackagesNg.melpaPackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaStablePackages
+env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPackages.melpaPackages
 3. `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
 
 */
@@ -33,8 +33,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
     inherit (import ./libgenerated.nix lib self) melpaDerivation;
     super = lib.listToAttrs (map (melpaDerivation variant) (lib.importJSON archiveJson));
 
-    generic = import ./melpa-generic.nix;
-
     overrides = rec {
       shared = {
         # Expects bash to be at /bin/bash
@@ -43,9 +41,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         airline-themes = super.airline-themes.override {
           inherit (self.melpaPackages) powerline;
         };
-
-        # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
 
         # part of a larger package
         caml = dontConfigure super.caml;
@@ -66,11 +61,25 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           inherit (self.melpaPackages) easy-kill;
         };
 
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
-
         elpy = super.elpy.overrideAttrs(old: {
           propagatedUserEnvPkgs = old.propagatedUserEnvPkgs ++ [ external.elpy ];
+        });
+
+        emacsql-sqlite = super.emacsql-sqlite.overrideAttrs(old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
         });
 
         evil-magit = super.evil-magit.overrideAttrs (attrs: {
@@ -85,9 +94,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Expects bash to be at /bin/bash
         flycheck-rtags = markBroken super.flycheck-rtags;
-
-        # build timeout
-        graphene = markBroken super.graphene;
 
         pdf-tools = super.pdf-tools.overrideAttrs(old: {
           nativeBuildInputs = [ external.pkgconfig ];
@@ -108,26 +114,24 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           propagatedUserEnvPkgs = [ external.hindent ];
         });
 
-        # upstream issue: missing file header
-        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
-
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
-
-        irony = super.irony.overrideAttrs(old: {
+        irony = super.irony.overrideAttrs (old: {
+          cmakeFlags = old.cmakeFlags or [] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
+          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';
           preBuild = ''
             make
+            install -D bin/irony-server $out/bin/irony-server
+            cd ..
           '';
-          postInstall = ''
-            mkdir -p $out
-            mv $out/share/emacs/site-lisp/elpa/*/server/bin $out
-            rm -rf $out/share/emacs/site-lisp/elpa/*/server
-          '';
-          preCheck = ''
+          checkPhase = ''
             cd source/server
+            make check
+            cd ../..
+          '';
+          preFixup = ''
+            rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
           doCheck = true;
@@ -142,12 +146,6 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
 
         # Expects bash to be at /bin/bash
         ivy-rtags = markBroken super.ivy-rtags;
-
-        # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
-
-        # upstream issue: missing file header
-        maxframe = markBroken super.maxframe;
 
         magit = super.magit.overrideAttrs (attrs: {
           # searches for Git at build time
@@ -208,8 +206,109 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
-        # missing OCaml
-        ocp-indent = markBroken super.ocp-indent;
+        shm = super.shm.overrideAttrs (attrs: {
+          propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
+        });
+
+        # Telega has a server portion for it's network protocol
+        telega = super.telega.overrideAttrs(old: {
+
+          buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
+
+          postBuild = ''
+            cd source/server
+            make
+            cd -
+          '';
+
+          postInstall = ''
+            mkdir -p $out/bin
+            install -m755 -Dt $out/bin ./source/server/telega-server
+          '';
+
+        });
+
+        vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        zmq = super.zmq.overrideAttrs(old: {
+          stripDebugList = [ "share" ];
+          preBuild = ''
+            make
+          '';
+          nativeBuildInputs = [
+            external.autoconf external.automake external.pkgconfig external.libtool
+            (external.zeromq.override { enableDrafts = true; })
+          ];
+          postInstall = ''
+            mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
+            rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
+            rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
+          '';
+        });
+
+        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
+        _0blayout = super."0blayout";
+        _0xc = super."0xc";
+        _2048-game = super."2048-game";
+        _4clojure = super."4clojure";
+        at = super."@";
+        desktop-plus = super."desktop+";
+        ghub-plus = super."ghub+";
+        git-gutter-plus = super."git-gutter+";
+        git-gutter-fringe-plus = super."git-gutter-fringe+";
+        ido-completing-read-plus = super."ido-completing-read+";
+        image-plus = super."image+";
+        image-dired-plus = super."image-dired+";
+        markdown-mode-plus = super."markdown-mode+";
+        package-plus = super."package+";
+        rect-plus = super."rect+";
+        term-plus = super."term+";
+        term-plus-key-intercept = super."term+key-intercept";
+        term-plus-mux = super."term+mux";
+        xml-plus = super."xml+";
+      };
+
+      stable = shared // {
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # part of a larger package
+        # upstream issue: missing package version
+        cmake-mode = dontConfigure super.cmake-mode;
+
+        # upstream issue: missing file header
+        connection = markBroken super.connection;
+
+        # upstream issue: missing file header
+        dictionary = markBroken super.dictionary;
+
+        # missing git
+        egg = markBroken super.egg;
+
+        # upstream issue: missing file header
+        elmine = markBroken super.elmine;
+
+        # upstream issue: missing file header
+        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+
+        # upstream issue: missing file header
+        initsplit = markBroken super.initsplit;
+
+        # upstream issue: missing file header
+        jsfmt = markBroken super.jsfmt;
+
+        # upstream issue: missing file header
+        maxframe = markBroken super.maxframe;
+
+        # upstream issue: doesn't build
+        eterm-256color = markBroken super.eterm-256color;
+
+        # Expects bash to be at /bin/bash
+        helm-rtags = markBroken super.helm-rtags;
 
         # upstream issue: missing file header
         qiita = markBroken super.qiita;
@@ -217,29 +316,73 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
         # upstream issue: missing file header
         speech-tagger = markBroken super.speech-tagger;
 
-        shm = super.shm.overrideAttrs (attrs: {
-          propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
-        });
-
-        # upstream issue: missing file header
-        tawny-mode = markBroken super.tawny-mode;
-
         # upstream issue: missing file header
         textmate = markBroken super.textmate;
 
-        # missing OCaml
-        utop = markBroken super.utop;
-
-        vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
+        # upstream issue: missing file header
+        link = markBroken super.link;
 
         # upstream issue: missing file header
         voca-builder = markBroken super.voca-builder;
 
         # upstream issue: missing file header
         window-numbering = markBroken super.window-numbering;
+
+      };
+
+      unstable = shared // {
+        editorconfig = super.editorconfig.overrideAttrs (attrs: {
+          propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
+        });
+
+        egg = super.egg.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        # missing dependencies
+        evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
+          packageRequires = with self; [ evil highlight ];
+        });
+
+        forge = super.forge.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
+
+        # Expects bash to be at /bin/bash
+        helm-rtags = markBroken super.helm-rtags;
+
+        orgit =
+          (super.orgit.overrideAttrs (attrs: {
+            # searches for Git at build time
+            nativeBuildInputs =
+              (attrs.nativeBuildInputs or []) ++ [ external.git ];
+           }));
+
+        # tries to write to $HOME
+        php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
+          HOME = "/tmp";
+        });
+
+        racer = super.racer.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace racer.el \
+              --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
+          '';
+        });
+
+        spaceline = super.spaceline.override {
+          inherit (self.melpaPackages) powerline;
+        };
+
+        treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
+          # searches for Git at build time
+          nativeBuildInputs =
+            (attrs.nativeBuildInputs or []) ++ [ external.git ];
+        });
 
         vterm = let
           emacsSources = pkgs.stdenv.mkDerivation {
@@ -288,169 +431,7 @@ env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../ -A emacsPac
           '';
         };
         # Legacy alias
-        emacs-libvterm = shared.vterm;
-
-        zmq = super.zmq.overrideAttrs(old: {
-          stripDebugList = [ "share" ];
-          preBuild = ''
-            make
-          '';
-          nativeBuildInputs = [
-            external.autoconf external.automake external.pkgconfig external.libtool
-            (external.zeromq.override { enableDrafts = true; })
-          ];
-          postInstall = ''
-            mv $out/share/emacs/site-lisp/elpa/zmq-*/src/.libs/emacs-zmq.so $out/share/emacs/site-lisp/elpa/zmq-*
-            rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
-            rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
-          '';
-        });
-
-        # Map legacy renames from emacs2nix since code generation was ported to emacs lisp
-        _0blayout = super."0blayout";
-        _0xc = super."0xc";
-        _2048-game = super."2048-game";
-        _4clojure = super."4clojure";
-        at = super."@";
-        desktop-plus = super."desktop+";
-        ghub-plus = super."ghub+";
-        git-gutter-plus = super."git-gutter+";
-        git-gutter-fringe-plus = super."git-gutter-fringe+";
-        ido-completing-read-plus = super."ido-completing-read+";
-        image-plus = super."image+";
-        image-dired-plus = super."image-dired+";
-        markdown-mode-plus = super."markdown-mode+";
-        package-plus = super."package+";
-        rect-plus = super."rect+";
-        term-plus = super."term+";
-        term-plus-key-intercept = super."term+key-intercept";
-        term-plus-mux = super."term+mux";
-        xml-plus = super."xml+";
-      };
-
-      stable = shared // {
-        # part of a larger package
-        # upstream issue: missing package version
-        cmake-mode = markBroken (dontConfigure super.cmake-mode);
-
-        # upstream issue: missing file header
-        connection = markBroken super.connection;
-
-        # upstream issue: missing file header
-        dictionary = markBroken super.dictionary;
-
-        # missing git
-        egg = markBroken super.egg;
-
-        # upstream issue: missing dependency redshank
-        emr = markBroken super.emr;
-
-        # upstream issue: doesn't build
-        eterm-256color = markBroken super.eterm-256color;
-
-        # upstream issue: missing dependency highlight
-        evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
-
-        # upstream issue: missing dependency highlight
-        floobits  = markBroken super.floobits;
-
-        # missing OCaml
-        flycheck-ocaml = markBroken super.flycheck-ocaml;
-
-        # upstream issue: missing dependency
-        fold-dwim-org = markBroken super.fold-dwim-org;
-
-        # build timeout
-        graphene = markBroken super.graphene;
-
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
-
-        # upstream issue: missing file header
-        link = markBroken super.link;
-
-        # missing OCaml
-        merlin = markBroken super.merlin;
-
-        # upstream issue: missing file header
-        po-mode = markBroken super.po-mode;
-
-        # upstream issue: truncated file
-        powershell = markBroken super.powershell;
-      };
-
-      unstable = shared // {
-        # upstream issue: mismatched filename
-        ack-menu = markBroken super.ack-menu;
-
-        editorconfig = super.editorconfig.overrideAttrs (attrs: {
-          propagatedUserEnvPkgs = [ external.editorconfig-core-c ];
-        });
-
-        egg = super.egg.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
-
-        # missing dependencies
-        evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
-          packageRequires = with self; [ evil highlight ];
-        });
-
-        forge = super.forge.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
-
-        # upstream issue: mismatched filename
-        helm-lobsters = markBroken super.helm-lobsters;
-
-        # Expects bash to be at /bin/bash
-        helm-rtags = markBroken super.helm-rtags;
-
-        # Fails with "package does not untar cleanly into ..."
-        irony = shared.irony.overrideAttrs(old: {
-          meta = old.meta // {
-            broken = true;
-          };
-        });
-
-        orgit =
-          (super.orgit.overrideAttrs (attrs: {
-            # searches for Git at build time
-            nativeBuildInputs =
-              (attrs.nativeBuildInputs or []) ++ [ external.git ];
-           }));
-
-        # tries to write to $HOME
-        php-auto-yasnippets = super.php-auto-yasnippets.overrideAttrs (attrs: {
-          HOME = "/tmp";
-        });
-
-        # upstream issue: mismatched filename
-        processing-snippets = markBroken super.processing-snippets;
-
-        racer = super.racer.overrideAttrs (attrs: {
-          postPatch = attrs.postPatch or "" + ''
-            substituteInPlace racer.el \
-              --replace /usr/local/src/rust/src ${external.rustPlatform.rustcSrc}
-          '';
-        });
-
-        # upstream issue: missing file footer
-        seoul256-theme = markBroken super.seoul256-theme;
-
-        spaceline = super.spaceline.override {
-          inherit (self.melpaPackages) powerline;
-        };
-
-        treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
-          # searches for Git at build time
-          nativeBuildInputs =
-            (attrs.nativeBuildInputs or []) ++ [ external.git ];
-        });
+        emacs-libvterm = unstable.vterm;
 
         w3m = super.w3m.override (args: {
           melpaBuild = drv: args.melpaBuild (drv // {

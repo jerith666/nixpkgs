@@ -217,7 +217,8 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
-    string = separatedString "";
+    string = warn "types.string is deprecated because it quietly concatenates strings"
+      (separatedString "");
 
     attrs = mkOptionType {
       name = "attrs";
@@ -442,6 +443,13 @@ rec {
            else null;
       functor = (defaultFunctor name) // { wrapped = [ t1 t2 ]; };
     };
+
+    # Any of the types in the given list
+    oneOf = ts:
+      let
+        head' = if ts == [] then throw "types.oneOf needs to get at least one type in its argument" else head ts;
+        tail' = tail ts;
+      in foldl' either head' tail';
 
     # Either value of type `finalType` or `coercedType`, the latter is
     # converted to `finalType` using `coerceFunc`.
