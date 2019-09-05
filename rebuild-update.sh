@@ -7,7 +7,14 @@ d=$1
 
 wt=$2
 
+echo "computing store path for new system"
+system=$(nixos-rebuild dry-build -I nixpkgs=$wt 2>&1 | grep nixos-system)
+
+echo "building new system store path $system"
+nix build $system;
+
 nixos-rebuild build -I nixpkgs=$wt;
+
 nix-store --realise --add-root system-result --indirect result;
 
 nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
