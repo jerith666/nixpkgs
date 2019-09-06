@@ -7,8 +7,8 @@ mkDerivation {
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "set-dyn-ip";
-    rev = "997c22c692517811be7ed56a6f94120032caa8d2";
-    sha256 = "07kgha0x7ffa8mhibf6sa2pr09l4dfhbr0n8xkngh9ylzyf55a5s";
+    rev = "c7bab504cd35db2f5b14be72874639344d581930";
+    sha256 = "03k52m7zpd2dkvfjhr115xh9fhrdrz83n8b1yq7m5k7xfaykqyyn";
   };
   isLibrary = false;
   isExecutable = true;

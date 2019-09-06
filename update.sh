@@ -20,9 +20,21 @@ git worktree add -b update-$d $wt $current
 
 pushd $wt
 
+for commit in ${PRE_REVERT:-}; do
+    git revert $commit;
+done
+
+for commit in ${PRE_CHERRY:-}; do
+    git cherry-pick -x $commit;
+done
+
 git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nixos-unstable'";
 
-for commit in "$@"; do
+for commit in ${POST_REVERT:-}; do
+    git revert $commit;
+done
+
+for commit in ${POST_CHERRY:-}; do
     git cherry-pick -x $commit;
 done
 

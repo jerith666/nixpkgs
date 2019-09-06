@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, makeWrapper, cmake, gtest
+{ fetchurl, fetchpatch, stdenv, pkgconfig, makeWrapper, cmake, gtest
 , boost, icu, libxml2, libxslt, gettext, swig, isocodes, gtk3, glibcLocales
 , webkitgtk, dconf, hicolor-icon-theme, libofx, aqbanking, gwenhywfar, libdbi
 , libdbiDrivers, guile, perl, perlPackages
@@ -24,11 +24,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnucash-${version}";
+  pname = "gnucash";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
+    url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
     sha256 = "09azp17ghn7i8kwk0ci3gq0qkn5pvbknhf1cbk7v43mvc3g8djzi";
   };
 
@@ -40,6 +40,15 @@ stdenv.mkDerivation rec {
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
+
+  # Included in the maint branch, apparently required by newer CMake
+  patches = [
+    (fetchpatch {
+      name = "fix-cmake-failure.patch";
+      url = "https://github.com/Gnucash/gnucash/commit/ce6c3c22a15102341ca41ddba2a46ea7daf63f17.patch";
+      sha256 = "0h8h8klq5gpsnhw86yyzc2rx21kn5vn12mwiz9amn52s0zzp459b";
+    })
+  ];
 
   propagatedUserEnvPkgs = [ dconf ];
 
@@ -61,7 +70,7 @@ stdenv.mkDerivation rec {
     rm $out/bin/gnucash-valgrind
 
     wrapProgram "$out/bin/gnucash" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
