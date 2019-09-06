@@ -753,15 +753,6 @@ self: super: {
   # fails with sandbox
   yi-keymap-vim = dontCheck super.yi-keymap-vim;
 
-  #amazonka-core = doJailbreak super.amazonka-core;
-  #conduit_1_2_13_1 = doJailbreak super.conduit_1_2_13_1;
-  conduit_1_2_13_1 = super.cabal2nix.overrideScope (self: super: {
-    resourcet = self.resourcet_1_1_11;
-  });
-  amazonka-core = super.cabal2nix.overrideScope (self: super: {
-    conduit = self.conduit_1_2_13_1;
-  });
-
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = doJailbreak super.applicative-quoters;
 
