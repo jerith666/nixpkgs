@@ -294,6 +294,14 @@ in
       perl = buildPackages.perl.override { fetchurl = stdenv.fetchurlBoot; };
       openssl = buildPackages.openssl.override {
         fetchurl = stdenv.fetchurlBoot;
+        coreutils = buildPackages.coreutils.override {
+          fetchurl = stdenv.fetchurlBoot;
+          inherit perl;
+          xz = buildPackages.xz.override { fetchurl = stdenv.fetchurlBoot; };
+          gmp = null;
+          aclSupport = false;
+          attrSupport = false;
+        };
         inherit perl;
         buildPackages = { inherit perl; };
       };
@@ -819,6 +827,8 @@ in
 
   ezstream = callPackage ../tools/audio/ezstream { };
 
+  libfx2 = with python3Packages; toPythonApplication fx2;
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
@@ -842,6 +852,8 @@ in
   gitless = callPackage ../applications/version-management/gitless { };
 
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
+
+  glasgow = with python3Packages; toPythonApplication glasgow;
 
   gucci = callPackage ../tools/text/gucci { };
 
@@ -4778,9 +4790,7 @@ in
 
   minetime = callPackage ../applications/office/minetime { };
 
-  minio-client = callPackage ../tools/networking/minio-client {
-    buildGoPackage = buildGo110Package;
-  };
+  minio-client = callPackage ../tools/networking/minio-client { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -7828,6 +7838,8 @@ in
   psc-package = haskell.lib.justStaticExecutables
     (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
 
+  "tacacs+" = callPackage ../servers/tacacs+ { };
+
   tamarin-prover =
     (haskellPackages.callPackage ../applications/science/logic/tamarin-prover {
       # NOTE: do not use the haskell packages 'graphviz' and 'maude'
@@ -8364,7 +8376,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-sweep = callPackage ../development/tools/rust/cargo-sweep { };
-  cargo-watch = callPackage ../development/tools/rust/cargo-watch { };
+  cargo-watch = callPackage ../development/tools/rust/cargo-watch {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
   cargo-generate = callPackage ../development/tools/rust/cargo-generate {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -10962,6 +10976,7 @@ in
     else if name == "libSystem" then targetPackages.darwin.xcode
     else if name == "nblibc" then targetPackages.netbsdCross.libc
     else if name == "wasilibc" then targetPackages.wasilibc or wasilibc
+    else if stdenv.targetPlatform.isGhcjs then null
     else throw "Unknown libc ${name}";
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
@@ -17921,7 +17936,7 @@ in
 
   electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
 
-  electrum = callPackage ../applications/misc/electrum { };
+  electrum = libsForQt5.callPackage ../applications/misc/electrum { };
 
   electrum-dash = callPackage ../applications/misc/electrum/dash.nix { };
 
@@ -23941,6 +23956,8 @@ in
                 initialRamdisk.
                 The result can be extended in the modules by defining
                 extra attributes in system.build.
+                Alternatively, you may use the result's config and
+                options attributes to query any option.
 
      Example:
 
@@ -23978,10 +23995,13 @@ in
      Note that you will need to have called Nixpkgs with the system
      parameter set to the right value for your deployment target.
   */
-  nixos = configuration:
-    (import (pkgs.path + "/nixos/lib/eval-config.nix") {
-      inherit (pkgs.stdenv.hostPlatform) system;
-      modules = [(
+  nixos =
+    configuration:
+      let
+        c = import (pkgs.path + "/nixos/lib/eval-config.nix") {
+              inherit (pkgs.stdenv.hostPlatform) system;
+              modules =
+                [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;
                   }
@@ -23990,7 +24010,9 @@ in
                   then configuration
                   else [configuration]
                 );
-    }).config.system.build;
+            };
+      in
+        c.config.system.build // c;
 
 
   /*
