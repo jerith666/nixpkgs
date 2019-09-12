@@ -839,6 +839,8 @@ in {
 
   pure-python-adb-homeassistant = callPackage ../development/python-modules/pure-python-adb-homeassistant { };
 
+  purl = callPackage ../development/python-modules/purl { };
+
   pymystem3 = callPackage ../development/python-modules/pymystem3 { };
 
   pymysql = callPackage ../development/python-modules/pymysql { };
@@ -2435,6 +2437,8 @@ in {
 
   ijson = callPackage ../development/python-modules/ijson {};
 
+  imagecodecs-lite = disabledIf (!isPy3k) (callPackage ../development/python-modules/imagecodecs-lite { });
+
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   image-match = callPackage ../development/python-modules/image-match { };
@@ -2588,6 +2592,9 @@ in {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
+  openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   pamela = callPackage ../development/python-modules/pamela { };
@@ -2666,7 +2673,7 @@ in {
 
   pycares = callPackage ../development/python-modules/pycares { };
 
-  pycuda = callPackage ../development/python-modules/pycuda rec {
+  pycuda = callPackage ../development/python-modules/pycuda {
     cudatoolkit = pkgs.cudatoolkit_7_5;
     inherit (pkgs.stdenv) mkDerivation;
   };
@@ -2999,8 +3006,6 @@ in {
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
   effect = callPackage ../development/python-modules/effect {};
-
-  elpy = callPackage ../development/python-modules/elpy { };
 
   enum = callPackage ../development/python-modules/enum { };
 
@@ -3975,10 +3980,10 @@ in {
       blas = pkgs.openblasCompat;
     };
     numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
-      version = "1.16.4";
+      version = "1.16.5";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "1ivrwh66cmly7xh1dl7pybizfz5rcicn4kkkx5g29v4gll9bwhkj";
+        sha256 = "8bb452d94e964b312205b0de1238dd7209da452343653ab214b5d681780e7a0c";
       };
     });
   in if pythonOlder "3.5" then numpy_2 else numpy_;
@@ -4428,6 +4433,8 @@ in {
 
   pyupdate = callPackage ../development/python-modules/pyupdate {};
 
+  pyvmomi = callPackage ../development/python-modules/pyvmomi { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
@@ -4574,6 +4581,8 @@ in {
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
 
+  python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
+
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
   python-wifi = callPackage ../development/python-modules/python-wifi { };
@@ -4657,6 +4666,8 @@ in {
   roboschool = callPackage ../development/python-modules/roboschool {
     inherit (pkgs) pkgconfig; # use normal pkgconfig, not the python package
   };
+
+  rfc6555 = callPackage ../development/python-modules/rfc6555 { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
 
@@ -4834,6 +4845,8 @@ in {
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
+
+  scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
 
@@ -6177,9 +6190,13 @@ in {
 
   yattag = callPackage ../development/python-modules/yattag { };
 
+  xenomapper = disabledIf (!isPy3k) (callPackage ../applications/science/biology/xenomapper { });
+
   z3 = (toPythonModule (pkgs.z3.override {
     inherit python;
   })).python;
+
+  zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 

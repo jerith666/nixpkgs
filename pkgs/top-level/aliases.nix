@@ -265,7 +265,6 @@ mapAliases ({
   plexpy = tautulli; # plexpy got renamed to tautulli, added 2019-02-22
   pmtools = acpica-tools; # added 2018-11-01
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
-  postgresql94 = postgresql_9_4;
   postgresql95 = postgresql_9_5;
   postgresql96 = postgresql_9_6;
   postgresql100 = throw "deprecated 2018-10-21: use postgresql_10 instead";
@@ -303,8 +302,9 @@ mapAliases ({
   rssglx = rss-glx; #added 2015-03-25
   ruby_2_0_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_1_0 = throw "deprecated 2018-0213: use a newer version of ruby";
-  ruby_2_2_9 = throw "deprecated 2018-0213: use ruby_2_2 instead";
-  ruby_2_3_6 = throw "deprecated 2018-0213: use ruby_2_3 instead";
+  ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
   ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
@@ -373,13 +373,13 @@ mapAliases ({
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
+  usbguard-nox = usbguard; # added 2019-09-04
   v4l_utils = v4l-utils; # added 2019-08-07
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24
   vorbisTools = vorbis-tools; # added 2016-01-26
   webkit = webkitgtk; # added 2019-03-05
-  weechat-xmpp = weechatScripts.weechat-xmpp; # added 2018-09-06
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # added 2018-09-06
   wineStaging = wine-staging; # added 2018-01-08
   winusb = woeusb; # added 2017-12-22
@@ -435,6 +435,9 @@ mapAliases ({
   # added 2019-08-01
   mumble_git = pkgs.mumble_rc;
   murmur_git = pkgs.murmur_rc;
+
+  # added 2019-09-06
+  zeroc_ice = pkgs.zeroc-ice;
 } // (with ocaml-ng; { # added 2016-09-14
   ocaml_4_00_1 = ocamlPackages_4_00_1.ocaml;
   ocaml_4_01_0 = ocamlPackages_4_01_0.ocaml;
