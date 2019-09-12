@@ -8,7 +8,14 @@ d=$1
 wt=$2
 
 echo "computing store path for new system"
-system=$(nixos-rebuild dry-build -I nixpkgs=$wt 2>&1 | grep nixos-system)
+if nixos-rebuild dry-build -I nixpkgs=$wt 2>dryout >dryout; then
+    system=$(grep nixos-system dryout);
+    rm dryout;
+else
+    cat dryout;
+    rm dryout;
+    exit;
+fi
 
 echo "building new system store path $system"
 nix build $system;
