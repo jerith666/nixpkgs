@@ -7,20 +7,27 @@ d=$1
 
 wt=$2
 
-echo "computing store path for new system"
+echo "computing store path for new system";
+echo;
 if nixos-rebuild dry-build -I nixpkgs=$wt 2>dryout >dryout; then
-    system=$(grep nixos-system dryout);
+    if grep nixos-system dryout; then
+        system=$(grep nixos-system dryout);
+        echo "building new system store path $system";
+        echo;
+        nix build $system;
+    else
+        echo "nixos-rebuild dry-build succeeded without producing a nixos-system path";
+        echo "perhaps the system is already built; proceeding with nixos-rebuild";
+        echo;
+    fi
+    nixos-rebuild build -I nixpkgs=$wt;
     rm dryout;
 else
+    echo "nixos-rebuild dry-build failed";
     cat dryout;
     rm dryout;
     exit;
 fi
-
-echo "building new system store path $system"
-nix build $system;
-
-nixos-rebuild build -I nixpkgs=$wt;
 
 nix-store --realise --add-root system-result --indirect result;
 
