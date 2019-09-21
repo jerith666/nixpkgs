@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;
-    rev = "${checkout}";
+    rev = checkout;
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
 
@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [ ./dont_static_link.patch ];
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
+  '';
 
   preBuild = ''
     patchShebangs scripts

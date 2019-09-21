@@ -179,7 +179,7 @@ in
   config = mkIf cfg.enable {
 
     services.phpfpm.pools = {
-      "${poolName}" = {
+      ${poolName} = {
         inherit (cfg) user group;
 
         phpOptions = ''
@@ -216,7 +216,6 @@ in
         index index.html index.php;
 
         gzip on;
-        gzip_disable "msie6";
 
         gzip_comp_level 6;
         gzip_min_length  1100;

@@ -63,7 +63,7 @@ buildPythonPackage rec {
     h2 hyperframe kaitaistruct passlib
     pyasn1 pyopenssl pyparsing pyperclip
     ruamel_yaml tornado urwid brotlipy
-    sortedcontainers ldap3 wsproto
+    sortedcontainers ldap3 wsproto setuptools
   ];
 
   checkInputs = [
