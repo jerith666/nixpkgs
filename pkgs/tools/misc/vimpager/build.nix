@@ -6,7 +6,7 @@
 , sha256
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit version;
   pname = "vimpager";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
     owner  = "rkitover";
     repo   = "vimpager";
-    rev    = "${version}";
+    rev    = version;
   };
 
   buildInputs = [ coreutils sharutils ]; # for uuencode

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "universal-ctags";
   version = "unstable-2019-07-30";
 
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags
     priority = 1;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

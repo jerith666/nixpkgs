@@ -4,20 +4,20 @@ let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
-    "x86_64-linux" = "linux-x64";
-    "x86_64-darwin" = "darwin";
+    x86_64-linux = "linux-x64";
+    x86_64-darwin = "darwin";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "0j6188gm66bwffyg0vn3ak8242vs2vb2cw92b9wfkiml6sfg555n";
-    "x86_64-darwin" = "0iblg0hn6jdds7d2hzp0icb5yh6hhw3fd5g4iim64ibi7lpwj2cj";
+    x86_64-linux = "15m7mfb8gmx3pwydc37blj0rxwgmkrnqfj6y79rpqlr2dg92gwlb";
+    x86_64-darwin = "080k4fnfa5ylmmya6zprgci3gld9mrbqsfnk53hgcny91ykl5xj5";
   }.${system};
 in
   callPackage ./generic.nix rec {
 
-    version = "1.37.1";
+    version = "1.38.1";
     pname = "vscodium";
 
     executableName = "codium";

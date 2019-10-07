@@ -79,8 +79,7 @@ in
         Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
       '';
 
-    services.xserver.displayManager.lightdm.enable = mkDefault true;
-    services.xserver.displayManager.lightdm.greeters.gtk.enable = mkDefault true;
+    services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
 
     # If not set manually Pantheon session cannot be started
     # Known issue of https://github.com/NixOS/nixpkgs/pull/43992
@@ -98,10 +97,6 @@ in
               export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${p}/lib
             fi
           '') cfg.sessionPath}
-
-          # Settings from elementary-default-settings
-          export GTK_CSD=1
-          export GTK_MODULES=$GTK_MODULES:pantheon-filechooser-module
       fi
     '';
 
@@ -113,9 +108,9 @@ in
     services.colord.enable = mkDefault true;
     services.pantheon.files.enable = mkDefault true;
     services.tumbler.enable = mkDefault true;
-    services.dbus.packages = mkMerge [
-      ([ pkgs.pantheon.switchboard-plug-power ])
-      (mkIf config.services.printing.enable  ([pkgs.system-config-printer]) )
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+    services.dbus.packages = [
+      pkgs.pantheon.switchboard-plug-power
     ];
     services.pantheon.contractor.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
@@ -145,6 +140,9 @@ in
     programs.dconf.enable = true;
     programs.evince.enable = mkDefault true;
     programs.file-roller.enable = mkDefault true;
+    # Otherwise you can't store NetworkManager Secrets with
+    # "Store the password only for this user"
+    programs.nm-applet.enable = true;
 
     # Shell integration for VTE terminals
     programs.bash.vteIntegration = mkDefault true;
@@ -163,9 +161,14 @@ in
                               networkmanager-iodine networkmanager-l2tp; };
 
     # Override GSettings schemas
-    environment.variables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
+    environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-    environment.variables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
+    environment.sessionVariables.GNOME_SESSION_DEBUG = optionalString cfg.debug "1";
+
+    # Settings from elementary-default-settings
+    environment.sessionVariables.GTK_CSD = "1";
+    environment.sessionVariables.GTK_MODULES = "pantheon-filechooser-module";
+    environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -191,6 +194,7 @@ in
         gtk3.out
         hicolor-icon-theme
         lightlocker
+        onboard
         plank
         qgnomeplatform
         shared-mime-info

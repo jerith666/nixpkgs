@@ -53,6 +53,7 @@ in
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
+      gnome3.gnome-themes-extra
       gnome3.adwaita-icon-theme
       hicolor-icon-theme
       tango-icon-theme
@@ -69,16 +70,17 @@ in
 
       exo
       garcon
-      gtk-xfce-engine
       libxfce4ui
       xfconf
 
       mousepad
+      parole
       ristretto
       xfce4-appfinder
       xfce4-screenshooter
       xfce4-session
       xfce4-settings
+      xfce4-taskmanager
       xfce4-terminal
 
       # TODO: resync patch for plugins
@@ -86,12 +88,16 @@ in
       thunar
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.hardware.pulseaudio.enable xfce4-pulseaudio-plugin
       ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optional cfg.enableXfwm xfwm4
-      ++ optionals (!cfg.noDesktop) [
-        xfce4-panel
+      ++ optionals config.hardware.pulseaudio.enable [
+        pavucontrol
+        xfce4-pulseaudio-plugin
+      ] ++ optionals cfg.enableXfwm [
+        xfwm4
+        xfwm4-themes
+      ] ++ optionals (!cfg.noDesktop) [
         xfce4-notifyd
+        xfce4-panel
         xfdesktop
       ];
 
@@ -114,12 +120,6 @@ in
       name = "xfce4-14";
       bgSupport = true;
       start = ''
-        # Set GTK_PATH so that GTK+ can find the theme engines.
-        export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
-
-        # Set GTK_DATA_PREFIX so that GTK+ can find the Xfce themes.
-        export GTK_DATA_PREFIX=${config.system.path}
-
         ${pkgs.runtimeShell} ${pkgs.xfce4-14.xinitrc} &
         waitPID=$!
       '';
@@ -137,8 +137,7 @@ in
     services.gvfs.enable = true;
     services.gvfs.package = pkgs.xfce.gvfs;
     services.tumbler.enable = true;
-    services.dbus.packages =
-      optional config.services.printing.enable pkgs.system-config-printer;
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
     services.xserver.libinput.enable = mkDefault true; # used in xfce4-settings-manager
 
     # Enable default programs

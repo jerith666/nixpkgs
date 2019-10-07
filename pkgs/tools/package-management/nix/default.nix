@@ -121,7 +121,7 @@ common =
         homepage = https://nixos.org/;
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.all;
+        platforms = stdenv.lib.platforms.unix;
         outputsToInstall = [ "out" "man" ];
       };
 
@@ -174,10 +174,10 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.2.2";
+    name = "nix-2.3";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "f80a1b4f9837a8d33209f0b7769d5038335459ff4303eccf3e9217a9eca8594c";
+      sha256 = "b1d1b4d87390941fc64b19776f1ed9e3871231d38f5a1f295dd13925acd3a98d";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -200,13 +200,13 @@ in rec {
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre20190830_04np4n6";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20190913_a25c022";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
-      hash = "sha256-09ZHwpxf9pRDacCSGTHYx+fnKYgxKx8G37Jqb4wl1xI=";
+      rev = "a25c022af3fa0a35be406942869edae1bdff2cf8";
+      hash = "sha256-HIvgrkXxQ57TPcf2pn9PkSDzM4XOCwXa1zYyIvcAdpg=";
     };
     fromGit = true;
 

@@ -7,7 +7,7 @@ let
 
   src = fetchFromGitHub {
     inherit owner repo sha256;
-    rev    = "${version}";
+    rev    = version;
   };
 
   backend = buildGoPackage {
@@ -27,7 +27,7 @@ let
     inherit src;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "uchiwa";
   inherit version;
 

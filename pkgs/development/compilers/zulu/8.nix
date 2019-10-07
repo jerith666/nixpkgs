@@ -23,7 +23,7 @@ let
     xorg.libXt xorg.libXrender stdenv.cc.cc
   ]));
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version openjdk platform hash extension;
 
   pname = "zulu";
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru = {
-    home = "${zulu}";
+    home = zulu;
   };
 
   meta = with stdenv.lib; {

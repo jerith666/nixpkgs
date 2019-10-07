@@ -17,7 +17,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cryptokit";
   inherit (param) version;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = "setup.data build";
 
-  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/cryptokit";
+  preBuild = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
   meta = {
     homepage = http://pauillac.inria.fr/~xleroy/software.html;

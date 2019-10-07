@@ -69,7 +69,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1795sad0jr2da2pn28nbqsvpld6zw8gf9yscywixkbabf7ls66fn";
+      sha256 = "1ackqjkwkfm3kazlyy4nwdjf6wwjlajql1hrznaki5138nw4gxs4";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -324,6 +324,7 @@ self: super: {
   lensref = dontCheck super.lensref;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
   lvmrun = disableHardening (dontCheck super.lvmrun) ["format"];
+  matplotlib = dontCheck super.matplotlib;
   memcache = dontCheck super.memcache;
   MemoTrie = dontHaddock (dontCheck super.MemoTrie);
   metrics = dontCheck super.metrics;
@@ -987,25 +988,17 @@ self: super: {
   # base >=4.7 && <4.10, tasty >=0.11 && <0.15
   qif = doJailbreak super.qif;
 
-  # https://github.com/haskell-rewriting/term-rewriting/issues/11
-  term-rewriting = dontCheck (doJailbreak super.term-rewriting);
+  # https://github.com/haskell-rewriting/term-rewriting/pull/15
+  # remove on next hackage update
+  term-rewriting = doJailbreak super.term-rewriting;
 
-  # https://github.com/nick8325/twee/pull/1
-  twee-lib = dontHaddock super.twee-lib;
-
-  # Needs older hlint
-  hpio = dontCheck super.hpio;
-
-  # https://github.com/fpco/inline-c/issues/72
-  inline-c = dontCheck super.inline-c;
-
-  # https://github.com/GaloisInc/pure-zlib/issues/6
+  # https://github.com/GaloisInc/pure-zlib/pull/11
   pure-zlib = doJailbreak super.pure-zlib;
 
-  # https://github.com/strake/lenz-template.hs/issues/1
+  # https://github.com/strake/lenz-template.hs/pull/2
   lenz-template = doJailbreak super.lenz-template;
 
-  # https://github.com/haskell-hvr/resolv/issues/1
+  # https://github.com/haskell-hvr/resolv/pull/6
   resolv = dontCheck super.resolv;
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
@@ -1018,11 +1011,6 @@ self: super: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
     preCheck = ''export PATH="$PWD/dist/build/alex:$PATH"'';
   });
-  arbtt = overrideCabal super.arbtt (drv: {
-    preCheck = ''
-      for n in $PWD/dist/build/*; do PATH+=":$n"; done
-    '';
-  });
 
   # This package refers to the wrong library (itself in fact!)
   vulkan = super.vulkan.override { vulkan = pkgs.vulkan-loader; };
@@ -1033,13 +1021,10 @@ self: super: {
   # };
 
   # https://github.com/dmwit/encoding/pull/3
-  encoding = appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch;
+  encoding = doJailbreak (appendPatch super.encoding ./patches/encoding-Cabal-2.0.patch);
 
   # Work around overspecified constraint on github ==0.18.
   github-backup = doJailbreak super.github-backup;
-
-  # https://github.com/fpco/streaming-commons/issues/49
-  streaming-commons = dontCheck super.streaming-commons;
 
   # Test suite depends on old QuickCheck 2.10.x.
   cassava = dontCheck super.cassava;
@@ -1071,15 +1056,8 @@ self: super: {
       super.dhall-nix
   );
 
-  # https://github.com/well-typed/cborg/issues/174
-  cborg = doJailbreak super.cborg;
-  serialise = doJailbreak (dontCheck super.serialise);
-
   # https://github.com/haskell-hvr/netrc/pull/2#issuecomment-469526558
   netrc = doJailbreak super.netrc;
-
-  # https://github.com/phadej/tree-diff/issues/19
-  tree-diff = doJailbreak super.tree-diff;
 
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
@@ -1090,23 +1068,6 @@ self: super: {
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
   # haddock-library_1_6_0 = doJailbreak (dontCheck super.haddock-library_1_6_0);
-
-  # haskell-names-0.9.4: Break out of “tasty >=0.12 && <1.2”
-  haskell-names = doJailbreak super.haskell-names;
-
-  # hdocs-0.5.3.1: Break out of “haddock-api ==2.21.*”
-  # cannot use doJailbreak due to https://github.com/peti/jailbreak-cabal/issues/7
-  hdocs = overrideCabal super.hdocs (drv: {
-    postPatch = ''
-      sed -i 's#haddock-api == 2\.21\.\*,#haddock-api == 2.22.*,#' hdocs.cabal
-    '';
-  });
-
-  # Break out of tasty >=0.10 && <1.2.
-  aeson-compat = doJailbreak super.aeson-compat;
-
-  # Break out of pretty-show >=1.6 && <1.9
-  hedgehog = doJailbreak super.hedgehog;
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1148,22 +1109,6 @@ self: super: {
   # Generate shell completions
   purescript = generateOptparseApplicativeCompletion "purs" super.purescript;
 
-  # https://github.com/adinapoli/mandrill/pull/52
-  mandrill = appendPatch super.mandrill (pkgs.fetchpatch {
-    url = https://github.com/adinapoli/mandrill/commit/30356d9dfc025a5f35a156b17685241fc3882c55.patch;
-    sha256 = "1qair09xs6vln3vsjz7sy4hhv037146zak4mq3iv6kdhmp606hqv";
-  });
-
-  # https://github.com/Euterpea/Euterpea2/pull/22
-  Euterpea = overrideSrc super.Euterpea {
-    src = pkgs.fetchFromGitHub {
-      owner = "Euterpea";
-      repo = "Euterpea2";
-      rev = "6f49b790adfb8b65d95a758116c20098fb0cd34c";
-      sha256 = "0qz1svb96n42nmig16vyphwxas34hypgayvwc91ri7w7xd6yi1ba";
-    };
-  };
-
   # https://github.com/kcsongor/generic-lens/pull/65
   generic-lens = dontCheck super.generic-lens;
 
@@ -1188,7 +1133,6 @@ self: super: {
 
   # Jailbreak tasty < 1.2: https://github.com/phadej/tdigest/issues/30
   tdigest = doJailbreak super.tdigest; # until tdigest > 0.2.1
-  these = doJailbreak super.these; # until these >= 0.7.6
 
   uri-bytestring = appendPatch super.uri-bytestring (pkgs.fetchpatch {
     url = "https://github.com/Soostone/uri-bytestring/commit/e5c5602a97160a6a6304a24947e33e47c9155460.patch";
@@ -1198,13 +1142,6 @@ self: super: {
   # Requires pg_ctl command during tests
   beam-postgres = overrideCabal super.beam-postgres (drv: {
     testToolDepends = (drv.testToolDepends or []) ++ [pkgs.postgresql];
-    });
-
-  # https://github.com/sighingnow/computations/pull/1
-  primesieve = appendPatch super.primesieve (pkgs.fetchpatch {
-    url = "https://github.com/sighingnow/computations/commit/1f96788367c879b999afe733e2fe28d919d17702.patch";
-    sha256 = "0lrcmcrxp9imj9rfaq7mb0fn9mxms4gq4sz95n4san3dpd0qmj9x";
-    stripLen = 1;
     });
 
   # Fix for base >= 4.11
@@ -1241,9 +1178,6 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
-  # Break out of pandoc >=2.0 && <2.7 (https://github.com/pbrisbin/yesod-markdown/pull/65)
-  yesod-markdown = doJailbreak super.yesod-markdown;
-
   # These packages needs network 3.x, which is not in LTS-13.x.
   network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
   lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
@@ -1265,15 +1199,12 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_25_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_25_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;
-
-  # https://github.com/hslua/tasty-lua/issues/1
-  tasty-lua = dontCheck super.tasty-lua;
 
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
@@ -1282,7 +1213,7 @@ self: super: {
   hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_0_20190723; };
 
   # https://github.com/sol/hpack/issues/366
-  hpack = dontCheck super.hpack;
+  hpack = self.hpack_0_32_0;
 
   amazonka-core = doJailbreak super.amazonka-core;
   amazonka = doJailbreak super.amazonka;
@@ -1292,5 +1223,17 @@ self: super: {
 
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
+
+  # The test suite needs the packages's executables in $PATH to succeed.
+  arbtt = overrideCabal super.arbtt (drv: {
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+  });
+
+  # The LTS-14.x version of optparse-applicative is too old.
+  cabal-plan = super.cabal-plan.override { optparse-applicative = self.optparse-applicative_0_15_1_0; };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

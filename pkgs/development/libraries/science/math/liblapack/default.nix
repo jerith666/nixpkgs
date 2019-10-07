@@ -11,7 +11,7 @@ let
   version = "3.8.0";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liblapack";
   inherit version;
   src = fetchurl {
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python2 ];
 
   cmakeFlags = [
-    "-DUSE_OPTIMIZED_BLAS=ON"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
+    "-DLAPACKE=ON"
   ]
   ++ (optional shared "-DBUILD_SHARED_LIBS=ON");
 

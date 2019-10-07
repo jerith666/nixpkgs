@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python, zip
+{ lib, stdenv, fetchurl, pkgconfig, gtk2, pango, perl, python2, python3, nodejs
 , libIDL, libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
 , freetype, fontconfig, file, nspr, nss, libnotify
-, yasm, libGLU_combined, sqlite, unzip
-, hunspell, libevent, libstartup_notification
+, yasm, libGLU_combined, sqlite, zip, unzip
+, libevent, libstartup_notification
 , icu, libpng, jemalloc
-, autoconf213, which, m4
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl, runtimeShell
-, cargo, rustc, llvmPackages
+, autoconf213, which, m4, fetchpatch
+, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, runtimeShell
+, cargo, rustc, rust-cbindgen, llvmPackages, nasm
 , libpulseaudio
 , enableGTK3 ? false, gtk3, gnome3, wrapGAppsHook, makeWrapper
 , enableCalendar ? true
@@ -21,11 +22,11 @@ let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "60.8.0";
+  version = "68.1.0";
 
   src = fetchurl {
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    sha512 = "1cd1ps4r70bnxn9kydljsp776dazfzfsghc5zwp1xz6p3cwb9g0gybj677sac7y3ma2wsq1xbqk20q35n7gjz3k1zzhmpxyii558rdl";
+    sha512 = "06036nawpm987q33567nhz55qybbcl55h5rdhjbhck5qmyj1qi383xqac5niwyk7c0gaq4ygwc5a24pysf85crjdway2zmqyjxp2apb";
   };
 
   # from firefox, but without sound libraries
@@ -36,27 +37,26 @@ in stdenv.mkDerivation rec {
       nspr nss libnotify xorg.pixman yasm libGLU_combined
       xorg.libXScrnSaver xorg.xorgproto
       xorg.libXext sqlite unzip
-      hunspell libevent libstartup_notification /* cairo */
-      icu libpng jemalloc
+      libevent libstartup_notification /* cairo */
+      icu libpng jemalloc nasm
       libpulseaudio
     ]
     ++ lib.optionals enableGTK3 [ gtk3 gnome3.adwaita-icon-theme ];
 
   # from firefox + m4 + wrapperTool
-  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python wrapperTool cargo rustc ];
+  # llvm is for llvm-objdump
+  nativeBuildInputs = [ m4 autoconf213 which gnused pkgconfig perl python2 python3 nodejs wrapperTool cargo rustc rust-cbindgen llvmPackages.llvm ];
 
   patches = [
     # Remove buildconfig.html to prevent a dependency on clang etc.
     ./no-buildconfig.patch
-
-    # Needed on older branches since rustc: 1.32.0 -> 1.33.0
-    (fetchurl {
-      name = "missing-documentation.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
-          + "?h=firefox-esr&id=03bdd01f9cf";
-      sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
-    })
-  ];
+  ]
+  ++ lib.optional (lib.versionOlder version "69")
+    (fetchpatch { # https://bugzilla.mozilla.org/show_bug.cgi?id=1500436#c29
+      name = "write_error-parallel_make.diff";
+      url = "https://hg.mozilla.org/mozilla-central/raw-diff/562655fe/python/mozbuild/mozbuild/action/node.py";
+      sha256 = "11d7rgzinb4mwl7yzhidjkajynmxgmffr4l9isgskfapyax9p88y";
+    });
 
   configureFlags = [
     "--enable-application=comm/mail"
@@ -70,7 +70,6 @@ in stdenv.mkDerivation rec {
       "--with-system-icu"
       #"--enable-rust-simd" # not supported since rustc 1.32.0 -> 1.33.0; TODO: probably OK since 68.0.0
       "--enable-system-ffi"
-      "--enable-system-hunspell"
       "--enable-system-pixman"
       "--enable-system-sqlite"
     # "--enable-system-cairo"
@@ -107,6 +106,9 @@ in stdenv.mkDerivation rec {
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
+
+      # AS=as in the environment causes build failure https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
+      unset AS
     '';
 
   dontWrapGApps = true; # we do it ourselves
@@ -127,6 +129,8 @@ in stdenv.mkDerivation rec {
       gappsWrapperArgs+=(
         --argv0 "$target"
         --set MOZ_APP_LAUNCHER thunderbird
+        # https://github.com/NixOS/nixpkgs/pull/61980
+        --set SNAP_NAME "thunderbird"
       )
       ${
         # We wrap manually because wrapGAppsHook does not detect the symlink
