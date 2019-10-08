@@ -223,7 +223,15 @@ in {
       statePath = mkOption {
         type = types.str;
         default = "/var/gitlab/state";
-        description = "Gitlab state directory, logs are stored here.";
+        description = ''
+          Gitlab state directory. Configuration, repositories and
+          logs, among other things, are stored here.
+
+          The directory will be created automatically if it doesn't
+          exist already. Its parent directories must be owned by
+          either <literal>root</literal> or the user set in
+          <option>services.gitlab.user</option>.
+        '';
       };
 
       backupPath = mkOption {
@@ -673,6 +681,10 @@ in {
         openssh
         nodejs
         gnupg
+
+        # Needed for GitLab project imports
+        gnutar
+        gzip
       ];
       serviceConfig = {
         Type = "simple";

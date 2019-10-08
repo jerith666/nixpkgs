@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jormungandr";
-  version = "0.3.9999";
+  version = "0.5.5";
 
   src = fetchgit {
     url = "https://github.com/input-output-hk/${pname}";
     rev = "v${version}";
-    sha256 = "11lr533fpispwbk4vsq9bnv40gkpybvpa7ajwczv9ky6afh8np5b";
+    sha256 = "1fzhmkx60b5fnx4x81g5ls93iixd3126m4q1smrpq8ksidw5xifa";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0b5phmvwv5cyjawlxd9rmlc403lxzm4gnw0mclq70g5g0msqzd9m";
+  cargoSha256 = "1hkbzxp6ic1655cq45zv6dcyrk9rbmvscdl8wm8fbidabz4x8vqd";
 
   nativeBuildInputs = [ pkgconfig protobuf ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage rec {
     install -d $out/bin $out/templates
     install -m755 target/*/release/jormungandr $out/bin/
     install -m755 target/*/release/jcli $out/bin/
+    install -m755 target/*/release/jormungandr-scenario-tests	$out/bin/
     install -m755 scripts/send-transaction $out/templates
     install -m755 scripts/jcli-helpers $out/bin/
     install -m755 scripts/bootstrap $out/bin/jormungandr-bootstrap
