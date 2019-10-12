@@ -73,6 +73,7 @@ self: super: {
   optparse-applicative = self.optparse-applicative_0_15_1_0;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
+  regex-compat = super.regex-compat_0_95_2_0;
   regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
   regex-posix = self.regex-posix_0_96_0_0;
   regex-tdfa = self.regex-tdfa_1_3_0;
