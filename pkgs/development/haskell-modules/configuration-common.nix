@@ -1207,6 +1207,9 @@ self: super: {
   amazonka-core = doJailbreak super.amazonka-core;
   amazonka = doJailbreak super.amazonka;
 
+  # base <4.13, regex-base ==0.93.*, regex-posix >=0.95.1 && <0.96
+  regex-compat = doJailbreak super.regex-compat;
+
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
 
