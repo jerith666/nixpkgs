@@ -418,7 +418,7 @@ in {
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
 
   bap = callPackage ../development/python-modules/bap {
-    bap = pkgs.ocamlPackages.bap;
+    bap = pkgs.ocaml-ng.ocamlPackages_4_06.bap;
   };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -6035,6 +6035,8 @@ in {
   yanc = callPackage ../development/python-modules/yanc { };
 
   yarl = callPackage ../development/python-modules/yarl { };
+
+  solo-python = disabledIf (! pythonAtLeast "3.6") (callPackage ../development/python-modules/solo-python { });
 
   suseapi = callPackage ../development/python-modules/suseapi { };
 
