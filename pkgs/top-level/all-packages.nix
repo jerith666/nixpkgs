@@ -4690,6 +4690,8 @@ in
 
   ltris = callPackage ../games/ltris { };
 
+  lv = callPackage ../tools/text/lv { };
+
   lxc = callPackage ../os-specific/linux/lxc { };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
   lxd = callPackage ../tools/admin/lxd { };
@@ -10531,6 +10533,8 @@ in
 
   niv = haskellPackages.niv.bin;
 
+  ormolu = haskellPackages.ormolu.bin;
+
   capnproto = callPackage ../development/libraries/capnproto { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
@@ -15176,6 +15180,7 @@ in
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
+  prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
@@ -15392,6 +15397,8 @@ in
   shaarli = callPackage ../servers/web-apps/shaarli { };
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
+
+  shiori = callPackage ../servers/web-apps/shiori { };
 
   matomo = callPackage ../servers/web-apps/matomo { };
 
@@ -18229,6 +18236,8 @@ in
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
+  envelope = callPackage ../applications/office/envelope { };
+
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
   epdfview = callPackage ../applications/misc/epdfview { };
@@ -20684,6 +20693,10 @@ in
   spideroak = callPackage ../applications/networking/spideroak { };
 
   split2flac = callPackage ../applications/audio/split2flac { };
+
+  spotify-tui = callPackage ../applications/audio/spotify-tui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
