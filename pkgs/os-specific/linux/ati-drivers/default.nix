@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
                  ./patches/4.12-npfeiler-PUD_OFFSET.patch
                  ./patches/4.13-npfeiler-wait_queue_t.patch
                  ./patches/4.14-npfeiler-task_struct-mm_segment_t.patch
-                 ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch ];
+                 ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch
+                 ./patches/4.17-manjaro.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
