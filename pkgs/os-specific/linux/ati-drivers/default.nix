@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, kernel ? null, which
+{ stdenv, lib, fetchurl, fetchpatch, kernel ? null, which
 , xorg, makeWrapper, glibc, patchelf, unzip
 , fontconfig, freetype, libGLU_combined # for fgl_glxgears
 , # Whether to build the libraries only (i.e. not the kernel module or
@@ -75,15 +75,19 @@ stdenv.mkDerivation rec {
     ./patches/15.9-preempt.patch
     ./patches/15.9-sep_printf.patch ]
   ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.6") )
+                 (lib.versionAtLeast kernel.version "4.14") )
                [ ./patches/kernel-4.6-get_user_pages.patch
-                 ./patches/kernel-4.6-page_cache_release-put_page.patch ]
-  ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.7") )
-               [ ./patches/4.7-arch-cpu_has_pge-v2.patch ]
-  ++ optionals ( kernel != null &&
-                 (lib.versionAtLeast kernel.version "4.9") )
-               [ ./patches/4.9-get_user_pages.patch ];
+                 ./patches/kernel-4.6-page_cache_release-put_page.patch
+                 ./patches/4.7-arch-cpu_has_pge-v2.patch
+                 ./patches/4.9-get_user_pages.patch
+                 # ./patches/4.10-arch-sling00-virtual_address-acpi_get_table_with_size.patch
+                 ./patches/4.11-npfeiler-signal_vmf.patch
+                 ./patches/4.12-arch-remove_clts.patch
+                 ./patches/4.12-npfeiler-movsl_mask.patch
+                 ./patches/4.12-npfeiler-PUD_OFFSET.patch
+                 ./patches/4.13-npfeiler-wait_queue_t.patch
+                 ./patches/4.14-npfeiler-task_struct-mm_segment_t.patch
+                 ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM

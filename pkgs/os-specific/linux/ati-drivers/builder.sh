@@ -10,6 +10,7 @@ run_file=fglrx-$build/amd-driver-installer-$build-x86.x86_64.run
 sh $run_file --extract .
 
 for patch in $patches;do
+    echo "applying patch: $patch";
     patch -p1 < $patch
 done
 
