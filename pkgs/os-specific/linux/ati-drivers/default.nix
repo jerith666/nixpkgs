@@ -68,28 +68,26 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "format" ];
 
   patchPhaseSamples = "patch -p2 < ${./patches/patch-samples.patch}";
-  patches = [ ./patches/makefile_compat.patch
-              ./patches/lano1106_fglrx_intel_iommu.patch
-              ./patches/lano1106_kcl_agp_13_4.patch
-              ./patches/4.2-amd-from_crimson_15.11.patch
-              ./patches/4.3-kolasa-seq_printf.patch
-              ./patches/4.3-gentoo-mtrr.patch
-              ./patches/fglrx_gpl_symbol.patch
-              ./patches/crimson_i686_xg.patch
-              ./patches/4.4-manjaro-xstate.patch
-              ./patches/grsec_arch.patch
-              ./patches/4.6-arch-get_user_pages-page_cache_release.patch
-              ./patches/makesh-dont-check-gcc-version.patch
-              ./patches/4.7-arch-cpu_has_pge-v2.patch
-              ./patches/4.9_over_4.6-arch-get_user_pages_remote.patch
-              ./patches/4.10-arch-sling00-virtual_address-acpi_get_table_with_size.patch
-              ./patches/4.11-npfeiler-signal_vmf.patch
-              ./patches/4.12-npfeiler-PUD_OFFSET.patch
-              ./patches/4.12-arch-remove_clts.patch
-              ./patches/4.12-npfeiler-movsl_mask.patch
-              ./patches/4.13-npfeiler-wait_queue_t.patch
-              ./patches/4.14-npfeiler-task_struct-mm_segment_t.patch
-              ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch ];
+  patches = [
+    ./patches/15.12-xstate-fp.patch
+    ./patches/15.9-kcl_str.patch
+    ./patches/15.9-mtrr.patch
+    ./patches/15.9-preempt.patch
+    ./patches/15.9-sep_printf.patch ]
+  ++ optionals ( kernel != null &&
+                 (lib.versionAtLeast kernel.version "4.14") )
+               [ ./patches/kernel-4.6-get_user_pages.patch
+                 ./patches/kernel-4.6-page_cache_release-put_page.patch
+                 ./patches/4.7-arch-cpu_has_pge-v2.patch
+                 ./patches/4.9-get_user_pages.patch
+                 # ./patches/4.10-arch-sling00-virtual_address-acpi_get_table_with_size.patch
+                 ./patches/4.11-npfeiler-signal_vmf.patch
+                 ./patches/4.12-arch-remove_clts.patch
+                 ./patches/4.12-npfeiler-movsl_mask.patch
+                 ./patches/4.12-npfeiler-PUD_OFFSET.patch
+                 ./patches/4.13-npfeiler-wait_queue_t.patch
+                 ./patches/4.14-npfeiler-task_struct-mm_segment_t.patch
+                 ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
