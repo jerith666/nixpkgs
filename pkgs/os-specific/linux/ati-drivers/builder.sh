@@ -231,7 +231,7 @@ fi
     libaticaldd.so \
     xorg/modules/linux/libfglrxdrm.so
   do
-    patchelf --set-rpath $glibcDir/lib/:$libStdCxx/lib/ $out/lib/$pelib2
+    patchelf --set-rpath $glibcDir/lib/:$libStdCxx/lib/:$out/lib/ $out/lib/$pelib2
   done
 }
 
