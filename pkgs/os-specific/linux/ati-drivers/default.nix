@@ -76,11 +76,13 @@ stdenv.mkDerivation rec {
     ./patches/15.9-sep_printf.patch ]
   ++ optionals ( kernel != null &&
                  (lib.versionAtLeast kernel.version "4.14") )
-               [ ./patches/kernel-4.6-get_user_pages.patch
-                 ./patches/kernel-4.6-page_cache_release-put_page.patch
+               [ ./patches/4.6-arch-get_user_pages-page_cache_release.patch
+                 # ./patches/kernel-4.6-get_user_pages.patch
+                 # ./patches/kernel-4.6-page_cache_release-put_page.patch
                  ./patches/4.7-arch-cpu_has_pge-v2.patch
-                 ./patches/4.9-get_user_pages.patch
-                 # ./patches/4.10-arch-sling00-virtual_address-acpi_get_table_with_size.patch
+                 # ./patches/4.9-get_user_pages.patch
+                 ./patches/4.9_over_4.6-arch-get_user_pages_remote.patch
+                 ./patches/4.10-arch-sling00-virtual_address-acpi_get_table_with_size.patch
                  ./patches/4.11-npfeiler-signal_vmf.patch
                  ./patches/4.12-arch-remove_clts.patch
                  ./patches/4.12-npfeiler-movsl_mask.patch
