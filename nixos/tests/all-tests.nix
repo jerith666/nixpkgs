@@ -39,7 +39,8 @@ in
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cassandra = handleTest ./cassandra.nix {};
-  ceph = handleTestOn ["x86_64-linux"] ./ceph.nix {};
+  ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
+  ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
   certmgr = handleTest ./certmgr.nix {};
   cfssl = handleTestOn ["x86_64-linux"] ./cfssl.nix {};
   chromium = (handleTestOn ["x86_64-linux"] ./chromium.nix {}).stable or {};
@@ -81,6 +82,7 @@ in
   env = handleTest ./env.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
+  fancontrol = handleTest ./fancontrol.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
   firewall = handleTest ./firewall.nix {};
@@ -93,6 +95,7 @@ in
   fsck = handleTest ./fsck.nix {};
   fwupd = handleTestOn ["x86_64-linux"] ./fwupd.nix {}; # libsmbios is unsupported on aarch64
   gdk-pixbuf = handleTest ./gdk-pixbuf.nix {};
+  gotify-server = handleTest ./gotify-server.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
@@ -157,6 +160,7 @@ in
   #logstash = handleTest ./logstash.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
+  matomo = handleTest ./matomo.nix {};
   matrix-synapse = handleTest ./matrix-synapse.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
   memcached = handleTest ./memcached.nix {};
@@ -201,12 +205,14 @@ in
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
   nzbget = handleTest ./nzbget.nix {};
+  openarena = handleTest ./openarena.nix {};
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
   # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
   #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
+  orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTest ./osquery.nix {};
   osrm-backend = handleTest ./osrm-backend.nix {};
@@ -275,6 +281,7 @@ in
   tor = handleTest ./tor.nix {};
   transmission = handleTest ./transmission.nix {};
   trezord = handleTest ./trezord.nix {};
+  trickster = handleTest ./trickster.nix {};
   udisks2 = handleTest ./udisks2.nix {};
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
@@ -291,5 +298,6 @@ in
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
+  yggdrasil = handleTest ./yggdrasil.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }

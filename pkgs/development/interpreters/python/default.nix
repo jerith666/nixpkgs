@@ -52,10 +52,10 @@ in {
     sourceVersion = {
       major = "2";
       minor = "7";
-      patch = "16";
+      patch = "17";
       suffix = "";
     };
-    sha256 = "1mqfcqp5y8r0bfyr7ppl74n0lig45p9mc4b8adlcpvj74rhfy8pj";
+    sha256 = "0hds28cg226m8j8sr394nm9yc4gxhvlv109w0avsf2mxrlrz0hsd";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -65,10 +65,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "5";
-      patch = "7";
+      patch = "9";
       suffix = "";
     };
-    sha256 = "1p67pnp2ca5przx2s45r8m55dcn6f5hsm0l4s1zp7mglkf4r4n18";
+    sha256 = "0jdh9pvx6m6lfz2liwvvhn7vks7qrysqgwn517fkpxb77b33fjn2";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -198,6 +198,11 @@ in {
     pythonVersion = "3.6";
     inherit passthruFun;
     ncurses = ncurses5;
+  };
+
+  graalpython37 = callPackage ./graalpython/default.nix {
+    self = pythonInterpreters.graalpython37;
+    inherit passthruFun;
   };
 
 })
