@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
+  separateDebugInfo = stdenv.isLinux;
+
   mesonFlags = [
     "-Dtests=false"
   ];
@@ -193,7 +195,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.gtk.org/;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ raskin vcunat lethalman ];
+    maintainers = with maintainers; [ raskin vcunat lethalman worldofpeace ];
     platforms = platforms.all;
   };
 }

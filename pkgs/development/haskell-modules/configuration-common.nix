@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1dawd7cxqgzv1irzgl9smzdw7b4v59k8xa5gbldkbww0ashyb8qv";
+      sha256 = "0gfb7r3pj2cdzbm2lbymlx27kgy2adnvlzpv4s3lmdfpyzgflf1y";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1050,7 +1050,7 @@ self: super: {
     generateOptparseApplicativeCompletion "dhall" (
       dontCheck super.dhall
   );
-  dhall_1_26_1 = dontCheck super.dhall_1_26_1;
+  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
 
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
@@ -1204,8 +1204,8 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_26_1; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_26_1; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_27_0; };
+  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_27_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1276,5 +1276,28 @@ self: super: {
       };
     });
   });
+
+  # upstream issue: https://github.com/vmchale/atspkg/issues/12
+  language-ats = dontCheck super.language-ats;
+
+  # polysemy-plugin requires polysemy >= 1.2.0.0
+  polysemy = self.polysemy_1_2_3_0;
+
+  # The polysemy-plugin tests failed because it couldn't find
+  # the polysemy-plugin package in the doctests:
+  # https://github.com/NixOS/nixpkgs/issues/71164
+  # I've addressed this with a PR upstream:
+  # https://github.com/polysemy-research/polysemy/pull/265
+  # the patch of which is applied here.
+  polysemy-plugin = appendPatch (addSetupDepend super.polysemy-plugin self.cabal-doctest) (pkgs.fetchpatch {
+    url = "https://github.com/polysemy-research/polysemy/pull/265.patch";
+    sha256 = "19237js70chq84w7vqgvj49n6bs9lp95k13ia3xzbr1r9yyrfkhq";
+    stripLen = 1;
+  });
+
+  polysemy-zoo = self.polysemy-zoo_0_6_0_1;
+
+  # https://github.com/Happstack/web-routes-th/pull/3
+  web-routes-th = doJailbreak super.web-routes-th;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

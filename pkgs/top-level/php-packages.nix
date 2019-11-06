@@ -217,9 +217,9 @@ let
 
   mongodb = buildPecl {
     pname = "mongodb";
-    version = "1.5.5";
+    version = "1.6.0";
 
-    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+    sha256 = "0bybfjs61v66bynajbd8dwjlwbz6p2gck49r3zqbxa3ja6d671l6";
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [
@@ -243,6 +243,15 @@ let
     postPatch = ''
       sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
     '';
+  };
+
+  pcov = buildPecl {
+    version = "1.0.6";
+    pname = "pcov";
+
+    sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
+
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
   };
 
   pcs = buildPecl {
@@ -392,12 +401,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.16";
+    version = "0.11.19";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0c2417kwkj3nf1zya1flw7g1mz0dwhh27hjs3wz04b0kgnv4syzs";
+      sha256 = "0b04d2x07vipx1850v3d2hga3s6ssv7g21x58dhcjrg35i1bvq71";
     };
 
     phases = [ "installPhase" ];

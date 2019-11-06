@@ -9,11 +9,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "126";
+  version = "127";
 
   src = fetchurl {
     url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "0jbmpxj3y1gnmd00pj9x3jrx0hnjlkrzvk1m9miswgfq0ac1ws3p";
+    sha256 = "029v3lbv281n7axl97khdh4m1p7b614p1fp838mm84v0wgz7q34i";
   };
 
   patches = [
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   #
   # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript wasm2wat zipnode
   # Also these libraries: python3-guestfs
-  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
+  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm pyxattr ] ++ [
       acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
       libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
