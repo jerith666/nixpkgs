@@ -560,6 +560,8 @@ in
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+
   airsonic = callPackage ../servers/misc/airsonic { };
 
   airspy = callPackage ../applications/radio/airspy { };
@@ -666,6 +668,8 @@ in
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
     gsl = gsl_1;
   };
+
+  async = callPackage ../development/tools/async {};
 
   atheme = callPackage ../servers/irc/atheme { };
 
@@ -853,6 +857,8 @@ in
   enchive = callPackage ../tools/security/enchive { };
 
   enpass = callPackage ../tools/security/enpass { };
+
+  essentia-extractor = callPackage ../tools/audio/essentia-extractor { };
 
   esh = callPackage ../tools/text/esh { };
 
@@ -1134,6 +1140,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
+
   bitbucket-cli = python2Packages.bitbucket-cli;
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
@@ -1245,6 +1253,8 @@ in
   btrbk = callPackage ../tools/backup/btrbk {
     asciidoc = asciidoc-full;
   };
+
+  buildpack = callPackage ../development/tools/buildpack { };
 
   buildtorrent = callPackage ../tools/misc/buildtorrent { };
 
@@ -1825,7 +1835,7 @@ in
 
   interlock = callPackage ../servers/interlock {};
 
-  jellyfin = callPackage ../servers/jellyfin { };
+  jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
@@ -2709,6 +2719,8 @@ in
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsproxy = callPackage ../tools/networking/dnsproxy { };
+
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
   dnsrecon = callPackage ../tools/security/dnsrecon { };
@@ -3037,6 +3049,8 @@ in
   };
 
   enscript = callPackage ../tools/text/enscript { };
+
+  ensemble-chorus = callPackage ../applications/audio/ensemble-chorus { };
 
   entr = callPackage ../tools/misc/entr { };
 
@@ -5890,6 +5904,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  quickjs = callPackage ../development/interpreters/quickjs { };
+
   quickserve = callPackage ../tools/networking/quickserve { };
 
   quicktun = callPackage ../tools/networking/quicktun { };
@@ -5945,7 +5961,7 @@ in
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
-  retext = callPackage ../applications/editors/retext { };
+  retext = libsForQt5.callPackage ../applications/editors/retext { };
 
   richgo = callPackage ../development/tools/richgo {  };
 
@@ -6343,6 +6359,8 @@ in
 
   smesh = callPackage ../development/libraries/smesh {};
 
+  smu = callPackage ../tools/text/smu { };
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
@@ -6419,6 +6437,8 @@ in
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
+
+  squashfs-tools-ng = callPackage ../tools/filesystems/squashfs-tools-ng { };
 
   squashfuse = callPackage ../tools/filesystems/squashfuse { };
 
@@ -6547,6 +6567,8 @@ in
 
   staruml = callPackage ../tools/misc/staruml { inherit (gnome2) GConf; libgcrypt = libgcrypt_1_5; };
 
+  stone-phaser = callPackage ../applications/audio/stone-phaser { };
+
   systrayhelper = callPackage ../tools/misc/systrayhelper {};
 
   Sylk = callPackage ../applications/networking/Sylk {};
@@ -6666,6 +6688,8 @@ in
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
   tinyemu = callPackage ../applications/virtualization/tinyemu { };
+
+  tinyfecvpn = callPackage ../tools/networking/tinyfecvpn {};
 
   tinyprog = callPackage ../development/tools/misc/tinyprog { };
 
@@ -7032,6 +7056,8 @@ in
 
   whois = callPackage ../tools/networking/whois { };
 
+  wifite2 = callPackage ../tools/networking/wifite2 { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
@@ -7223,6 +7249,8 @@ in
 
   waf = callPackage ../development/tools/build-managers/waf { python = python3; };
   wafHook = callPackage ../development/tools/build-managers/wafHook { };
+
+  wagyu = callPackage ../tools/misc/wagyu { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
 
@@ -8835,6 +8863,8 @@ in
 
   z88dk = callPackage ../development/compilers/z88dk { };
 
+  zulip = callPackage ../applications/networking/instant-messengers/zulip { };
+
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu = callPackage ../development/compilers/zulu { };
 
@@ -8886,9 +8916,9 @@ in
     lfe lfe_1_2;
 
   inherit (beam.packages.erlang)
-    rebar rebar3-open rebar3
-    hexRegistrySnapshot fetchHex beamPackages
-    hex2nix relxExe;
+    rebar rebar3
+    fetchHex beamPackages
+    relxExe;
 
   inherit (beam.packages.erlangR19) cuter;
 
@@ -10724,7 +10754,8 @@ in
   boost169 = callPackage ../development/libraries/boost/1.69.nix { };
   boost16x = boost167;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
-  boost17x = boost170;
+  boost171 = callPackage ../development/libraries/boost/1.71.nix { };
+  boost17x = boost171;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -10851,8 +10882,6 @@ in
   cointop = callPackage ../applications/misc/cointop { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
-
-  coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
 
@@ -13162,6 +13191,8 @@ in
     if stdenv.hostPlatform.useiOSPrebuilt
     then null
     else callPackage ../development/libraries/ncurses { };
+
+  ndi = callPackage ../development/libraries/ndi { };
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -17571,6 +17602,8 @@ in
 
   raleway = callPackage ../data/fonts/raleway { };
 
+  recursive = callPackage ../data/fonts/recursive { };
+
   rictydiminished-with-firacode = callPackage ../data/fonts/rictydiminished-with-firacode { };
 
   roboto = callPackage ../data/fonts/roboto { };
@@ -18000,6 +18033,8 @@ in
     inherit (pkgs.xorg) libX11 libXrender libXtst libXdamage
                         libXi libXext libXfixes libXcomposite;
   };
+
+  blugon = callPackage ../applications/misc/blugon { };
 
   bombono = callPackage ../applications/video/bombono {};
 
@@ -18793,7 +18828,7 @@ in
   wireshark-qt = wireshark;
 
   # The GTK UI is deprecated by upstream. You probably want the QT version.
-  wireshark-gtk = throw "Not supported anymore. Use wireshark-qt or wireshark-cli instead.";
+  wireshark-gtk = throw "wireshark-gtk is not supported anymore. Use wireshark-qt or wireshark-cli instead.";
   wireshark-cli = wireshark.override { withQt = false; };
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep {};
@@ -19020,7 +19055,7 @@ in
 
   moe =  callPackage ../applications/editors/moe { };
 
-  multibootusb = callPackage ../applications/misc/multibootusb {};
+  multibootusb = qt5.callPackage ../applications/misc/multibootusb {};
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -19034,6 +19069,8 @@ in
   rhvoice = callPackage ../applications/audio/rhvoice { };
 
   svox = callPackage ../applications/audio/svox { };
+
+  giada = callPackage ../applications/audio/giada {};
 
   gkrellm = callPackage ../applications/misc/gkrellm {
     inherit (darwin) IOKit;
@@ -19148,6 +19185,8 @@ in
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
+  gxmatcheq-lv2 = callPackage ../applications/audio/gxmatcheq-lv2 { };
+
   gxplugins-lv2 = callPackage ../applications/audio/gxplugins-lv2 { };
 
   hackrf = callPackage ../applications/radio/hackrf { };
@@ -19172,6 +19211,8 @@ in
   hexchat = callPackage ../applications/networking/irc/hexchat { };
 
   hexcurse = callPackage ../applications/editors/hexcurse { };
+
+  hexdino = callPackage ../applications/editors/hexdino { };
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
@@ -19608,6 +19649,8 @@ in
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
     go = buildPackages.go_1_12;
   };
+
+  kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
@@ -21013,6 +21056,8 @@ in
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
+
+  spike = callPackage ../applications/virtualization/spike { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
 
@@ -23312,8 +23357,8 @@ in
     topicons-plus = callPackage ../desktops/gnome-3/extensions/topicons-plus { };
     window-corner-preview = callPackage ../desktops/gnome-3/extensions/window-corner-preview { };
 
-    nohotcorner = throw "removed 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
-    mediaplayer = throw "deprecated 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
+    nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
+    mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
   };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
@@ -23337,11 +23382,11 @@ in
 
   plasma-applet-volumewin7mixer = libsForQt5.callPackage ../applications/misc/plasma-applet-volumewin7mixer { };
 
-  redshift = callPackage ../applications/misc/redshift {
+  inherit (callPackages ../applications/misc/redshift {
     inherit (python3Packages) python pygobject3 pyxdg wrapPython;
     inherit (darwin.apple_sdk.frameworks) CoreLocation ApplicationServices Foundation Cocoa;
     geoclue = geoclue2;
-  };
+  }) redshift redshift-wlr;
 
   redshift-plasma-applet = libsForQt5.callPackage ../applications/misc/redshift-plasma-applet { };
 
@@ -25552,5 +25597,7 @@ in
   keycard-cli = callPackage ../tools/security/keycard-cli {};
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
+
+  gortr = callPackage ../servers/gortr {};
 
 }
