@@ -10,6 +10,7 @@ run_file=fglrx-$build/amd-driver-installer-$build-x86.x86_64.run
 sh $run_file --extract .
 
 for patch in $patches;do
+    echo "applying patch: $patch";
     patch -p1 < $patch
 done
 
@@ -227,9 +228,10 @@ fi
     xorg/modules/glesx.so \
     dri/fglrx_dri.so \
     fglrx_dri.so \
-    libaticaldd.so
+    libaticaldd.so \
+    xorg/modules/linux/libfglrxdrm.so
   do
-    patchelf --set-rpath $glibcDir/lib/:$libStdCxx/lib/ $out/lib/$pelib2
+    patchelf --set-rpath $glibcDir/lib/:$libStdCxx/lib/:$out/lib/ $out/lib/$pelib2
   done
 }
 

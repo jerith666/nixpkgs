@@ -21,7 +21,7 @@ git worktree add -b update-$d $wt $current
 pushd $wt
 
 for commit in ${PRE_REVERT:-}; do
-    git revert $commit;
+    git revert --no-edit $commit;
 done
 
 for commit in ${PRE_CHERRY:-}; do
@@ -31,7 +31,7 @@ done
 git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nixos-unstable'";
 
 for commit in ${POST_REVERT:-}; do
-    git revert $commit;
+    git revert --no-edit $commit;
 done
 
 for commit in ${POST_CHERRY:-}; do
