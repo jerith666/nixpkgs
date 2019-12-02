@@ -63,8 +63,7 @@ in rec {
 
         #(all nixos.tests.containers)
         (all nixos.tests.containers-imperative)
-        (all nixos.tests.containers-ipv4)
-        (all nixos.tests.containers-ipv6)
+        (all nixos.tests.containers-ip)
         nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
@@ -136,7 +135,6 @@ in rec {
         (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
-        (all nixos.tests.xfce4-14)
 
         nixpkgs.tarball
         (all allSupportedNixpkgs.emacs)
