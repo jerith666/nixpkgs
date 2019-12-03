@@ -10,6 +10,7 @@
 , sysprof
 , desktop-file-utils
 , libcap_ng
+, egl-wayland
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +27,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dxwayland-path=${xwayland}/bin/Xwayland"
     "-Dinstalled_tests=false" # TODO: enable these
+    "-Dwayland_eglstream=true"
+    "-Degl_device=true"
   ];
 
   propagatedBuildInputs = [
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     gnome-desktop cairo pango cogl zenity libstartup_notification
     geocode-glib libinput libgudev libwacom
     libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire xwayland
+    libxkbcommon pipewire xwayland egl-wayland
     gnome-settings-daemon sysprof
   ];
 
@@ -65,6 +68,11 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;
+    })
+    # Fix build with libglvnd provided headers
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/a444a4c5f58ea516ad3cd9d6ddc0056c3ca9bc90.patch";
+      sha256 = "0imy2j8af9477jliwdq4jc40yw1cifsjjf196gnmwxr9rkj0hbrd";
     })
   ];
 

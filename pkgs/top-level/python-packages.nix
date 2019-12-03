@@ -18,7 +18,7 @@ let
   packages = ( self:
 
 let
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   callPackage = pkgs.newScope self;
 
@@ -100,7 +100,7 @@ let
 
 in {
 
-  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy33 isPy34 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
@@ -166,6 +166,8 @@ in {
   aioredis = callPackage ../development/python-modules/aioredis { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
+
+  ansiwrap =  callPackage ../development/python-modules/ansiwrap { };
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
@@ -251,10 +253,6 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
-  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
-
-  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
-
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
@@ -270,6 +268,8 @@ in {
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
+
+  azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
 
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
@@ -301,6 +301,10 @@ in {
 
   azure-mgmt-advisor = callPackage ../development/python-modules/azure-mgmt-advisor { };
 
+  azure-mgmt-apimanagement = callPackage ../development/python-modules/azure-mgmt-apimanagement { };
+
+  azure-mgmt-appconfiguration = callPackage ../development/python-modules/azure-mgmt-appconfiguration { };
+
   azure-mgmt-applicationinsights = callPackage ../development/python-modules/azure-mgmt-applicationinsights { };
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
@@ -310,6 +314,8 @@ in {
   azure-mgmt-batchai = callPackage ../development/python-modules/azure-mgmt-batchai { };
 
   azure-mgmt-billing = callPackage ../development/python-modules/azure-mgmt-billing { };
+
+  azure-mgmt-botservice = callPackage ../development/python-modules/azure-mgmt-botservice { };
 
   azure-mgmt-cdn = callPackage ../development/python-modules/azure-mgmt-cdn { };
 
@@ -322,6 +328,8 @@ in {
   azure-mgmt-consumption = callPackage ../development/python-modules/azure-mgmt-consumption { };
 
   azure-mgmt-containerinstance = callPackage ../development/python-modules/azure-mgmt-containerinstance { };
+
+  azure-mgmt-containerregistry = callPackage ../development/python-modules/azure-mgmt-containerregistry { };
 
   azure-mgmt-containerservice = callPackage ../development/python-modules/azure-mgmt-containerservice { };
 
@@ -341,6 +349,8 @@ in {
 
   azure-mgmt-devtestlabs = callPackage ../development/python-modules/azure-mgmt-devtestlabs { };
 
+  azure-mgmt-deploymentmanager = callPackage ../development/python-modules/azure-mgmt-deploymentmanager { };
+
   azure-mgmt-dns = callPackage ../development/python-modules/azure-mgmt-dns { };
 
   azure-mgmt-eventgrid = callPackage ../development/python-modules/azure-mgmt-eventgrid { };
@@ -348,6 +358,10 @@ in {
   azure-mgmt-eventhub = callPackage ../development/python-modules/azure-mgmt-eventhub { };
 
   azure-mgmt-hanaonazure = callPackage ../development/python-modules/azure-mgmt-hanaonazure { };
+
+  azure-mgmt-hdinsight = callPackage ../development/python-modules/azure-mgmt-hdinsight { };
+
+  azure-mgmt-imagebuilder = callPackage ../development/python-modules/azure-mgmt-imagebuilder { };
 
   azure-mgmt-iotcentral = callPackage ../development/python-modules/azure-mgmt-iotcentral { };
 
@@ -357,11 +371,15 @@ in {
 
   azure-mgmt-keyvault = callPackage ../development/python-modules/azure-mgmt-keyvault { };
 
+  azure-mgmt-kusto = callPackage ../development/python-modules/azure-mgmt-kusto { };
+
   azure-mgmt-loganalytics = callPackage ../development/python-modules/azure-mgmt-loganalytics { };
 
   azure-mgmt-logic = callPackage ../development/python-modules/azure-mgmt-logic { };
 
   azure-mgmt-machinelearningcompute = callPackage ../development/python-modules/azure-mgmt-machinelearningcompute { };
+
+  azure-mgmt-managedservices = callPackage ../development/python-modules/azure-mgmt-managedservices { };
 
   azure-mgmt-managementgroups = callPackage ../development/python-modules/azure-mgmt-managementgroups { };
 
@@ -377,6 +395,8 @@ in {
 
   azure-mgmt-msi = callPackage ../development/python-modules/azure-mgmt-msi { };
 
+  azure-mgmt-netapp = callPackage ../development/python-modules/azure-mgmt-netapp { };
+
   azure-mgmt-network = callPackage ../development/python-modules/azure-mgmt-network { };
 
   azure-mgmt-notificationhubs = callPackage ../development/python-modules/azure-mgmt-notificationhubs { };
@@ -384,6 +404,8 @@ in {
   azure-mgmt-policyinsights = callPackage ../development/python-modules/azure-mgmt-policyinsights { };
 
   azure-mgmt-powerbiembedded = callPackage ../development/python-modules/azure-mgmt-powerbiembedded { };
+
+  azure-mgmt-privatedns = callPackage ../development/python-modules/azure-mgmt-privatedns { };
 
   azure-mgmt-rdbms = callPackage ../development/python-modules/azure-mgmt-rdbms { };
 
@@ -403,6 +425,8 @@ in {
 
   azure-mgmt-search = callPackage ../development/python-modules/azure-mgmt-search { };
 
+  azure-mgmt-security = callPackage ../development/python-modules/azure-mgmt-security { };
+
   azure-mgmt-servicebus = callPackage ../development/python-modules/azure-mgmt-servicebus { };
 
   azure-mgmt-servicefabric = callPackage ../development/python-modules/azure-mgmt-servicefabric { };
@@ -411,6 +435,8 @@ in {
 
   azure-mgmt-sql = callPackage ../development/python-modules/azure-mgmt-sql { };
 
+  azure-mgmt-sqlvirtualmachine = callPackage ../development/python-modules/azure-mgmt-sqlvirtualmachine { };
+
   azure-mgmt-storage = callPackage ../development/python-modules/azure-mgmt-storage { };
 
   azure-mgmt-subscription = callPackage ../development/python-modules/azure-mgmt-subscription { };
@@ -418,6 +444,8 @@ in {
   azure-mgmt-trafficmanager = callPackage ../development/python-modules/azure-mgmt-trafficmanager { };
 
   azure-mgmt-web = callPackage ../development/python-modules/azure-mgmt-web { };
+
+  azure-multiapi-storage = callPackage ../development/python-modules/azure-multiapi-storage { };
 
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
@@ -461,13 +489,17 @@ in {
 
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
-  bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+  bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
 
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
   cachelib = callPackage ../development/python-modules/cachelib { };
 
   cachy = callPackage ../development/python-modules/cachy { };
+
+  cadquery = callPackage ../development/python-modules/cadquery { };
+
+  catalogue = callPackage ../development/python-modules/catalogue { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
 
@@ -770,6 +802,8 @@ in {
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
+  mnist = callPackage ../development/python-modules/mnist { };
+
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
   monty = callPackage ../development/python-modules/monty { };
@@ -843,6 +877,8 @@ in {
     });
 
   palettable = callPackage ../development/python-modules/palettable { };
+
+  papermill = callPackage ../development/python-modules/papermill { };
 
   parsley = callPackage ../development/python-modules/parsley { };
 
@@ -954,9 +990,15 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
-  pydocstyle = callPackage ../development/python-modules/pydocstyle { };
+  pydocstyle =
+    if isPy27 then
+      callPackage ../development/python-modules/pydocstyle/2.nix { }
+    else
+      callPackage ../development/python-modules/pydocstyle { };
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
+
+  pydrive = callPackage ../development/python-modules/pydrive { };
 
   pydy = callPackage ../development/python-modules/pydy { };
 
@@ -1007,11 +1049,6 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
-  pykde4 = callPackage ../development/python-modules/pykde4 {
-    inherit (self) pyqt4;
-    callPackage = pkgs.callPackage;
-  };
-
   pykdtree = callPackage ../development/python-modules/pykdtree {
     inherit (pkgs.llvmPackages) openmp;
   };
@@ -1060,6 +1097,8 @@ in {
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyschedule = callPackage ../development/python-modules/pyschedule { };
+
+  pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
 
   pyside = callPackage ../development/python-modules/pyside {
     inherit (pkgs) mesa;
@@ -1115,11 +1154,15 @@ in {
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
+  pytest-qt = callPackage ../development/python-modules/pytest-qt { };
+
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-tornado = callPackage ../development/python-modules/pytest-tornado { };
 
   pytest-xprocess = callPackage ../development/python-modules/pytest-xprocess { };
+
+  pytest-xvfb = callPackage ../development/python-modules/pytest-xvfb { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
 
@@ -1263,6 +1306,8 @@ in {
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
+  sshtunnel = callPackage ../development/python-modules/sshtunnel { };
+
   sslib = callPackage ../development/python-modules/sslib { };
 
   statistics = callPackage ../development/python-modules/statistics { };
@@ -1282,6 +1327,8 @@ in {
   };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
+  tesserocr = callPackage ../development/python-modules/tesserocr { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
@@ -2352,8 +2399,6 @@ in {
   # alias
   elasticsearchdsl = self.elasticsearch-dsl;
 
-  elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
-
   elementpath = callPackage ../development/python-modules/elementpath { };
 
   entrypoints = callPackage ../development/python-modules/entrypoints { };
@@ -3400,7 +3445,7 @@ in {
   google_api_python_client = let
     google_api_python_client = callPackage ../development/python-modules/google-api-python-client { };
   in if isPy3k then google_api_python_client else
-    # Python 2.7 support was deprecated but is still needed by weboob
+    # Python 2.7 support was deprecated but is still needed by weboob and duplicity
     google_api_python_client.overridePythonAttrs (old: rec {
       version = "1.7.6";
       src = old.src.override {
@@ -3680,7 +3725,10 @@ in {
 
   jupyterhub-ldapauthenticator = callPackage ../development/python-modules/jupyterhub-ldapauthenticator { };
 
-  keyring = callPackage ../development/python-modules/keyring { };
+  keyring = if isPy3k then
+    callPackage ../development/python-modules/keyring { }
+  else
+    callPackage ../development/python-modules/keyring/2.nix { };
 
   keyutils = callPackage ../development/python-modules/keyutils { inherit (pkgs) keyutils; };
 
@@ -4192,7 +4240,10 @@ in {
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
-  openpyxl = callPackage ../development/python-modules/openpyxl { };
+  openpyxl = if isPy3k then
+    callPackage ../development/python-modules/openpyxl { }
+  else
+    callPackage ../development/python-modules/openpyxl/2.nix { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
@@ -4443,7 +4494,7 @@ in {
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
-  
+
   prance = callPackage ../development/python-modules/prance { };
 
   prawcore = callPackage ../development/python-modules/prawcore { };
@@ -4515,6 +4566,8 @@ in {
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = callPackage ../development/python-modules/Babel { };
+
+  babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
   pybfd = callPackage ../development/python-modules/pybfd { };
 
@@ -4984,7 +5037,9 @@ in {
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
-  rpy2 = callPackage ../development/python-modules/rpy2 {};
+  rpy2 = if isPy3k
+    then callPackage ../development/python-modules/rpy2 { }
+    else callPackage ../development/python-modules/rpy2/2.nix { };
 
   rtslib = callPackage ../development/python-modules/rtslib {};
 
@@ -5206,7 +5261,15 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  textwrap3 =  callPackage ../development/python-modules/textwrap3 { };
+
+  tiledb = callPackage ../development/python-modules/tiledb {
+    inherit (pkgs) tiledb;
+  };
+
   tiros = callPackage ../development/python-modules/tiros { };
+
+  tinydb = callPackage ../development/python-modules/tinydb { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
 
@@ -5283,6 +5346,8 @@ in {
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
   vsts = callPackage ../development/python-modules/vsts { };
+
+  vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
 
   python-vlc = callPackage ../development/python-modules/python-vlc { };
 
@@ -5501,6 +5566,8 @@ in {
   secretstorage = if isPy3k
     then callPackage ../development/python-modules/secretstorage { }
     else callPackage ../development/python-modules/secretstorage/2.nix { };
+
+  secure = callPackage ../development/python-modules/secure { };
 
   semantic = callPackage ../development/python-modules/semantic { };
 
@@ -6188,6 +6255,8 @@ in {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
+  javaproperties = callPackage ../development/python-modules/javaproperties { };
+
   tempora= callPackage ../development/python-modules/tempora { };
 
   hypchat = callPackage ../development/python-modules/hypchat { };
@@ -6513,6 +6582,8 @@ in {
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  pony = callPackage ../development/python-modules/pony { };
 
 });
 
