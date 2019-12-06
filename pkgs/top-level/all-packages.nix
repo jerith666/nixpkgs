@@ -916,6 +916,8 @@ in
 
   glyr = callPackage ../tools/audio/glyr { };
 
+  hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
+
   httperf = callPackage ../tools/networking/httperf { };
 
   ili2c = callPackage ../tools/misc/ili2c { };
@@ -1313,6 +1315,7 @@ in
   });
 
   caddy = callPackage ../servers/caddy { };
+  caddy2 = callPackage ../servers/caddy/v2.nix { };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
@@ -2564,7 +2567,7 @@ in
 
   cron = callPackage ../tools/system/cron { };
 
-  cudaPackages = callPackages ../development/compilers/cudatoolkit { };
+  cudaPackages = recurseIntoAttrs (callPackage ../development/compilers/cudatoolkit {});
   inherit (cudaPackages)
     cudatoolkit_6
     cudatoolkit_6_5
@@ -5023,6 +5026,8 @@ in
 
   mt-st = callPackage ../tools/backup/mt-st {};
 
+  multitime = callPackage ../tools/misc/multitime { };
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
@@ -5781,6 +5786,8 @@ in
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
+  pmacct = callPackage ../tools/networking/pmacct { };
+
   polygraph = callPackage ../tools/networking/polygraph { };
 
   progress = callPackage ../tools/misc/progress { };
@@ -6441,6 +6448,8 @@ in
 
   ssldump = callPackage ../tools/networking/ssldump { };
 
+  sslsplit = callPackage ../tools/networking/sslsplit { };
+
   sstp = callPackage ../tools/networking/sstp {};
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
@@ -6895,6 +6904,8 @@ in
   usync = callPackage ../applications/misc/usync { };
 
   uwsgi = callPackage ../servers/uwsgi { };
+
+  v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
@@ -8726,9 +8737,7 @@ in
   shmig = callPackage ../development/tools/database/shmig { };
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
-  smlnj = if stdenv.isDarwin
-            then callPackage ../development/compilers/smlnj { }
-            else pkgsi686Linux.callPackage ../development/compilers/smlnj { };
+  smlnj = callPackage ../development/compilers/smlnj { };
 
   solc = callPackage ../development/compilers/solc { };
 
@@ -9087,6 +9096,10 @@ in
     php = php73;
   });
 
+  php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74;
+  });
+
   phpPackages-unit = php72Packages-unit;
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
@@ -9097,11 +9110,16 @@ in
     php = php73-unit;
   });
 
+  php74Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
+    php = php74-unit;
+  });
+
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   })
-    php72
-    php73;
+    php74
+    php73
+    php72;
 
   php-embed = php73-embed;
 
@@ -9111,6 +9129,11 @@ in
   };
 
   php73-embed = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+  };
+
+  php74-embed = php74.override {
     config.php.embed = true;
     config.php.apxs2 = false;
   };
@@ -9127,6 +9150,15 @@ in
   };
 
   php73-unit = php73.override {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+    config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
+    config.php.fpm = false;
+  };
+
+  php74-unit = php74.override {
     config.php.embed = true;
     config.php.apxs2 = false;
     config.php.systemd = false;
@@ -17805,6 +17837,8 @@ in
 
   airwave = callPackage ../applications/audio/airwave { };
 
+  akira-unstable = callPackage ../applications/graphics/akira { };
+
   alembic = callPackage ../development/libraries/alembic {};
 
   alchemy = callPackage ../applications/graphics/alchemy { };
@@ -19182,6 +19216,10 @@ in
 
   gv = callPackage ../applications/misc/gv { };
 
+  gvisor = callPackage ../applications/virtualization/gvisor { };
+
+  gvisor-containerd-shim = callPackage ../applications/virtualization/gvisor/containerd-shim.nix { };
+
   guvcview = callPackage ../os-specific/linux/guvcview { };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
@@ -19538,7 +19576,7 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = gcc6Stdenv;
-    boost = boost.override { enablePython = true; };
+    boost = boost155.override { enablePython = true; };
   };
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
@@ -22335,7 +22373,11 @@ in
   clightning = callPackage ../applications/blockchains/clightning.nix { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = true; };
-  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc.nix { boost = boost165; withGui = false; };
+  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc.nix {
+    boost = boost165;
+    mkDerivation = stdenv.mkDerivation;
+    withGui = false;
+  };
 
   bitcoin-unlimited  = libsForQt5.callPackage ../applications/blockchains/bitcoin-unlimited.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation ApplicationServices AppKit;
@@ -24546,8 +24588,9 @@ in
     kops_1_12
     kops_1_13
     kops_1_14
+    kops_1_15
     ;
-  kops = kops_1_14;
+  kops = kops_1_15;
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
@@ -24756,6 +24799,8 @@ in
   nix-index = callPackage ../tools/package-management/nix-index {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  nix-linter = haskellPackages.callPackage ../development/tools/analysis/nix-linter { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
