@@ -361,6 +361,8 @@ in
 
   fetchFromGitLab = callPackage ../build-support/fetchgitlab {};
 
+  fetchFromGitiles = callPackage ../build-support/fetchgitiles {};
+
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
@@ -1493,6 +1495,8 @@ in
   cri-tools = callPackage ../tools/virtualization/cri-tools {};
 
   crip = callPackage ../applications/audio/crip { };
+
+  crosvm = callPackage ../applications/virtualization/crosvm { };
 
   crunch = callPackage ../tools/security/crunch { };
 
@@ -25615,5 +25619,7 @@ in
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   gortr = callPackage ../servers/gortr {};
+
+  sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
 }
