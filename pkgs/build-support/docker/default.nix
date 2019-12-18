@@ -528,11 +528,9 @@ rec {
     created ? "1970-01-01T00:00:01Z",
     # Optional bash script to run on the files prior to fixturizing the layer.
     extraCommands ? "", uid ? 0, gid ? 0,
-    # Docker's lowest maximum layer limit is 42-layers for an old
-    # version of the AUFS graph driver. We pick 24 to ensure there is
-    # plenty of room for extension. I believe the actual maximum is
-    # 128.
-    maxLayers ? 24
+    # We pick 100 to ensure there is plenty of room for extension. I
+    # believe the actual maximum is 128.
+    maxLayers ? 100
   }:
     let
       baseName = baseNameOf name;
@@ -845,6 +843,9 @@ rec {
         echo "         be better to only have one layer that contains a nix store."
 
         export NIX_REMOTE=local?root=$PWD
+        # A user is required by nix
+        # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
+        export USER=nobody
         ${nix}/bin/nix-store --load-db < ${closureInfo {rootPaths = contentsList;}}/registration
 
         mkdir -p nix/var/nix/gcroots/docker/
