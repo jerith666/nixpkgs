@@ -1323,4 +1323,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
+  threadscope = doJailbreak super.threadscope;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
