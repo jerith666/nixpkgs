@@ -8425,7 +8425,10 @@ in
 
   graalvm8-ee = callPackage ../development/compilers/graalvm/enterprise-edition.nix { };
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
+    # https://github.com/OpenShot/libopenshot-audio/issues/33
+    stdenv = gcc8Stdenv;
+  };
 
   openspin = callPackage ../development/compilers/openspin { };
 
@@ -13851,9 +13854,24 @@ in
 
     libktorrent = callPackage ../development/libraries/libktorrent { };
 
-    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
+    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
+      # https://github.com/OpenShot/libopenshot-audio/issues/33
+      stdenv = gcc8Stdenv;
+      imagemagick = imagemagick.override {
+        stdenv = gcc8Stdenv;
+        libheif = libheif.override {
+          stdenv = gcc8Stdenv;
+        };
+        openexr = openexr.override {
+          stdenv = gcc8Stdenv;
+        };
+      };
+    };
 
-    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
+    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
+      # https://github.com/OpenShot/libopenshot-audio/issues/33
+      stdenv = gcc8Stdenv;
+    };
 
     libqglviewer = callPackage ../development/libraries/libqglviewer {
       inherit (darwin.apple_sdk.frameworks) AGL;
