@@ -12,11 +12,11 @@
 let
 
   name = "hplip-${version}";
-  version = "3.19.12";
+  version = "3.19.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0mdj0sqgfxjqa550adiw1gn4z9n6wcvn55slivgf0ndn5x89iwxp";
+    sha256 = "0vfnc6pg7wzs68qn5mlk3cyl969d8n55bydgydq2wzfikvpfvnpw";
   };
 
   plugin = fetchurl {
@@ -34,13 +34,12 @@ let
     x86_64-linux = "x86_64";
     armv6l-linux = "arm32";
     armv7l-linux = "arm32";
-    aarch64-linux = "aarch64";
   };
 
   hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
-  pluginArches = [ "x86_32" "x86_64" "arm32" "aarch64" ];
+  pluginArches = [ "x86_32" "x86_64" "arm32" ];
 
 in
 
@@ -65,7 +64,9 @@ python3Packages.buildPythonApplication {
     zlib
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ];
 
   pythonPath = with python3Packages; [
     dbus
@@ -225,7 +226,7 @@ python3Packages.buildPythonApplication {
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
     maintainers = with maintainers; [ ttuegel ];
   };
 }
