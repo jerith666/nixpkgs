@@ -202,6 +202,8 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
+  docker-slim = callPackage ../build-support/docker-slim { };
+
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
   docui = callPackage ../tools/misc/docui { };
@@ -2944,6 +2946,10 @@ in
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
+
+  rage = callPackage ../tools/security/rage {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   s-tar = callPackage ../tools/archivers/s-tar {};
 
@@ -6926,6 +6932,10 @@ in
   u9fs = callPackage ../servers/u9fs { };
 
   ua = callPackage ../tools/networking/ua { };
+
+  uberwriter = callPackage ../applications/editors/uberwriter {
+    pythonPackages = python3Packages;
+  };
 
   ubridge = callPackage ../tools/networking/ubridge { };
 
@@ -14358,6 +14368,8 @@ in
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
+
+  svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
   swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
 
@@ -22068,7 +22080,8 @@ in
     pythonPackages = python3Packages;
   };
 
-  way-cooler = callPackage ../applications/window-managers/way-cooler {};
+  way-cooler = throw ("way-cooler is abandoned by its author: " +
+    "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html");
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
