@@ -224,6 +224,8 @@ in {
     inherit (pkgs) augeas;
   };
 
+  authheaders = callPackage ../development/python-modules/authheaders { };
+
   authres = callPackage ../development/python-modules/authres { };
 
   autograd = callPackage ../development/python-modules/autograd { };
@@ -690,6 +692,8 @@ in {
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
 
+  getmac = callPackage ../development/python-modules/getmac { };
+
   gidgethub = callPackage ../development/python-modules/gidgethub { };
 
   gin-config = callPackage ../development/python-modules/gin-config { };
@@ -817,11 +821,11 @@ in {
 
   mail-parser = callPackage ../development/python-modules/mail-parser { };
 
-  mailman = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/core.nix { });
+  mailman = callPackage ../servers/mail/mailman { };
 
-  mailman-web = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/web.nix { });
+  mailman-web = callPackage ../servers/mail/mailman/web.nix { };
 
-  mailmanclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/mailmanclient { });
+  mailmanclient = callPackage ../development/python-modules/mailmanclient { };
 
   mailman-hyperkitty = callPackage ../development/python-modules/mailman-hyperkitty { };
 
@@ -2583,6 +2587,8 @@ in {
 
   fluent-logger = callPackage ../development/python-modules/fluent-logger {};
 
+  flux-led = callPackage ../development/python-modules/flux-led { };
+
   python-forecastio = callPackage ../development/python-modules/python-forecastio { };
 
   fpdf = callPackage ../development/python-modules/fpdf { };
@@ -3053,7 +3059,7 @@ in {
 
   sunpy = callPackage ../development/python-modules/sunpy { };
 
-  hyperkitty = disabledIf (!isPy3k) (callPackage ../servers/mail/mailman/hyperkitty.nix { });
+  hyperkitty = callPackage ../servers/mail/mailman/hyperkitty.nix { };
 
   robot-detection = callPackage ../development/python-modules/robot-detection {};
 

@@ -218,7 +218,15 @@ in
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
-  dotnet-sdk = dotnetCorePackages.sdk_2_2;
+  dotnet-sdk = dotnetCorePackages.sdk_2_1;
+
+  dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
+
+  dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
+
+  dotnet-netcore = dotnetCorePackages.netcore_2_1;
+
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -5700,6 +5708,8 @@ in
 
   peco = callPackage ../tools/text/peco { };
 
+  pg_checksums = callPackage ../development/tools/database/pg_checksums { };
+
   pg_flame = callPackage ../tools/misc/pg_flame { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
@@ -9786,9 +9796,9 @@ in
 
   buck = callPackage ../development/tools/build-managers/buck { };
 
-  buildkite-agent = buildkite-agent2;
-  buildkite-agent2 = callPackage ../development/tools/continuous-integration/buildkite-agent/2.x.nix { };
-  buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent/3.x.nix { };
+  buildkite-agent = buildkite-agent3;
+  buildkite-agent2 = throw "pkgs.buildkite-agent2 has been discontinued. Please use pkgs.buildkite-agent (v3.x)";
+  buildkite-agent3 = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
   libbpf = callPackage ../os-specific/linux/libbpf { };
 
@@ -14028,7 +14038,6 @@ in
   lilv = callPackage ../development/libraries/audio/lilv { };
 
   lv2 = callPackage ../development/libraries/audio/lv2 { };
-  lv2Unstable = callPackage ../development/libraries/audio/lv2/unstable.nix { };
 
   lvtk = callPackage ../development/libraries/audio/lvtk { };
 
@@ -17238,10 +17247,6 @@ in
 
   xf86_input_cmt = callPackage ../os-specific/linux/xf86-input-cmt { };
 
-  xf86_input_mtrack = callPackage ../os-specific/linux/xf86-input-mtrack { };
-
-  xf86_input_multitouch = callPackage ../os-specific/linux/xf86-input-multitouch { };
-
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested { };
@@ -18107,6 +18112,9 @@ in
   ao = libfive;
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
+
+  apngasm = callPackage ../applications/graphics/apngasm {};
+  apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix {};
 
   appeditor = callPackage ../applications/misc/appeditor { };
 
