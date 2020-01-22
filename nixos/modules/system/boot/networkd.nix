@@ -11,7 +11,7 @@ let
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
       "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name" "OriginalName"
-      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port"
+      "MTUBytes" "BitsPerSecond" "Duplex" "AutoNegotiation" "WakeOnLan" "Port" "Advertise"
       "TCPSegmentationOffload" "TCP6SegmentationOffload" "GenericSegmentationOffload"
       "GenericReceiveOffload" "LargeReceiveOffload" "RxChannels" "TxChannels"
       "OtherChannels" "CombinedChannels"
@@ -276,7 +276,7 @@ let
     (assertValueOneOf "ARP" boolValues)
     (assertValueOneOf "Multicast" boolValues)
     (assertValueOneOf "Unmanaged" boolValues)
-    (assertValueOneOf "RequiredForOnline" boolValues)
+    (assertValueOneOf "RequiredForOnline" (boolValues ++ ["off" "no-carrier" "dormant" "degraded-carrier" "carrier" "degraded" "enslaved" "routable"]))
   ];
 
 
@@ -872,10 +872,10 @@ let
         '';
     };
 
-  unitFiles = map (name: {
-    target = "systemd/network/${name}";
-    source = "${cfg.units.${name}.unit}/${name}";
-  }) (attrNames cfg.units);
+  unitFiles = listToAttrs (map (name: {
+    name = "systemd/network/${name}";
+    value.source = "${cfg.units.${name}.unit}/${name}";
+  }) (attrNames cfg.units));
 in
 
 {
@@ -938,7 +938,7 @@ in
 
     systemd.services.systemd-networkd = {
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = map (f: f.source) (unitFiles);
+      restartTriggers = attrNames unitFiles;
       # prevent race condition with interface renaming (#39069)
       requires = [ "systemd-udev-settle.service" ];
       after = [ "systemd-udev-settle.service" ];

@@ -7,6 +7,8 @@ d=$1
 
 wt=$2
 
+ulimit -s 100000;
+
 echo "computing store path for new system";
 echo;
 if nixos-rebuild dry-build -I nixpkgs=$wt 2>dryout >dryout; then

@@ -33,6 +33,7 @@ in
 
   imports = [
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
   ];
 
   config = mkMerge [
@@ -182,10 +183,7 @@ in
         "/share"
       ];
 
-      environment.etc = singleton {
-        source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+      environment.etc."X11/xkb".source = xcfg.xkbDir;
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
