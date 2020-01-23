@@ -5130,6 +5130,8 @@ in
 
   munt = libsForQt5.callPackage ../applications/audio/munt { };
 
+  mutagen = callPackage ../tools/misc/mutagen { };
+
   mycli = callPackage ../tools/admin/mycli { };
 
   mydumper = callPackage ../tools/backup/mydumper { };
@@ -6234,6 +6236,8 @@ in
   safeeyes = callPackage ../applications/misc/safeeyes { };
 
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
+
+  saldl = callPackage ../tools/networking/saldl { };
 
   salt = callPackage ../tools/admin/salt {};
 
@@ -7576,6 +7580,8 @@ in
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
+  
+  zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
@@ -8768,7 +8774,7 @@ in
 
   buildRustCrate = callPackage ../build-support/rust/build-rust-crate { };
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
-  buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { }).tests;
+  buildRustCrateTests = recurseIntoAttrs (callPackage ../build-support/rust/build-rust-crate/test { });
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
 
   cargo-web = callPackage ../development/tools/cargo-web {
@@ -17160,7 +17166,7 @@ in
     ubootBananaPi
     ubootBananaPim3
     ubootBananaPim64
-    ubootBeagleboneBlack
+    ubootAmx335xEVM
     ubootClearfog
     ubootGuruplug
     ubootJetsonTK1
@@ -23163,6 +23169,8 @@ in
   njam = callPackage ../games/njam { };
 
   newtonwars = callPackage ../games/newtonwars { };
+
+  nudoku = callPackage ../games/nudoku { };
 
   nxengine-evo = callPackage ../games/nxengine-evo { };
 

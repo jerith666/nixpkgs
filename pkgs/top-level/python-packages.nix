@@ -562,6 +562,8 @@ in {
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
+  denonavr = callPackage ../development/python-modules/denonavr { };
+
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   btchip = callPackage ../development/python-modules/btchip { };
@@ -947,6 +949,8 @@ in {
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyperf = callPackage ../development/python-modules/pyperf { };
 
@@ -2113,6 +2117,10 @@ in {
 
   cookies = callPackage ../development/python-modules/cookies { };
 
+  coreapi = callPackage ../development/python-modules/coreapi { };
+
+  coreschema = callPackage ../development/python-modules/coreschema { };
+
   coveralls = callPackage ../development/python-modules/coveralls { };
 
   coverage = callPackage ../development/python-modules/coverage { };
@@ -2440,6 +2448,16 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dash = callPackage ../development/python-modules/dash { };
+
+  dash-core-components = callPackage ../development/python-modules/dash-core-components { };
+
+  dash-html-components = callPackage ../development/python-modules/dash-html-components { };
+
+  dash-renderer = callPackage ../development/python-modules/dash-renderer { };
+
+  dash-table = callPackage ../development/python-modules/dash-table { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
@@ -2497,6 +2515,8 @@ in {
   dpkt = callPackage ../development/python-modules/dpkt {};
 
   urllib3 = callPackage ../development/python-modules/urllib3 {};
+
+  drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
   dropbox = callPackage ../development/python-modules/dropbox {};
 
@@ -2747,6 +2767,8 @@ in {
 
   itsdangerous = callPackage ../development/python-modules/itsdangerous { };
 
+  itypes = callPackage ../development/python-modules/itypes { };
+
   iniparse = callPackage ../development/python-modules/iniparse { };
 
   intreehooks = callPackage ../development/python-modules/intreehooks { };
@@ -2937,6 +2959,12 @@ in {
   plaster = callPackage ../development/python-modules/plaster {};
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
+
+  plexapi = callPackage ../development/python-modules/plexapi { };
+
+  plexauth = callPackage ../development/python-modules/plexauth { };
+
+  plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
 
   plotly = callPackage ../development/python-modules/plotly { };
 
@@ -3174,10 +3202,6 @@ in {
   django = self.django_1_11;
 
   django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
-    gdal = self.gdal;
-  };
-
-  django_2_1 = callPackage ../development/python-modules/django/2_1.nix {
     gdal = self.gdal;
   };
 
@@ -3465,6 +3489,8 @@ in {
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
+
+  flask-sockets = callPackage ../development/python-modules/flask-sockets { };
 
   flask_sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 

@@ -517,6 +517,12 @@
     githubId = 5327697;
     name = "Anatolii Prylutskyi";
   };
+  antoinerg = {
+    email = "roygobeil.antoine@gmail.com";
+    github = "antoinerg";
+    githubId = 301546;
+    name = "Antoine Roy-Gobeil";
+  };
   anton-dessiatov = {
     email = "anton.dessiatov@gmail.com";
     github = "anton-dessiatov";
@@ -1918,6 +1924,12 @@
       longkeyid = "rsa4096/0x1525585D1B43C62A";
       fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A";
     }];
+  };
+  dwarfmaster = {
+    email = "nixpkgs@dwarfmaster.net";
+    github = "dwarfmaster";
+    githubId = 2025623;
+    name = "Luc Chabassier";
   };
   dxf = {
     email = "dingxiangfei2009@gmail.com";
@@ -4168,12 +4180,6 @@
     email = "laure.tavard@univ-grenoble-alpes.fr";
     github = "ltavard";
     name = "Laure Tavard";
-  };
-  lucas8 = {
-    email = "luc.linux@mailoo.org";
-    github = "lucas8";
-    githubId = 2025623;
-    name = "Luc Chabassier";
   };
   lucus16 = {
     email = "lars.jellema@gmail.com";
@@ -7855,6 +7861,12 @@
     github = "zoomulator";
     githubId = 1069303;
     name = "Kim Simmons";
+  };
+  zowoq = {
+    email = "59103226+zowoq@users.noreply.github.com";
+    github = "zowoq";
+    githubId = 59103226;
+    name = "zowoq";
   };
   zraexy = {
     email = "zraexy@gmail.com";
