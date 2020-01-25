@@ -18,39 +18,35 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.3";
+  version = "1.9.7";
   # Note: Due to our strong dependency on the Arch patches it's probably best
   # to also wait for the Arch update (especially if the patches don't apply).
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1fx7v7j7iw4iywdbl89c5f1y74via61a0k20zrgjv5a0j4v6g76a";
+    sha256 = "1hj7bv11alc8cfffy0k3za4missdr44cdmia93xn77w012qjn8a4";
   };
 
   # Arch patches (svn export telegram-desktop/trunk)
   archPatches = fetchsvn {
     url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
     # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "549803";
-    sha256 = "1py2a25wgpvx0n4kz383fj0jav1qdm8wqx5bdaygg6296r294czj";
+    rev = "554983";
+    sha256 = "02gk5dlrmxvyl7w1yxmwclknk1k9drpx6rxqc6vmmw85l763m95j";
   };
 
   # Note: It would be best if someone could get as many patches upstream as
   # possible (we currently depend a lot on custom patches...).
   patches = [
-    "${archPatches}/0001-Dynamic-linking-system-libs.patch"
-    "${archPatches}/0002-Dynamic-linking-system-qt.patch"
-    "${archPatches}/0004-gtk3.patch"
     "${archPatches}/0005-Use-system-wide-fonts.patch"
-    "${archPatches}/0006-Revert-Disable-DemiBold-fallback-for-Semibold.patch"
   ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
       --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
-    substituteInPlace cmake/external/ranges/CMakeLists.txt \
-      --replace "/usr/include" "${range-v3}/include"
+    substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
+      --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -83,20 +79,38 @@ mkDerivation rec {
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   cmakeFlags = [
+    "-Ddisable_autoupdate=ON"
     #"-DTDESKTOP_API_TEST=ON" # TODO: Officiall API credentials for Nixpkgs
     "-DTDESKTOP_API_ID=17349" # See: https://github.com/NixOS/nixpkgs/issues/55271
     "-DTDESKTOP_API_HASH=344583e45741c457fe1862106095a5eb"
     "-DDESKTOP_APP_USE_GLIBC_WRAPS=OFF"
-    "-DDESKTOP_APP_USE_SYSTEM_LIBS=ON"
+    "-DDESKTOP_APP_USE_PACKAGED=ON"
+    "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
     "-DDESKTOP_APP_DISABLE_CRASH_REPORTS=ON"
-    "-Ddisable_autoupdate=ON"
     "-DTDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME=ON"
     "-DTDESKTOP_DISABLE_DESKTOP_FILE_GENERATION=ON"
+    "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
+    "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
 
+  # Note: The following packages could be packaged system-wide, but it's
+  # probably best to use the bundled ones from tdesktop (Arch does this too):
+  # rlottie:
+  # - CMake flag: "-DTDESKTOP_USE_PACKAGED_TGVOIP=ON"
+  # - Sources (problem: there are no stable releases!):
+  #   - desktop-app (tdesktop): https://github.com/desktop-app/rlottie
+  #   - upstream: https://github.com/Samsung/rlottie
+  # libtgvoip:
+  # - CMake flag: "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=ON"
+  # - Sources  (problem: the stable releases might be too old!):
+  #   - tdesktop: https://github.com/telegramdesktop/libtgvoip
+  #   - upstream: https://github.com/grishka/libtgvoip
+  # Both of these packages are included in this PR (kotatogram-desktop):
+  # https://github.com/NixOS/nixpkgs/pull/75210
+
   installPhase = ''
-    install -Dm755 bin/Telegram $out/bin/telegram-desktop
+    install -Dm755 bin/telegram-desktop $out/bin/telegram-desktop
 
     mkdir -p $out/share/{kservices5,applications,metainfo}
     sed "s,/usr/bin,$out/bin,g" "../lib/xdg/tg.protocol" > "$out/share/kservices5/tg.protocol"
@@ -115,7 +129,8 @@ mkDerivation rec {
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
       --prefix PATH : ${xdg_utils}/bin \
-      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
+      --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR" \
+      --unset QT_QPA_PLATFORMTHEME # From the Arch wrapper
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
