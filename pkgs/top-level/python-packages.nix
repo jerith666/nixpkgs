@@ -187,6 +187,8 @@ in {
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
+  aria2p = callPackage ../development/python-modules/aria2p { inherit (pkgs) aria2 poetry; };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -311,6 +313,8 @@ in {
   azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
 
   azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
+
+  azure-storage-file-share = callPackage ../development/python-modules/azure-storage-file-share { };
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
@@ -2253,6 +2257,8 @@ in {
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
   python-ly = callPackage ../development/python-modules/python-ly {};
+
+  pyhcl = callPackage ../development/python-modules/pyhcl { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
