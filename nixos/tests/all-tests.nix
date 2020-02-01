@@ -32,7 +32,6 @@ in
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
-  #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024
   buildkite-agent = handleTest ./buildkite-agent.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
@@ -94,6 +93,7 @@ in
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
+  freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   gitea = handleTest ./gitea.nix {};
@@ -293,6 +293,7 @@ in
   upnp = handleTest ./upnp.nix {};
   uwsgi = handleTest ./uwsgi.nix {};
   vault = handleTest ./vault.nix {};
+  victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
   wireguard = handleTest ./wireguard {};
   wireguard-generated = handleTest ./wireguard/generated.nix {};
