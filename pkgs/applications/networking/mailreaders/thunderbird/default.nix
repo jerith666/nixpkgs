@@ -60,12 +60,8 @@
 , waylandSupport ? true
 , libxkbcommon, calendarSupport ? true
 
-, # If you want the resulting program to call itself "Thunderbird" instead
-# of "Earlybird" or whatever, enable this option.  However, those
-# binaries may not be distributed without permission from the
-# Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
-enableOfficialBranding ? false
+, # see comment in ../../browsers/firefox/common.nix
+  enableOfficialBranding ? true
 }:
 
 assert waylandSupport -> gtk3Support == true;

@@ -7,14 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "cheetah";
-  version = "2.4.4";
-
-  disabled = isPy3k;
+  pname = "Cheetah3";
+  version = "3.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550";
+    sha256 = "0ar5dqjnqaw0c17mymd6xgd81jn9br9fblawr0x438v1571bkaya";
   };
 
   propagatedBuildInputs = [ markdown ];
