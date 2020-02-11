@@ -65,7 +65,7 @@ in
   couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
-  dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
+  dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   docker-containers = handleTestOn ["x86_64-linux"] ./docker-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
@@ -213,8 +213,7 @@ in
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
-  # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
-  #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
+  openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
@@ -249,6 +248,7 @@ in
   radicale = handleTest ./radicale.nix {};
   redis = handleTest ./redis.nix {};
   redmine = handleTest ./redmine.nix {};
+  restic = handleTest ./restic.nix {};
   roundcube = handleTest ./roundcube.nix {};
   rspamd = handleTest ./rspamd.nix {};
   rss2email = handleTest ./rss2email.nix {};
@@ -275,6 +275,7 @@ in
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
@@ -307,6 +308,7 @@ in
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  zfs = handleTest ./zfs.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }
