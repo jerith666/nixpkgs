@@ -166,6 +166,8 @@ in
 
   corgi = callPackage ../development/tools/corgi { };
 
+  colorz = callPackage ../tools/misc/colorz { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
@@ -2627,6 +2629,8 @@ in
 
   cocoapods-beta = lowPrio (callPackage ../development/mobile/cocoapods { beta = true; });
 
+  codebraid = callPackage ../tools/misc/codebraid { };
+
   compass = callPackage ../development/tools/compass { };
 
   conda = callPackage ../tools/package-management/conda { };
@@ -4267,6 +4271,8 @@ in
   ipcalc = callPackage ../tools/networking/ipcalc {};
 
   netmask = callPackage ../tools/networking/netmask {};
+
+  netifd = callPackage ../tools/networking/netifd {};
 
   ipscan = callPackage ../tools/security/ipscan { };
 
@@ -6712,6 +6718,8 @@ in
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
   svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
+
+  sycl-info = callPackage ../development/libraries/sycl-info { };
 
   symengine = callPackage ../development/libraries/symengine { };
 
@@ -11171,6 +11179,10 @@ in
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
 
+  ubus = callPackage ../development/libraries/ubus { };
+
+  uci = callPackage ../development/libraries/uci { };
+
   uri = callPackage ../development/libraries/uri { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
@@ -11265,6 +11277,8 @@ in
   };
 
   dlib = callPackage ../development/libraries/dlib { };
+
+  doctest = callPackage ../development/libraries/doctest { };
 
   docopt_cpp = callPackage ../development/libraries/docopt_cpp { };
 
@@ -13344,6 +13358,8 @@ in
   luksmeta = callPackage ../development/libraries/luksmeta {
     asciidoc = asciidoc-full;
   };
+
+  lyra = callPackage ../development/libraries/lyra { };
 
   lzo = callPackage ../development/libraries/lzo { };
 
@@ -18989,6 +19005,8 @@ in
   eterm = callPackage ../applications/misc/eterm { };
 
   eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
+
+  etesync-dav = callPackage ../applications/misc/etesync-dav {};
 
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
@@ -25273,6 +25291,8 @@ in
     nix-prefetch-hg
     nix-prefetch-svn
     nix-prefetch-scripts;
+
+  nix-query-tree-viewer = callPackage ../tools/nix/nix-query-tree-viewer { };
 
   nix-update-source = callPackage ../tools/package-management/nix-update-source {};
 
