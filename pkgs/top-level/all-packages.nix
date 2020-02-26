@@ -952,6 +952,8 @@ in
 
   ili2c = callPackage ../tools/misc/ili2c { };
 
+  imageworsener = callPackage ../tools/graphics/imageworsener { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
@@ -1968,6 +1970,10 @@ in
   meritous = callPackage ../games/meritous { };
 
   opendune = callPackage ../games/opendune { };
+
+  merriweather = callPackage ../data/fonts/merriweather { };
+
+  merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
@@ -3165,9 +3171,7 @@ in
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
-  ettercap = callPackage ../applications/networking/sniffers/ettercap {
-    openssl = openssl_1_0_2;
-  };
+  ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { };
 
@@ -7101,9 +7105,7 @@ in
 
   vbetool = callPackage ../tools/system/vbetool { };
 
-  vde2 = callPackage ../tools/networking/vde2 {
-    openssl = openssl_1_0_2;
-  };
+  vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference {};
 
@@ -7912,6 +7914,7 @@ in
   llvm-polly = llvmPackages_latest.llvm-polly;
   clang-polly = llvmPackages_latest.clang.override { cc = llvmPackages_latest.clang-polly-unwrapped; };
 
+  clang_10 = llvmPackages_10.clang;
   clang_9  = llvmPackages_9.clang;
   clang_8  = llvmPackages_8.clang;
   clang_7  = llvmPackages_7.clang;
@@ -8621,6 +8624,7 @@ in
   lld_7 = llvmPackages_7.lld;
   lld_8 = llvmPackages_8.lld;
   lld_9 = llvmPackages_9.lld;
+  lld_10 = llvmPackages_10.lld;
 
   lldb = llvmPackages.lldb;
   lldb_5 = llvmPackages_5.lldb;
@@ -8628,10 +8632,12 @@ in
   lldb_7 = llvmPackages_7.lldb;
   lldb_8 = llvmPackages_8.lldb;
   lldb_9 = llvmPackages_9.lldb;
+  lldb_10 = llvmPackages_10.lldb;
 
   llvm = llvmPackages.llvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
+  llvm_10 = llvmPackages_10.llvm;
   llvm_9  = llvmPackages_9.llvm;
   llvm_8  = llvmPackages_8.llvm;
   llvm_7  = llvmPackages_7.llvm;
@@ -8682,7 +8688,15 @@ in
     stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
   });
 
-  llvmPackages_latest = llvmPackages_9;
+  llvmPackages_10 = callPackage ../development/compilers/llvm/10 ({
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_10.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_10.libraries;
+  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
+    stdenv = gcc7Stdenv;
+  });
+
+  llvmPackages_latest = llvmPackages_9; # llvmPackages_10: when out of RC
 
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
@@ -9071,6 +9085,8 @@ in
     inherit bintools libc;
   } // extraArgs; in self);
 
+  yaml-language-server = nodePackages.yaml-language-server;
+
   # prolog
   yap = callPackage ../development/compilers/yap { };
 
@@ -9108,7 +9124,7 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  dhall = callPackage ../development/interpreters/dhall { };
+  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
@@ -9118,7 +9134,7 @@ in
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
-  dhallPackages = import ../development/dhall-modules { inherit pkgs; };
+  dhallPackages = callPackages ./dhall-packages.nix { };
 
   duktape = callPackage ../development/interpreters/duktape { };
 
@@ -12508,7 +12524,9 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
-  libfido2 = callPackage ../development/libraries/libfido2 { };
+  libfido2 = callPackage ../development/libraries/libfido2 {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
@@ -13530,9 +13548,7 @@ in
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.lib;
 
-  nix-plugins = callPackage ../development/libraries/nix-plugins {
-    nix = nixUnstable;
-  };
+  nix-plugins = callPackage ../development/libraries/nix-plugins {};
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
@@ -15740,6 +15756,8 @@ in
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
+  patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
+
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
   pgpool = callPackage ../servers/sql/pgpool {
@@ -17490,6 +17508,8 @@ in
   coreclr = callPackage ../development/compilers/coreclr { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
+
+  cozette = callPackage ../data/fonts/cozette { };
 
   culmus = callPackage ../data/fonts/culmus { };
 
@@ -21625,6 +21645,10 @@ in
 
   skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
+  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup {
+    inherit (pkgs.vamp) vampSDK;
+  };
+
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
   };
@@ -24053,6 +24077,8 @@ in
   neuron-full = neuron-mpi.override { inherit python; };
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
+
+  mrtrix = callPackage ../applications/science/biology/mrtrix { python = python3; };
 
   megahit = callPackage ../applications/science/biology/megahit { };
 
