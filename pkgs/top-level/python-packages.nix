@@ -1203,6 +1203,8 @@ in {
 
   simplefix = callPackage ../development/python-modules/simplefix { };
 
+  pyscrypt = callPackage ../development/python-modules/pyscrypt { };
+
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
     inherit (pkgs) cmake qt5;
   });
@@ -1769,6 +1771,8 @@ in {
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
   beaker = callPackage ../development/python-modules/beaker { };
+
+  bespon = callPackage ../development/python-modules/bespon { };
 
   betamax = callPackage ../development/python-modules/betamax {};
 
@@ -2643,6 +2647,8 @@ in {
 
   Fabric = callPackage ../development/python-modules/Fabric { };
 
+  fastdtw = callPackage ../development/python-modules/fastdtw { };
+
   faulthandler = if ! isPy3k
     then callPackage ../development/python-modules/faulthandler {}
     else throw "faulthandler is built into ${python.executable}";
@@ -2738,6 +2744,8 @@ in {
   google-music-utils = callPackage ../development/python-modules/google-music-utils { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
+
+  googletrans = callPackage ../development/python-modules/googletrans { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
@@ -3453,6 +3461,8 @@ in {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
+  etesync = callPackage ../development/python-modules/etesync { };
+
   eventlet = callPackage ../development/python-modules/eventlet { };
 
   exifread = callPackage ../development/python-modules/exifread { };
@@ -3808,6 +3818,10 @@ in {
   gphoto2 = callPackage ../development/python-modules/gphoto2 {
     inherit (pkgs) pkgconfig;
   };
+
+  graphql-core = callPackage ../development/python-modules/graphql-core { };
+
+  graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -4781,6 +4795,8 @@ in {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  promise = callPackage ../development/python-modules/promise { };
+
   prox-tv = callPackage ../development/python-modules/prox-tv {
     # We need to use blas instead of openblas on darwin,
     # see https://github.com/NixOS/nixpkgs/pull/45013.
@@ -5482,7 +5498,10 @@ in {
 
   scp = callPackage ../development/python-modules/scp {};
 
-  seaborn = callPackage ../development/python-modules/seaborn { };
+  seaborn = if isPy3k then
+    callPackage ../development/python-modules/seaborn { }
+  else
+    callPackage ../development/python-modules/seaborn/0.9.1.nix { };
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
@@ -6949,6 +6968,8 @@ in {
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };
 
   qiskit = callPackage ../development/python-modules/qiskit { };
+
+  qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
 

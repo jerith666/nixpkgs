@@ -1085,6 +1085,12 @@
     githubId = 7716744;
     name = "Berno Strik";
   };
+  brettlyons = {
+    email = "blyons@fastmail.com";
+    github = "brettlyons";
+    githubId = 3043718;
+    name = "Brett Lyons";
+  };
   btlvr = {
     email = "btlvr@protonmail.com";
     github = "btlvr";
@@ -6648,6 +6654,12 @@
     email = "jot.skrzyp@gmail.com";
     name = "Jakub Skrzypnik";
   };
+  skykanin = {
+    email = "skykanin@users.noreply.github.com";
+    github = "skykanin";
+    githubId = 3789764;
+    name = "skykanin";
+  };
   sleexyz = {
     email = "freshdried@gmail.com";
     github = "sleexyz";
@@ -6789,6 +6801,12 @@
     github = "severen";
     githubId = 4061736;
     name = "Severen Redwood";
+  };
+  sstef = {
+    email = "stephane@nix.frozenid.net";
+    github = "fkstef";
+    githubId = 8668915;
+    name = "Stephane Schitter";
   };
   steell = {
     email = "steve@steellworks.com";
@@ -7748,7 +7766,7 @@
     email = "worldofpeace@protonmail.ch";
     github = "worldofpeace";
     githubId = 28888242;
-    name = "Worldofpeace";
+    name = "worldofpeace";
   };
   wscott = {
     email = "wsc9tt@gmail.com";
@@ -8103,3 +8121,5 @@
     name = "Asad Saeeduddin";
   };
 }
+
+  
