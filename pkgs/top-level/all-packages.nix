@@ -4062,6 +4062,8 @@ in
   hexd = callPackage ../tools/misc/hexd { };
   pixd = callPackage ../tools/misc/pixd { };
 
+  hey = callPackage ../tools/networking/hey { };
+  
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
@@ -9281,23 +9283,19 @@ in
   };
 
   octave = callPackage ../development/interpreters/octave {
-    qt = null;
-    qscintilla = null;
-    ghostscript = null;
-    graphicsmagick = null;
-    llvm = null;
-    hdf5 = null;
-    glpk = null;
-    suitesparse = null;
-    jdk = null;
+    python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
-
-  octaveFull = (lowPrio (octave.override {
-    qt = qt4;
-    inherit qscintilla;
-    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
+  octave-jit = callPackage ../development/interpreters/octave {
+    python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
+    enableJIT = true;
+  };
+  octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
+    python = python3;
+    openblas = if stdenv.isDarwin then openblasCompat else openblas;
+    enableQt = true;
+    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
@@ -14481,7 +14479,13 @@ in
     withQt5 = false;
   };
 
-  sundials = callPackage ../development/libraries/sundials { };
+  sundials = callPackage ../development/libraries/sundials {
+    python = python3;
+  };
+
+  sundials_2 = callPackage ../development/libraries/sundials/2.x.nix {
+    python = python3;
+  };
 
   sutils = callPackage ../tools/misc/sutils { };
 
@@ -14510,7 +14514,7 @@ in
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
-    python = buildPackages.python2;
+    python = buildPackages.python3;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
@@ -15425,6 +15429,8 @@ in
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
 
   jetty = callPackage ../servers/http/jetty { };
+
+  keycloak = callPackage ../servers/keycloak { };
 
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver { };
@@ -18154,6 +18160,8 @@ in
 
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
+  vimix-gtk-themes = callPackage ../data/themes/vimix {};
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
@@ -18701,6 +18709,8 @@ in
   cvs = callPackage ../applications/version-management/cvs { };
 
   cvsps = callPackage ../applications/version-management/cvsps { };
+
+  cvsq = callPackage ../applications/version-management/cvsq { };
 
   cvs2svn = callPackage ../applications/version-management/cvs2svn { };
 
