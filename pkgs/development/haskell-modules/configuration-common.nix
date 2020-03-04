@@ -1401,4 +1401,6 @@ self: super: {
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
 
+  persistent-mysql = dontCheck super.persistent-mysql;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
