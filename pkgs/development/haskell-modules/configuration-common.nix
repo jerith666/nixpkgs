@@ -1454,4 +1454,6 @@ self: super: {
     })
   ];
 
+  persistent-mysql = dontCheck super.persistent-mysql;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
