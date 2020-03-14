@@ -36,9 +36,9 @@ nix-store --realise --add-root system-result --indirect result;
 nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 nix-store --realise --add-root client-ip-echo-result --indirect result;
 
-nix-shell -I nixpkgs=$wt ~/git/elbum/shell.nix --run true;
-
-nix-shell -I nixpkgs=$wt ~/git/bills-automation/shell.nix --run true;
+for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
+    nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --run true;
+done
 
 echo;
 echo "rebuild complete, computing changes";
