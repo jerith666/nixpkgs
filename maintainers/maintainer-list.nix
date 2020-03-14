@@ -1958,7 +1958,7 @@
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
     github = "drewrisinger";
-    gitHubId = 10198051;
+    githubId = 10198051;
     name = "Drew Risinger";
   };
   dsferruzza = {
@@ -3096,6 +3096,12 @@
     githubId = 4401220;
     name = "Michael Eden";
   };
+  illiusdope = {
+    email = "mat@marini.ca";
+    github = "illiusdope";
+    githubId = 61913481;
+    name = "Mat Marini";
+  };
   ilya-fedin = {
     email = "fedin-ilja2010@ya.ru";
     github = "ilya-fedin";
@@ -3589,6 +3595,12 @@
     email = "johannes@jorsn.eu";
     github = "jorsn";
     githubId = 4646725;
+  };
+  joshuafern = {
+    name = "Joshua Fern";
+    email = "joshuafern@protonmail.com";
+    github = "JoshuaFern";
+    githubId = 4300747;
   };
   jpas = {
     name = "Jarrod Pas";
@@ -4532,6 +4544,12 @@
     githubId = 1711539;
     name = "matklad";
   };
+  matt-snider = {
+    email = "matt.snider@protonmail.com";
+    github = "matt-snider";
+    githubId = 11810057;
+    name = "Matt Snider";
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
@@ -4872,7 +4890,7 @@
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
-    gitHubId = 85857;
+    githubId = 85857;
     name = "Martin Milata";
   };
   mmlb = {
@@ -5492,6 +5510,12 @@
     githubId = 11016164;
     name = "Fedor Pakhomov";
   };
+  paluh = {
+    email = "paluho@gmail.com";
+    github = "paluh";
+    githubId = 190249;
+    name = "Tomasz Rybarczyk";
+  };
   pamplemousse = {
     email = "xav.maso@gmail.com";
     github = "Pamplemousse";
@@ -5880,6 +5904,12 @@
     github = "PyroLagus";
     githubId = 4579165;
     name = "Danny Bautista";
+  };
+  peelz = {
+    email = "peelz.dev+nixpkgs@gmail.com";
+    github = "louistakepillz";
+    githubId = 920910;
+    name = "peelz";
   };
   q3k = {
     email = "q3k@q3k.org";
@@ -7228,6 +7258,12 @@
     github = "thiagokokada";
     githubId = 844343;
     name = "Thiago K. Okada";
+  };
+  thmzlt = {
+    email = "git@thomazleite.com";
+    github = "thmzlt";
+    githubId = 7709;
+    name = "Thomaz Leite";
   };
   ThomasMader = {
     email = "thomas.mader@gmail.com";
