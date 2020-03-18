@@ -1803,6 +1803,8 @@ in {
 
   base58 = callPackage ../development/python-modules/base58 {};
 
+  batchgenerators = callPackage ../development/python-modules/batchgenerators { };
+
   batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
@@ -2768,7 +2770,7 @@ in {
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 
-  gitdb2 = callPackage ../development/python-modules/gitdb2 { };
+  gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
 
   GitPython = callPackage ../development/python-modules/GitPython { };
 
@@ -5645,9 +5647,13 @@ in {
 
   sphinxcontrib-devhelp = callPackage ../development/python-modules/sphinxcontrib-devhelp {};
 
+  sphinxcontrib-fulltoc = callPackage ../development/python-modules/sphinxcontrib-fulltoc { };
+
   sphinxcontrib-htmlhelp = callPackage ../development/python-modules/sphinxcontrib-htmlhelp {};
 
   sphinxcontrib-jsmath = callPackage ../development/python-modules/sphinxcontrib-jsmath {};
+
+  sphinxcontrib-katex = callPackage ../development/python-modules/sphinxcontrib-katex { };
 
   sphinxcontrib-qthelp = callPackage ../development/python-modules/sphinxcontrib-qthelp {};
 
@@ -5748,7 +5754,7 @@ in {
 
   smmap = callPackage ../development/python-modules/smmap { };
 
-  smmap2 = callPackage ../development/python-modules/smmap2 { };
+  smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
   transaction = callPackage ../development/python-modules/transaction { };
 
@@ -6729,6 +6735,8 @@ in {
 
   threadpool = callPackage ../development/python-modules/threadpool { };
 
+  threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
+
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = callPackage ../development/python-modules/yapsy { };
@@ -6933,6 +6941,8 @@ in {
   wasabi = callPackage ../development/python-modules/wasabi { };
 
   yahooweather = callPackage ../development/python-modules/yahooweather { };
+
+  somajo = callPackage ../development/python-modules/somajo { };
 
   spacy = callPackage ../development/python-modules/spacy { };
 
