@@ -1504,11 +1504,11 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
-  spyder-kernels = if isPy3k then callPackage ../development/python-modules/spyder-kernels {}
-    else callPackage ../development/python-modules/spyder-kernels/2.nix {};
+  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
+  spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.x.nix {};
 
-  spyder = if isPy3k then callPackage ../development/python-modules/spyder {}
-    else callPackage ../development/python-modules/spyder/2.nix {};
+  spyder = callPackage ../development/python-modules/spyder {};
+  spyder_3 = callPackage ../development/python-modules/spyder/3.nix { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
@@ -4619,7 +4619,7 @@ in {
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
-  openpyxl = if isPy3k then
+  openpyxl = if pythonAtLeast "3.6" then
     callPackage ../development/python-modules/openpyxl { }
   else
     callPackage ../development/python-modules/openpyxl/2.nix { };
@@ -6245,6 +6245,8 @@ in {
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
+  wsgitools = callPackage ../development/python-modules/wsgitools { };
+
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
@@ -7093,6 +7095,8 @@ in {
   pyatv = callPackage ../development/python-modules/pyatv { };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pymetno = callPackage ../development/python-modules/pymetno { };
 
   pytado = callPackage ../development/python-modules/pytado { };
 
