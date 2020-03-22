@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk13-bootstrap
+, libXcursor, libXrandr, fontconfig, openjdk14-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,9 +9,9 @@
 }:
 
 let
-  major = "13";
-  update = ".0.2";
-  build = "-ga";
+  major = "14";
+  update = "";
+  build = "+36";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -19,14 +19,14 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1871ziss7ny19rw8f7bay5vznmhpqbfi4ihn3yygs06wyxhm0zmv";
+      sha256 = "0d3ny2sfq04bcjllf23bxdz4g2awaqbyv12f4n8n5y6hgnndn5b8";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk13-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk14-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -54,7 +54,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk13-bootstrap.home}"
+      "--with-boot-jdk=${openjdk14-bootstrap.home}"
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -137,7 +137,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk13-bootstrap ];
+    disallowedReferences = [ openjdk14-bootstrap ];
 
     meta = with stdenv.lib; {
       homepage = http://openjdk.java.net/;
