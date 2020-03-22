@@ -18990,7 +18990,7 @@ in
   echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk13;
+    jdk = jdk14;
   });
 
   eclipsesJdk8 = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
