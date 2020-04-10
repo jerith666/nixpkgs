@@ -1,27 +1,31 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fzf }:
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, fzf
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zoxide";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
     rev = "v${version}";
-    sha256 = "0ldqhzkpbqjc1in0d0f7b06b8gim4sbh292qcbwhf5abyrhbm3m8";
+    sha256 = "1sad18d0pxfdy9gvjmixzgdskg1l7djvzp0aipx7pz0lyi6gs23z";
   };
 
   buildInputs = [
     fzf
   ];
 
-  cargoSha256 = "1grrqbdy37p3r857gz956h0ls922ma5fz6f8fb3vx7wc98rap621";
+  cargoSha256 = "1sx3s1jnfxylbjr3x6v6j8a6zkl7hfyj4alzlyrsw36b1b64pwqm";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ysndr ];
+    maintainers = with maintainers; [ ysndr cole-h ];
     platforms = platforms.all;
   };
 }

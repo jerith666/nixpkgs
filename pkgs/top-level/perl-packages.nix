@@ -1243,6 +1243,21 @@ let
     };
   };
 
+  BytesRandomSecure = buildPerlPackage {
+    pname = "Bytes-Random-Secure";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
+      sha256 = "53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae";
+    };
+    propagatedBuildInputs = [ CryptRandomSeed MathRandomISAAC ];
+    meta = {
+      description = "Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CacheCache = buildPerlPackage {
     pname = "Cache-Cache";
     version = "1.08";
@@ -3329,9 +3344,9 @@ let
     };
     patches = [
       (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/andk/cpanpm/pull/133.diff";
+        url = "https://github.com/andk/cpanpm/commit/10da44f1757aff6971e3bc4ed38ab115e738c740.diff";
         name = "patch-YAML-modules-default-for-LoadBlessed-was-changed-to-false";
-        sha256 = "0i8648cwshzzd0b34gyfn68s1vs85d8336ggk2kl99awah1ydsfr";
+        sha256 = "0sr2nxkr1cwavpvpxsqcsryfd5fjv4fkxfihd03jzavv5awj79hp";
       })
     ];
     propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
@@ -3605,6 +3620,22 @@ let
     };
   };
 
+  CryptRandomSeed = buildPerlPackage {
+    pname = "Crypt-Random-Seed";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-Seed-0.03.tar.gz";
+      sha256 = "593da54b522c09cc26bbcc0e4e49c1c8e688a6fd33b0726af801d722a5c8d0f1";
+    };
+    propagatedBuildInputs = [ CryptRandomTESHA2 ];
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-Seed";
+      description = "Provide strong randomness for seeding";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptRandomSource = buildPerlModule {
     pname = "Crypt-Random-Source";
     version = "0.14";
@@ -3616,6 +3647,20 @@ let
     propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
     meta = {
       description = "Get weak or strong random data from pluggable sources";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CryptRandomTESHA2 = buildPerlPackage {
+    pname = "Crypt-Random-TESHA2";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
+      sha256 = "a0912b42c52be173da528d5527e40d967324bc04ac78d9fc2ddc91ff16fe9633";
+    };
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-TESHA2";
+      description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3826,14 +3871,15 @@ let
 
   CryptSSLeay = buildPerlPackage {
     pname = "Crypt-SSLeay";
-    version = "0.72";
+    version = "0.73_06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz;
-      sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
+      url = "mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.73_06.tar.gz";
+      sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
+
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
-    propagatedBuildInputs = [ LWPProtocolHttps ];
+    propagatedBuildInputs = [ LWPProtocolHttps BytesRandomSecure ];
   };
 
   CSSDOM = buildPerlPackage {
@@ -4950,6 +4996,16 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
+  };
+
+  DBDCSV = buildPerlPackage {
+    pname = "DBD-CSV";
+    version = "0.54";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/H/HM/HMBRAND/DBD-CSV-0.54.tgz;
+      sha256 = "bc597cd7195e5a023e2b3413d8dc614602b9b3f279f436027881796464d4f0be";
+    };
+    propagatedBuildInputs = [ DBI TextCSV_XS SQLStatement ModuleRuntime ParamsUtil ];
   };
 
   DBDMock = buildPerlModule {
@@ -11091,6 +11147,15 @@ let
     };
   };
 
+  MathBaseConvert = buildPerlPackage {
+    pname = "Math-Base-Convert";
+    version = "0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIKER/Math-Base-Convert-0.11.tar.gz;
+      sha256 = "8c0971355f24c93b79e77ad54a4570090a1a598fcb9b86f5c17eba42f38b40e0";
+    };
+  };
+
   MathLibm = buildPerlPackage {
     pname = "Math-Libm";
     version = "1.00";
@@ -12220,6 +12285,23 @@ let
       homepage = "https://github.com/jberger/Mojo-JWT";
       description = "JSON Web Token the Mojo way";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoPg = buildPerlPackage {
+    pname = "Mojo-Pg";
+    version = "4.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.18.tar.gz";
+      sha256 = "31baacc0d6693886b3580e4b3ec6f2d053be8578809c9c1750753576bd1bda3c";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
+    meta = {
+      homepage = "https://github.com/mojolicious/mojo-pg";
+      description = "Mojolicious <3 PostgreSQL";
+      license = stdenv.lib.licenses.artistic2;
       maintainers = [ maintainers.sgo ];
     };
   };
@@ -14540,6 +14622,19 @@ let
     };
   };
 
+  ParseYapp = buildPerlPackage {
+    pname = "Parser-Yapp";
+    version = "1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz;
+      sha256 = "1r8kbyk0qd4ficmabj753kjpq0ib0csk01169w7jxflg62cfj41q";
+    };
+    meta = {
+      description = "Perl extension for generating and using LALR parsers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PathClass = buildPerlModule {
     pname = "Path-Class";
     version = "0.37";
@@ -16544,6 +16639,17 @@ let
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
   };
 
+  SQLStatement = buildPerlPackage {
+    pname = "SQL-Statement";
+    version = "1.412";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RE/REHSACK/SQL-Statement-1.412.tar.gz;
+      sha256 = "65c870883379c11b53f19ead10aaac241ccc86a90bbab77f6376fe750720e5c8";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ Clone ModuleRuntime ParamsUtil TextSoundex MathBaseConvert ];
+  };
+
   SQLTokenizer = buildPerlPackage {
     pname = "SQL-Tokenizer";
     version = "0.24";
@@ -17282,11 +17388,11 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "5.4.0";
+    version = "6.1.0";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "0csg10mydcif2l0qf16nlphq6ih5378nk6dk1vznf5bspws2ch7a";
+      sha256 = "00w4fmki7ff7i9bi39w2w15mvv38b5ifwk3zib90ny536r3n63sb";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
