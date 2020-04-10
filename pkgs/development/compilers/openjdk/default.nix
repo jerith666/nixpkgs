@@ -19,7 +19,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "0d3ny2sfq04bcjllf23bxdz4g2awaqbyv12f4n8n5y6hgnndn5b8";
+      sha256 = "1bj5f6c554vn1qmbw8smjfszfbwnd31ppyxb7hpiq36lcfykxlgw";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
