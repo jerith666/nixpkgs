@@ -586,6 +586,12 @@ in
     stdenv = clangStdenv;
   };
 
+  aflplusplus = callPackage ../tools/security/aflplusplus {
+    stdenv = clangStdenv;
+    python = python37;
+    wine = null;
+  };
+
   libdislocator = callPackage ../tools/security/afl/libdislocator.nix { };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
@@ -921,6 +927,8 @@ in
 
   libfx2 = with python3Packages; toPythonApplication fx2;
 
+  fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { };
+
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
   genymotion = callPackage ../development/mobile/genymotion { };
@@ -948,6 +956,8 @@ in
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
   gjs = callPackage ../development/libraries/gjs { };
+
+  gjo = callPackage ../tools/text/gjo { };
 
   glances = python3Packages.callPackage ../applications/system/glances { };
 
@@ -2471,6 +2481,7 @@ in
   circus = callPackage ../tools/networking/circus { };
 
   citrix_workspace_unwrapped = callPackage ../applications/networking/remote/citrix-workspace { };
+  citrix_workspace_unwrapped_20_04_0 = citrix_workspace_unwrapped.override { version = "20.04.0"; };
   citrix_workspace_unwrapped_19_12_0 = citrix_workspace_unwrapped.override { version = "19.12.0"; };
   citrix_workspace_unwrapped_19_10_0 = citrix_workspace_unwrapped.override { version = "19.10.0"; };
   citrix_workspace_unwrapped_19_8_0 = citrix_workspace_unwrapped.override { version = "19.8.0"; };
@@ -3988,6 +3999,8 @@ in
   gzrt = callPackage ../tools/compression/gzrt { };
 
   httplab = callPackage ../tools/networking/httplab { };
+
+  lucky-cli = callPackage ../development/web/lucky-cli { };
 
   partclone = callPackage ../tools/backup/partclone { };
 
@@ -6532,6 +6545,8 @@ in
 
   shocco = callPackage ../tools/text/shocco { };
 
+  shopify-themekit = callPackage ../development/web/shopify-themekit { };
+
   shorewall = callPackage ../tools/networking/shorewall { };
 
   shotwell = callPackage ../applications/graphics/shotwell { };
@@ -6604,8 +6619,6 @@ in
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};
-
-  slimrat = callPackage ../tools/networking/slimrat { };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns/default.nix { };
 
@@ -6876,6 +6889,8 @@ in
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tarsnapper = callPackage ../tools/backup/tarsnapper { };
+
+  tartube = callPackage ../applications/video/tartube { };
 
   tayga = callPackage ../tools/networking/tayga { };
 
@@ -8114,9 +8129,7 @@ in
     crystal
     crystal2nix;
 
-  icr = callPackage ../development/tools/icr {
-    openssl = openssl_1_0_2;
-  };
+  icr = callPackage ../development/tools/icr { };
 
   scry = callPackage ../development/tools/scry {};
 
@@ -8407,6 +8420,28 @@ in
     inherit (gnome2) libart_lgpl;
   });
 
+  gnat = gnat9;
+
+  gnat6 = wrapCC (gcc6.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    inherit gnatboot;
+  });
+
+  gnat9 = wrapCC (gcc9.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    gnatboot = gnat6;
+  });
+
+  gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
+
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
   gccgo = gccgo6;
@@ -8417,6 +8452,16 @@ in
     langGo = true;
     profiledCompiler = false;
   });
+
+  ghdl = ghdl-mcode;
+
+  ghdl-mcode = callPackage ../development/compilers/ghdl {
+    backend = "mcode";
+  };
+
+  ghdl-llvm = callPackage ../development/compilers/ghdl {
+    backend = "llvm";
+  };
 
   gcl = callPackage ../development/compilers/gcl {
     gmp = gmp4;
@@ -8469,6 +8514,8 @@ in
   pulp = nodePackages.pulp;
 
   pscid = nodePackages.pscid;
+
+  remarkable-toolchain = callPackage ../development/tools/misc/remarkable/remarkable-toolchain { };
 
   tacacsplus = callPackage ../servers/tacacsplus { };
 
@@ -8562,8 +8609,6 @@ in
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gogetdoc = callPackage ../development/tools/gogetdoc { };
-
-  gometalinter = callPackage ../development/tools/gometalinter { };
 
   gox = callPackage ../development/tools/gox { };
 
@@ -12199,6 +12244,16 @@ in
   } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu65 = callPackage ../development/libraries/icu/65.nix ({
+    nativeBuildRoot = buildPackages.icu65.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu66 = callPackage ../development/libraries/icu/66.nix ({
+    nativeBuildRoot = buildPackages.icu66.override { buildRootOnly = true; };
+  } // (stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
   icu = icu64;
 
@@ -12258,8 +12313,8 @@ in
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_6;
-    stdenv = llvmPackages_6.stdenv;
+    stdenv = llvmPackages_10.stdenv;
+    llvmPackages = llvmPackages_10;
   };
 
   isso = callPackage ../servers/isso { };
@@ -12664,9 +12719,7 @@ in
 
   libfakekey = callPackage ../development/libraries/libfakekey { };
 
-  libfido2 = callPackage ../development/libraries/libfido2 {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
+  libfido2 = callPackage ../development/libraries/libfido2 { };
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
@@ -13011,6 +13064,7 @@ in
   libjcat = callPackage ../development/libraries/libjcat { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
+  # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = libjpeg_turbo;
@@ -14539,6 +14593,8 @@ in
   spice-protocol = callPackage ../development/libraries/spice-protocol { };
 
   spice-up = callPackage ../applications/office/spice-up { };
+
+  spirv-cross = callPackage ../tools/graphics/spirv-cross { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
@@ -17024,7 +17080,7 @@ in
     };
     kernelPatches = kernel.kernelPatches ++ [
       kernelPatches.tag_hardened
-      kernelPatches.hardened.${kernel.version}
+      kernelPatches.hardened.${kernel.meta.branch}
     ];
     modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
@@ -17241,6 +17297,8 @@ in
   gomodifytags = callPackage ../development/tools/gomodifytags { };
 
   go-langserver = callPackage ../development/tools/go-langserver { };
+
+  gopls = callPackage ../development/tools/gopls { };
 
   gotests = callPackage ../development/tools/gotests { };
 
@@ -18918,7 +18976,7 @@ in
 
   dablin = callPackage ../applications/radio/dablin { };
 
-  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskell.packages.ghc865.darcs) (drv: {
+  darcs = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.darcs) (drv: {
     configureFlags = (stdenv.lib.remove "-flibrary" drv.configureFlags or []) ++ ["-f-library"];
   });
 
@@ -19921,6 +19979,8 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  musikcube = callPackage ../applications/audio/musikcube {};
+
   pinboard-notes-backup = haskell.lib.overrideCabal
     (haskell.lib.generateOptparseApplicativeCompletion "pnbackup"
       haskellPackages.pinboard-notes-backup)
@@ -20187,7 +20247,13 @@ in
   k3d = callPackage ../applications/graphics/k3d {
     inherit (pkgs.gnome2) gtkglext;
     stdenv = gcc6Stdenv;
-    boost = boost155.override { enablePython = true; };
+    boost = boost155.override {
+      enablePython = true;
+      stdenv = gcc6Stdenv;
+      buildPackages = buildPackages // {
+        stdenv = gcc6Stdenv;
+      };
+    };
   };
 
   k3s = callPackage ../applications/networking/cluster/k3s {};
@@ -22252,6 +22318,8 @@ in
 
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix {});
   uefitool = uefitoolPackages.new-engine;
+
+  ungoogled-chromium = callPackage ../applications/networking/browsers/ungoogled-chromium (config.chromium or {});
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
@@ -24424,6 +24492,8 @@ in
 
   prodigal = callPackage ../applications/science/biology/prodigal { };
 
+  quast = callPackage ../applications/science/biology/quast { };
+
   raxml = callPackage ../applications/science/biology/raxml { };
 
   raxml-mpi = appendToName "mpi" (raxml.override {
@@ -25668,6 +25738,8 @@ in
 
   nix-serve = callPackage ../tools/package-management/nix-serve { };
 
+  nix-simple-deploy = callPackage ../tools/package-management/nix-simple-deploy { };
+
   nixfmt = haskell.lib.justStaticExecutables haskellPackages.nixfmt;
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
@@ -26480,4 +26552,5 @@ in
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron { };
 
+  zenstates = callPackage ../os-specific/linux/zenstates {};
 }
