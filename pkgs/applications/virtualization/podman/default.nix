@@ -1,24 +1,33 @@
-{ stdenv, fetchFromGitHub, pkgconfig, installShellFiles
-, buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp, systemd
+{ stdenv
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, buildGoPackage
+, gpgme
+, lvm2
+, btrfs-progs
+, libseccomp
+, systemd
 , go-md2man
+, nixosTests
 }:
 
 buildGoPackage rec {
   pname = "podman";
-  version = "1.8.2";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
-    owner  = "containers";
-    repo   = "libpod";
-    rev    = "v${version}";
-    sha256 = "1nxlkqz1ffa3l2yf4rmsxj788dx6xdp8pbi55m9jc9k1vqwc9hxs";
+    owner = "containers";
+    repo = "libpod";
+    rev = "v${version}";
+    sha256 = "19y48lpf7pvw5f5pzpknn92rq9xwbrpvi8mj7mc4dby6skqadrk4";
   };
 
   goPackagePath = "github.com/containers/libpod";
 
   outputs = [ "bin" "out" "man" ];
 
-  nativeBuildInputs = [ pkgconfig go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
 
@@ -36,6 +45,8 @@ buildGoPackage rec {
     installShellCompletion --zsh completions/zsh/_podman
     MANDIR=$man/share/man make install.man
   '';
+
+  passthru.tests.podman = nixosTests.podman;
 
   meta = with stdenv.lib; {
     homepage = "https://podman.io/";

@@ -45,6 +45,12 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
+  # http://bugs.darcs.net/issue2642
+  darcs = doJailbreak (appendPatches super.darcs [
+    ./patches/darcs-setup.patch
+    ./patches/darcs-2.14.2-Compile-against-GHC-8.8.patch
+  ]);
+
   # Tests are failing
   # https://github.com/bos/statistics/issues/123
   statistics = dontCheck super.statistics;
@@ -114,13 +120,8 @@ self: super: {
   # Depends on broken "hails" package.
   hails-bin = dontDistribute super.hails-bin;
 
-  # Switch levmar build to openblas.
   bindings-levmar = overrideCabal super.bindings-levmar (drv: {
-    preConfigure = ''
-      sed -i bindings-levmar.cabal \
-          -e 's,extra-libraries: lapack blas,extra-libraries: openblas,'
-    '';
-    extraLibraries = [ pkgs.openblasCompat ];
+    extraLibraries = [ pkgs.blas ];
   });
 
   # The Haddock phase fails for one reason or another.
@@ -176,6 +177,9 @@ self: super: {
 
   # Test suite build depends on ancient tasty 0.11.x.
   cryptohash-sha512 = dontCheck super.cryptohash-sha512;
+
+  # Test suite depends on source code being available
+  simple-affine-space = dontCheck super.simple-affine-space;
 
   # https://github.com/kazu-yamamoto/simple-sendfile/issues/17
   simple-sendfile = dontCheck super.simple-sendfile;
@@ -592,6 +596,12 @@ self: super: {
   elm-repl = markBroken super.elm-repl;
   elm-server = markBroken super.elm-server;
   elm-yesod = markBroken super.elm-yesod;
+
+  # https://github.com/Euterpea/Euterpea2/issues/40
+  Euterpea = appendPatch super.Euterpea (pkgs.fetchpatch {
+    url = "https://github.com/Euterpea/Euterpea2/pull/38.patch";
+    sha256 = "13g462qmj8c7if797gnyvf8h0cddmm3xy0pjldw48w8f8sr4qsj0";
+  });
 
   # https://github.com/athanclark/sets/issues/2
   sets = dontCheck super.sets;
@@ -1059,13 +1069,9 @@ self: super: {
   # https://github.com/haskell-hvr/hgettext/issues/14
   hgettext = doJailbreak super.hgettext;
 
-  # 2.23.0 supports GHC 8.x and up
-  haddock = super.haddock_2_22_0;
-  # haddock-api-2.22.0: Break out of “QuickCheck ==2.11.*, hspec >=2.4.4 && <2.6”
-  haddock-api = dontHaddock (doJailbreak (super.haddock-api_2_22_0));
-
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
+  haddock-library_1_9_0 = doJailbreak (dontCheck super.haddock-library_1_9_0);
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1460,8 +1466,8 @@ self: super: {
   # details.
   cryptonite = dontCheck super.cryptonite;
 
-  # The test suite depends on an impure cabal-install installation
-  # in $HOME, which we don't have in our build sandbox.
+  # The test suite depends on an impure cabal-install installation in
+  # $HOME, which we don't have in our build sandbox.
   cabal-install-parsers = dontCheck super.cabal-install-parsers;
 
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
@@ -1508,7 +1514,16 @@ self: super: {
     polysemy = self.polysemy_1_3_0_0;
   };
 
-  # Fixed at head, but hasn't cut a release in awhile.
-  darcs = doJailbreak super.darcs;
+  # Test suite requires running a database server. Testing is done upstream.
+  hasql-pool = dontCheck super.hasql-pool;
+
+  # This bumps optparse-applicative to <0.16 in the cabal file, as otherwise
+  # the version bounds are not satisfied.  This can be removed if the PR at
+  # https://github.com/ananthakumaran/webify/pull/27 is merged and a new
+  # release of webify is published.
+  webify = appendPatch super.webify (pkgs.fetchpatch {
+    url = "https://github.com/ananthakumaran/webify/pull/27/commits/6d653e7bdc1ffda75ead46851b5db45e87cb2aa0.patch";
+    sha256 = "sha256:0xbfhzhzg94b4r5qy5dg1c40liswwpqarrc2chcwgfbfnrmwkfc2";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

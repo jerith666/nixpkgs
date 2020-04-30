@@ -238,6 +238,7 @@
   ./services/backup/zfs-replication.nix
   ./services/backup/znapzend.nix
   ./services/cluster/hadoop/default.nix
+  ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addons/dns.nix
   ./services/cluster/kubernetes/addons/dashboard.nix
   ./services/cluster/kubernetes/addon-manager.nix
@@ -546,6 +547,7 @@
   ./services/monitoring/teamviewer.nix
   ./services/monitoring/telegraf.nix
   ./services/monitoring/thanos.nix
+  ./services/monitoring/tuptime.nix
   ./services/monitoring/ups.nix
   ./services/monitoring/uptime.nix
   ./services/monitoring/vnstat.nix
@@ -983,6 +985,7 @@
   ./virtualisation/anbox.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containers.nix
+  ./virtualisation/nixos-containers.nix
   ./virtualisation/cri-o.nix
   ./virtualisation/docker.nix
   ./virtualisation/docker-containers.nix
@@ -996,6 +999,7 @@
   ./virtualisation/kvmgt.nix
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
+  ./virtualisation/podman.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
   ./virtualisation/rkt.nix
