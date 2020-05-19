@@ -317,12 +317,7 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
-    ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
-
-    ipaddr =
-      if lib.versionOlder "4.02" ocaml.version
-      then callPackage ../development/ocaml-modules/ipaddr { }
-      else ipaddr_p4;
+    ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
     irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
 
@@ -393,9 +388,7 @@ let
 
     irmin-watcher = callPackage ../development/ocaml-modules/irmin-watcher { };
 
-    jingoo = callPackage ../development/ocaml-modules/jingoo {
-      pcre = ocaml_pcre;
-    };
+    jingoo = callPackage ../development/ocaml-modules/jingoo { };
 
     js_of_ocaml =
     if lib.versionOlder "4.02" ocaml.version
@@ -448,10 +441,6 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/lablgtk-extras { }
       else callPackage ../development/ocaml-modules/lablgtk-extras/1.4.nix { };
-
-    lablgtkmathview = callPackage ../development/ocaml-modules/lablgtkmathview {
-      gtkmathview = callPackage ../development/libraries/gtkmathview { };
-    };
 
     labltk = callPackage ../development/ocaml-modules/labltk { };
 
@@ -1241,6 +1230,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_09 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.09.nix { });
 
   ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
+
+  ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_10;
 

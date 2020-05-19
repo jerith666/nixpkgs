@@ -182,6 +182,8 @@ in
 
   deadcode = callPackage ../development/tools/deadcode { };
 
+  glade = callPackage ../development/tools/glade { };
+
   hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
 
   proto-contrib = callPackage ../development/tools/proto-contrib {};
@@ -4469,6 +4471,8 @@ in
 
   jucipp = callPackage ../applications/editors/jucipp { };
 
+  jugglinglab = callPackage ../tools/misc/jugglinglab { };
+
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
@@ -8641,6 +8645,13 @@ in
       inherit (darwin.apple_sdk.frameworks) Security;
     };
 
+  go_1_13 = callPackage ../development/compilers/go/1.13.nix ({
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    stdenv = gcc8Stdenv;
+    buildPackages = buildPackages // { stdenv = gcc8Stdenv; };
+  });
+
   go_1_14 = callPackage ../development/compilers/go/1.14.nix ({
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   } // lib.optionalAttrs stdenv.isAarch64 {
@@ -9121,6 +9132,7 @@ in
   cargo-release = callPackage ../tools/package-management/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin { };
   cargo-tree = callPackage ../tools/package-management/cargo-tree { };
   cargo-update = callPackage ../tools/package-management/cargo-update { };
 
@@ -12869,7 +12881,7 @@ in
 
   libfabric = callPackage ../os-specific/linux/libfabric {};
 
-  libfive = callPackage ../development/libraries/libfive { };
+  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
 
@@ -14069,6 +14081,7 @@ in
 
   protobuf = protobuf3_8;
 
+  protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
   protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };
   protobuf3_9 = callPackage ../development/libraries/protobuf/3.9.nix { };
@@ -14185,7 +14198,7 @@ in
       knotifyconfig kpackage kparts kpeople kplotting kpty kross krunner
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
-      networkmanager-qt plasma-framework prison solid sonnet syntax-highlighting
+      networkmanager-qt plasma-framework prison qqc2-desktop-style solid sonnet syntax-highlighting
       syndication threadweaver kirigami2 kholidays kpurpose kcontacts;
 
     ### KDE PLASMA 5
@@ -15196,31 +15209,10 @@ in
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
-  agda = callPackage ../build-support/agda {
-    glibcLocales = if pkgs.stdenv.isLinux then pkgs.glibcLocales else null;
-    extension = self : super : { };
+  agdaPackages = callPackage ./agda-packages.nix {
     inherit (haskellPackages) Agda;
   };
-
-  agdaBase = callPackage ../development/libraries/agda/agda-base { };
-
-  agdaIowaStdlib = callPackage ../development/libraries/agda/agda-iowa-stdlib { };
-
-  agdaPrelude = callPackage ../development/libraries/agda/agda-prelude { };
-
-  AgdaStdlib = callPackage ../development/libraries/agda/agda-stdlib {
-    inherit (haskellPackages) ghcWithPackages;
-  };
-
-  AgdaSheaves = callPackage ../development/libraries/agda/Agda-Sheaves { };
-
-  bitvector = callPackage ../development/libraries/agda/bitvector { };
-
-  categories = callPackage ../development/libraries/agda/categories { };
-
-  pretty = callPackage ../development/libraries/agda/pretty { };
-
-  TotalParserCombinators = callPackage ../development/libraries/agda/TotalParserCombinators { };
+  agda = agdaPackages.agda;
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
@@ -15293,12 +15285,18 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
+  buildGo113Package = callPackage ../development/go-packages/generic {
+    go = buildPackages.go_1_13;
+  };
   buildGo114Package = callPackage ../development/go-packages/generic {
     go = buildPackages.go_1_14;
   };
 
   buildGoPackage = buildGo114Package;
 
+  buildGo113Module = callPackage ../development/go-modules/generic {
+    go = buildPackages.go_1_13;
+  };
   buildGo114Module = callPackage ../development/go-modules/generic {
     go = buildPackages.go_1_14;
   };
@@ -15885,8 +15883,7 @@ in
   mariadb-connector-c = mariadb-connector-c_3_1;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
 
-  mariadb-galera = mariadb-galera_25;
-  mariadb-galera_25 = callPackage ../servers/sql/mariadb/galera/25.nix {
+  mariadb-galera = callPackage ../servers/sql/mariadb/galera {
     asio = asio_1_10;
   };
 
@@ -18703,6 +18700,8 @@ in
 
   bb =  callPackage ../applications/misc/bb { };
 
+  berry = callPackage ../applications/window-managers/berry { };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
@@ -18785,6 +18784,8 @@ in
   bristol = callPackage ../applications/audio/bristol { };
 
   bs1770gain = callPackage ../applications/audio/bs1770gain { };
+
+  bjumblr = callPackage ../applications/audio/bjumblr { };
 
   bsequencer = callPackage ../applications/audio/bsequencer { };
 
@@ -20012,6 +20013,8 @@ in
 
   leftwm = callPackage ../applications/window-managers/leftwm { };
 
+  lwm = callPackage ../applications/window-managers/lwm { };
+
   musikcube = callPackage ../applications/audio/musikcube {};
 
   pinboard-notes-backup = haskell.lib.overrideCabal
@@ -20032,6 +20035,8 @@ in
   singularity = callPackage ../applications/virtualization/singularity { };
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
+
+  smallwm = callPackage ../applications/window-managers/smallwm { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
@@ -21718,8 +21723,6 @@ in
 
   ripser = callPackage ../applications/science/math/ripser { };
 
-  rkt = callPackage ../applications/virtualization/rkt { };
-
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
@@ -22569,6 +22572,8 @@ in
   vuze = callPackage ../applications/networking/p2p/vuze { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
+
+  yeahwm = callPackage ../applications/window-managers/yeahwm { };
 
   vym = qt5.callPackage ../applications/misc/vym { };
 
