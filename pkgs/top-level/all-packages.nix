@@ -602,6 +602,8 @@ in
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng { };
 
+  agda-pkg = callPackage ../development/tools/agda-pkg { };
+
   agrep = callPackage ../tools/text/agrep { };
 
   aha = callPackage ../tools/text/aha { };
@@ -1853,6 +1855,8 @@ in
   go-2fa = callPackage ../tools/security/2fa {};
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
+
+  go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
   geckodriver = callPackage ../development/tools/geckodriver { };
 
@@ -5975,6 +5979,8 @@ in
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
+  pinnwand = callPackage ../servers/pinnwand { };
+
   pirate-get = callPackage ../tools/networking/pirate-get { };
 
   pipreqs = callPackage ../tools/misc/pipreqs { };
@@ -7195,6 +7201,10 @@ in
 
   tuir = callPackage ../applications/misc/tuir { };
 
+  tunnelto = callPackage ../tools/networking/tunnelto {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   tuptime = callPackage ../tools/system/tuptime { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
@@ -7447,10 +7457,6 @@ in
   woof = callPackage ../tools/misc/woof { };
 
   wootility = callPackage ../tools/misc/wootility { };
-
-  wormhole = callPackage ../tools/networking/wormhole {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   wpscan = callPackage ../tools/security/wpscan { };
 
@@ -10228,6 +10234,8 @@ in
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
+  cmake-language-server = python3Packages.callPackage ../development/tools/cmake-language-server { };
+
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
 
@@ -11592,6 +11600,8 @@ in
   };
 
   dssi = callPackage ../development/libraries/dssi {};
+
+  duckdb = callPackage ../development/libraries/duckdb {};
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
@@ -15600,6 +15610,8 @@ in
 
   dex-oidc = callPackage ../servers/dex { };
 
+  dex2jar = callPackage ../development/tools/java/dex2jar { };
+
   doh-proxy = callPackage ../servers/dns/doh-proxy {
     python3Packages = python36Packages;
   };
@@ -17042,6 +17054,8 @@ in
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     rtl8814au = callPackage ../os-specific/linux/rtl8814au { };
+
+    rtl88xxau-aircrack = callPackage ../os-specific/linux/rtl88xxau-aircrack { };
 
     rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 

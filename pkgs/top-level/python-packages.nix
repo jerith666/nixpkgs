@@ -813,6 +813,8 @@ in {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  hiyapyco = callPackage ../development/python-modules/hiyapyco { };
+
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
 
   holidays = callPackage ../development/python-modules/holidays { };
@@ -2482,6 +2484,8 @@ in {
 
   pytest-cram = callPackage ../development/python-modules/pytest-cram { };
 
+  pytest-datadir = callPackage ../development/python-modules/pytest-datadir { };
+
   pytest-datafiles = callPackage ../development/python-modules/pytest-datafiles { };
 
   pytest-dependency = callPackage ../development/python-modules/pytest-dependency { };
@@ -3286,6 +3290,8 @@ in {
 
   pyfxa = callPackage ../development/python-modules/pyfxa { };
 
+  pygls = callPackage ../development/python-modules/pygls {};
+
   pyhomematic = callPackage ../development/python-modules/pyhomematic { };
 
   pylama = callPackage ../development/python-modules/pylama { };
@@ -3618,6 +3624,10 @@ in {
   keyrings-alt = callPackage ../development/python-modules/keyrings-alt {};
 
   SPARQLWrapper = callPackage ../development/python-modules/sparqlwrapper { };
+
+  duckdb = callPackage ../development/python-modules/duckdb {
+    duckdb = pkgs.duckdb;
+  };
 
   dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) git glibcLocales;
@@ -5068,6 +5078,8 @@ in {
   plumbum = callPackage ../development/python-modules/plumbum { };
 
   polib = callPackage ../development/python-modules/polib {};
+
+  ponywhoosh = callPackage ../development/python-modules/ponywhoosh { };
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
@@ -6968,6 +6980,8 @@ in {
   Yapsy = callPackage ../development/python-modules/yapsy { };
 
   ansi = callPackage ../development/python-modules/ansi { };
+
+  pygments-better-html = callPackage ../development/python-modules/pygments-better-html { };
 
   pygments-markdown-lexer = callPackage ../development/python-modules/pygments-markdown-lexer { };
 
