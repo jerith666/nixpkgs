@@ -463,7 +463,9 @@
   ./services/misc/lidarr.nix
   ./services/misc/mame.nix
   ./services/misc/mathics.nix
+  ./services/misc/matrix-appservice-discord.nix
   ./services/misc/matrix-synapse.nix
+  ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/mesos-master.nix
@@ -805,7 +807,6 @@
   ./services/security/torsocks.nix
   ./services/security/usbguard.nix
   ./services/security/vault.nix
-  ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
   ./services/system/dbus.nix
   ./services/system/earlyoom.nix
