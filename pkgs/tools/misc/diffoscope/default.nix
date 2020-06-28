@@ -16,16 +16,17 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "148";
+  version = "149";
 
   src = fetchurl {
     url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "1fx3wq5bv12pjcpkd7lvis0vg50apzwvxa5jvcs2dv1r8385wchz";
+    sha256 = "1158vxgslj33dp1iazllxiwiarlvmc2cayl4y8ckm35v4is9nkrr";
   };
 
   outputs = [ "out" "man" ];
 
   patches = [
+    ./file-5.39-compat.patch
     ./ignore_links.patch
     ./skip-failing-test.patch
   ];

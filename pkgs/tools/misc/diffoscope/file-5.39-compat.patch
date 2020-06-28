@@ -1,0 +1,13 @@
+diff --git a/tests/data/archive12.diff.txt b/tests/data/archive12.diff.txt
+index 3547c2b4..27fd20ae 100644
+--- a/tests/data/archive12.diff.txt
++++ b/tests/data/archive12.diff.txt
+@@ -7,7 +7,7 @@
+ ├── compressed.gz
+ │ ├── filetype from file(1)
+ │ │ @@ -1 +1 @@
+-│ │ -gzip compressed data, max compression, from Unix
++│ │ -gzip compressed data, max compression, from Unix, truncated
+ │ │ +gzip compressed data, was "compressed", last modified: Sun Mar 19 22:27:42 2017, max compression, from Unix, truncated
+ │ ├── compressed
+ │ │ @@ -1 +1 @@
