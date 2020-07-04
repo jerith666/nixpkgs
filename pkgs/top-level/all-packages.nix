@@ -8869,10 +8869,7 @@ in
     graalvm8-ee
     graalvm11-ee;
 
-  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
-    # https://github.com/OpenShot/libopenshot-audio/issues/33
-    stdenv = gcc8Stdenv;
-  };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   openspin = callPackage ../development/compilers/openspin { };
 
@@ -14353,24 +14350,9 @@ in
 
     libktorrent = callPackage ../development/libraries/libktorrent { };
 
-    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix {
-      # https://github.com/OpenShot/libopenshot-audio/issues/33
-      stdenv = gcc8Stdenv;
-      imagemagick = imagemagick.override {
-        stdenv = gcc8Stdenv;
-        libheif = libheif.override {
-          stdenv = gcc8Stdenv;
-        };
-        openexr = openexr.override {
-          stdenv = gcc8Stdenv;
-        };
-      };
-    };
+    libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
 
-    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-      # https://github.com/OpenShot/libopenshot-audio/issues/33
-      stdenv = gcc8Stdenv;
-    };
+    libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix { };
 
     libqglviewer = callPackage ../development/libraries/libqglviewer {
       inherit (darwin.apple_sdk.frameworks) AGL;
