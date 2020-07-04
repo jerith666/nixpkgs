@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig, intltool, itstool, python3, wrapGAppsHook
 , python3Packages, gst_all_1, gtk3
 , gobject-introspection, librsvg, gnome3, libnotify, gsound
 , meson, ninja, gsettings-desktop-schemas
@@ -38,6 +38,16 @@ in python3Packages.buildPythonApplication rec {
     # and saves them to the generated binary. This would make the build-time
     # dependencies part of the closure so we remove it.
     ./prevent-closure-contamination.patch
+    # patches from upstream don't cherry-pick onto 0.999 cleanly
+    # so use backports from debian instead
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pitivi/0.999-2/debian/patches/9fc400ca6f3f59fd2b2abfb8e39f0cf7a4031e09.patch";
+      sha256 = "197ls2ka51qz9lgzvvsd7bi15ngzc5g21q4aklh5fv00janwl3jl";
+    })
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pitivi/0.999-2/debian/patches/0a3cc054a2c20b59f5aaaaa307de3c9af3c0d270.patch";
+      sha256 = "1f7hy4ksma80ch0rpshg3qfi082zc8wr2icbzfpq00arp9by42wq";
+    })
   ];
 
   postPatch = ''
