@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, installShellFiles, nixosTests}:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchpatch, installShellFiles, nixosTests}:
 
 buildGoPackage rec {
   pname = "restic";
@@ -12,6 +12,12 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "0lydll93n1lcn1fl669b9cikmzz9d6vfpc8ky3ng5fi8kj3v1dz7";
   };
+
+  patches = [ ( fetchpatch {
+    # https://github.com/restic/restic/issues/2571
+    url = "https://github.com/MichaelEischer/restic/commit/c76b7588cc53a53fdc1fad06b66a39beb2e90b3c.patch";
+    sha256 = "0g23dh0617fmj6l8n9nzxlyc6b5x69r0rldnl3xmwrsmr75dfgar";
+  } ) ];
 
   subPackages = [ "cmd/restic" ];
 

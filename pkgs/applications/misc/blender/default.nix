@@ -17,11 +17,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.83.0";
+  version = "2.83.1";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "07rzm4xaj94pjxy2vlqfhi1adsqpshfkrzrq8kljmcbnw22vrqhl";
+    sha256 = "1kd74nzqvpcpsb4lghnjj9z3ps93lzqbhkv3lp5p79rqs8y64i23";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+        --replace 'set(PYTHON_VERSION 3.7)' \
+                  'set(PYTHON_VERSION ${python.pythonVersion})' \
+        --replace '${"$"}{PYTHON_VERSION}m' \
+                  '${"$"}{PYTHON_VERSION}' \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
         --replace '${"$"}{LIBDIR}/opencollada' \
@@ -86,9 +90,9 @@ stdenv.mkDerivation rec {
       "-DWITH_SDL=OFF"
       "-DWITH_OPENCOLORIO=ON"
       "-DWITH_OPENSUBDIV=ON"
-      "-DPYTHON_LIBRARY=${python.libPrefix}m"
+      "-DPYTHON_LIBRARY=${python.libPrefix}"
       "-DPYTHON_LIBPATH=${python}/lib"
-      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}m"
+      "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
       "-DPYTHON_VERSION=${python.pythonVersion}"
       "-DWITH_PYTHON_INSTALL=OFF"
       "-DWITH_PYTHON_INSTALL_NUMPY=OFF"
