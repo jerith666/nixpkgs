@@ -608,6 +608,7 @@
   ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix
+  ./services/networking/ncdns.nix
   ./services/networking/ejabberd.nix
   ./services/networking/epmd.nix
   ./services/networking/ergo.nix
@@ -939,6 +940,7 @@
   ./system/boot/grow-partition.nix
   ./system/boot/initrd-network.nix
   ./system/boot/initrd-ssh.nix
+  ./system/boot/initrd-openvpn.nix
   ./system/boot/kernel.nix
   ./system/boot/kexec.nix
   ./system/boot/loader/efi.nix
