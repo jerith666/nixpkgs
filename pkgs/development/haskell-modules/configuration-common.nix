@@ -459,6 +459,12 @@ self: super: {
   bytestring-strict-builder = dontCheck super.bytestring-strict-builder;
   bytestring-tree-builder = dontCheck super.bytestring-tree-builder;
 
+  # https://github.com/byteverse/bytebuild/issues/19
+  bytebuild = dontCheck super.bytebuild;
+
+  # https://github.com/andrewthad/haskell-ip/issues/67
+  ip = dontCheck super.ip;
+
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
   shake = overrideCabal super.shake (drv: { doCheck = !pkgs.stdenv.isDarwin && false; });
@@ -1351,7 +1357,7 @@ self: super: {
         })).override {
           # we are faster than stack here
           hie-bios = dontCheck self.hie-bios_0_6_1;
-          lsp-test = dontCheck self.lsp-test_0_11_0_2;
+          lsp-test = dontCheck self.lsp-test_0_11_0_3;
         });
 
   haskell-language-server = (overrideCabal super.haskell-language-server
@@ -1371,7 +1377,7 @@ self: super: {
       ghcide = self.hls-ghcide;
       # we are faster than stack here
       hie-bios = dontCheck self.hie-bios_0_6_1;
-      lsp-test = dontCheck self.lsp-test_0_11_0_2;
+      lsp-test = dontCheck self.lsp-test_0_11_0_3;
     };
 
   # https://github.com/kowainik/policeman/issues/57
@@ -1395,9 +1401,6 @@ self: super: {
     url = "https://github.com/jkff/splot/commit/a6710b05470d25cb5373481cf1cfc1febd686407.patch";
     sha256 = "1c5ck2ibag2gcyag6rjivmlwdlp5k0dmr8nhk7wlkzq2vh7zgw63";
   });
-
-  # The current LTS 15.x version has a bug in the test suite.
-  streaming-commons = self.streaming-commons_0_2_2_1;
 
   # Version bumps have not been merged by upstream yet.
   # https://github.com/obsidiansystems/dependent-sum-aeson-orphans/pull/5
@@ -1457,6 +1460,16 @@ self: super: {
     rib = super.rib.override {
       pandoc = self.pandoc_2_10_1;
       pandoc-types = self.pandoc-types_1_21;
+    };
+  };
+
+  # Testsuite trying to run `which haskeline-examples-Test`
+  haskeline_0_8_0_0 = dontCheck super.haskeline_0_8_0_0;
+
+  # Requires repline 0.4 which is the default only for ghc8101, override for the rest
+  zre = super.zre.override {
+    repline = self.repline_0_4_0_0.override {
+      haskeline = self.haskeline_0_8_0_0;
     };
   };
 
