@@ -42,7 +42,7 @@
 */
 {
   "0x4A6F" = {
-    email = "0x4A6F@shackspace.de";
+    email = "mail-maintainer@0x4A6F.dev";
     name = "Joachim Ernst";
     github = "0x4A6F";
     githubId = 9675338;
@@ -1446,6 +1446,12 @@
       fingerprint = "099E 3F97 FA08 3D47 8C75  EBEC E0EB AD78 F019 0BD9";
     }];
   };
+  chiroptical = {
+    email = "chiroptical@gmail.com";
+    github = "chiroptical";
+    githubId = 3086255;
+    name = "Barry Moore II";
+  };
   chkno = {
     email = "chuck@intelligence.org";
     github = "chkno";
@@ -1760,6 +1766,16 @@
     githubId = 490965;
     name = "Craig Swank";
   };
+  cust0dian = {
+    email = "serg@effectful.software";
+    github = "cust0dian";
+    githubId = 389387;
+    name = "Serg Nesterov";
+    keys = [{
+      longkeyid = "rsa4096/0x1512F6EB84AECC8C";
+      fingerprint = "6E7D BA30 DB5D BA60 693C  3BE3 1512 F6EB 84AE CC8C";
+    }];
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
@@ -1935,6 +1951,12 @@
     github = "dbrock";
     githubId = 14032;
     name = "Daniel Brockman";
+  };
+  ddelabru = {
+    email = "ddelabru@redhat.com";
+    github = "ddelabru";
+    githubId = 39909293;
+    name = "Dominic Delabruere";
   };
   dduan = {
     email = "daniel@duan.ca";
@@ -2163,6 +2185,16 @@
     github = "dpaetzel";
     githubId = 974130;
     name = "David Pätzel";
+  };
+  dpausp = {
+    email = "dpausp@posteo.de";
+    github = "dpausp";
+    githubId = 1965950;
+    name = "Tobias Stenzel";
+    keys = [{
+      longkeyid = "rsa2048/0x78C7DD40DF23FB16";
+      fingerprint = "4749 0887 CF3B 85A1 6355  C671 78C7 DD40 DF23 FB16";
+    }];
   };
   dpflug = {
     email = "david@pflug.email";
@@ -2397,6 +2429,12 @@
     github = "proteansec";
     githubId = 1753498;
     name = "Dejan Lukan";
+  };
+  elliottvillars = {
+    email = "elliottvillars@gmail.com";
+    github = "elliottvillars";
+    githubId = 48104179;
+    name = "Elliott Villars";
   };
   eliasp = {
     email = "mail@eliasprobst.eu";
@@ -5186,6 +5224,12 @@
     github = "McSinyx";
     githubId = 13689192;
     name = "Nguyễn Gia Phong";
+  };
+  mcwitt = {
+    email = "mcwitt@gmail.com";
+    github = "mcwitt";
+    githubId = 319411;
+    name = "Matt Wittmann";
   };
   mdaiter = {
     email = "mdaiter8121@gmail.com";
@@ -9244,5 +9288,11 @@
     email = "ext0l@riseup.net";
     github = "deifactor";
     githubId = 30192992;
+  };
+  fzakaria = {
+    name = "Farid Zakaria";
+    email = "farid.m.zakaria@gmail.com";
+    github = "fzakaria";
+    githubId = 605070;
   };
 }
