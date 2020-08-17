@@ -12,6 +12,7 @@ result-*
 
 .DS_Store
 .mypy_cache
+__pycache__
 
 .bundle
 bisects
