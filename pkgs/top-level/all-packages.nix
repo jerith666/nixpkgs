@@ -134,6 +134,8 @@ in
 
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
+  alda = callPackage ../development/interpreters/alda { };
+
   ankisyncd = callPackage ../servers/ankisyncd { };
 
   avro-tools = callPackage ../development/tools/avro-tools { };
@@ -154,7 +156,10 @@ in
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
   buildEnvTest = callPackage ../build-support/buildenv/test.nix { };
 
-  buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
+  # TODO: eventually migrate everything to buildFHSUserEnvBubblewrap
+  buildFHSUserEnv = buildFHSUserEnvChroot;
+  buildFHSUserEnvChroot = callPackage ../build-support/build-fhs-userenv { };
+  buildFHSUserEnvBubblewrap = callPackage ../build-support/build-fhs-userenv-bubblewrap { };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
@@ -996,7 +1001,9 @@ in
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
-  genpass = callPackage ../tools/security/genpass { };
+  genpass = callPackage ../tools/security/genpass {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
@@ -2053,6 +2060,8 @@ in
   interlock = callPackage ../servers/interlock {};
 
   jellyfin = callPackage ../servers/jellyfin { };
+
+  jellyfin_10_5 = callPackage ../servers/jellyfin/10.5.x.nix { };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
@@ -3213,6 +3222,10 @@ in
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  mozwire = callPackage ../tools/networking/mozwire {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   rage = callPackage ../tools/security/rage {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -3675,6 +3688,10 @@ in
   };
 
   freetds = callPackage ../development/libraries/freetds { };
+
+  freqtweak = callPackage ../applications/audio/freqtweak {
+    wxGTK = wxGTK31-gtk2;
+  };
 
   frescobaldi = python3Packages.callPackage ../misc/frescobaldi {};
 
@@ -5469,6 +5486,8 @@ in
 
   mycli = callPackage ../tools/admin/mycli { };
 
+  mycrypto = callPackage ../applications/blockchains/mycrypto { };
+
   mydumper = callPackage ../tools/backup/mydumper { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
@@ -6133,6 +6152,8 @@ in
   pinnwand = callPackage ../servers/pinnwand { };
 
   pirate-get = callPackage ../tools/networking/pirate-get { };
+
+  pipr = callPackage ../applications/misc/pipr { };
 
   pipreqs = callPackage ../tools/misc/pipreqs { };
 
@@ -12108,8 +12129,6 @@ in
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
-  fontconfig-penultimate = callPackage ../data/fonts/fontconfig-penultimate {};
-
   folly = callPackage ../development/libraries/folly { };
 
   folks = callPackage ../development/libraries/folks { };
@@ -16823,6 +16842,8 @@ in
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
+  rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
+
   searx = callPackage ../servers/web-apps/searx { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
@@ -19182,7 +19203,9 @@ in
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   androidStudioPackages = recurseIntoAttrs
-    (callPackage ../applications/editors/android-studio { });
+    (callPackage ../applications/editors/android-studio {
+      buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+    });
   android-studio = androidStudioPackages.stable;
 
   animbar = callPackage ../applications/graphics/animbar { };
@@ -19695,7 +19718,7 @@ in
     inherit (pkgs.gnome2) libart_lgpl libgnomeui;
   };
 
-  direwolf = callPackage ../applications/misc/direwolf { };
+  direwolf = callPackage ../applications/radio/direwolf { };
 
   dirt = callPackage ../applications/audio/dirt {};
 
@@ -21011,6 +21034,8 @@ in
 
   kanshi = callPackage ../tools/misc/kanshi { };
 
+  kapitonov-plugins-pack = callPackage ../applications/audio/kapitonov-plugins-pack { };
+
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
@@ -21332,7 +21357,9 @@ in
     inherit (gnome3) gnome-desktop libgnome-keyring;
     wine = wineWowPackages.staging;
   };
-  lutris = callPackage ../applications/misc/lutris/chrootenv.nix { };
+  lutris = callPackage ../applications/misc/lutris/fhsenv.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
   lutris-free = lutris.override {
     steamSupport = false;
   };
@@ -22247,7 +22274,7 @@ in
 
   protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
 
-  protonvpn-cli-ng = callPackage ../applications/networking/protonvpn-cli-ng { };
+  protonvpn-gui = callPackage ../applications/networking/protonvpn-gui { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
@@ -23147,6 +23174,8 @@ in
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
 
   ueberzug = with python3Packages; toPythonApplication ueberzug;
+
+  uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
 
   umurmur = callPackage ../applications/networking/umurmur { };
 
@@ -24783,9 +24812,11 @@ in
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
+  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  });
 
-  steam = steamPackages.steam-chrootenv;
+  steam = steamPackages.steam-fhsenv;
 
   steam-run = steam.run;
   steam-run-native = (steam.override {
