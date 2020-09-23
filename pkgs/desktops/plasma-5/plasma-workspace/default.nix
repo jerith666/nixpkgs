@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, fetchpatch,
 
   extra-cmake-modules, kdoctools,
 
@@ -45,6 +45,12 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
+    # https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/137
+    # https://bugs.kde.org/show_bug.cgi?id=423526
+    ( fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/137.diff";
+      sha256 = "22e9c683dfc56a559e652809ade238f8eb0ffb09d5ab042f5cd4b8216f647c00";
+    } )
   ];
 
 
