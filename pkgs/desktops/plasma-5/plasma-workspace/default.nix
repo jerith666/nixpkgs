@@ -49,6 +49,11 @@ mkDerivation {
     ./kde-lock-screen.patch
   ];
 
+  postPatch = ''
+    substituteInPlace wallpapers/image/wallpaper.knsrc.cmake \
+      --replace '@QtBinariesDir@/qdbus' ${getBin qttools}/bin/qdbus
+  '';
+
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
     ''-DNIXPKGS_XRDB="${getBin xrdb}/bin/xrdb"''
