@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, python
+{ stdenv, fetchpatch, buildPythonPackage, fetchPypi, pythonOlder, python
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
@@ -16,6 +16,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1qg7dgl81yq0sp50pkhgvmf8az1svx20zmpkfa68ka9d0ssh1wjw";
   };
+
+  patches = [ (fetchpatch {
+    url = "https://github.com/adobe-type-tools/afdko/commit/12575a5f0b4f04d95f234832ee42b6df89e11a1f.patch";
+    sha256 = "0p6a485mmzrbfldfbhgfghsypfiad3cabcw7qlw2rh993ivpnibf";
+  }) ];
 
   nativeBuildInputs = [ setuptools_scm ];
 
