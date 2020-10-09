@@ -7,10 +7,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "79.0";
+    ffversion = "81.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0zgf7wdcz992a4dy1rj0ax0k65an7h9p9iihka3jy4jd7w4g2d0x4mxz5iqn2y26hmgnkvjb921zh28biikahgygqja3z2pcx26ic0r";
+      sha512 = "1dnxn754vb99mccqrj3wr3pg2scjy42rvs5xc6bw022gh6n8kgipx9pbkapwfivkglynxmmbw1k11ak34zhr1g6p31m3550ad6azq19";
     };
 
     patches = [
@@ -26,6 +26,7 @@ rec {
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = lib.licenses.mpl20;
+      timeout = 28800; # eight hours
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
@@ -35,10 +36,10 @@ rec {
 
   firefox-esr-78 = common rec {
     pname = "firefox-esr";
-    ffversion = "78.1.0esr";
+    ffversion = "78.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "223v796vjsvgs3yw442c8qbsbh43l1aniial05rl70hx44rh9sg108ripj8q83p5l9m0sp67x6ixd2xvifizv6461a1zra1rvbb1caa";
+      sha512 = "3rg4rjmigir2wsvzdl5dkh74hahjv36yvd04rhq0rszw6xz9wyig64nxhkrpf416z6iy3y1qavk7x9j6j02sc2f545pd6cx8abjgqc9";
     };
 
     patches = [
@@ -60,32 +61,4 @@ rec {
       versionKey = "ffversion";
     };
   };
-
-  firefox-esr-68 = (common rec {
-    pname = "firefox-esr";
-    ffversion = "68.11.0esr";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0zg41jnbnpsa07xaizwfsmfav0cgxdqnh8i4yanxy49a45gigk895zqrx2if7pfsmdnj9zpwj9prj8cpnpsfhv6p62f3g2596aa9kvx";
-    };
-
-    patches = [
-      ./no-buildconfig-ffx65.patch
-    ];
-
-    meta = firefox.meta // {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-68-unwrapped";
-      versionSuffix = "esr";
-      versionKey = "ffversion";
-    };
-  }).override {
-    # Mozilla unfortunately doesn't support building with latest NSS anymore;
-    # instead they provide ESR releases for NSS:
-    # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Releases
-    nss = nss_3_44;
-  };
-
 }

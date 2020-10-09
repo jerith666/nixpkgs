@@ -10,13 +10,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "z3";
-  version = "4.8.7";
+  version = "4.8.9";
 
   src = fetchFromGitHub {
     owner  = "Z3Prover";
     repo   = pname;
     rev    = "z3-${version}";
-    sha256 = "0hprcdwhhyjigmhhk6514m71bnmvqci9r8gglrqilgx424r6ff7q";
+    sha256 = "1hnbzq10d23drd7ksm3c1n2611c3kd0q0yxgz8y78zaafwczvwxx";
   };
 
   buildInputs = [ python fixDarwinDylibNames ] ++ optional javaBindings jdk;
@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/Z3Prover/z3";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.x86_64;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ttuegel ];
   };
 }

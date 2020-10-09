@@ -1,22 +1,24 @@
-{ rustPlatform, fetchFromGitHub, lib, fzf, makeWrapper }:
+{ fetchFromGitHub, fzf, lib, makeWrapper, rustPlatform, wget }:
 
 rustPlatform.buildRustPackage rec {
   pname = "navi";
-  version = "2.7.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "denisidoro";
     repo = "navi";
     rev = "v${version}";
-    sha256 = "12p9l41k7isaapr0xbsm7brkjrv7i8826y029i12psz92nsynk29";
+    sha256 = "0izmf4flwwn2h1wwpsnghb6rd494lj63hhsky1v9v6l1l641had4";
   };
 
-  cargoSha256 = "11dc3gc7fyikbbgacmljhysr2sl7lmq6w3bsfcf2cqny39r25yp0";
+  cargoSha256 = "19xv9kbmxbp84lj8ycifsdr7sw9vhwgla7cdmrvlhayiq5r04xd7";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $out/bin/navi --prefix PATH : ${lib.makeBinPath [ fzf ]}
+    wrapProgram $out/bin/navi \
+      --prefix PATH : "$out/bin" \
+      --prefix PATH : ${lib.makeBinPath [ fzf wget ]}
   '';
 
   meta = with lib; {

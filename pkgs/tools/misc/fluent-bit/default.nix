@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.5.3";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
     rev = "v${version}";
-    sha256 = "153c7hafmzwxa24h923irfhzaqqd8wbr2aaab6l3hjhgx5q8s5bf";
+    sha256 = "1kpa2wgpm747w7bnk33m7bip5shlbkavs7rwnlj6yr600dcp8zp5";
   };
 
   nativeBuildInputs = [ cmake flex bison ];

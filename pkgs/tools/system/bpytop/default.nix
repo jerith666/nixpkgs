@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpytop";
-  version = "1.0.13";
+  version = "1.0.25";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mrzl5ry5janifykp58gf5g7xw7522wvpp8hgq2hpfx52z6my1bj";
+    sha256 = "0sxwrckv2j1283h888pyyxply2g93x6jn6cghqh207igmcg4iaj3";
   };
 
   buildInputs = [ makeWrapper ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e "s#/usr/\[local/\]#$out/#g" \
            -e "s#/usr/{td}#$out/#g" \
+           -e "s#THEME_DIR: str = \"\"#THEME_DIR: str = \"$out/share/bpytop/themes\"#" \
       ./bpytop.py
   '';
 

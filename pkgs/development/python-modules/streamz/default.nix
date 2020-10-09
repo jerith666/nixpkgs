@@ -10,6 +10,7 @@
 , toolz
 , tornado
 , zict
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0r83z3233pfwjw31bkmdldjqlx533f27iimayadfgcn5jr3xwykq";
+    sha256 = "787ade4796c5b2e79af2aac678841ba3748a65a3adce150697dcdd31c4f80365";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +38,8 @@ buildPythonPackage rec {
     pytest
     requests
   ];
+
+  disabled = pythonOlder "3.6";
 
   # Disable test_tcp_async because fails on sandbox build
   # disable kafka tests

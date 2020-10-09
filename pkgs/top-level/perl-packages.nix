@@ -11,8 +11,8 @@
 , perl, overrides, buildPerl, shortenPerlShebang
 }:
 
-# cpan2nix assumes that perl-packages.nix will be used only with perl 5.28.3 or above
-assert stdenv.lib.versionAtLeast perl.version "5.28.3";
+# cpan2nix assumes that perl-packages.nix will be used only with perl 5.30.3 or above
+assert stdenv.lib.versionAtLeast perl.version "5.30.3";
 let
   inherit (stdenv.lib) maintainers;
   self = _self // (overrides pkgs);
@@ -801,6 +801,20 @@ let
     meta = {
       description = "Provide an interface to ZIP archive files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  AstroFITSHeader = buildPerlModule rec {
+    pname = "Astro-FITS-Header";
+    version = "3.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
+      sha256 = "530d59ef0c0935f9862d187187a2d7583b12c639bb67db14f983322b161892d9";
+    };
+    meta = {
+      homepage = "http://github.com/timj/perl-Astro-FITS-Header/tree/master";
+      description = "Object-oriented interface to FITS HDUs";
+      license = stdenv.lib.licenses.free;
     };
   };
 
@@ -2916,6 +2930,22 @@ let
     };
   };
 
+  CLIHelpers = buildPerlPackage {
+    pname = "CLI-Helpers";
+    version = "1.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-1.8.tar.gz";
+      sha256 = "1hgiynpy7q4gbx1d9pwnzdzil36k13vjxhscalj710ikcddvjz92";
+    };
+    buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
+    propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
+    meta = {
+      homepage = "https://github.com/reyjrar/CLI-Helpers";
+      description = "Subroutines for making simple command line scripts";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   Clipboard = buildPerlModule {
     pname = "Clipboard";
     version = "0.26";
@@ -4036,6 +4066,23 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
       sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
+    };
+  };
+
+  CryptSodium = buildPerlPackage {
+    pname = "Crypt-Sodium";
+    version = "0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MG/MGREGORO/Crypt-Sodium-0.11.tar.gz";
+      sha256 = "0y3c24zv4iwnvlf9zwxambk8ddram54fm6l1m5yhbskc0nhp6z4h";
+    };
+    NIX_CFLAGS_COMPILE = "-I${pkgs.libsodium.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.libsodium.out}/lib -lsodium";
+    meta = {
+      homepage = "https://metacpan.org/release/Crypt-Sodium";
+      description = "Perl bindings for libsodium (NaCL)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -8762,6 +8809,21 @@ let
     };
   };
 
+  HamAPRSFAP = buildPerlPackage {
+    pname = "Ham-APRS-FAP";
+    version = "1.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HE/HESSU/Ham-APRS-FAP-1.21.tar.gz";
+      sha256 = "e01b455d46f44710dbcf21b6fa843f09358ce60eee1c4141bc74e0a204d3a020";
+    };
+    propagatedBuildInputs = [ DateCalc ];
+    meta = with stdenv.lib; {
+      description = "Finnish APRS Parser (Fabulous APRS Parser)";
+      maintainers = with maintainers; [ andrew-d ];
+      license = with licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HashDiff = buildPerlPackage {
     pname = "Hash-Diff";
     version = "0.010";
@@ -10183,7 +10245,8 @@ let
 
     propagatedBuildInputs = [ Inline ];
 
-    makeMakerFlags = "J2SDK=${pkgs.jdk}";
+    # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
+    makeMakerFlags = "J2SDK=${pkgs.jdk8}";
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
@@ -10700,10 +10763,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.12";
+    version = "1.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.12.tar.gz";
-      sha256 = "1fd25bd6047b45cdcb1ab71a3d3bb0b36c71ec844a8742dee0bb34f8587fbd08";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.14.tar.gz";
+      sha256 = "1dzbh40g773ivawn1smii6jz3kisz07pcn9sbqarc857q5zaf8dq";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -12858,10 +12921,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.55";
+    version = "8.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.55.tar.gz";
-      sha256 = "116f79a8jvdk0zfj34gp3idhxgk4l8qq4ka6pwhdp8pmks969w0x";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.58.tar.gz";
+      sha256 = "0543m2g1pjm06b0yr4cffw70ki76762ria65zvrjccc2zk69pwvy";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -15615,6 +15678,51 @@ let
     };
   };
 
+  PDL = buildPerlPackage rec {
+    pname = "PDL";
+    version = "2.022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/${pname}-${version}.tar.gz";
+      sha256 = "12isj05ni44bgf76lc0fs5v88ai8gn5dqrppsbj7vsxblcya7113";
+    };
+    patchPhase = ''
+      substituteInPlace perldl.conf \
+        --replace 'POSIX_THREADS_LIBS => undef' 'POSIX_THREADS_LIBS => "-L${pkgs.glibc.dev}/lib"' \
+        --replace 'POSIX_THREADS_INC  => undef' 'POSIX_THREADS_INC  => "-I${pkgs.glibc.dev}/include"' \
+        --replace 'WITH_MINUIT => undef' 'WITH_MINUIT => 0' \
+        --replace 'WITH_SLATEC => undef' 'WITH_SLATEC => 0' \
+        --replace 'WITH_HDF => undef' 'WITH_HDF => 0' \
+        --replace 'WITH_GD => undef' 'WITH_GD => 0' \
+        --replace 'WITH_PROJ => undef' 'WITH_PROJ => 0'
+    '';
+
+    nativeBuildInputs = with pkgs; [ autoPatchelfHook libGL.dev glibc.dev mesa_glu.dev ];
+
+    buildInputs = [ DevelChecklib TestDeep TestException TestWarn ] ++
+                  (with pkgs; [ gsl freeglut xorg.libXmu xorg.libXi ]);
+
+    propagatedBuildInputs = [
+      AstroFITSHeader
+      ConvertUU
+      ExtUtilsF77
+      FileMap
+      Inline
+      InlineC
+      ListMoreUtils
+      ModuleCompile
+      OpenGL
+      PodParser
+      TermReadKey
+    ];
+
+    meta = {
+      homepage = "http://pdl.perl.org/";
+      description = "Perl Data Language";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  };
+
   Pegex = buildPerlPackage {
     pname = "Pegex";
     version = "0.75";
@@ -16716,6 +16824,24 @@ let
     };
   };
 
+  Apprainbarf = buildPerlModule {
+    pname = "Apprainbarf";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SY/SYP/App-rainbarf-1.4.tar.gz";
+      sha256 = "4f139ad35faaf2de0623dc0bb1dd89fa5a431e548bfec87dee194cf0e25cc97d";
+    };
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/rainbarf
+    '';
+    meta = {
+      homepage = "https://github.com/creaktive/rainbarf";
+      description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus  ];
+    };
+  };
+
   Razor2ClientAgent = buildPerlPackage {
     pname = "Razor2-Client-Agent";
     version = "2.86";
@@ -16982,6 +17108,22 @@ let
     meta = {
       description = "An Asynchronous Remote Procedure Stack";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+    RPM2 = buildPerlModule {
+    pname = "RPM2";
+    version = "1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/RPM2-1.4.tar.gz";
+      sha256 = "5ecb42aa69324e6f4088abfae07313906e5aabf2f46f1204f3f1de59155bb636";
+    };
+    buildInputs = [ pkgs.pkg-config pkgs.rpm ];
+    doCheck = false; # Tries to open /var/lib/rpm
+    meta = {
+      description = "Perl bindings for the RPM Package Manager API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
