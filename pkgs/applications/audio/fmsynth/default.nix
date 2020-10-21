@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     cd lv2
     substituteInPlace GNUmakefile --replace "/usr/lib/lv2" "$out/lib/lv2"
-    make
+    make  SIMD=0
   '';
 
   preInstall = "mkdir -p $out/lib/lv2";
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       - Full floating point implementation optimized for SIMD
       - Hard real-time constraints
     '';
-    homepage = https://github.com/Themaister/libfmsynth;
+    homepage = "https://github.com/Themaister/libfmsynth";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
     platforms = stdenv.lib.platforms.linux;

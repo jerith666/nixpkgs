@@ -1,23 +1,24 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+, pgpy, flask, bleach, misaka, humanize, html5lib, markdown, psycopg2, pygments
+, requests, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, prometheus_client
+, celery, alembic, importlib-metadata
 , sassc, nodejs
 , writeText }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.54.2";
+  version = "0.59.13";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "1m9nblm0ygjjdzcf79jk5v8p74dgyby15mqkggw9i3smz9r3afim";
+    sha256 = "1rgndpr0w25mxg0d8x54lay82d0p01aygallsgr1lw5zs4r3ldz6";
   };
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
     nodejs = nodejs;
-    sha256 = "0axl50swhcw8llq8z2icwr4nkr5qsw2riih0a040f9wx4xiw4p6p";
+    sha256 = "0gwa2xb75g7fclrsr7r131kj8ri5gmhd96yw1iws5pmgsn2rlqi1";
   };
 
   patches = [
@@ -35,18 +36,21 @@ buildPythonPackage rec {
     bleach
     misaka
     humanize
+    html5lib
     markdown
     psycopg2
     pygments
     requests
     sqlalchemy
-    flask_login
+    cryptography
     beautifulsoup4
     sqlalchemy-utils
+    prometheus_client
 
     # Unofficial runtime dependencies?
     celery
     alembic
+    importlib-metadata
   ];
 
   PKGVER = version;
@@ -55,20 +59,10 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
+  dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/srht;
+    homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

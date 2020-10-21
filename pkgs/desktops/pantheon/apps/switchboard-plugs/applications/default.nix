@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -13,18 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-applications";
-  version = "2.1.5";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1c4agff456625kycacpsww7c9jsnsg1rqps96r7cvn9zq371b5ir";
+    sha256 = "0wzm390g8di4ks3w637a0wl4j7g89j321xkz5msd9058gksvaaxs";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -42,11 +43,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Applications Plug";
-    homepage = https://github.com/elementary/switchboard-plug-applications;
+    homepage = "https://github.com/elementary/switchboard-plug-applications";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

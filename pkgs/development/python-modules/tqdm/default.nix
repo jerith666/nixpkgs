@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.32.2";
+  version = "4.48.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "25d4c0ea02a305a688e7e9c2cdc8f862f989ef2a4701ab28ee963295f5b109ab";
+    sha256 = "6baa75a88582b1db6d34ce4690da5501d2a1cb65c34664840a456b2c9f794d29";
   };
 
-  buildInputs = [ nose coverage glibcLocales flake8 ];
+  checkInputs = [ nose coverage glibcLocales flake8 ];
 
   postPatch = ''
     # Remove performance testing.
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Fast, Extensible Progress Meter";
-    homepage = https://github.com/tqdm/tqdm;
+    homepage = "https://github.com/tqdm/tqdm";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

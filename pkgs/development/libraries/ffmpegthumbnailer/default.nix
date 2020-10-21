@@ -1,22 +1,22 @@
-{ fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig, libjpeg
+{ fetchFromGitHub, stdenv, ffmpeg_3, cmake, libpng, pkgconfig, libjpeg
 }:
 
 stdenv.mkDerivation rec {
   pname = "ffmpegthumbnailer";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
     rev = version;
-    sha256 = "0mcdvyzny3yrdx23f3ww0i6lgkh68nzfcdla9d4vkc8l2b1kla1j";
+    sha256 = "1bakbr714j7yxdal1f5iq0gcl4cxggbbgj227ihdh5kvygqlwich";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ ffmpeg libpng libjpeg ];
+  buildInputs = [ ffmpeg_3 libpng libjpeg ];
 
   meta = with stdenv.lib;  {
-    homepage = https://github.com/dirkvdb/ffmpegthumbnailer;
+    homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
     description = "A lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video 
         thumbnailer that can be used by file managers to create thumbnails

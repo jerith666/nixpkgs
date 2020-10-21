@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.7";
+  version = "3.5.6";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "0rzr0n1gljhmxidsslbr9505xcv0hm8jahkp4dm87a1v3l956cpy";
+    sha256 = "0shyxk83adv4pbfilmskyrgjpb57vyhmvqbmfqawxbc22mksmh4f";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
     make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
   '';
 
-  NIX_LDFLAGS = lib.optional withLDAP "-llber";
+  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
 
   installTargets = [ "non-interactive-package" ];
 
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://www.postfix.org/;
+    homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;

@@ -30,8 +30,8 @@
 let
 
   name = "hylafaxplus-${version}";
-  version = "7.0.0";
-  sha256 = "1ryqd8mcaj536pxykja3qzwgd985ad1nn5zfqr1wksf2mzqvwscy";
+  version = "7.0.3";
+  sha256 = "139iwcwrn9i5lragxi33ilzah72w59wg4midfjjgx5cly3ah0iy4";
 
   configSite = substituteAll {
     name = "hylafaxplus-config.site";
@@ -89,8 +89,8 @@ stdenv.mkDerivation {
   postInstallCheck = ''. ${./post-install-check.sh}'';
   meta = {
     description = "enterprise-class system for sending and receiving facsimiles";
-    downloadPage = https://hylafax.sourceforge.io/download.php;
-    homepage = https://hylafax.sourceforge.io;
+    downloadPage = "https://hylafax.sourceforge.io/download.php";
+    homepage = "https://hylafax.sourceforge.io";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.yarny ];
     platforms = lib.platforms.linux;

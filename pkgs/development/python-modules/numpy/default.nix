@@ -1,31 +1,51 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, lapack
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
 
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      ${blasImplementation} = {
-        include_dirs = "${blas}/include";
+      ${blas.implementation} = {
+        include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+        libraries = "lapack,lapacke,blas,cblas";
+      };
+      lapack = {
+        include_dirs = "${lib.getDev lapack}/include";
+        library_dirs = "${lapack}/lib";
+      };
+      blas = {
+        include_dirs = "${lib.getDev blas}/include";
         library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
       };
     });
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.17.2";
+  version = "1.19.1";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "73615d3edc84dd7c4aeb212fa3748fb83217e00d201875a47327f55363cef2df";
+    sha256 = "b8456987b637232602ceb4d663cb34106f7eb780e247d51a260b84760fd8f491";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
-  buildInputs = [ blas ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
+  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -56,8 +76,10 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
-    inherit blasImplementation cfg;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
   # Disable test
@@ -66,7 +88,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = "https://numpy.org/";
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

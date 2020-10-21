@@ -1,12 +1,12 @@
-{stdenv, fetchurl, cyrus_sasl, libevent}:
+{stdenv, fetchurl, cyrus_sasl, libevent, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.18";
+  version = "1.6.6";
   pname = "memcached";
 
   src = fetchurl {
     url = "https://memcached.org/files/${pname}-${version}.tar.gz";
-    sha256 = "127g4l0ilb376dpgz6qby24vc72ban35c938dzmp1nh6bdqddgcy";
+    sha256 = "1xrj7vy05nc6bky4wnrmrbxfibvk5vq4dp2fwk4jk4amzbn0x3wh";
   };
 
   configureFlags = [
@@ -21,10 +21,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";
-    repositories.git = https://github.com/memcached/memcached.git;
-    homepage = http://memcached.org/;
+    repositories.git = "https://github.com/memcached/memcached.git";
+    homepage = "http://memcached.org/";
     license = licenses.bsd3;
     maintainers = [ maintainers.coconnor ];
     platforms = platforms.linux ++ platforms.darwin;
+  };
+  passthru.tests = {
+    smoke-tests = nixosTests.memcached;
   };
 }

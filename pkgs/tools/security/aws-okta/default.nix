@@ -1,8 +1,8 @@
-{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv }:
+{ buildGoPackage, fetchFromGitHub, libusb1, pkgconfig, stdenv, libiconv }:
 
 buildGoPackage rec {
   pname = "aws-okta";
-  version = "0.20.1";
+  version = "1.0.4";
 
   goPackagePath = "github.com/segmentio/aws-okta";
 
@@ -10,24 +10,22 @@ buildGoPackage rec {
     owner = "segmentio";
     repo = "aws-okta";
     rev = "v${version}";
-    sha256 = "084lb9rp04vbpzmvsb2l92a4gp7c8g28x4xsagzwkqqpwi3fd15d";
+    sha256 = "0a7xccnv0x0a6sydif0rvkdbw4jy9gjijajip1ac6m70l20dhl1v";
   };
 
-  goDeps = ./deps.nix;
+  buildFlags = [ "--tags" "release" ];
 
-  buildFlags = "--tags release";
+  buildFlagsArray = [ "-ldflags=-X main.Version=${version}" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb1 ];
+  buildInputs = [ libusb1  libiconv ];
 
   meta = with stdenv.lib; {
     inherit version;
     description = "aws-vault like tool for Okta authentication";
     license = licenses.mit;
     maintainers = [maintainers.imalsogreg];
-    broken = stdenv.isDarwin;  # test with CoreFoundation 10.11
-    platforms = platforms.all;
-    homepage = https://github.com/segmentio/aws-okta;
+    homepage = "https://github.com/segmentio/aws-okta";
     downloadPage = "https://github.com/segmentio/aws-okta";
   };
 }

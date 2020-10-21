@@ -5,6 +5,7 @@
 , libxml2
 , xdg-desktop-portal
 , gtk3
+, gnome3
 , glib
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.4.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "1zryfg6232vz1pmv0zqcxvl4clnbb15kjf55b24cimkcnidklbap";
+    sha256 = "183iha9dxmvprn99ymgz17jx1lyn1fj5jyj6ghxl716zn9mxmird";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
+    gnome3.gnome-desktop
+    gnome3.gnome-settings-daemon # schemas needed for settings api (fonts, etc)
   ];
 
   meta = with stdenv.lib; {

@@ -1,6 +1,8 @@
 { stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+, gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
+, extraPatches ? []
 }:
 
 let
@@ -15,17 +17,11 @@ stdenv.mkDerivation rec {
     url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
+  nativeBuildInputs = [ gnumake42 ];
   buildInputs =
     [ bison pkgconfig glib gettext perl libgdiplus libX11 ncurses zlib python autoconf libtool automake cmake which
     ]
     ++ (stdenv.lib.optionals stdenv.isDarwin [ Foundation libobjc ]);
-
-  propagatedBuildInputs = [glib];
-
-  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
-
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
@@ -44,7 +40,7 @@ stdenv.mkDerivation rec {
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
-  patches = [ ./pkgconfig-before-gac.patch ];
+  patches = [ ./pkgconfig-before-gac.patch ] ++ extraPatches;
 
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.
@@ -80,7 +76,7 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with stdenv.lib; {
-    homepage = https://mono-project.com/;
+    homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];

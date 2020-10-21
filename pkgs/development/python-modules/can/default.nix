@@ -16,20 +16,15 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1giv9s6w90lalxsijgnxzynygkckcfyaxnxsldbwv0784vwy1jcd";
+    sha256 = "ecd69cf6b2f0235345ebe607a15325cf1384c85b24ffbe1d68c3754357f87488";
   };
 
   propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
-
-  # Tests won't work with hypothesis 4.7.3 under Python 2. So skip the tests in
-  # that case. This clause can be removed once hypothesis has been upgraded in
-  # nixpkgs.
-  doCheck = !(isPy27 && (hypothesis.version == "4.7.3"));
+  checkInputs = [ nose mock pytest hypothesis future ];
 
   # Add the scripts to PATH
   checkPhase = ''
@@ -37,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
+    homepage = "https://github.com/hardbyte/python-can";
     description = "CAN support for Python";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ sorki ];

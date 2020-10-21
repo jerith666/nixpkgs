@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -9,25 +9,26 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "cfe" "0426ma80i41qsgzm1qdz81mjskck426diygxi2k5vji2gkpixa3v";
+    src = fetch "clang" "0ls2h3iv4finqyflyhry21qhc9cm9ga7g1zq21020p065qmm2y2p";
 
     unpackPhase = ''
       unpackFile $src
-      mv cfe-${version}* clang
+      mv clang-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python ]
-      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    nativeBuildInputs = [ cmake python3 ]
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DCLANGD_BUILD_XPC=OFF"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -43,6 +44,8 @@ let
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-9.patch
     ];
 
     postPatch = ''
@@ -73,7 +76,8 @@ let
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"
       substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
+          --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
       mkdir -p $python/bin $python/share/clang/
       mv $out/bin/{git-clang-format,scan-view} $python/bin
@@ -89,13 +93,11 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = http://llvm.org/;
+      homepage    = "https://llvm.org/";
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };

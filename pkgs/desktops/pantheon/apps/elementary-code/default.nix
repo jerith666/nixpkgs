@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -27,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-code";
-  version = "3.1.1";
+  version = "3.4.1";
 
   repoName = "code";
 
@@ -35,13 +36,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0l469fi5vbcazwfhy320nr8wrzz96jbrqn4hag0kdm16wvf5x1yc";
+    sha256 = "158zrzyyy507rxcbsb5am9768zbakpwrl61ixab57zla7z51l0g0";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Code editor designed for elementary OS";
-    homepage = https://github.com/elementary/code;
+    homepage = "https://github.com/elementary/code";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

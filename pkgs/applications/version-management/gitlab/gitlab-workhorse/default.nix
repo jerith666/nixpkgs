@@ -3,20 +3,19 @@
 buildGoPackage rec {
   pname = "gitlab-workhorse";
 
-  version = "8.10.0";
+  version = "8.31.2";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "11cfhh48dga5ghfcijb68gbx0nfr5bs3vvp2j1gam9ac37fpvk0x";
+    sha256 = "0wvhhjfb490mjdrmc9xwr3qfh3941xn3b02c757ghrvzwv329wvg";
   };
 
   goPackagePath = "gitlab.com/gitlab-org/gitlab-workhorse";
   goDeps = ./deps.nix;
   buildInputs = [ git ];
-
-  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" "GOCACHE=$(TMPDIR)/go-cache" ];
+  buildFlagsArray = "-ldflags=-X main.Version=${version}";
 
   # gitlab-workhorse depends on an older version of labkit which
   # contains old, vendored versions of some packages; gitlab-workhorse
@@ -29,8 +28,8 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
+    homepage = "http://www.gitlab.com/";
+    platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin talyz ];
     license = licenses.mit;
   };

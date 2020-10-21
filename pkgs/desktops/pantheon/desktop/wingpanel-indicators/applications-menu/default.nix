@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
@@ -22,11 +23,12 @@
 , wingpanel
 , zeitgeist
 , bc
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.4.3";
+  version = "2.7.1";
 
   repoName = "applications-menu";
 
@@ -34,13 +36,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "15mwfynaa57jii43x77iaz5gqjlylh5zxc70am8zgp8vhgzflvyd";
+    sha256 = "0wsfvyp0z6c612nl348dr6sar0qghhfcgkzcx3108x8v743v7rim";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
     libunity
     plank
@@ -73,13 +75,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   patches = [
     (substituteAll {
-      src = ./bc.patch;
-      exec = "${bc}/bin/bc";
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
     })
   ];
 
@@ -90,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
-    homepage = https://github.com/elementary/applications-menu;
+    homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

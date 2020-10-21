@@ -134,6 +134,10 @@ let
   };
 
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+  ];
+
   options = {
     boot.binfmt = {
       registrations = mkOption {
@@ -264,9 +268,10 @@ in {
       mkdir -p -m 0755 /run/binfmt
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
-    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {})
-      [ "proc-sys-fs-binfmt_misc.automount"
-        "proc-sys-fs-binfmt_misc.mount"
-      ];
+    systemd.additionalUpstreamSystemUnits = lib.mkIf (config.boot.binfmt.registrations != {}) [
+      "proc-sys-fs-binfmt_misc.automount"
+      "proc-sys-fs-binfmt_misc.mount"
+      "systemd-binfmt.service"
+    ];
   };
 }

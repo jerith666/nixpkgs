@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr }:
+{ stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.0.2";
+  version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
     rev = "release-${version}";
-    sha256 = "11lkihykwkq0sbmijqxmn52lg6mcn6gkcpj1c7fhzm0hm1b9p9dn";
+    sha256 = "1igxyji2ab3gki1hlndvws1b2868mk1n3c4c3y5z0h3g713zw9ap";
   };
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = [ libX11 libXxf86vm libXrandr ];
+  buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL ];
   enableParallelBuilding = true;
 
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Khronos OpenXR loader";
-    homepage    = https://www.khronos.org/openxr;
+    homepage    = "https://www.khronos.org/openxr";
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

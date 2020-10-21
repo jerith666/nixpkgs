@@ -4,13 +4,13 @@
 { stdenv, fetchgit }:
 
 stdenv.mkDerivation rec {
-  version = "2019-10-10";
+  version = "2020-08-18";
   pname = "oh-my-zsh";
-  rev = "52f58785645c18aa88ea515d070a42bcfe97508d";
+  rev = "89400f156a6e1d64acaeab9ec265f54cdab91817";
 
   src = fetchgit { inherit rev;
-    url = "https://github.com/robbyrussell/oh-my-zsh";
-    sha256 = "0sxj077g8jh9v0n3zzrkihmgx7v5dyv4h6nrpk1c5ijjk9j7x9d5";
+    url = "https://github.com/ohmyzsh/ohmyzsh";
+    sha256 = "1k659480dv7wi9rz1zdq8w0nysgjsm58jy2kzp3rnxaxm7fkzivm";
   };
 
   pathsToLink = [ "/share/oh-my-zsh" ];
@@ -34,6 +34,17 @@ stdenv.mkDerivation rec {
   sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
          -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
    $template
+
+  chmod +w oh-my-zsh.sh
+
+  # Both functions expect oh-my-zsh to be in ~/.oh-my-zsh and try to
+  # modify the directory.
+  cat >> oh-my-zsh.sh <<- EOF
+
+  # Undefine functions that don't work on Nix.
+  unfunction uninstall_oh_my_zsh
+  unfunction upgrade_oh_my_zsh
+  EOF
 
   # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
   # them, if found.
@@ -66,7 +77,7 @@ stdenv.mkDerivation rec {
 
     $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
   '';
-  homepage        = https://ohmyz.sh/;
+  homepage        = "https://ohmyz.sh/";
   license         = licenses.mit;
   platforms       = platforms.all;
   maintainers     = with maintainers; [ scolobb nequissimus ];

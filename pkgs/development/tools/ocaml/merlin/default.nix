@@ -1,21 +1,19 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, yojson }:
+{ lib, fetchurl, buildDunePackage, yojson }:
 
 buildDunePackage rec {
   pname = "merlin";
-  version = "3.3.2";
+  version = "3.3.6";
 
   minimumOCamlVersion = "4.02.1";
 
-  src = fetchFromGitHub {
-    owner = "ocaml";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1z9mcxflraj15sbz6q7f84n31n9fsialw7z8bi3r1biz68nypva9";
+  src = fetchurl {
+    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-v${version}.tbz";
+    sha256 = "1360cm0jkn2v2y5p3yzdyw9661a1vpddcibkbfblmk95qafx4civ";
   };
 
   buildInputs = [ yojson ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;

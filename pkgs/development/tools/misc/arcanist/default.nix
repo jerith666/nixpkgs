@@ -1,51 +1,54 @@
-{ stdenv, fetchFromGitHub, php, flex, makeWrapper }:
+{ stdenv, fetchFromGitHub, php, flex }:
 
-let
-  libphutil = fetchFromGitHub {
-    owner = "phacility";
-    repo = "libphutil";
-    rev = "3215e4e291ed4468faeed4542d47a571b5bc559a";
-    sha256 = "0bbinaxny0j4iniz2grf0s9cysbl3x24yc32f3jra9mwsgh2v2zj";
-  };
-  arcanist = fetchFromGitHub {
-    owner = "phacility";
-    repo = "arcanist";
-    rev = "2650e8627a20e1bfe334a4a2b787f44ef5d6ebc5";
-    sha256 = "0x0xxiar202ypbgxh19swzjil546bbp8li4k5yrpvab55y8ymkd4";
-  };
+# Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
+# invoked and complains about it being an unknown toolset. We could use `makeWrapper`, but
+# then we’d need to still craft a script that does the `php libexec/arcanist/bin/...` dance
+# anyway... So just do everything at once.
+let makeArcWrapper = toolset: ''
+    cat << WRAPPER > $out/bin/${toolset}
+    #!$shell -e
+    export PATH='${php}/bin/'\''${PATH:+':'}\$PATH
+    exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
+    WRAPPER
+    chmod +x $out/bin/${toolset}
+'';
+
 in
+
 stdenv.mkDerivation {
   pname = "arcanist";
-  version = "20180916";
+  version = "20200711";
 
-  src = [ arcanist libphutil ];
-  buildInputs = [ php makeWrapper flex ];
-
-  unpackPhase = ''
-    cp -aR ${libphutil} libphutil
-    cp -aR ${arcanist} arcanist
-    chmod +w -R libphutil arcanist
-  '';
+  src = fetchFromGitHub {
+    owner = "phacility";
+    repo = "arcanist";
+    rev = "2565cc7b4d1dbce6bc7a5b3c4e72ae94be4712fe";
+    sha256 = "0jiv4aj4m5750dqw9r8hizjkwiyxk4cg4grkr63sllsa2dpiibxw";
+  };
+  buildInputs = [ php flex ];
 
   postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace libphutil/support/xhpast/Makefile \
+    substituteInPlace support/xhpast/Makefile \
       --replace "-minline-all-stringops" ""
   '';
 
   buildPhase = ''
-    (
-      cd libphutil/support/xhpast
-      make clean all install
-    )
+    make xhpast -C support/xhpast
   '';
+
   installPhase = ''
     mkdir -p $out/bin $out/libexec
-    cp -R libphutil $out/libexec/libphutil
-    cp -R arcanist  $out/libexec/arcanist
+    make install -C support/xhpast
+    cp -R $src $out/libexec/arcanist
 
-    ln -s $out/libexec/arcanist/bin/arc $out/bin
-    wrapProgram $out/bin/arc \
-      --prefix PATH : "${php}/bin"
+    ${makeArcWrapper "arc"}
+    ${makeArcWrapper "phage"}
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/arc help diff -- > /dev/null
+    $out/bin/phage help alias -- > /dev/null
   '';
 
   meta = {

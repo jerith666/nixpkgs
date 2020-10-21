@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -16,18 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0frml591r82j7hf1zlccgv8pzk3w10x470f9nzvdgdjpz0r776k2";
+    sha256 = "1kwd3cj6kk5dnmhcrmf13adqrhhjv2j6j2i78cpqbi9yv2h7sv9y";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -48,11 +49,9 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   meta = with stdenv.lib; {
     description = "Switchboard Sound Plug";
-    homepage = https://github.com/elementary/switchboard-plug-sound;
+    homepage = "https://github.com/elementary/switchboard-plug-sound";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

@@ -36,10 +36,10 @@ let
     attrs ? meta.license;
 
   hasWhitelistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license whitelist;
+    hasLicense attrs && lib.lists.any (l: builtins.elem l whitelist) (lib.lists.toList attrs.meta.license);
 
   hasBlacklistedLicense = assert areLicenseListsValid; attrs:
-    hasLicense attrs && builtins.elem attrs.meta.license blacklist;
+    hasLicense attrs && lib.lists.any (l: builtins.elem l blacklist) (lib.lists.toList attrs.meta.license);
 
   allowBroken = config.allowBroken or false
     || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
@@ -67,7 +67,7 @@ let
     isUnfree (lib.lists.toList attrs.meta.license) &&
     !allowUnfreePredicate attrs;
 
-  allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
+  allowInsecureDefaultPredicate = x: builtins.elem (getName x) (config.permittedInsecurePackages or []);
   allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
@@ -75,7 +75,7 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  showLicense = license: license.shortName or "unknown";
+  showLicense = license: toString (map (l: l.shortName or "unknown") (lib.lists.toList license));
 
   pos_str = meta: meta.position or "«unknown-file»";
 
@@ -108,7 +108,12 @@ let
         You can install it anyway by whitelisting this package, using the
         following methods:
 
-        a) for `nixos-rebuild` you can add ‘${getName attrs}’ to
+        a) To temporarily allow all insecure packages, you can use an environment
+           variable for a single invocation of the nix tools:
+
+             $ export NIXPKGS_ALLOW_INSECURE=1
+
+        b) for `nixos-rebuild` you can add ‘${getName attrs}’ to
            `nixpkgs.config.permittedInsecurePackages` in the configuration.nix,
            like so:
 
@@ -118,9 +123,9 @@ let
                ];
              }
 
-        b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
-        ‘${getName attrs}’ to `permittedInsecurePackages` in
-        ~/.config/nixpkgs/config.nix, like so:
+        c) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+           ‘${getName attrs}’ to `permittedInsecurePackages` in
+           ~/.config/nixpkgs/config.nix, like so:
 
              {
                permittedInsecurePackages = [

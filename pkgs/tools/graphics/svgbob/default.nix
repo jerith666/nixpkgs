@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/svgbob_cli";
 
-  cargoSha256 = "0mnq1s809f394x83gjv9zljr07c94k48zkrwxs6ibi19shgmrnnd";
+  cargoSha256 = "1y9jsnxmz51zychmmzp6mi29pb5ks2qww7lk5bshkhp56v51sm8d";
 
   # Test tries to build outdated examples
   doCheck = false;
@@ -23,6 +23,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ivanceras/svgbob";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
-    platforms = platforms.all;
   };
 }

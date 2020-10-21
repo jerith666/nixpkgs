@@ -1,28 +1,33 @@
-{ stdenv, fetchurl, autoPatchelfHook, cmake, pkgconfig, libdrm, libpciaccess
-, libva , libX11, libXau, libXdmcp, libpthreadstubs
-}:
+{ stdenv, fetchurl, cmake, pkgconfig, gtest, libdrm, libpciaccess, libva, libX11
+, libXau, libXdmcp, libpthreadstubs }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
-  version = "19.2.1";
+  version = "20.2.1";
 
   src = fetchurl {
     url = "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-${version}.tar.gz";
-    sha256 = "0w3r6lr2q3kch0vz9sxld1nz6iff129xr8wzg0p2j7mng41imh83";
+    sha256 = "0m3ipfdknpgrdwiywlinl4sfkfrvyv7wmq1j83pmbr54z067sgg1";
   };
 
-  # patchelf is needed for binaries in $out/share/samples
-  nativeBuildInputs = [ autoPatchelfHook cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
     libdrm libva libpciaccess libX11 libXau libXdmcp libpthreadstubs
   ];
+  checkInputs = [ gtest ];
 
-  enableParallelBuild = true;
+  cmakeFlags = [
+    "-DBUILD_SAMPLES=OFF"
+    "-DBUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DUSE_SYSTEM_GTEST=ON"
+  ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "Intel Media SDK.";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
-    platforms = with platforms; linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

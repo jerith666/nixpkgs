@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "openresolv";
-  version = "3.9.1";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "mirror://roy/openresolv/${pname}-${version}.tar.xz";
-    sha256 = "1wlzi88837rf4ygswmzpbcmgkbbjhn5n322n9q6ir6x367hygf1q";
+    sha256 = "0g7wb2880hbr0x99n73m7fgjm7lcdbpxfy2i620zxcq73qfrvspa";
   };
 
   buildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       EOF
     '';
 
-  installFlags = "SYSCONFDIR=$(out)/etc";
+  installFlags = [ "SYSCONFDIR=$(out)/etc" ];
 
   postInstall = ''
     wrapProgram "$out/sbin/resolvconf" --set PATH "${coreutils}/bin"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program to manage /etc/resolv.conf";
-    homepage = https://roy.marples.name/projects/openresolv;
+    homepage = "https://roy.marples.name/projects/openresolv";
     license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

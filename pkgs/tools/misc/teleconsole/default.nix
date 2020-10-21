@@ -16,13 +16,12 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   CGO_ENABLED = 1;
-  buildFlags = "-ldflags";
+  buildFlags = [ "-ldflags" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.teleconsole.com/";
     description = "Share your terminal session with people you trust";
     license = licenses.asl20;
-    platforms = platforms.all;
     # Builds for Aarch64 not possible in the current release due to
     # incompatibilities further up the dependency chain.
     # See:

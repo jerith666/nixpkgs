@@ -13,13 +13,11 @@ stdenv.mkDerivation rec {
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch
-    # Suitable for all but limited to musl to avoid rebuild
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl.patch;
+  patches = [ ./darwin.patch ];
 
   meta = with stdenv.lib; {
     description = "Common functions found on BSD systems";
-    homepage = https://libbsd.freedesktop.org/;
+    homepage = "https://libbsd.freedesktop.org/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];

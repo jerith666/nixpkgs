@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi1
+, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkgconfig
 , python, pythonPackages
 }:
 
@@ -7,24 +7,25 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "blackmagic";
-  version = "unstable-2019-08-13";
+  version = "unstable-2020-08-05";
   # `git describe --always`
-  firmwareVersion = "v1.6.1-317-gc9c8b08";
+  firmwareVersion = "v1.6.1-539-gdd74ec8";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "c9c8b089f716c31433432f5ee54c5c206e4945cf";
-    sha256 = "0175plba7h3r1p584ygkjlvg2clvxa2m0xfdcb2v8jza2vzc8ywd";
+    rev = "dd74ec8e6f734302daa1ee361af88dfb5043f166";
+    sha256 = "18w8y64fs7wfdypa4vm3migk5w095z8nbd8qp795f322mf2bz281";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded
+    gcc-arm-embedded pkgconfig
   ];
 
   buildInputs = [
     libftdi1
+    libusb-compat-0_1
     python
     pythonPackages.intelhex
   ];
@@ -58,9 +59,11 @@ stdenv.mkDerivation rec {
       directory.  It also places the FTDI version of the blackmagic
       executable in the bin directory.
     '';
-    homepage = https://github.com/blacksphere/blackmagic;
+    homepage = "https://github.com/blacksphere/blackmagic";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones emily ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ pjones emily sorki ];
+    # fails on darwin with
+    # arm-none-eabi-gcc: error: unrecognized command line option '-iframework'
+    platforms = platforms.linux;
   };
 }

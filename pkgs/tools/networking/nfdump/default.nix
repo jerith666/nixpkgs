@@ -2,7 +2,7 @@
 , autoconf, automake, libtool, pkg-config
 , bzip2, libpcap, flex, yacc }:
 
-let version = "1.6.18"; in
+let version = "1.6.21"; in
 
 stdenv.mkDerivation {
   pname = "nfdump";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "phaag";
     repo = "nfdump";
     rev = "v${version}";
-    sha256 = "0hfgj9lghkjrjxww0jdk8gxr6g4gbmbdmfg9ddg5jj6gcra21gha";
+    sha256 = "1ifxnpyzyn8nd6n44pjcw0rwck392nzj1gwa4zzqvvgzj477m6ha";
   };
 
   nativeBuildInputs = [ autoconf automake flex libtool pkg-config yacc ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     longDescription = ''
       nfdump is a set of tools for working with netflow data.
     '';
-    homepage = https://github.com/phaag/nfdump;
+    homepage = "https://github.com/phaag/nfdump";
     license = licenses.bsd3;
     maintainers = [ maintainers.takikawa ];
     platforms = platforms.unix;

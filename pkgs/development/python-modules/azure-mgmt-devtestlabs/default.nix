@@ -1,11 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrest
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
-, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,15 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  pythonNamespaces = [ "azure.mgmt" ];
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure DevTestLabs Management Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-devtestlabs;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer mwilsoninsight ];
   };
 }

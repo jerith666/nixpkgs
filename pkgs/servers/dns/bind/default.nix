@@ -10,11 +10,11 @@ assert enablePython -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.14.6";
+  version = "9.14.12";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/bind9/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1zpd47ckn5lf4qbscfkj7krngwn2gwsp961v5401h3lhxm0a0rw9";
+    sha256 = "1j7ldvdschmvzxrbajjhmdsl2iqxc1lm64vk0a5sdykxpy9y8kcw";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
-
-  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -56,7 +54,8 @@ stdenv.mkDerivation rec {
     "--without-eddsa"
     "--with-aes"
   ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp";
+    ++ lib.optional enableSeccomp "--enable-seccomp"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -65,6 +64,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/host $host
 
     moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires root and the net
 
   meta = with stdenv.lib; {
-    homepage = https://www.isc.org/downloads/bind/;
+    homepage = "https://www.isc.org/downloads/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
 

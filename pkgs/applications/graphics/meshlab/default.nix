@@ -1,69 +1,88 @@
-{ fetchFromGitHub, libGLU, llvmPackages, qtbase, qtscript, qtxmlpatterns }:
+{ mkDerivation, lib, fetchFromGitHub
+, fetchpatch
+, libGLU
+, qtbase
+, qtscript
+, qtxmlpatterns
+, lib3ds
+, bzip2
+, muparser
+, eigen
+, glew
+, gmp
+, levmar
+, qhull
+, cmake
+}:
 
-let
-  meshlabRev = "d596d7c086c51fbdfb56050f9c30b55dd0286d4c";
-  vcglibRev = "6c3c940e34327322507c703889f9f1cfa73ab183";
-  # ^ this should be the latest commit in the vcglib devel branch at the time of the meshlab revision
+mkDerivation rec {
+  pname = "meshlab";
+  version = "2020.03";
 
-  stdenv = llvmPackages.stdenv; # only building with clang seems to be tested upstream
-in stdenv.mkDerivation {
-  name = "meshlab-20180627-beta";
+  src = fetchFromGitHub {
+    owner = "cnr-isti-vclab";
+    repo = "meshlab";
+    rev = "f3568e75c9aed6da8bb105a1c8ac7ebbe00e4536";
+    sha256 = "17g9icgy1w67afxiljzxk94dyhj4f336gjxn0bhppd58xfqh8w4g";
+    fetchSubmodules = true; # for vcglib
+  };
 
-  srcs =
-    [
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "meshlab";
-        rev = meshlabRev;
-        sha256 = "0xi7wiyy0yi545l5qvccbqahlcsf70mhx829gf7bq29640si4rax";
-        name = "meshlab-${meshlabRev}";
-      })
-      (fetchFromGitHub {
-        owner = "cnr-isti-vclab";
-        repo = "vcglib";
-        rev = vcglibRev;
-        sha256 = "0jfgjvf21y9ncmyr7caipy3ardhig7hh9z8miy885c99b925hhwd";
-        name = "vcglib-${vcglibRev}";
-      })
-    ];
+  buildInputs = [
+    libGLU
+    qtbase
+    qtscript
+    qtxmlpatterns
+    lib3ds
+    bzip2
+    muparser
+    eigen
+    glew
+    gmp
+    levmar
+    qhull
+  ];
 
-  sourceRoot = "meshlab-${meshlabRev}";
+  nativeBuildInputs = [ cmake ];
 
-  hardeningDisable = [ "format" ];
-  enableParallelBuilding = true;
+  patches = [ ./no-build-date.patch ];
 
-  patches = [ ./fix-20180627-beta.patch ];
+  # MeshLab computes the version based on the build date, remove when https://github.com/cnr-isti-vclab/meshlab/issues/622 is fixed.
+  postPatch = ''
+    substituteAll ${./fix-version.patch} /dev/stdout | patch -p1 --binary
+  '';
 
-  buildPhase = ''
-    # MeshLab has ../vcglib hardcoded everywhere, so move the source dir
-    mv ../vcglib-${vcglibRev} ../vcglib
-
+  preConfigure = ''
+    substituteAll ${./meshlab.desktop} install/linux/resources/meshlab.desktop
     cd src
-    export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
-    export QMAKESPEC="linux-clang"
-
-    pushd external
-    qmake -recursive external.pro
-    buildPhase
-    popd
-    qmake -recursive meshlab_full.pro
-    buildPhase
   '';
 
-  installPhase = ''
-    mkdir -p $out/opt/meshlab $out/bin
-    cp -Rv distrib/* $out/opt/meshlab
-    ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
-    ln -s $out/opt/meshlab/meshlabserver $out/bin/meshlabserver
-  '';
+  cmakeFlags = [
+    "-DALLOW_BUNDLED_EIGEN=OFF"
+    "-DALLOW_BUNDLED_GLEW=OFF"
+    "-DALLOW_BUNDLED_LIB3DS=OFF"
+    "-DALLOW_BUNDLED_MUPARSER=OFF"
+    "-DALLOW_BUNDLED_QHULL=OFF"
+     # disable when available in nixpkgs
+    "-DALLOW_BUNDLED_OPENCTM=ON"
+    "-DALLOW_BUNDLED_SSYNTH=ON"
+    # some plugins are disabled unless these are on
+    "-DALLOW_BUNDLED_NEWUOA=ON"
+    "-DALLOW_BUNDLED_LEVMAR=ON"
+  ];
 
-  buildInputs = [ libGLU llvmPackages.openmp qtbase qtscript qtxmlpatterns ];
+  # Meshlab is not format-security clean; without disabling hardening, we get:
+  # src/common/GLLogStream.h:61:37: error: format not a string literal and no format arguments [-Werror=format-security]
+  #  61 |         int chars_written = snprintf(buf, buf_size, f, std::forward<Ts>(ts)...);
+  #     |
+  hardeningDisable = [ "format" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A system for processing and editing 3D triangular meshes.";
-    homepage = http://www.meshlab.net/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://www.meshlab.net/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

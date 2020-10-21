@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.48";
+  version = "1.3.51";
   pname = "flrig";
 
   src = fetchurl {
     url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
-    sha256 = "0f46rmrr8aphj8fsbfa1bywihigzfzyxq9zg66d1laa7d3jsfs9q";
+    sha256 = "0aq4x0ai9q08ypfhzfj2inc4z3q39zq1l6h9as1kil9yn4zbay61";
   };
 
   buildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Digital modem rig control program";
-    homepage = https://sourceforge.net/projects/fldigi/;
+    homepage = "https://sourceforge.net/projects/fldigi/";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ dysinger ];
     platforms = stdenv.lib.platforms.linux;

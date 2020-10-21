@@ -1,7 +1,7 @@
-{ stdenv, mkDerivation, fetchurl, fetchpatch, cmake, ninja, coin3d, xercesc, ode
-, eigen, qtbase, qttools, qtwebkit, opencascade-occt, gts, hdf5, vtk, medfile
-, zlib, python3Packages, swig, gfortran, libXmu, soqt, libf2c, libGLU
-, makeWrapper, pkgconfig, mpi ? null }:
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, cmake, ninja, coin3d,
+xercesc, ode, eigen, qtbase, qttools, qtwebkit, wrapQtAppsHook,
+opencascade-occt, gts, hdf5, vtk, medfile, zlib, python3Packages, swig,
+gfortran, libXmu, soqt, libf2c, libGLU, makeWrapper, pkgconfig, mpi ? null }:
 
 assert mpi != null;
 
@@ -9,15 +9,25 @@ let
   pythonPackages = python3Packages;
 in mkDerivation rec {
   pname = "freecad";
-  version = "0.18.3";
+  version = "0.18.4";
 
-  src = fetchurl {
-    url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "07j7azgnicmd8cqnyskp15y44ykgj5qqz5y3w1jdynrv3yrvk1kz";
+  src = fetchFromGitHub {
+    owner = "FreeCAD";
+    repo = "FreeCAD";
+    rev = version;
+    sha256 = "1phs9a0px5fnzpyx930cz39p5dis0f0yajxzii3c3sazgkzrd55s";
   };
 
-  nativeBuildInputs = [ cmake ninja pkgconfig pythonPackages.pyside2-tools ];
-  buildInputs = [ cmake coin3d xercesc ode eigen opencascade-occt gts
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkgconfig
+    pythonPackages.pyside2-tools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    cmake coin3d xercesc ode eigen opencascade-occt gts
     zlib swig gfortran soqt libf2c makeWrapper mpi vtk hdf5 medfile
     libGLU libXmu qtbase qttools qtwebkit
   ] ++ (with pythonPackages; [

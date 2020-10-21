@@ -1,33 +1,44 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, Security, CoreServices }:
+{ stdenv, rustPlatform, fetchFromGitHub
+, pkgconfig, openssl
+, Security, CoreServices
+, dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
-rustPlatform.buildRustPackage rec {
+let
+  featuresFlag = "--features ${dbBackend}";
+
+in rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
-  version = "1.9.1";
+  version = "1.16.3";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "0jfb4b2lp2v01aw615lx0qj1qh73hyrbjn9kva7zqp74wcfw12gp";
+    sha256 = "1scy8abzy6j1jsms84cg2nqkn1zsxr5mjikp2xh0yl0ckkk13ffn";
   };
 
-  cargoPatches = [
-    # type annotations required: cannot resolve `std::string::String: std::convert::AsRef<_>`
-    ./cargo-lock-lettre.patch
-  ];
-
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = with stdenv.lib; [ openssl ]
+    ++ optionals stdenv.isDarwin [ Security CoreServices ]
+    ++ optional (dbBackend == "mysql") libmysqlclient
+    ++ optional (dbBackend == "postgresql") postgresql;
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoSha256 = "0p39gqrqdmgqhngp1qyh6jl0sp0ifj5n3bxfqafjbspb4zph3ls4";
+  cargoSha256 = "112mvgq581cms0war5dbni7f7yryjr5agryzn5qx835qkznzar8s";
+  cargoBuildFlags = [ featuresFlag ];
+
+  checkPhase = ''
+    runHook preCheck
+    echo "Running cargo cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
-    description = "An unofficial lightweight implementation of the Bitwarden server API using Rust and SQLite";
-    homepage = https://github.com/dani-garcia/bitwarden_rs;
+    description = "Unofficial Bitwarden compatible server written in Rust";
+    homepage = "https://github.com/dani-garcia/bitwarden_rs";
     license = licenses.gpl3;
     maintainers = with maintainers; [ msteen ];
-    platforms = platforms.all;
   };
 }

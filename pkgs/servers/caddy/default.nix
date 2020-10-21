@@ -2,9 +2,7 @@
 
 buildGoModule rec {
   pname = "caddy";
-  version = "1.0.3";
-
-  goPackagePath = "github.com/caddyserver/caddy";
+  version = "1.0.5";
 
   subPackages = [ "caddy" ];
 
@@ -12,19 +10,27 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1n7i9w4vva5x5wry7gzkyfylk39x40ykv7ypf1ca3zbbk7w5x6mw";
+    sha256 = "0jrhwmr6gggppskg5h450wybzkv17iq69dgw36hd1dp56q002i7g";
   };
-  modSha256 = "0np0mbs0mrn8scqa0dgvi7ya1707b3883prdaf1whsqrcr71ig8q";
+  vendorSha256 = "09vnci9pp8zp7bvn8zj68wslz2nc54nhcd0ll31sqfjbp00215mj";
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w -X github.com/caddyserver/caddy/caddy/caddymain.gitTag=v${version}
+  doCheck = false;
+
+  preBuild = ''
+    cat << EOF > caddy/main.go
+    package main
+    import "github.com/caddyserver/caddy/caddy/caddymain"
+    func main() {
+      caddymain.EnableTelemetry = false
+      caddymain.Run()
+    }
+    EOF
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://caddyserver.com;
+    homepage = "https://caddyserver.com";
     description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ rushmorem fpletz zimbatm ];
+    maintainers = with maintainers; [ rushmorem fpletz zimbatm filalex77 ];
   };
 }

@@ -1,19 +1,25 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "azure-storage-azcopy";
-  version = "10.0.1-pre";
-  revision = "10.0.1";
-  goPackagePath = "github.com/Azure/azure-storage-azcopy";
-
-  goDeps= ./deps.nix;
+  version = "10.5.1";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-storage-azcopy";
-    rev = revision;
-    sha256 = "0v1qli01nnx81186q1d2556w457qkbwypq6yy89ns52pqg941arp";
+    rev = "v${version}";
+    sha256 = "0bygbg1k6926ri3988wbz0b1vv6wamk799mn5nkjf0xa6gjfqqsr";
   };
+
+  subPackages = [ "." ];
+
+  vendorSha256 = "10bpzf8f7ibx1wzd0nzh5q1ynwfjr4n1gjygq4zqqxg51ganqj82";
+
+  doCheck = false;
+
+  postInstall = ''
+    ln -rs "$out/bin/azure-storage-azcopy" "$out/bin/azcopy"
+  '';
 
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ colemickens ];

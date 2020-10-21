@@ -4,6 +4,7 @@ with lib;
 
 let
   luks = config.boot.initrd.luks;
+  kernelPackages = config.boot.kernelPackages;
 
   commonFunctions = ''
     die() {
@@ -126,7 +127,7 @@ let
 
     gpg-agent --daemon --scdaemon-program $out/bin/scdaemon > /dev/null 2> /dev/null
     ''}
-        
+
     # Disable all input echo for the whole stage. We could use read -s
     # instead but that would ocasionally leak characters between read
     # invocations.
@@ -139,7 +140,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, preOpenCommands, postOpenCommands,... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -387,11 +388,41 @@ let
     }
     ''}
 
-    ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) then ''
+    ${optionalString (luks.fido2Support && (fido2.credential != null)) ''
+
+    open_with_hardware() {
+      local passsphrase
+
+        ${if fido2.passwordLess then ''
+          export passphrase=""
+        '' else ''
+          read -rsp "FIDO2 salt for ${device}: " passphrase
+          echo
+        ''}
+        ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
+          echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
+          echo "Please move your mouse to create needed randomness."
+        ''}
+          echo "Waiting for your FIDO2 device..."
+          fido2luks -i open ${device} ${name} ${fido2.credential} --await-dev ${toString fido2.gracePeriod} --salt string:$passphrase
+        if [ $? -ne 0 ]; then
+          echo "No FIDO2 key found, falling back to normal open procedure"
+          open_normally
+        fi
+    }
+    ''}
+
+    # commands to run right before we mount our device
+    ${preOpenCommands}
+
+    ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) || (luks.fido2Support && (fido2.credential != null)) then ''
     open_with_hardware
     '' else ''
     open_normally
     ''}
+
+    # commands to run right after we mounted our device
+    ${postOpenCommands}
   '';
 
   askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
@@ -417,6 +448,9 @@ let
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ] "")
+  ];
 
   options = {
 
@@ -439,8 +473,6 @@ in
         [ "aes" "aes_generic" "blowfish" "twofish"
           "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
           "af_alg" "algif_skcipher"
-
-          (if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "aes_x86_64" else "aes_i586")
         ];
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
@@ -605,6 +637,31 @@ in
             });
           };
 
+          fido2 = {
+            credential = mkOption {
+              default = null;
+              example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
+              type = types.str;
+              description = "The FIDO2 credential ID.";
+            };
+
+            gracePeriod = mkOption {
+              default = 10;
+              type = types.int;
+              description = "Time in seconds to wait for the FIDO2 key.";
+            };
+
+            passwordLess = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Defines whatever to use an empty string as a default salt.
+
+                Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+              '';
+            };
+          };
+
           yubikey = mkOption {
             default = null;
             description = ''
@@ -682,6 +739,30 @@ in
               };
             });
           };
+
+          preOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              mkdir -p /tmp/persistent
+              mount -t zfs rpool/safe/persistent /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right before we try to mount our LUKS device.
+              This can be useful, if the keys needed to open the drive is on another partion.
+            '';
+          };
+
+          postOpenCommands = mkOption {
+            type = types.lines;
+            default = "";
+            example = ''
+              umount /tmp/persistent
+            '';
+            description = ''
+              Commands that should be run right after we have mounted our LUKS device.
+            '';
+          };
         };
       }));
     };
@@ -703,6 +784,15 @@ in
             and a Yubikey to work with this feature.
           '';
     };
+
+    boot.initrd.luks.fido2Support = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables support for authenticating with FIDO2 devices.
+      '';
+    };
+
   };
 
   config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
@@ -710,6 +800,14 @@ in
     assertions =
       [ { assertion = !(luks.gpgSupport && luks.yubikeySupport);
           message = "Yubikey and GPG Card may not be used at the same time.";
+        }
+
+        { assertion = !(luks.gpgSupport && luks.fido2Support);
+          message = "FIDO2 and GPG Card may not be used at the same time.";
+        }
+
+        { assertion = !(luks.fido2Support && luks.yubikeySupport);
+          message = "FIDO2 and Yubikey may not be used at the same time.";
         }
       ];
 
@@ -750,6 +848,11 @@ in
         chmod +x $out/bin/openssl-wrap
       ''}
 
+      ${optionalString luks.fido2Support ''
+        copy_bin_and_libs ${pkgs.fido2luks}/bin/fido2luks
+      ''}
+
+
       ${optionalString luks.gpgSupport ''
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg-agent
@@ -779,6 +882,9 @@ in
         $out/bin/gpg --version
         $out/bin/gpg-agent --version
         $out/bin/scdaemon --version
+      ''}
+      ${optionalString luks.fido2Support ''
+        $out/bin/fido2luks --version
       ''}
     '';
 

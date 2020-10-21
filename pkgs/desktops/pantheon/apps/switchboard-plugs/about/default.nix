@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , substituteAll
 , meson
@@ -11,22 +12,23 @@
 , gtk3
 , switchboard
 , pciutils
+, elementary-feedback
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "2.5.2";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "11diwz2aj45yqkxdija8ny0sgm0wl2905gl3799cdl12ss9ffndp";
+    sha256 = "1zs2qmglh85ami07dnlq3lfwl5ikc4abvz94a35k6fhfs703lay2";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -46,17 +48,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./lspci-path.patch;
+      src = ./fix-paths.patch;
       inherit pciutils;
+      elementary_feedback = elementary-feedback;
     })
-    ./remove-update-button.patch
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard About Plug";
-    homepage = https://github.com/elementary/witchboard-plug-about;
+    homepage = "https://github.com/elementary/switchboard-plug-about";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

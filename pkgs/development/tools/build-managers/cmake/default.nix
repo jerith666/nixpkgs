@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.15.1";
+  version = "3.18.0";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "1xyprly3sf4wi0n1x79k4n22yxm6pb7fv70gqr9lvc7qv14cbphq";
+    sha256 = "0aby67jn3i0rqhj6cvpm0f7idw3dl7jayaqxa9hkk9w2jk5zzd43";
   };
 
   patches = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
+
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
@@ -62,14 +63,21 @@ stdenv.mkDerivation rec {
       --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
     substituteInPlace Modules/FindCxxTest.cmake \
       --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
-    # BUILD_CC and BUILD_CXX are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$BUILD_CC CXX=$BUILD_CXX $configureFlags"
+  ''
+  # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+  + ''
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+    ++ lib.optionals stdenv.hostPlatform.is32bit [
+      "CFLAGS=-D_FILE_OFFSET_BITS=64"
+      "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+    ]
     ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
@@ -102,7 +110,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    homepage = http://www.cmake.org/;
+    homepage = "http://www.cmake.org/";
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];

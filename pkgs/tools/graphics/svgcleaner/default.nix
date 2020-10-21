@@ -11,13 +11,12 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1jpnqsln37kkxz98vj7gly3c2170v6zamd876nc9nfl9vns41s0f";
   };
 
-  cargoSha256 = "0kzrklw5nrzgvrfzq1mlnri06s19p4f3w38v39247baz2xd6j1n2";
+  cargoSha256 = "1xhwlsq9b6cnafbapm5jf48zqdx5k2vxlr701lh5f8nqvd7nxi6g";
 
   meta = with stdenv.lib; {
     description = "A tool for tidying and optimizing SVGs";
     homepage = "https://github.com/RazrFalcon/svgcleaner";
     license = licenses.gpl2;
-    platforms = platforms.all;
     maintainers = [ maintainers.mehandes ];
   };
 }

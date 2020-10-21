@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, setuptools_scm
 }:
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.3.1";
+  version = "1.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eb91be369f945f10d3a49f5f9be8b3d0b93a4c2be8f8a5b83b0571b8123e0a7a";
+    sha256 = "9723364577b79ad9958a68851fe2acb94da6fd25170c595516a8289e6a129043";
   };
 
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  checkInputs = [ pytest ];
   checkPhase = ''
     py.test tests
   '';
@@ -23,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fast and thorough lazy object proxy";
-    homepage = https://github.com/ionelmc/python-lazy-object-proxy;
+    homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
     license = with licenses; [ bsd2 ];
   };
 

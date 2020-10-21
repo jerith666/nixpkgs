@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net_snmp
+, snmpSupport ? true, net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient
@@ -21,7 +21,7 @@ in
       inherit version;
 
       src = fetchurl {
-        url = "mirror://sourceforge/zabbix/ZABBIX%20Latest%20Stable/${version}/zabbix-${version}.tar.gz";
+        url = "https://cdn.zabbix.com/zabbix/sources/stable/${stdenv.lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -34,7 +34,7 @@ in
         zlib
       ]
       ++ optional odbcSupport unixODBC
-      ++ optional snmpSupport net_snmp
+      ++ optional snmpSupport net-snmp
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient

@@ -3,33 +3,19 @@
 , qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools
 }:
 
-assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
-assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
-
-let
-  # https://github.com/mltframework/shotcut/issues/771
-  fixVaapiRendering1 = fetchpatch {
-    url = "https://github.com/peti/shotcut/commit/038f6839298fc1e9e80ddf84fe168a78118bc625.patch";
-    sha256 = "153z1g6criszd6gdkw4f5zk0gmh0jar6l2g8fzwjhhcvkdz30vbp";
-  };
-  fixVaapiRendering2 = fetchpatch {
-    url = "https://github.com/peti/shotcut/commit/653c485f92d2847fdac517e3f797c9254826ffab.patch";
-    sha256 = "1qd0zgyahda72xh3avlg7lg0jq94wq5847154qlrgzj8b4n7vizw";
-  };
-in
+assert stdenv.lib.versionAtLeast libmlt.version "6.20.0";
+assert stdenv.lib.versionAtLeast mlt.version "6.20.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "19.09.14";
+  version = "20.07.11";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1cl8ba1n0h450r4n5mfqmyjaxvczs3m19blwxslqskvmxy5my3cn";
+    sha256 = "0ajg0bpdckhvmmsliy1xky9p4mdypnaw3z3cvfsdrm0zcihbgazv";
   };
-
-  patches = [ fixVaapiRendering1 fixVaapiRendering2 ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -72,9 +58,9 @@ mkDerivation rec {
       nixpkgs maintainer(s). If you wish to report any bugs upstream,
       please use the official build from shotcut.org instead.
     '';
-    homepage = https://shotcut.org;
+    homepage = "https://shotcut.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu woffs ];
+    maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
   };
 }

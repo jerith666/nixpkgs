@@ -18,6 +18,7 @@ let
     nativeBuildInputs = [ autoreconfHook ];
 
     doCheck = true;
+    AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
 
     patches = stdenv.lib.optionals stdenv.isDarwin [ ./skip-flaky-darwin-test.patch ];
 
@@ -30,12 +31,12 @@ let
 
     meta = with stdenv.lib; {
       description = "Search engine library";
-      homepage = https://xapian.org/;
+      homepage = "https://xapian.org/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ ];
       platforms = platforms.unix;
     };
   };
 in {
-  xapian_1_4 = generic "1.4.12" "0z5c1y9vp519h2x2igjq39v6j615nppry0wasd0xn4hphgd3d2jg";
+  xapian_1_4 = generic "1.4.16" "4937f2f49ff27e39a42150e928c8b45877b0bf456510f0785f50159a5cb6bf70";
 }

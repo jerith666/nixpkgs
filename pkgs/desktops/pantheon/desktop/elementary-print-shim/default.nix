@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , meson
 , ninja
@@ -22,9 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple shim for printing support via Contractor";
-    homepage = https://github.com/elementary/print;
+    homepage = "https://github.com/elementary/print";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

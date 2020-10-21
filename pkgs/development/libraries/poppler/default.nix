@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -7,16 +7,16 @@
 , minimal ? false, suffix ? "glib"
 }:
 
-let # beware: updates often break cups-filters build
-  version = "0.74.0";
+let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
+  version = "0.90.1"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0bvb0yq9zsl2b811j4l4x0vf8g5lgmqbndkb2hvgsrr5639rzq4j";
+    sha256 = "mE2C5y6RQY0oCIUpjIvchVov2SZl/VKhNFsnI14MccQ=";
   };
 
   outputs = [ "out" "dev" ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = https://poppler.freedesktop.org/;
+    homepage = "https://poppler.freedesktop.org/";
     description = "A PDF rendering library";
 
     longDescription = ''
@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 }

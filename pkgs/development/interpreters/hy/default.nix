@@ -1,22 +1,31 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hy";
-  version = "0.17.0";
+  version = "0.19.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1gdbqsirsdxj320wnp7my5awzs1kfs6m4fqmkzbd1zd47qzj0zfi";
+    sha256 = "05k05qmiiysiwdc05sxmanwhv1crfwbb3l8swxfisbzbvmv1snis";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  checkInputs = with python3Packages; [ flake8 pytest ];
+
+  propagatedBuildInputs = with python3Packages; [
     appdirs
     astor
     clint
+    colorama
     fastentrypoints
     funcparserlib
     rply
+    pygments
   ];
+
+  # Hy does not include tests in the source distribution from PyPI, so only test executable.
+  checkPhase = ''
+    $out/bin/hy --help > /dev/null
+  '';
 
   meta = with stdenv.lib; {
     description = "A LISP dialect embedded in Python";

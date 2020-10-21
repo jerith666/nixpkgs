@@ -18,19 +18,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.13.3";
+  version = "0.13.8";
 
   src =
     if stdenv.isDarwin
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "04ylhqadj7wnclhiar9il6fkrxmh9qkz6fpas7z3b37w4qg0gshl";
+      sha256 = "058w8w24g7xbdkn5l97jfj9dcg81vkfh3w8112anj982lynk6391";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1xcn694qfql87pdjh09hhvfvpakzxb2hagss61vh9msqq3s96l3z";
+      sha256 = "01xb9sl6rmg02ypdrv4n0mkzmdr5y9rajcdmg9c3j46q7z6q9mxy";
     };
 
 
@@ -57,9 +57,9 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
-    homepage = http://www.purescript.org/;
+    homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.justinwoo ];
+    maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

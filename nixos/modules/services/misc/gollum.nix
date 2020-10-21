@@ -71,6 +71,7 @@ in
       group = config.users.users.gollum.name;
       description = "Gollum user";
       createHome = false;
+      isSystemUser = true;
     };
 
     users.groups.gollum = { };
@@ -97,7 +98,7 @@ in
           ${pkgs.gollum}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
-            --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
+            --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \

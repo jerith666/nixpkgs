@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname =  "boto3";
-  version = "1.9.205"; # N.B: if you change this, change botocore too
+  version = "1.14.32"; # N.B: if you change this, change botocore too
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zxz1d6w3f4ip04bm26xplpxjhblc2vfmqcs5n63a9y1h43mk171";
+    sha256 = "d494a23295b2db9920e85391dc8106dc08d91dd40eeba5c05002771fe10f8853";
   };
 
   propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = https://github.com/boto/boto3;
+    homepage = "https://github.com/boto/boto3";
     license = lib.licenses.asl20;
     description = "AWS SDK for Python";
     longDescription = ''

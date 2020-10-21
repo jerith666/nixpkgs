@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchurl, ocamlPackages }:
 
 with ocamlPackages; buildDunePackage rec {
   pname = "ocamlformat";
-  version = "0.11.0";
+  version = "0.15.0";
 
   minimumOCamlVersion = "4.06";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = pname;
-    rev = version;
-    sha256 = "0zvjn71jd4d3znnpgh0yphb2w8ggs457b6bl6cg1fmpdgxnds6yx";
+  useDune2 = true;
+
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
+    sha256 = "0190vz59n6ma9ca1m3syl3mc8i1smj1m3d8x1jp21f710y4llfr6";
   };
 
   buildInputs = [
@@ -22,12 +22,14 @@ with ocamlPackages; buildDunePackage rec {
     stdio
     uuseg
     uutf
+    fix
+    menhir
   ];
 
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-ppx/ocamlformat";
     description = "Auto-formatter for OCaml code";
-    maintainers = [ lib.maintainers.Zimmi48 ];
+    maintainers = [ lib.maintainers.Zimmi48 lib.maintainers.marsam ];
     license = lib.licenses.mit;
   };
 }

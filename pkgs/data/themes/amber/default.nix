@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amber-theme";
-  version = "3.34-1";
+  version = "3.36-1";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fmsjhaxlw2znlbjys3ggmsr7zlfk1wlng7bh54g6b0vjgdbik3r";
+    sha256 = "0dn81ca3kyfz4ql15kl5108gw309cc0c1inmwlch1nq5dslmfjji";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GTK, gnome-shell and Xfce theme based on Ubuntu Ambiance";
-    homepage = https://github.com/lassekongo83/amber-theme;
+    homepage = "https://github.com/lassekongo83/amber-theme";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

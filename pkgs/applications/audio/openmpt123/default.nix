@@ -2,14 +2,14 @@
 , usePulseAudio ? config.pulseaudio or false, libpulseaudio }:
 
 let
-  version = "0.4.1";
+  version = "0.5.1";
 in stdenv.mkDerivation {
   pname = "openmpt123";
   inherit version;
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
-    sha256 = "1k1m1adjh4s2q9lxgkf836k5243akxrzq1hsdjhrkg4idd3pxzp4";
+    sha256 = "1vpalfsrkbx4vyrh1qy564lr91jwdxlbjivv5gzf8zcywxasf0xa";
   };
 
   enableParallelBuilding = true;
@@ -19,11 +19,11 @@ in stdenv.mkDerivation {
   buildInputs = [ zlib mpg123 libogg libvorbis portaudio libsndfile flac ]
   ++ stdenv.lib.optional usePulseAudio libpulseaudio;
 
-  configureFlags = stdenv.lib.optional (!usePulseAudio) [ "--without-pulseaudio" ];
+  configureFlags = stdenv.lib.optional (!usePulseAudio) "--without-pulseaudio";
 
   meta = with stdenv.lib; {
     description = "A cross-platform command-line based module file player";
-    homepage = https://lib.openmpt.org/libopenmpt/;
+    homepage = "https://lib.openmpt.org/libopenmpt/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;

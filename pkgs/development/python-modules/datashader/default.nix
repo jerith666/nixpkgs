@@ -25,15 +25,16 @@
 , fastparquet
 , testpath
 , nbconvert
+, pytest_xdist
 }:
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.7.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5baf218713dc1ad4791f7bcf606ef8f618273945e788c59f9573aebd7cb851f8";
+    sha256 = "05p81aff7x70yj8llclclgz6klvfzqixwxfng6awn3y5scv18w40";
   };
 
   propagatedBuildInputs = [
@@ -60,6 +61,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     pytest-benchmark
+    pytest_xdist # not needed
     flake8
     nbsmoke
     fastparquet
@@ -69,16 +71,16 @@ buildPythonPackage rec {
 
   postConfigure = ''
     substituteInPlace setup.py \
-      --replace "'testpath<0.4'" "'testpath'"
+      --replace "'numba >=0.37.0,<0.49'" "'numba'"
   '';
 
   checkPhase = ''
-    pytest datashader
+    pytest -n $NIX_BUILD_CORES datashader
   '';
 
   meta = with lib; {
     description = "Data visualization toolchain based on aggregating into a grid";
-    homepage = https://datashader.org;
+    homepage = "https://datashader.org";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

@@ -8,7 +8,7 @@ let
 common = { scalaVersion, sha256 }:
 stdenv.mkDerivation rec {
   pname = "ammonite";
-  version = "1.7.1";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
@@ -18,10 +18,11 @@ stdenv.mkDerivation rec {
   phases = "installPhase";
 
   installPhase = ''
-    install -Dm755 ${src} $out/bin/amm
+    install -Dm755 $src $out/bin/amm
     sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
   '' + optionalString (disableRemoteLogging) ''
     sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+    sed -i '1i #!/bin/sh' $out/bin/amm
   '';
 
   meta = {
@@ -32,13 +33,13 @@ stdenv.mkDerivation rec {
         with a lot of ergonomic improvements and configurability
         that may be familiar to people coming from IDEs or other REPLs such as IPython or Zsh.
     '';
-    homepage = http://www.lihaoyi.com/Ammonite/;
+    homepage = "http://www.lihaoyi.com/Ammonite/";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.nequissimus ];
   };
 };
 in {
-  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "0isg9flnzc2ldbx6q0lg0xyg9lnvqkd8qhgfln8p1hbzdq0n6jd0"; };
-  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "01dyc6bilhcr1mwrpmhjc8nhzfqgjh44bx36gd3gk9mkvlbys5mp"; };
+  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "0nclfqwy3jfn1680z1hd0zzmc0b79wpvx6gn1jnm19aq7qcvh5zp"; };
+  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "104bnahn382sb6vwjvchsg0jrnkkwjn08rfh0g5ra7lwhgcj2719"; };
 }

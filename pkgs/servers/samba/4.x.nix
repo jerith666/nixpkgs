@@ -1,30 +1,52 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+{ stdenv
+, fetchurl
+, python
+, pkgconfig
+, bison
+, flex
+, perl
+, libxslt
+, docbook_xsl
+, rpcgen
 , fixDarwinDylibNames
-, docbook_xml_dtd_42, readline
-, popt, iniparser, libbsd, libarchive, libiconv, gettext
-, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme, libuuid
+, docbook_xml_dtd_45
+, readline
+, popt
+, libbsd
+, libarchive
+, zlib
+, liburing
+, fam
+, gnutls
+, libunwind
+, systemd
+, jansson
+, libtasn1
+, tdb
+, cmocka
+, nixosTests
 
-, enableLDAP ? false
-, enablePrinting ? false
-, enableMDNS ? false
-, enableDomainController ? false
-, enableRegedit ? true
-, enableCephFS ? false
-, enableGlusterFS ? false
-, enableAcl ? (!stdenv.isDarwin)
-, enablePam ? (!stdenv.isDarwin)
+, enableLDAP ? false, openldap
+, enablePrinting ? false, cups
+, enableProfiling ? true
+, enableMDNS ? false, avahi
+, enableDomainController ? false, gpgme, lmdb
+, enableRegedit ? true, ncurses
+, enableCephFS ? false, libceph
+, enableGlusterFS ? false, glusterfs, libuuid
+, enableAcl ? (!stdenv.isDarwin), acl
+, enablePam ? (!stdenv.isDarwin), pam
 }:
 
-with lib;
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.10.8";
+  version = "4.12.5";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "1x0hlhb674fndfkmimjicnzs543n3i8465a5ifcmjwvzavxha7y4";
+    sha256 = "05dqj5l3spa8ggw0agxa5rf8fwgiizbmbfjms46y5jla6z31rd2l";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -36,17 +58,39 @@ stdenv.mkDerivation rec {
     ./4.x-fix-makeflags-parsing.patch
   ];
 
-  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+  nativeBuildInputs = [
+    pkgconfig
+    bison
+    flex
+    perl
+    perl.pkgs.ParseYapp
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_45
+    cmocka
+  ] ++ optionals stdenv.isDarwin [
+    rpcgen
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-    docbook_xml_dtd_45 */ readline popt iniparser jansson
-    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
-  ] ++ optionals stdenv.isLinux [ libaio systemd ]
+    python
+    readline
+    popt
+    jansson
+    libbsd
+    libarchive
+    zlib
+    fam
+    libunwind
+    gnutls
+    libtasn1
+    tdb
+  ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gnutls gpgme lmdb ]
+    ++ optionals enableDomainController [ gpgme lmdb ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
@@ -61,24 +105,21 @@ stdenv.mkDerivation rec {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
-  '' + optionalString stdenv.isDarwin ''
-     substituteInPlace libcli/dns/wscript_build \
-       --replace "bld.SAMBA_BINARY('resolvconftest'" "True or bld.SAMBA_BINARY('resolvconftest'"
   '';
 
   configureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc" krb5Full
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
+  ] ++ optional (!enableDomainController)
+    "--without-ad-dc"
+  ++ optionals (!enableLDAP) [
+    "--without-ldap"
+    "--without-ads"
+  ] ++ optional enableProfiling "--with-profiling-data"
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
@@ -101,6 +142,10 @@ stdenv.mkDerivation rec {
     EOF
     find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
+
+  passthru = {
+    tests.samba = nixosTests.samba;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://www.samba.org";

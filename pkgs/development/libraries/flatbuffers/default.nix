@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1b32kc5jp83l43w2gs1dkw2vqm2j0wi7xfxqa86m18n3l41ca734";
+    sha256 = "0f7xd66vc1lzjbn7jzd5kyqrgxpsfxi4zc7iymhb5xrwyxipjl1g";
   };
 
   preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   enableParallelBuilding = true;
 
-  doCheck = true;
+  cmakeFlags = [ "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}" ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";
 
   meta = {
@@ -32,6 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.teh ];
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://google.github.io/flatbuffers/;
+    homepage = "https://google.github.io/flatbuffers/";
   };
 }

@@ -1,10 +1,12 @@
 [
-    "elm-test",
-    "elm-verify-examples",
+    "elm-analyse",
+    "elm-coverage",
     "elm-doc-preview",
-    "elm-upgrade",
-    { "elm-analyse": "0.16.3" },
+    "@elm-tooling/elm-language-server",
     "elm-live",
+    "elm-test",
+    "elm-upgrade",
+    "elm-verify-examples",
     "elm-xref",
-    "@elm-tooling/elm-language-server"
+    "create-elm-app"
 ]

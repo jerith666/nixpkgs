@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iotcentral";
-  version = "1.0.0";
+  version = "3.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "9aac88ed1f993965015f4e9986931fc08798e09d7b864928681a7cebff053de8";
+    sha256 = "c175f6642be514ad0efd3dc03d09e50d923596fd9e634381793dcc46bb8a57c7";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure IoTCentral Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/iot?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

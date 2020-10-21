@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "1.17.3";
+  version = "1.17.6";
   pname = "clp";
   src = fetchurl {
     url = "https://www.coin-or.org/download/source/Clp/Clp-${version}.tgz";
-    sha256 = "0ws515f73vq2p4nzyq0fbnm4zp9a7mjg54szdzvkql5dj51gafx1";
+    sha256 = "0ap1f0lxppa6pnbc4bg7ih7a96avwaki482nig8w5fr3vg9wvkzr";
   };
 
   propagatedBuildInputs = [ zlib ];

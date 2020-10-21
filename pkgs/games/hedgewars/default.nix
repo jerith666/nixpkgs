@@ -1,27 +1,25 @@
-{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg, freeglut
-, lib, fetchhg, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
+{ mkDerivation, SDL2_image, SDL2_ttf, SDL2_net, fpc, ghcWithPackages, ffmpeg_3, freeglut
+, lib, fetchurl, cmake, pkgconfig, lua5_1, SDL2, SDL2_mixer
 , zlib, libpng, libGL, libGLU, physfs
 , qtbase, qttools
 , withServer ? true
 }:
 
 let
+  # gameServer/hedgewars-server.cabal depends on network < 3
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          SHA bytestring entropy hslogger network pkgs.zlib random
+          SHA bytestring entropy hslogger network_2_6_3_1 pkgs.zlib random
           regex-tdfa sandi utf8-string vector
         ]);
 
 in
 mkDerivation rec {
   pname = "hedgewars";
-  version = "1.0.0-beta2";
+  version = "1.0.0";
 
-  # it's crazy slow to fetch the whole repo but the beta versions are not
-  # released as tarballs
-  src = fetchhg {
-    url = "https://hg.hedgewars.org/hedgewars/";
-    rev = "dff37ac61dcf";
-    sha256 = "1dsq6wfv3d7jfnr068b7ixpnqp0h6mj7zgby6h1viwblgbirri78";
+  src = fetchurl {
+    url = "https://www.hedgewars.org/download/releases/hedgewars-src-${version}.tar.bz2";
+    sha256 = "0nqm9w02m0xkndlsj6ys3wr0ik8zc14zgilq7k6fwjrf3zk385i1";
   };
 
   nativeBuildInputs = [ cmake pkgconfig qttools ];
@@ -29,7 +27,7 @@ mkDerivation rec {
   buildInputs = [
     SDL2_ttf SDL2_net SDL2 SDL2_mixer SDL2_image
     fpc lua5_1
-    ffmpeg freeglut physfs
+    ffmpeg_3 freeglut physfs
     qtbase
   ] ++ lib.optional withServer ghc;
 
@@ -42,6 +40,15 @@ mkDerivation rec {
     "-DNOVERSIONINFOUPDATE=ON"
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
+
+
+  # hslogger brings network-3 and network-bsd which conflict with 
+  # network-2.6.3.1
+  preConfigure = ''
+    substituteInPlace gameServer/CMakeLists.txt \
+      --replace "haskell_flags}" \
+        "haskell_flags} -package network-2.6.3.1 -hide-package network-bsd"
+  '';
 
   NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out

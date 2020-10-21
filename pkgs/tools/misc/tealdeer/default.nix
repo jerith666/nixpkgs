@@ -1,23 +1,34 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, openssl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "055pjxgiy31j69spq66w80ig469yi075dk8ad38z6rlvjmf74k71";
+    sha256 = "0l16qqkrya22nnm4j3dxyq4gb85i3c07p10s00bpqcvki6n6v6r8";
   };
 
-  cargoSha256 = "0yrz2pq4zdv6hzc8qc1zskpkq556mzpwvzl7qzbfzx8b6g31ak19";
+  cargoSha256 = "0jvgcf493rmkrh85j0fkf8ffanva80syyxclzkvkrzvvwwj78b5l";
 
-  buildInputs = [ openssl cacert curl ];
+  buildInputs = if stdenv.isDarwin then [ Security ] else [ openssl ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  
-  NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  postInstall = ''
+    installShellCompletion --bash --name tealdeer.bash bash_tealdeer
+    installShellCompletion --fish --name tealdeer.fish fish_tealdeer
+    installShellCompletion --zsh --name _tealdeer zsh_tealdeer
+  '';
 
   # disable tests for now since one needs network
   # what is unavailable in sandbox build
@@ -29,6 +40,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dbrgn/tealdeer";
     maintainers = with maintainers; [ davidak ];
     license = with licenses; [ asl20 mit ];
-    platforms = platforms.all;
   };
 }

@@ -1,15 +1,15 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
-, srht, pyyaml, PyGithub, cryptography }:
+, srht, pyyaml, PyGithub }:
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.11.1";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     rev = version;
-    sha256 = "1bi7vn0yr326mf2c63f2fahdlrx2c6a8d6p6bzy2ym2835qfcc0v";
+    sha256 = "0h3nn73qvxspqv0myiss0y5i8jynh2rh9m57awy89vv6rwgai7vq";
   };
 
   patches = [
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     srht
     pyyaml
     PyGithub
-    cryptography
   ];
 
   preBuild = ''
@@ -31,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht;
+    homepage = "https://dispatch.sr.ht/~sircmpwn/dispatch.sr.ht";
     description = "Task dispatcher and service integration tool for the sr.ht network";
     license = licenses.agpl3;
     maintainers = with maintainers; [ eadwu ];

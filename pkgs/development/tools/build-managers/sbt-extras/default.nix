@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk }:
 
 let
-  rev = "aa4425cc96aee5119fb9fee9138b3d3bdb6482f7";
-  version = "2019-09-30";
+  rev = "fa06c268993aa72fc094dce06a71182827aad395";
+  version = "2020-06-01";
 in
 stdenv.mkDerivation {
   name = "sbt-extras-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "15xkd1l0ka1fl77g7p498krvk0mcn25jq6jp4zyq5r8dla5rn832";
+    sha256 = "0a4dxpvw21yi3pji1s31pp17xplmczn2f2yijn58an9m2angw83j";
   };
 
   dontBuild = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A more featureful runner for sbt, the simple/scala/standard build tool";
-    homepage = https://github.com/paulp/sbt-extras;
+    homepage = "https://github.com/paulp/sbt-extras";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
     platforms = stdenv.lib.platforms.unix;

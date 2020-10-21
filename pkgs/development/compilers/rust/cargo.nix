@@ -1,5 +1,5 @@
-{ stdenv, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
+, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
 
@@ -9,19 +9,20 @@ rustPlatform.buildRustPackage {
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";
-  preBuild = "pushd src/tools/cargo";
-  postBuild = "popd";
+  buildAndTestSubdir = "src/tools/cargo";
 
   passthru.rustc = rustc;
 
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
-  buildInputs = [ cacert file curl python openssl zlib libgit2 ]
+  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
+  buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+  # cargo uses git-rs which is made for a version of libgit2 from recent master that
+  # is not compatible with the current version in nixpkgs.
+  #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
   # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
   RUSTC_BOOTSTRAP = 1;
@@ -35,6 +36,13 @@ rustPlatform.buildRustPackage {
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+
+    installManPage src/tools/cargo/src/etc/man/*
+
+    installShellCompletion --bash --name cargo \
+      src/tools/cargo/src/etc/cargo.bashcomp.sh
+
+    installShellCompletion --zsh src/tools/cargo/src/etc/_cargo
   '';
 
   checkPhase = ''
@@ -47,7 +55,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://crates.io;
+    homepage = "https://crates.io";
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];

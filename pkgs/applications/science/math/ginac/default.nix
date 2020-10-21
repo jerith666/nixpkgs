@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cln, pkgconfig, readline, gmp, python }:
 
 stdenv.mkDerivation rec {
-  name = "ginac-1.7.7";
+  name = "ginac-1.7.9";
 
   src = fetchurl {
     url    = "${meta.homepage}/${name}.tar.bz2";
-    sha256 = "1jsf74cym5v6nq70aij3l7axq8vf7rrc1lnb9siyb9lsfbnnxzqf";
+    sha256 = "08cqc87qq4w6z3l053x5gfqsa4zkgkicq8skxsbsj39nli1zzkb7";
   };
 
   propagatedBuildInputs = [ cln ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GiNaC is Not a CAS";
-    homepage    = http://www.ginac.de/;
+    homepage    = "http://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];
     license = licenses.gpl2;
     platforms   = platforms.all;

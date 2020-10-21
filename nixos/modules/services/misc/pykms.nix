@@ -9,6 +9,10 @@ let
 in {
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "pykms" "verbose" ] "Use services.pykms.logLevel instead")
+  ];
+
   options = {
     services.pykms = {
       enable = mkOption {
@@ -78,6 +82,7 @@ in {
         ]);
         ProtectHome = "tmpfs";
         WorkingDirectory = libDir;
+        SyslogIdentifier = "pykms";
         Restart = "on-failure";
         MemoryLimit = cfg.memoryLimit;
       };

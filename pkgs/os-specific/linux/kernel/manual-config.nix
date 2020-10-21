@@ -1,6 +1,6 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio
-, utillinux
+, libelf, cpio, elfutils
+, utillinuxMinimal
 , writeTextFile
 }:
 
@@ -164,6 +164,10 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (
         if platform ? kernelInstallTarget then platform.kernelInstallTarget
@@ -179,7 +183,7 @@ let
       '' else "") + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -265,8 +269,8 @@ let
             + stdenv.lib.concatStringsSep ", " (map (x: x.name) kernelPatches)
             + ")");
         license = stdenv.lib.licenses.gpl2;
-        homepage = https://www.kernel.org/;
-        repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
+        homepage = "https://www.kernel.org/";
+        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = [
           maintainers.thoughtpolice
         ];
@@ -276,8 +280,10 @@ let
     };
 in
 
-assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
-assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
+assert (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") -> libelf != null;
+assert stdenv.lib.versionAtLeast version "4.15" -> utillinuxMinimal != null;
+assert stdenv.lib.versionAtLeast version "5.8" -> elfutils != null;
+
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
   pname = "linux";
   inherit version;
@@ -287,10 +293,11 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
       ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ++ optional  (stdenv.lib.versionAtLeast version "4.14" && stdenv.lib.versionOlder version "5.8") libelf
+      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinuxMinimal
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
+      ++ optional  (stdenv.lib.versionAtLeast version "5.8")  elfutils
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

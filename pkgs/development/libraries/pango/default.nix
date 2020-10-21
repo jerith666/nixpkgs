@@ -9,43 +9,47 @@ with stdenv.lib;
 
 let
   pname = "pango";
-  version = "1.43.0";
+  version = "1.45.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1lnxldmv1a12dq5h0dlq5jyzl4w75k76dp8cn360x2ijlm9w5h6j";
+    sha256 = "0zg6gvzk227q997jf1c9p7j5ra87nm008hlgq6q8na9xmgmw2x8z";
   };
+
+  patches = [
+    # Fix issue with Pango loading unsupported formats that
+    # breaks mixed x11/opentype font packages.
+    # See https://gitlab.gnome.org/GNOME/pango/issues/457
+    # Remove on next release.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/pango/commit/fe1ee773310bac83d8e5d3c062b13a51fb5fb4ad.patch";
+      sha256 = "1px66g31l2jx4baaqi4md59wlmvw0ywgspn6zr919fxl4h1kkh0h";
+    })
+  ];
 
   # FIXME: docs fail on darwin
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
   nativeBuildInputs = [
     meson ninja
+    glib # for glib-mkenum
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
-    harfbuzz fribidi
+    fribidi
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl ] ++
+  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
     optional x11Support libXft;
 
-  patches = [
-    (fetchpatch {
-      # Add gobject-2 to .pc file
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/546f4c242d6f4fe312de3b7c918a848e5172e18d.patch";
-      sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
-    })
-  ];
-
   mesonFlags = [
-    "-Denable_docs=${if stdenv.isDarwin then "false" else "true"}"
+    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
   ];
 
   enableParallelBuilding = true;
@@ -74,7 +78,7 @@ in stdenv.mkDerivation rec {
       Pango forms the core of text and font handling for GTK.
     '';
 
-    homepage = https://www.pango.org/;
+    homepage = "https://www.pango.org/";
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ];

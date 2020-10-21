@@ -71,23 +71,25 @@ in
         this is the case when configuration options are merged.
       '';
       default = [];
-      example = [
-        # Allow execution of any command by all users in group sudo,
-        # requiring a password.
-        { groups = [ "sudo" ]; commands = [ "ALL" ]; }
+      example = literalExample ''
+        [
+          # Allow execution of any command by all users in group sudo,
+          # requiring a password.
+          { groups = [ "sudo" ]; commands = [ "ALL" ]; }
 
-        # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
-        # and the group with GID `1006` without a password.
-        { users = [ "backup" "database" ]; groups = [ 1006 ];
-          commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
+          # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
+          # and the group with GID `1006` without a password.
+          { users = [ "backup" "database" ]; groups = [ 1006 ];
+            commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
 
-        # Allow all users of group `bar` to run two executables as user `foo`
-        # with arguments being pre-set.
-        { groups = [ "bar" ]; runAs = "foo";
-          commands =
-            [ "/home/baz/cmd1.sh hello-sudo"
-              { command = ''/home/baz/cmd2.sh ""''; options = [ "SETENV" ]; } ]; }
-      ];
+          # Allow all users of group `bar` to run two executables as user `foo`
+          # with arguments being pre-set.
+          { groups = [ "bar" ]; runAs = "foo";
+            commands =
+              [ "/home/baz/cmd1.sh hello-sudo"
+                  { command = '''/home/baz/cmd2.sh ""'''; options = [ "SETENV" ]; } ]; }
+        ]
+      '';
       type = with types; listOf (submodule {
         options = {
           users = mkOption {
@@ -171,7 +173,9 @@ in
 
   config = mkIf cfg.enable {
 
-    security.sudo.extraRules = [
+    # We `mkOrder 600` so that the default rule shows up first, but there is
+    # still enough room for a user to `mkBefore` it.
+    security.sudo.extraRules = mkOrder 600 [
       { groups = [ "wheel" ];
         commands = [ { command = "ALL"; options = (if cfg.wheelNeedsPassword then [ "SETENV" ] else [ "NOPASSWD" "SETENV" ]); } ];
       }
@@ -212,7 +216,7 @@ in
 
     security.pam.services.sudo = { sshAgentAuth = true; };
 
-    environment.etc = singleton
+    environment.etc.sudoers =
       { source =
           pkgs.runCommand "sudoers"
           {
@@ -222,7 +226,6 @@ in
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
           "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
-        target = "sudoers";
         mode = "0440";
       };
 

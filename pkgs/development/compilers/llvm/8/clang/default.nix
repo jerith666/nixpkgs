@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -6,7 +6,8 @@
 
 let
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
 
     src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
 
@@ -18,15 +19,16 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python ]
-      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    nativeBuildInputs = [ cmake python3 ]
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DCLANGD_BUILD_XPC=OFF"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ stdenv.lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -49,6 +51,8 @@ let
       ./unwindlib.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-8.patch
     ];
 
     postPatch = ''
@@ -94,18 +98,16 @@ let
     passthru = {
       isClang = true;
       inherit llvm;
-    } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
     };
 
     meta = {
       description = "A c, c++, objective-c, and objective-c++ frontend for the llvm compiler";
-      homepage    = http://llvm.org/;
+      homepage    = "https://llvm.org/";
       license     = stdenv.lib.licenses.ncsa;
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
+    pname = "clang-manpages";
 
     buildPhase = ''
       make docs-clang-man

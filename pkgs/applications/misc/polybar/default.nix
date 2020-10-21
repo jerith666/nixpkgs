@@ -1,6 +1,7 @@
 { cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
+, python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
+, removeReferencesTo
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
@@ -26,13 +27,13 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     pname = "polybar";
-    version = "3.4.0";
+    version = "3.4.3";
 
     src = fetchFromGitHub {
-      owner = "jaagr";
+      owner = pname;
       repo = pname;
       rev = version;
-      sha256 = "1g3zj0788cdlm8inpl19279bw8zjcy7dzj7q4f1l2d8c8g1jhv0m";
+      sha256 = "0fsfh3xv0c0hz10xqzvd01c0p0wvzcnanbyczi45zhaxfrisb39w";
       fetchSubmodules = true;
     };
 
@@ -45,12 +46,12 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = [ maintainers.afldcr ];
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ afldcr filalex77 ];
+      platforms = platforms.linux;
     };
 
     buildInputs = [
-      cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
+      cairo libXdmcp libpthreadstubs libxcb pcre python3 xcbproto xcbutil
       xcbutilcursor xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
 
       (if alsaSupport   then alsaLib       else null)
@@ -68,17 +69,16 @@ stdenv.mkDerivation rec {
       (if i3Support || i3GapsSupport then makeWrapper else null)
     ];
 
-    postConfigure = ''
-      substituteInPlace generated-sources/settings.hpp \
-        --replace "${stdenv.cc}" "${stdenv.cc.name}"
-    '';
-
     postInstall = if (i3Support || i3GapsSupport) then ''
       wrapProgram $out/bin/polybar \
         --prefix PATH : "${if i3Support then i3 else i3-gaps}/bin"
     '' else "";
 
     nativeBuildInputs = [
-      cmake pkgconfig
+      cmake pkgconfig removeReferencesTo
     ];
+
+    postFixup = ''
+        remove-references-to -t ${stdenv.cc} $out/bin/polybar
+    '';
 }

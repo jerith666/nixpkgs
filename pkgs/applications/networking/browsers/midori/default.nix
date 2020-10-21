@@ -4,7 +4,7 @@
 , ninja
 , pkgconfig
 , intltool
-, vala_0_44
+, vala
 , wrapGAppsHook
 , gcr
 , libpeas
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkgconfig
-    vala_0_44
+    vala
     wrapGAppsHook
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight WebKitGTK web browser";
-    homepage = https://www.midori-browser.org/;
+    homepage = "https://www.midori-browser.org/";
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
     maintainers = with maintainers; [ raskin ramkromberg ];

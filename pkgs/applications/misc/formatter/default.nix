@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , meson
 , ninja
 , vala
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "formatter";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "Djaler";
     repo = "Formatter";
     rev = version;
-    sha256 = "145742dk16736zxj30rzn61h4k0xpggfsbqkxllxd302mgbmxlzq";
+    sha256 = "0da1dvzsvbwg1ys19yf0n080xc0hjwin9zacjndb24jvphy3bxql";
   };
 
   patches = [
@@ -61,10 +62,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "A simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
-    maintainers = with maintainers; [ kjuvi ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

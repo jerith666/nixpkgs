@@ -17,14 +17,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "14.29.53";
+  version = "14.31.2";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    sha256 = "0wdkiprccgvc5nh6h616l282fbd5mx5z3aiq2y558qa4gn22nqrq";
+    sha256 = "0p2cbzxhw1s4l76kbriag3r4dkpsfvrnydryyikgkbdwnq479hm2";
   };
 
   patchPhase = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
      description = "A Java 3D viewer for chemical structures";
-     homepage = https://sourceforge.net/projects/jmol;
+     homepage = "https://sourceforge.net/projects/jmol";
      license = licenses.lgpl2;
      platforms = platforms.all;
      maintainers = with maintainers; [ timokau mounium ];

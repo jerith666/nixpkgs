@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rdkafka";
-  version = "1.2.0";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "edenhill";
     repo = "librdkafka";
     rev = "v${version}";
-    sha256 = "03h4yxnbnig17zapnnyvvnh1bsp0qalvlpb4fc3bpvs7yj4d8v25";
+    sha256 = "05mgrdzacn9kdpr68r5j0cvsvl54s52glnsc1ww9rcxx6p7hq1ly";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "librdkafka - Apache Kafka C/C++ client library";
-    homepage = https://github.com/edenhill/librdkafka;
+    homepage = "https://github.com/edenhill/librdkafka";
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ boothead ];

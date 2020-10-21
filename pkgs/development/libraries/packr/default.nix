@@ -1,22 +1,50 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
+, stdenv
+, symlinkJoin
 }:
 
-buildGoModule rec {
-  pname = "packr";
-  version = "2.6.0";
+let p2 = buildGoModule rec {
+  pname = "packr2";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "gobuffalo";
-    repo = pname;
+    repo = "packr";
     rev = "v${version}";
-    sha256 = "11bd0s3hyzvhcg1q0iahv2w9f0w1k57jfxgswhz7dyndxvvr2b8i";
+    sha256 = "1x78yq2yg0r82h7a67078llni85gk9nbd2ismlbqgppap7fcpyai";
+  }+"/v2";
+
+  subPackages = [ "packr2" ];
+
+  vendorSha256 = "12yq121b0bn8z12091fyqhhz421kgx4z1nskrkvbxlhyc47bwyrp";
+
+  doCheck = false;
+
+  meta = with stdenv.lib; {
+    description = "The simple and easy way to embed static files into Go binaries";
+    homepage = "https://github.com/gobuffalo/packr";
+    license = licenses.mit;
+    maintainers = with maintainers; [ mmahut ];
+  };
+};
+p1 = buildGoModule rec {
+  pname = "packr1";
+  version = "2.8.0";
+
+  src = fetchFromGitHub {
+    owner = "gobuffalo";
+    repo = "packr";
+    rev = "v${version}";
+    sha256 = "1x78yq2yg0r82h7a67078llni85gk9nbd2ismlbqgppap7fcpyai";
   };
 
-  subPackages = [ "packr" "v2/packr2" ];
+  subPackages = [ "packr" ];
 
-  modSha256 = "0afhkvivma16bi8rz3kwcsz9mhmcn4zm6rrymxkvazx6b844hcdv";
+  vendorSha256 = "0m3yj8ww4a16j56p8d8w0sdnyx0g2bkd8zg0l4d8vb72mvg5asga";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "The simple and easy way to embed static files into Go binaries";
@@ -24,4 +52,9 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ mmahut ];
   };
+};
+in
+symlinkJoin{
+    name = "packr";
+    paths = [p1 p2];
 }

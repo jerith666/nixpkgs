@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "django-q";
-  version = "1.0.1";
+  version = "1.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17mqxiacsp2yszak6j48fm7vx0w44pcg86flc63r9y5yhx490n5r";
+    sha256 = "6838e6dda377ab6bd31f5721a66aa6d19ad9a88ca9c03cbb464b2321d3c4c979";
   };
 
   propagatedBuildInputs = [
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A multiprocessing distributed task queue for Django";
-    homepage = https://django-q.readthedocs.org;
+    homepage = "https://django-q.readthedocs.org";
     license = licenses.mit;
   };
 }

@@ -1,17 +1,22 @@
-{ stdenv, buildPythonPackage , fetchPypi
-, pytest, jupyter_core, pandas }:
+{ stdenv, buildPythonPackage , fetchPypi, pythonOlder
+, pytest, jupyter_core, pandas, ipywidgets, jupyter, altair }:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "2.3.2";
+  version = "3.4.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f39kfinn297gjhms9jys3ixdlsn0dz3gndgacyimp77jhzir4v1";
+    sha256 = "f343ceb11add58d24cd320d69e410b111a56c98c9069ebb4ef89c608c4c1950d";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter_core pandas ];
+  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
+
+  # currently, recommonmark is broken on python3
+  doCheck = false;
+  checkInputs = [ altair ];
 
   meta = with stdenv.lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";
@@ -21,7 +26,7 @@ buildPythonPackage rec {
       jupyter nbextension install --user --py vega
       jupyter nbextension enable --user vega
     '';
-    homepage = https://github.com/vega/ipyvega;
+    homepage = "https://github.com/vega/ipyvega";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

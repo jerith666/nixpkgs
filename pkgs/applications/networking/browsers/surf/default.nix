@@ -1,6 +1,7 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , pkgconfig, wrapGAppsHook
 , glib, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
+, xorg, dmenu, findutils, gnused, coreutils
 , patches ? null
 }:
 
@@ -20,6 +21,16 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
+  # Add run-time dependencies to PATH. Append them to PATH so the user can
+  # override the dependencies with their own PATH.
+  preFixup = let
+    depsPath = lib.makeBinPath [ xorg.xprop dmenu findutils gnused coreutils ];
+  in ''
+    gappsWrapperArgs+=(
+      --suffix PATH : ${depsPath}
+    )
+  '';
+
   meta = with stdenv.lib; {
     description = "A simple web browser based on WebKit/GTK";
     longDescription = ''
@@ -28,7 +39,7 @@ stdenv.mkDerivation rec {
       possible to embed it in another application. Furthermore, one can point
       surf to another URI by setting its XProperties.
     '';
-    homepage = https://surf.suckless.org;
+    homepage = "https://surf.suckless.org";
     license = licenses.mit;
     platforms = webkitgtk.meta.platforms;
     maintainers = with maintainers; [ joachifm ];

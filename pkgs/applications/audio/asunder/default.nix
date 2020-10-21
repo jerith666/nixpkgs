@@ -12,15 +12,15 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.9.4";
+  version = "2.9.6";
   pname = "asunder";
   src = fetchurl {
     url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "1bwc9v9l1f3kqjd7wis6g2sv6ibc618ybh0gsb8mkkfhadp68w30";
+    sha256 = "1ycnd82lh7qy1pcbngd4b41s16j9hnm2kyfrncg4cwr3bfk7yg7a";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 libcddb intltool makeWrapper ];
+  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  buildInputs = [ gtk2 libcddb ];
 
   runtimeDeps =
     optional mp3Support lame ++
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A graphical Audio CD ripper and encoder for Linux";
-    homepage = http://littlesvr.ca/asunder/index.php;
+    homepage = "http://littlesvr.ca/asunder/index.php";
     license = licenses.gpl2;
     maintainers = with maintainers; [ mudri ];
     platforms = platforms.linux;

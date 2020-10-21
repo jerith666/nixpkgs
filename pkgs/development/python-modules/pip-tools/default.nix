@@ -1,18 +1,18 @@
-{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six, first
+{ stdenv, fetchPypi, buildPythonPackage, pip, pytest, click, six
 , setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "3.8.0";
+  version = "5.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vwh3hx4jrzf51yj9h31nk9ji53lqaq63mlqd7n84hcmfwy3rwz4";
+    sha256 = "5b4b6e7b6e66357685c73e856296b4792b2d159ff6074729e250e291834bfd9d";
   };
 
   LC_ALL = "en_US.UTF-8";
   checkInputs = [ pytest git glibcLocales mock ];
-  propagatedBuildInputs = [ pip click six first setuptools_scm ];
+  propagatedBuildInputs = [ pip click six setuptools_scm ];
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
     # Depend on network tests:
@@ -27,17 +27,14 @@ buildPythonPackage rec {
     "test_generate_hashes_with_editable"
     "test_generate_hashes_with_url"
     "test_generate_hashes_without_interfering_with_each_other"
+    "test_get_file_hash_without_interfering_with_each_other"
     "test_get_hashes_local_repository_cache_miss"
     "test_realistic_complex_sub_dependencies"
     "test_stdin"
     "test_upgrade_packages_option"
     "test_url_package"
-    # Expect specific version of "six":
     "test_editable_package"
-    "test_input_file_without_extension"
     "test_locally_available_editable_package_is_not_archived_in_cache_dir"
-    "test_no_candidates"
-    "test_no_candidates_pre"
   ];
 
   checkPhase = ''
@@ -47,9 +44,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Keeps your pinned dependencies fresh";
-    homepage = https://github.com/jazzband/pip-tools/;
+    homepage = "https://github.com/jazzband/pip-tools/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zimbatm ];
-    broken = true;
   };
 }

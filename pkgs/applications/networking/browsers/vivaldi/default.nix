@@ -1,10 +1,11 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE
 , libXfixes, libXt, libXi, libXcursor, libXScrnSaver, libXcomposite, libXdamage, libXtst, libXrandr
-, alsaLib, dbus, cups, libexif, ffmpeg, systemd
+, alsaLib, dbus, cups, libexif, ffmpeg_3, systemd
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
-, gstreamer, gst-plugins-base, libxml2
+, libxml2
 , glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core, gnome2
+, libdrm, mesa
 , nss, nspr
 , patchelf, makeWrapper
 , isSnapshot ? false
@@ -17,11 +18,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.8.1664.40-1";
+  version = "3.1.1929.45-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "07v7p3r9yc566xkwhiazd80pj2d6rcvs3xnbnwjambi1rajbs5sx";
+    sha256 = "0pg16zs9fcr6b360igszpkia3i8i5xf4m0hs1b2a17lf8vkldix9";
   };
 
   unpackPhase = ''
@@ -34,9 +35,10 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd
+    atk at-spi2-atk at-spi2-core alsaLib dbus cups gtk3 gdk-pixbuf libexif ffmpeg_3 systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
-    gstreamer libxml2 gst-plugins-base pango cairo gnome2.GConf
+    libxml2 pango cairo gnome2.GConf
+    libdrm mesa
   ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
@@ -51,8 +53,7 @@ in stdenv.mkDerivation rec {
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
-    sed -i '/^if \[ "$VIVALDI_FFMPEG_FOUND/i \
-      VIVALDI_FFMPEG_FOUND=YES\nCACHED_FFMPEG=${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so' opt/${vivaldiName}/${vivaldiName}
+    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
@@ -82,7 +83,7 @@ in stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + stdenv.lib.optionalString enableWidevine ''
-    ln -sf ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
+    ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '';
 
   meta = with stdenv.lib; {

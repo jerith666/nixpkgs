@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
-  version = "1.2.1";
+  version = "1.2.3";
 
   outputs = [ "out" "bin" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lsn6mdkk8yb933n0c9dka89bixvwis09w5nh5wkcag2jsdbfmvb";
+    sha256 = "1s57i8a8wnnxnsfl27cq4503dkdlzbrhry5zpg23sfqfffvdqqx2";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
   };

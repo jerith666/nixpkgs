@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "dkimpy";
-  version = "0.9.3";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1rnnax2blmwk6404yrnhswp50xbp2h192rd2l6mra5lh3rg36zvd";
+    hash = "sha256:088iz5cqjqh4c7141d94pvn13bh25aizqlrifwv6fs5g16zj094s";
 };
 
   checkInputs = [ pytest ];
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       records. This version also supports the experimental Authenticated
       Received Chain (ARC) protocol.
     '';
-    homepage = https://launchpad.net/dkimpy;
+    homepage = "https://launchpad.net/dkimpy";
     license = licenses.bsd3;
     maintainers = with maintainers; [ leenaars ];
   };

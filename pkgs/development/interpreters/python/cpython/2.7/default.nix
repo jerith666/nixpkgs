@@ -11,7 +11,8 @@
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
 , self
-, CF, configd, coreutils
+, configd, coreutils
+, autoreconfHook
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
@@ -22,6 +23,7 @@
 , sha256
 , passthruFun
 , static ? false
+, enableOptimizations ? (!stdenv.isDarwin)
 }:
 
 assert x11Support -> tcl != null
@@ -79,18 +81,15 @@ let
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
       })
 
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/979daae300916adb399ab5b51410b6ebd0888f13.patch";
-        name = "CVE-2018-20852.patch";
-        sha256 = "0p838ycssd6abxzby69rhngjqqm59cmlp07910mpjx7lmsz049pb";
-      })
-
       # Fix race-condition during pyc creation. Has a slight backwards
       # incompatible effect: pyc symlinks will now be overridden
       # (https://bugs.python.org/issue17222). Included in python >= 3.4,
       # backported in debian since 2013.
       # https://bugs.python.org/issue13146
       ./atomic_pyc.patch
+
+      # Backport from CPython 3.8 of a good list of tests to run for PGO.
+      ./profile-task.patch
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -140,7 +139,9 @@ let
         --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
     '';
 
-  configureFlags = [
+  configureFlags = optionals enableOptimizations [
+    "--enable-optimizations"
+  ] ++ [
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"
@@ -186,10 +187,11 @@ let
     ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+    ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
-    optionals (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ buildPackages.stdenv.cc buildPackages.python ];
+    [ autoreconfHook ]
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+      [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -240,9 +242,6 @@ in with passthru; stdenv.mkDerivation ({
         ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
-
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
 
         # Determinism: Windows installers were not deterministic.
@@ -272,7 +271,7 @@ in with passthru; stdenv.mkDerivation ({
     doCheck = false; # expensive, and fails
 
     meta = {
-      homepage = http://python.org;
+      homepage = "http://python.org";
       description = "A high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that

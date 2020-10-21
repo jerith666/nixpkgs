@@ -6,9 +6,12 @@
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
+, gtest
 , cunit, snappy
 , rocksdb, makeWrapper
-, leveldb, oathToolkit, removeReferencesTo
+, leveldb, oathToolkit
+, libnl, libcap_ng
+, rdkafka
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -72,6 +75,26 @@ let
     none = [ ];
   };
 
+  getMeta = description: {
+     homepage = "https://ceph.com/";
+     inherit description;
+     license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
+     maintainers = with maintainers; [ adev ak johanot krav ];
+     platforms = [ "x86_64-linux" ];
+   };
+
+  ceph-common = python3Packages.buildPythonPackage rec{
+    pname = "ceph-common";
+    inherit src version;
+
+    sourceRoot = "ceph-${version}/src/python-common";
+
+    checkInputs = [ python3Packages.pytest ];
+    propagatedBuildInputs = with python3Packages; [ pyyaml six ];
+
+    meta = getMeta "Ceph common module for code shared by manager modules";
+  };
+
   ceph-python-env = python3Packages.python.withPackages (ps: [
     ps.sphinx
     ps.flask
@@ -80,42 +103,49 @@ let
     ps.virtualenv
     # Libraries needed by the python tools
     ps.Mako
+    ceph-common
     ps.cherrypy
+    ps.dateutil
+    ps.jsonpatch
     ps.pecan
     ps.prettytable
     ps.pyjwt
     ps.webob
     ps.bcrypt
+    # scipy > 1.3 breaks diskprediction_local, leading to mgr hang on startup
+    # Bump (and get rid of scipy_1_3) once these issues are resolved:
+    # https://tracker.ceph.com/issues/42764 https://tracker.ceph.com/issues/45147
+    ps.scipy_1_3
     ps.six
+    ps.pyyaml
   ]);
+  sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.4";
+  version = "15.2.4";
+  src = fetchurl {
+    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    sha256 = "0jy5dp4r1bqk1l7nrv8l8zpl984k61p3vkvf73ygcn03bxyjjlax";
+  };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
-    inherit version;
-
-    src = fetchurl {
-      url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "1y6hixh6srd5aswhzq0sf0dbygwhx0ardx3w3f7qazf5rapvd03i";
-    };
+    inherit src version;
 
     patches = [
       ./0000-fix-SPDK-build-env.patch
-      ./0000-dont-check-cherrypy-version.patch
     ];
 
     nativeBuildInputs = [
       cmake
       pkgconfig which git python3Packages.wrapPython makeWrapper
+      python3Packages.python # for the toPythonPath function
       (ensureNewerSourcesHook { year = "1980"; })
     ];
 
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
-      malloc zlib openldap lttng-ust babeltrace gperf cunit
-      snappy rocksdb lz4 oathToolkit leveldb
-      removeReferencesTo
+      malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng rdkafka
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14
@@ -124,73 +154,64 @@ in rec {
       optFcgi optExpat optCurl optFuse optLibedit
     ];
 
+    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+
     preConfigure =''
       substituteInPlace src/common/module.c --replace "/sbin/modinfo"  "modinfo"
       substituteInPlace src/common/module.c --replace "/sbin/modprobe" "modprobe"
-      # Since Boost 1.67 this seems to have changed
-      substituteInPlace CMakeLists.txt --replace "list(APPEND BOOST_COMPONENTS python)" "list(APPEND BOOST_COMPONENTS python37)"
-      substituteInPlace src/CMakeLists.txt --replace "Boost::python " "Boost::python37 "
 
       # for pybind/rgw to find internal dep
-      export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="$PWD/build/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
-      export PYTHONPATH=${ceph-python-env}/lib/python3.7/site-packages:$lib/lib/python3.7/site-packages/:$out/lib/python3.7/site-packages/
-
-      patchShebangs src/spdk
+      # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
+      export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
+      patchShebangs src/script src/spdk src/test src/tools
     '';
 
     cmakeFlags = [
       "-DWITH_PYTHON3=ON"
       "-DWITH_SYSTEM_ROCKSDB=OFF"
+      "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
+
 
       "-DWITH_SYSTEM_BOOST=ON"
+      "-DWITH_SYSTEM_ROCKSDB=ON"
+      "-DWITH_SYSTEM_GTEST=ON"
+      "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
       "-DWITH_SYSTEMD=OFF"
       "-DWITH_TESTS=OFF"
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND=OFF"
     ];
 
-    preFixup = ''
-      find $lib -type f -exec remove-references-to -t $out '{}' +
-      mv $out/share/ceph/mgr $lib/lib/ceph/
-    '';
-
     postFixup = ''
-      export PYTHONPATH="${ceph-python-env}/lib/python3.7/site-packages:$lib/lib/ceph/mgr:$out/lib/python3.7/site-packages/"
       wrapPythonPrograms
-      wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "${ceph-python-env}/lib/python3.7/site-packages:$lib/lib/ceph/mgr:$out/lib/python3.7/site-packages/"
-      wrapProgram $out/bin/ceph-volume --prefix PYTHONPATH ":" "${ceph-python-env}/lib/python3.7/site-packages:$lib/lib/ceph/mgr:$out/lib/python3.7/site-packages/"
+      wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$(toPythonPath ${placeholder "out"}):$(toPythonPath ${ceph-python-env})"
+
+      # Test that ceph-volume exists since the build system has a tendency to
+      # silently drop it with misconfigurations.
+      test -f $out/bin/ceph-volume
     '';
 
     enableParallelBuilding = true;
 
     outputs = [ "out" "lib" "dev" "doc" "man" ];
 
-    meta = {
-      homepage = https://ceph.com/;
-      description = "Distributed storage system";
-      license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-      maintainers = with maintainers; [ adev ak krav johanot ];
-      platforms = platforms.unix;
-    };
+    doCheck = false; # uses pip to install things from the internet
+
+    meta = getMeta "Distributed storage system";
 
     passthru.version = version;
   };
 
   ceph-client = runCommand "ceph-client-${version}" {
-     meta = {
-        homepage = https://ceph.com/;
-        description = "Tools needed to mount Ceph's RADOS Block Devices";
-        license = with licenses; [ lgpl21 gpl2 bsd3 mit publicDomain ];
-        maintainers = with maintainers; [ adev ak johanot krav ];
-        platforms = platforms.unix;
-      };
+      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices";
     } ''
-      mkdir -p $out/{bin,etc,lib/python3.7/site-packages}
+      mkdir -p $out/{bin,etc,${sitePackages}}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/lib/python3.7/site-packages $out/lib/python3.7/
+      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/etc
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out

@@ -22,11 +22,11 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = {
-    homepage = http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod;
+    homepage = "http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
     description = "Generate OCaml modules from source files";
     platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [
-      z77z
+      maggesi
     ];
   };
 }

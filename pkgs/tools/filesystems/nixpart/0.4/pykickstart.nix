@@ -19,12 +19,11 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ urlgrabber ];
 
   checkPhase = ''
-    export PYTHONPATH="$PYTHONPATH:."
     ${python}/bin/${python.executable} tests/baseclass.py -vv
   '';
 
   meta = {
-    homepage = http://fedoraproject.org/wiki/Pykickstart;
+    homepage = "http://fedoraproject.org/wiki/Pykickstart";
     description = "Read and write Fedora kickstart files";
     license = stdenv.lib.licenses.gpl2Plus;
   };

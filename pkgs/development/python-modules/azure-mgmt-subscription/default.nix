@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-subscription";
-  version = "0.3.0";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7a095fe46e598210b178e1059bba82eb02f3b8a7f44f3791442ff7d9ff323d2b";
+    sha256 = "7448a322eceed3d300e181fde0f626c0e37df773f6c7297df2b73d98cb0936cf";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Subscription Management Client Library";
-    homepage = https://github.com/Azure/azure-sdk-for-python/tree/master/azure-mgmt-subscription;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

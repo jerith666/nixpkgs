@@ -2,19 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
-  version = "10.0.1";
+  version = "12.0.4";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g8p4f8g9zb1fqzzb1qi28idskahi5nldsma6rydjyrgi9gynpa0";
+    sha256 = "0vj6xpp5ss82n1zxljy5893s8l1pdhar5xqay5vvglkp8bzblin6";
   };
 
-  cargoSha256 = "0pwq1scll5ga8rw4lx97s915zvp7v171b6316cin54f2zzpbrxx5";
-
-  # Patch for v10.0.1 Cargo.lock issue
-  patches = [ ./Cargo.lock.patch ];
+  cargoSha256 = "02c2pdjzd49qznm1yj3rnli48267ajjdklrb1cpj0rhpirw4rh1j";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security
@@ -28,9 +25,8 @@ rustPlatform.buildRustPackage rec {
     longDescription = ''
       Tokei is a program that displays statistics about your code. Tokei will show number of files, total lines within those files and code, comments, and blanks grouped by language.
     '';
-    homepage = https://github.com/XAMPPRocky/tokei;
+    homepage = "https://github.com/XAMPPRocky/tokei";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner lilyball ];
-    platforms = platforms.all;
   };
 }

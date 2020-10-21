@@ -25,18 +25,18 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "3.7";
+  version = "3.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
-    sha256 = "1d2qi3ny0bxa16ifh3465z1jgn1l0fmqk9dkph4ialw076gv13kb";
+    sha256 = "05kgg7mhizndwn7icnarqk3c19xrzfawf90y9nb3jdm6fv1741xn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkitgtk dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ dconf ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   patches = [ ./cmake_check_symbol_exists.patch ];
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
+      --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
   # TODO: The following tests FAILED:
-  #   61 - test-gnc-timezone (Failed)
   #   70 - test-load-c (Failed)
   #   71 - test-modsysver (Failed)
   #   72 - test-incompatdep (Failed)
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   #   80 - test-gnc-module-scm-module (Failed)
   #   81 - test-gnc-module-scm-multi (Failed)
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
   '';
   doCheck = false;
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnucash.org/;
+    homepage = "http://www.gnucash.org/";
 
     maintainers = [ stdenv.lib.maintainers.peti stdenv.lib.maintainers.domenkozar ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;

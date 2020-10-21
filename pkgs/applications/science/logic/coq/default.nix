@@ -5,10 +5,11 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchFromGitHub, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig, gnumake42
 , ocamlPackages, ncurses
-, buildIde ? true
+, buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
+, darwin
 , csdp ? null
 , version
 }:
@@ -28,7 +29,13 @@ let
    "8.8.2" = "1lip3xja924dm6qblisk1bk0x8ai24s5xxqxphbdxj6djglj68fd";
    "8.9.0" = "1dkgdjc4n1m15m1p724hhi5cyxpqbjw6rxc5na6fl3v4qjjfnizh";
    "8.9.1" = "1xrq6mkhpq994bncmnijf8jwmwn961kkpl4mwwlv7j3dgnysrcv2";
-   "8.10+beta3" = "08c7q97jyblsf7dhk8jf1fx1cp9qr3dr5s42wigx10wh7i6j7pca";
+   "8.10.0" = "138jw94wp4mg5dgjc2asn8ng09ayz1mxdznq342n0m469j803gzg";
+   "8.10.1" = "072v2zkjzf7gj48137wpr3c9j0hg9pdhlr5l8jrgrwynld8fp7i4";
+   "8.10.2" = "0znxmpy71bfw0p6x47i82jf5k7v41zbz9bdpn901ysn3ir8l3wrz";
+   "8.11.0" = "1rfdic6mp7acx2zfwz7ziqk12g95bl9nyj68z4n20a5bcjv2pxpn";
+   "8.11.1" = "0qriy9dy36dajsv5qmli8gd6v55mah02ya334nw49ky19v7518m0";
+   "8.11.2" = "0f77ccyxdgbf1nrj5fa8qvrk1cyfy06fv8gj9kzfvlcgn0cf48sa";
+   "8.12.0" = "18dc7k0piv6v064zgdadpw6mkkxk7j663hb3svgj5236fihjr0cz";
   }.${version};
   coq-version = stdenv.lib.versions.majorMinor version;
   versionAtLeast = stdenv.lib.versionAtLeast coq-version;
@@ -100,12 +107,19 @@ self = stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ] ++ (with ocamlPackages; [ ocaml findlib camlp5 num ])
+  nativeBuildInputs = [ pkgconfig ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.6") gnumake42
+  ;
+  buildInputs = [ ncurses ocamlPackages.ocaml ocamlPackages.findlib ]
+  ++ stdenv.lib.optional (!versionAtLeast "8.10") ocamlPackages.camlp5
+  ++ stdenv.lib.optional (!versionAtLeast "8.12") ocamlPackages.num
   ++ stdenv.lib.optionals buildIde
     (if versionAtLeast "8.10"
      then [ ocamlPackages.lablgtk3-sourceview3 glib gnome3.defaultIconTheme wrapGAppsHook ]
+     ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
      else [ ocamlPackages.lablgtk ]);
+
+  propagatedBuildInputs = stdenv.lib.optional (versionAtLeast "8.12") ocamlPackages.num;
 
   postPatch = ''
     UNAME=$(type -tp uname)
@@ -119,7 +133,7 @@ self = stdenv.mkDerivation {
   setupHook = writeText "setupHook.sh" ''
     addCoqPath () {
       if test -d "''$1/lib/coq/${coq-version}/user-contrib"; then
-        export COQPATH="''${COQPATH}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
+        export COQPATH="''${COQPATH-}''${COQPATH:+:}''$1/lib/coq/${coq-version}/user-contrib/"
       fi
     }
 
@@ -136,7 +150,7 @@ self = stdenv.mkDerivation {
 
   prefixKey = "-prefix ";
 
-  buildFlags = "revision coq coqide bin/votour";
+  buildFlags = [ "revision" "coq" "coqide" "bin/votour" ];
 
   createFindlibDestdir = true;
 
@@ -153,7 +167,7 @@ self = stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = http://coq.inria.fr;
+    homepage = "http://coq.inria.fr";
     license = licenses.lgpl21;
     branch = coq-version;
     maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-hanaonazure";
-  version = "0.6.0";
+  version = "0.14.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1spsy6g5z4nb1y1gfz0p1ykybi76qbig8j22zvmws59329b3br5h";
+    sha256 = "7f8b912ca62431c1697b4914c12cc5f8123e60ee6c65d123591f937744d204e0";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure SAP Hana on Azure Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/hanaonazure?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

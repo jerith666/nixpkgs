@@ -1,4 +1,4 @@
-{ stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper }:
+{ stdenv, cmake, openmw, fetchFromGitHub, luajit, makeWrapper, mygui }:
 
 # revisions are taken from https://github.com/GrimKriegor/TES3MP-deploy
 
@@ -24,24 +24,35 @@ let
   coreScripts = fetchFromGitHub {
     owner = "TES3MP";
     repo = "CoreScripts";
-    # usually latest master
-    rev = "71e15fa3b1d5131b6607ba1589f41c06672ce376";
-    sha256 = "1kwii8rpsxjmz4dh06wb0qaix17hq5s1qsvysv6n6209vlclfxjg";
+    # usually latest in stable branch (e.g. 0.7.0)
+    rev = "24aae91d9ddad38cdb3b0e0a13af59f142803e94";
+    sha256 = "1rfmxxr9ircfagdpbdrzl26msdhx1i3g974cblbv69078cradfh3";
   };
+  # https://github.com/TES3MP/openmw-tes3mp/issues/555
+  mygui_ = mygui.overrideAttrs (oldAttrs: rec {
+    version = "3.2.2";
+
+    src = fetchFromGitHub {
+      owner = "MyGUI";
+      repo = "mygui";
+      rev = "MyGUI${version}";
+      sha256 = "1wk7jmwm55rhlqqcyvqsxdmwvl70bysl9azh4kd9n57qlmgk3zmw";
+    };
+  });
 in openmw.overrideAttrs (oldAttrs: rec {
-  version = "2019-06-09";
+  version = "2019-11-19";
   name = "openmw-tes3mp-${version}";
 
   src = fetchFromGitHub {
     owner = "TES3MP";
     repo = "openmw-tes3mp";
     # usually latest in stable branch (e.g. 0.7.0)
-    rev = "01804af100785bc2c162d568258d9662012627a3";
-    sha256 = "0j99v9vvmic0bqw3y4550k1dy058lwvs9s9qcjmxh1wkqkvrpdnp";
+    rev = "ad9ee80641a3e22d0780daca051df7f4e90f3615";
+    sha256 = "03a1vldiv5lk7yq6lhicx3qz8hjfxhind2dj0w9lg5839ljyk6jv";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
-  buildInputs = oldAttrs.buildInputs ++ [ luajit ];
+  buildInputs = [ luajit mygui_ ] ++ oldAttrs.buildInputs;
 
   cmakeFlags = oldAttrs.cmakeFlags ++ [
     "-DBUILD_OPENCS=OFF"
@@ -49,6 +60,12 @@ in openmw.overrideAttrs (oldAttrs: rec {
     "-DRakNet_LIBRARY_RELEASE=${rakNetLibrary}/lib/libRakNetLibStatic.a"
     "-DRakNet_LIBRARY_DEBUG=${rakNetLibrary}/lib/libRakNetLibStatic.a"
   ];
+
+  # https://github.com/TES3MP/openmw-tes3mp/issues/552
+  patches = [
+    ./tes3mp.patch
+  ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     substituteInPlace files/version.in \
@@ -69,9 +86,9 @@ in openmw.overrideAttrs (oldAttrs: rec {
 
   meta = with stdenv.lib; {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
-    homepage = https://tes3mp.com/;
+    homepage = "https://tes3mp.com/";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 })

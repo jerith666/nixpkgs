@@ -10,16 +10,17 @@
 
 let
   major = "11";
-  update = ".0.4";
-  build = "ga";
+  minor = "0";
+  update = "8";
+  build = "10";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}.${minor}.${update}+${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1v6pam38iidlhz46046h17hf5kki6n3kl302awjcyxzk7bmkvb8x";
+      sha256 = "1sdncn1bk4h8xxfnmrl1125maqy6mc0v0y1dyifwsa04wasj9hbz";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
@@ -47,6 +48,7 @@ let
 
     configureFlags = [
       "--with-boot-jdk=${openjdk11-bootstrap.home}"
+      "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -61,13 +63,13 @@ let
 
     separateDebugInfo = true;
 
-    NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+    NIX_CFLAGS_COMPILE = "-Wno-error";
 
-    NIX_LDFLAGS = lib.optionals (!headless) [
+    NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
       "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
-    ];
+    ]);
 
     buildFlags = [ "all" ];
 
@@ -106,7 +108,7 @@ let
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
       cat <<EOF > $out/nix-support/setup-hook
-      if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out/lib/openjdk; fi
+      if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out/lib/openjdk; fi
       EOF
     '';
 
@@ -132,10 +134,10 @@ let
     disallowedReferences = [ openjdk11-bootstrap ];
 
     meta = with stdenv.lib; {
-      homepage = http://openjdk.java.net/;
+      homepage = "http://openjdk.java.net/";
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo ];
+      maintainers = with maintainers; [ edwtjo asbachb ];
       platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ];
     };
 

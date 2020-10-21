@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, nix-update-script
 , fetchpatch
 , meson
 , ninja
@@ -8,9 +9,8 @@
 , rustc
 , python3
 , rustPlatform
-, pkgconfig
-, gtksourceview
-, hicolor-icon-theme
+, pkg-config
+, gtksourceview4
 , glib
 , libhandy
 , gtk3
@@ -26,27 +26,28 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fractal";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "0clwsmd6h759bzlazfq5ig56dbx7npx3h43yspk87j1rm2dp1177";
+    sha256 = "DSNVd9YvI7Dd3s3+M0+wE594tmL1yPNMnD1W9wLhSuw=";
   };
 
-  cargoSha256 = "1hwjajkphl5439dymglgj3h92hxgbf7xpipzrga7ga8m10nx1dhl";
+  cargoSha256 = "xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
 
   nativeBuildInputs = [
     cargo
     gettext
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     rustc
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [
@@ -59,20 +60,12 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
+    gst_all_1.gst-validate
     gtk3
-    gtksourceview
-    hicolor-icon-theme
+    gtksourceview4
     libhandy
     openssl
     sqlite
-  ];
-
-  cargoPatches = [
-    # https://gitlab.gnome.org/GNOME/fractal/merge_requests/446
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/commit/2778acdc6c50bc6f034513029b66b0b092bc4c38.patch";
-      sha256 = "08v17xmbwrjw688ps4hsnd60d5fm26xj72an3zf6yszha2b97j6y";
-    })
   ];
 
   postPatch = ''
@@ -86,11 +79,16 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";
-    homepage = https://gitlab.gnome.org/GNOME/fractal;
+    homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
-

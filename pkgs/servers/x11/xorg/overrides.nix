@@ -1,10 +1,10 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
+  stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
-  mcpp, epoxy, openssl, pkgconfig, llvm_6,
+  mcpp, epoxy, openssl, pkgconfig, llvm_6, python3,
   ApplicationServices, Carbon, Cocoa, Xplugin
 }:
 
@@ -20,6 +20,11 @@ self: super:
 {
   bdftopcf = super.bdftopcf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ self.xorgproto ];
+  });
+
+  fonttosfnt = super.fonttosfnt.overrideAttrs (attrs: {
+    # https://gitlab.freedesktop.org/xorg/app/fonttosfnt/merge_requests/6
+    patches = [ ./fix-uninitialised-memory.patch ];
   });
 
   bitmap = super.bitmap.overrideAttrs (attrs: {
@@ -63,22 +68,31 @@ self: super:
     x11BuildHook = ./imake.sh;
     patches = [./imake.patch ./imake-cc-wrapper-uberhack.patch];
     setupHook = ./imake-setup-hook.sh;
-    CFLAGS = [ ''-DIMAKE_COMPILETIME_CPP='"${if stdenv.isDarwin
+    CFLAGS = "-DIMAKE_COMPILETIME_CPP='\"${if stdenv.isDarwin
       then "${tradcpp}/bin/cpp"
-      else "gcc"}"' ''
-    ];
+      else "gcc"}\"'";
+
     inherit tradcpp;
   });
 
   mkfontdir = self.mkfontscale;
 
-  libxcb = super.libxcb.overrideAttrs (attrs: {
+  libxcb = (super.libxcb.override {
+    python = python3;
+  }).overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
+    patches = [
+      # Fixes an issue that happens when cross-compiling for us.
+      (fetchpatch {
+        url = "https://cgit.freedesktop.org/xorg/lib/libX11/patch/?id=0327c427d62f671eced067c6d9b69f4e216a8cac";
+        sha256 = "11k2mx56hjgw886zf1cdf2nhv7052d5rggimfshg6lq20i38vpza";
+      })
+    ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -91,7 +105,7 @@ self: super:
         rm -rf $out/share/doc
       '';
     CPP = stdenv.lib.optionalString stdenv.isDarwin "clang -E -";
-    propagatedBuildInputs = [ self.xorgproto ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto ];
   });
 
   libAppleWM = super.libAppleWM.overrideAttrs (attrs: {
@@ -103,7 +117,7 @@ self: super:
 
   libXau = super.libXau.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    propagatedBuildInputs = [ self.xorgproto ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto ];
   });
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
@@ -112,15 +126,29 @@ self: super:
 
   libXfont = super.libXfont.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    propagatedBuildInputs = [ freetype ]; # propagate link reqs. like bzip2
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ freetype ]; # propagate link reqs. like bzip2
     # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optionals isDarwin [
-      "CFLAGS=-O0"
-    ];
+    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
   });
 
   libXxf86vm = super.libXxf86vm.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libXxf86dga = super.libXxf86dga.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libXxf86misc = super.libXxf86misc.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  libdmx = super.libdmx.overrideAttrs (attrs: {
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+  xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -134,7 +162,7 @@ self: super:
     '';
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = [ self.libSM ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";
     outputs = [ "out" "dev" "devdoc" ];
@@ -154,12 +182,12 @@ self: super:
 
   libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    propagatedBuildInputs = [ self.libXfixes ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXfixes ];
   });
 
   libXaw = super.libXaw.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
-    propagatedBuildInputs = [ self.libXmu ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXmu ];
   });
 
   libXcursor = super.libXcursor.overrideAttrs (attrs: {
@@ -172,9 +200,19 @@ self: super:
 
   libXft = super.libXft.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    propagatedBuildInputs = [ self.libXrender freetype fontconfig ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXrender freetype fontconfig ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
+
+    patches = [
+      # Adds color emoji rendering support.
+      # https://gitlab.freedesktop.org/xorg/lib/libxft/merge_requests/1
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/xorg/lib/libxft/commit/fe41537b5714a2301808eed2d76b2e7631176573.patch";
+        sha256 = "045lp1q50i2wlwvpsq6ycxdc6p3asm2r3bk2nbad1dwkqw2xf9jc";
+      })
+    ];
+
     # the include files need ft2build.h, and Requires.private isn't enough for us
     postInstall = ''
       sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
@@ -186,7 +224,7 @@ self: super:
 
   libXext = super.libXext.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
-    propagatedBuildInputs = [ self.xorgproto self.libXau ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto self.libXau ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
   });
@@ -197,10 +235,9 @@ self: super:
 
   libXi = super.libXi.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" "doc" ];
-    propagatedBuildInputs = [ self.libXfixes ];
-    configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "xorg_cv_malloc0_returns_null=no"
-    ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXfixes ];
+    configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+      "xorg_cv_malloc0_returns_null=no";
   });
 
   libXinerama = super.libXinerama.overrideAttrs (attrs: {
@@ -211,30 +248,39 @@ self: super:
 
   libXmu = super.libXmu.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    buildFlags = ''BITMAP_DEFINES=-DBITMAPDIR=\"/no-such-path\"'';
+    buildFlags = [ "BITMAP_DEFINES='-DBITMAPDIR=\"/no-such-path\"'" ];
   });
 
   libXrandr = super.libXrandr.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = [self.libXrender];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libXrender ];
   });
 
   libSM = super.libSM.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
-    propagatedBuildInputs = [ self.libICE ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.libICE ];
   });
 
   libXrender = super.libXrender.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
     configureFlags = attrs.configureFlags or []
       ++ malloc0ReturnsNullCrossFlag;
-    propagatedBuildInputs = [ self.xorgproto ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xorgproto ];
   });
 
   libXres = super.libXres.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
+    buildInputs = with self; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+
+  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
+    buildInputs = with self; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
   });
 
   libXv = super.libXv.overrideAttrs (attrs: {
@@ -255,11 +301,6 @@ self: super:
   });
 
   libXpm = super.libXpm.overrideAttrs (attrs: {
-    name = "libXpm-3.5.12";
-    src = fetchurl {
-      url = mirror://xorg/individual/lib/libXpm-3.5.12.tar.bz2;
-      sha256 = "1v5xaiw4zlhxspvx76y3hq4wpxv7mpj6parqnwdqvpj8vbinsspx";
-    };
     outputs = [ "bin" "dev" "out" ]; # tiny man in $bin
     patchPhase = "sed -i '/USE_GETTEXT_TRUE/d' sxpm/Makefile.in cxpm/Makefile.in";
   });
@@ -275,7 +316,7 @@ self: super:
   libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
     name = "libxshmfence-1.3";
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2;
+      url = "mirror://xorg/individual/lib/libxshmfence-1.3.tar.bz2";
       sha256 = "1ir0j92mnd1nk37mrv9bz5swnccqldicgszvfsh62jd14q6k115q";
     };
     outputs = [ "out" "dev" ]; # mainly to avoid propagation
@@ -294,12 +335,16 @@ self: super:
   });
 
   utilmacros = super.utilmacros.overrideAttrs (attrs: { # not needed for releases, we propagate the needed tools
-    propagatedBuildInputs = [ automake autoconf libtool ];
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ automake autoconf libtool ];
   });
 
   x11perf = super.x11perf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ freetype fontconfig ];
   });
+
+  xcbproto = super.xcbproto.override {
+    python = python3;
+  };
 
   xcbutil = super.xcbutil.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
@@ -329,32 +374,43 @@ self: super:
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [
+      "sdkdir=${placeholder ''out''}/include/xorg"
+    ];
   });
 
   xf86inputmouse = super.xf86inputmouse.overrideAttrs (attrs: {
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [
+      "sdkdir=${placeholder ''out''}/include/xorg"
+    ];
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = [
+      "sdkdir=${placeholder ''out''}/include/xorg"
+    ];
   });
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
-    installFlags = "sdkdir=\${dev}/include/xorg";
+    installFlags = [
+      "sdkdir=${placeholder ''dev''}/include/xorg"
+    ];
   });
 
   xf86inputsynaptics = super.xf86inputsynaptics.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ]; # *.pc pulls xorgserver.dev
-    installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
+    installFlags = [
+      "sdkdir=${placeholder ''out''}/include/xorg"
+      "configdir=${placeholder ''out''}/share/X11/xorg.conf.d"
+    ];
   });
 
   xf86inputvmmouse = super.xf86inputvmmouse.overrideAttrs (attrs: {
     configureFlags = [
-      "--sysconfdir=$(out)/etc"
-      "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
-      "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
+      "--sysconfdir=${placeholder ''out''}/etc"
+      "--with-xorg-conf-dir=${placeholder ''out''}/share/X11/xorg.conf.d"
+      "--with-udev-rules-dir=${placeholder ''out''}/lib/udev/rules.d"
     ];
 
     meta = attrs.meta // {
@@ -374,6 +430,10 @@ self: super:
   xf86videov4l     = super.xf86videov4l.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videovoodoo  = super.xf86videovoodoo.overrideAttrs  (attrs: { meta = attrs.meta // { broken = true; }; });
   xf86videowsfb    = super.xf86videowsfb.overrideAttrs    (attrs: { meta = attrs.meta // { broken = true; }; });
+
+  xf86videoomap    = super.xf86videoomap.overrideAttrs (attrs: {
+    NIX_CFLAGS_COMPILE = [ "-Wno-error=format-overflow" ];
+  });
 
   xf86videoamdgpu = super.xf86videoamdgpu.overrideAttrs (attrs: {
     configureFlags = [ "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d" ];
@@ -514,6 +574,7 @@ self: super:
 
   xorgproto = super.xorgproto.overrideAttrs (attrs: {
     buildInputs = [];
+    propagatedBuildInputs = [];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
@@ -522,7 +583,7 @@ self: super:
   xorgserver = with self; super.xorgserver.overrideAttrs (attrs_passed:
     # exchange attrs if abiCompat is set
     let
-      version = (builtins.parseDrvName attrs_passed.name).version;
+      version = lib.getVersion attrs_passed;
       attrs =
         if (abiCompat == null || lib.hasPrefix abiCompat version) then
           attrs_passed // {
@@ -536,7 +597,7 @@ self: super:
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
           src = fetchurl {
-            url = mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2;
+            url = "mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2";
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
           nativeBuildInputs = [ pkgconfig ];
@@ -546,7 +607,7 @@ self: super:
             name = "xorg-server-1.18.4";
             builder = ./builder.sh;
             src = fetchurl {
-              url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
+              url = "mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2";
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
             nativeBuildInputs = [ pkgconfig ];
@@ -557,7 +618,7 @@ self: super:
 
     in attrs //
     (let
-      version = (builtins.parseDrvName attrs.name).version;
+      version = lib.getVersion attrs;
       commonBuildInputs = attrs.buildInputs ++ [ xtrans ];
       commonPropagatedBuildInputs = [
         zlib libGL libGLU dbus
@@ -582,7 +643,7 @@ self: super:
       then {
         outputs = [ "out" "dev" ];
         buildInputs = commonBuildInputs ++ [ libdrm mesa ];
-        propagatedBuildInputs = [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ libpciaccess epoxy ] ++ commonPropagatedBuildInputs ++ lib.optionals stdenv.isLinux [
           udev
         ];
         prePatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -622,8 +683,8 @@ self: super:
           libAppleWM xorgproto
         ];
 
-        # XQuartz patchset
         patches = [
+          # XQuartz patchset
           (fetchpatch {
             url = "https://github.com/XQuartz/xorg-server/commit/e88fd6d785d5be477d5598e70d105ffb804771aa.patch";
             sha256 = "1q0a30m1qj6ai924afz490xhack7rg4q3iig2gxsjjh98snikr1k";
@@ -711,7 +772,7 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
-    propagatedBuildInputs = [ self.xauth ]
+    propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ self.xauth ]
                          ++ lib.optionals isDarwin [ self.libX11 self.xorgproto ];
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
@@ -720,11 +781,14 @@ self: super:
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2018-12-03";
-    src = fetchurl {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
-          + "e5ff8e1828f97891c819c919d7115c6e18b2eb1f.tar.gz";
-      sha256 = "01136zljk6liaqbk8j9m43xxzqj6xy4v50yjgi7l7g6pp8pw0gx6";
+    name = "xf86-video-intel-2019-12-09";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      group = "xorg";
+      owner = "driver";
+      repo = "xf86-video-intel";
+      rev = "f66d39544bb8339130c96d282a80f87ca1606caf";
+      sha256 = "14rwbbn06l8qpx7s5crxghn80vgcx8jmfc7qvivh72d81r0kvywl";
     };
     buildInputs = attrs.buildInputs ++ [self.libXfixes self.libXScrnSaver self.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];

@@ -1,29 +1,30 @@
-{
-  stdenv, fetchzip,
-
-  iproute ? null,
-  libmnl ? null,
-  makeWrapper ? null,
-  openresolv ? null,
-  procps ? null,
-  wireguard-go ? null,
+{ stdenv
+, fetchzip
+, nixosTests
+, iptables ? null
+, iproute ? null
+, makeWrapper ? null
+, openresolv ? null
+, procps ? null
+, wireguard-go ? null
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "0.0.20190913";
+  version = "1.0.20200513";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "08ns5d6xbl0qylb98mml0yh0yp837a1sm3hvpra21by1dvx8k0dg";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
+    sha256 = "1rvnr4hk17xa2sp48icbhdnd3l69fiwwlxnn3587p1slrlms808l";
   };
 
-  sourceRoot = "source/src/tools";
+  outputs = [ "out" "man" ];
+
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
     done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
@@ -46,14 +47,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    tests = nixosTests.wireguard;
+  };
 
   meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = "https://git.zx2c4.com/WireGuard/refs/";
+    downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 xwvvvvwx ];
     platforms = platforms.unix;
   };
 }

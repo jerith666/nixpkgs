@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-media";
-  version = "1.1.1";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "5d0c6b3a0f882dde8ae3d42467f03ea6c4e3f62613936087d54c67e6f504939b";
+    sha256 = "0adeee9e654a9011f5107def06fea6838864a3514a1e5a9ed495f3a56a687cc7";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Media Services Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/media-services?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

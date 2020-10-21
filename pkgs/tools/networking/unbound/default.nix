@@ -2,12 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.9.3";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://unbound.net/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1ykdy62sgzv33ggkmzwx2h0ifm7hyyxyfkb4zckv7gz4f28xsm8v";
+    sha256 = "1xqywn2qdmjjq0csrqxh9p2rnizdrr1f99zdx87z7f3fyyc0fbwz";
   };
+
+  # https://github.com/NLnetLabs/unbound/pull/90
+  postPatch = ''
+    substituteInPlace validator/val_secalgo.c \
+      --replace '&nettle_secp_256r1' 'nettle_get_secp_256r1()' \
+      --replace '&nettle_secp_384r1' 'nettle_get_secp_384r1()'
+  '';
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
@@ -26,6 +33,10 @@ stdenv.mkDerivation rec {
   ];
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
+
+  postInstall = ''
+    make unbound-event-install
+  '';
 
   preFixup = stdenv.lib.optionalString (stdenv.isLinux && !stdenv.hostPlatform.isMusl) # XXX: revisit
     # Build libunbound again, but only against nettle instead of openssl.
@@ -46,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
-    homepage = https://www.unbound.net;
+    homepage = "https://www.unbound.net";
     maintainers = with maintainers; [ ehmry fpletz globin ];
     platforms = stdenv.lib.platforms.unix;
   };

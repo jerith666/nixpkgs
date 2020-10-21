@@ -18,12 +18,15 @@ let
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
-    log_file            "syslog"
-    user                "${cfg.user}"
-    group               "${cfg.group}"
 
     ${optionalString (cfg.network.listenAddress != "any") ''bind_to_address "${cfg.network.listenAddress}"''}
     ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+    ${optionalString (cfg.fluidsynth) ''
+      decoder {
+              plugin "fluidsynth"
+              soundfont "${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2"
+      }
+    ''}
 
     ${cfg.extraConfig}
   '';
@@ -136,6 +139,14 @@ in {
           parameter is omitted from the configuration.
         '';
       };
+
+      fluidsynth = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set, add fluidsynth soundfont and configure the plugin.
+        '';
+      };
     };
 
   };
@@ -181,22 +192,23 @@ in {
         ProtectKernelModules = true;
         RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
         RestrictNamespaces = true;
+        Restart = "always";
       };
     };
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      inherit uid;
-      inherit name;
-      group = cfg.group;
-      extraGroups = [ "audio" ];
-      description = "Music Player Daemon user";
-      home = "${cfg.dataDir}";
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        inherit uid;
+        group = cfg.group;
+        extraGroups = [ "audio" ];
+        description = "Music Player Daemon user";
+        home = "${cfg.dataDir}";
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      inherit name;
-      gid = gid;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = gid;
+    };
   };
 
 }

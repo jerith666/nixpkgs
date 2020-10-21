@@ -2,7 +2,7 @@
 , lib
 , buildGoPackage
 , fetchFromGitHub
-, openssl_1_0_2
+, openssl
 , pkgconfig
 , libpcap
 }:
@@ -36,7 +36,7 @@ in buildGoPackage {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl_1_0_2 libpcap ];
+  buildInputs = [ openssl libpcap ];
 
   # Mongodb incorrectly names all of their binaries main
   # Let's work around this with our own installer
@@ -45,14 +45,14 @@ in buildGoPackage {
     runHook preBuild
 
     ${stdenv.lib.concatMapStrings (t: ''
-      go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
+      go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
     '') tools}
 
     runHook postBuild
   '';
 
   meta = {
-    homepage = https://github.com/mongodb/mongo-tools;
+    homepage = "https://github.com/mongodb/mongo-tools";
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
   };

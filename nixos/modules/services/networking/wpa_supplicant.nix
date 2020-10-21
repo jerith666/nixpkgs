@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.networking.wireless;
-  configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
+  configFile = if cfg.networks != {} || cfg.extraConfig != "" || cfg.userControlled.enable then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
@@ -233,28 +233,32 @@ in {
       path = [ pkgs.wpa_supplicant ];
 
       script = ''
+        iface_args="-s -u -D${cfg.driver} -c ${configFile}"
         ${if ifaces == [] then ''
           for i in $(cd /sys/class/net && echo *); do
             DEVTYPE=
-            source /sys/class/net/$i/uevent
-            if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
-              ifaces="$ifaces''${ifaces:+ -N} -i$i"
+            UEVENT_PATH=/sys/class/net/$i/uevent
+            if [ -e "$UEVENT_PATH" ]; then
+              source "$UEVENT_PATH"
+              if [ "$DEVTYPE" = "wlan" -o -e /sys/class/net/$i/wireless ]; then
+                args+="''${args:+ -N} -i$i $iface_args"
+              fi
             fi
           done
         '' else ''
-          ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+          args="${concatMapStringsSep " -N " (i: "-i${i} $iface_args") ifaces}"
         ''}
-        exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
+        exec wpa_supplicant $args
       '';
     };
 
     powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
+      /run/current-system/systemd/bin/systemctl try-restart wpa_supplicant
     '';
 
     # Restart wpa_supplicant when a wlan device appears or disappears.
     services.udev.extraRules = ''
-      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="${config.systemd.package}/bin/systemctl try-restart wpa_supplicant.service"
+      ACTION=="add|remove", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", RUN+="/run/current-system/systemd/bin/systemctl try-restart wpa_supplicant.service"
     '';
   };
 

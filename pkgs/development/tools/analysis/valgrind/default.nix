@@ -1,22 +1,23 @@
 { stdenv, fetchurl, perl, gdb, cctools, xnu, bootstrap_cmds }:
 
 stdenv.mkDerivation rec {
-  name = "valgrind-3.15.0";
+  name = "valgrind-3.16.1";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/valgrind/${name}.tar.bz2";
-    sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
+    sha256 = "1jik19rcd34ip8a5c9nv5wfj8k8maqb8cyclr4xhznq2gcpkl7y9";
   };
-
-  # Perl is needed for `cg_annotate'.
-  nativeBuildInputs = [ perl ];
 
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  # Perl is needed for `callgrind_{annotate,control}'.
+  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+
+  # Perl is also a native build input.
+  nativeBuildInputs = [ perl ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;
@@ -37,10 +38,6 @@ stdenv.mkDerivation rec {
       sed -i coregrind/link_tool_exe_darwin.in \
           -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
 
-      echo "substitute hardcoded /usr/include/mach with ${xnu}/include/mach"
-      substituteInPlace coregrind/Makefile.in \
-         --replace /usr/include/mach ${xnu}/include/mach
-
       substituteInPlace coregrind/m_debuginfo/readmacho.c \
          --replace /usr/bin/dsymutil ${stdenv.cc.bintools.bintools}/bin/dsymutil
 
@@ -53,7 +50,8 @@ stdenv.mkDerivation rec {
   postPatch = "";
 
   configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit";
+    stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin") "--enable-only64bit"
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin "--with-xcodedir=${xnu}/include";
 
   doCheck = false; # fails
 
@@ -67,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.valgrind.org/;
+    homepage = "http://www.valgrind.org/";
     description = "Debugging and profiling tool suite";
 
     longDescription = ''

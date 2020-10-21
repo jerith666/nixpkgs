@@ -21,6 +21,7 @@ let
   #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts = genAttrs [
+    "apcupsd"
     "bind"
     "blackbox"
     "collectd"
@@ -28,13 +29,18 @@ let
     "dovecot"
     "fritzbox"
     "json"
+    "keylight"
+    "lnd"
     "mail"
+    "mikrotik"
     "minio"
+    "modemmanager"
     "nextcloud"
     "nginx"
     "node"
     "postfix"
     "postgres"
+    "redis"
     "rspamd"
     "snmp"
     "surfboard"
@@ -160,6 +166,15 @@ let
   };
 in
 {
+
+  imports = (lib.forEach [ "blackboxExporter" "collectdExporter" "fritzboxExporter"
+                   "jsonExporter" "minioExporter" "nginxExporter" "nodeExporter"
+                   "snmpExporter" "unifiExporter" "varnishExporter" ]
+       (opt: lib.mkRemovedOptionModule [ "services" "prometheus" "${opt}" ] ''
+         The prometheus exporters are now configured using `services.prometheus.exporters'.
+         See the 18.03 release notes for more information.
+       '' ));
+
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
@@ -179,13 +194,25 @@ in
 
   config = mkMerge ([{
     assertions = [ {
-      assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
+      assertion = cfg.snmp.enable -> (
+        (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
+      );
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
     } {
-      assertion = (cfg.mail.configFile == null) != (cfg.mail.configuration == {});
+      assertion = cfg.mikrotik.enable -> (
+        (cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null)
+      );
+      message = ''
+        Please specify either `services.prometheus.exporters.mikrotik.configuration'
+          or `services.prometheus.exporters.mikrotik.configFile'.
+      '';
+    } {
+      assertion = cfg.mail.enable -> (
+        (cfg.mail.configFile == null) != (cfg.mail.configuration == null)
+      );
       message = ''
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
@@ -197,6 +224,9 @@ in
     services.prometheus.exporters.minio.minioAccessSecret = mkDefault config.services.minio.secretKey;
   })] ++ [(mkIf config.services.rspamd.enable {
     services.prometheus.exporters.rspamd.url = mkDefault "http://localhost:11334/stat";
+  })] ++ [(mkIf config.services.nginx.enable {
+    systemd.services.prometheus-nginx-exporter.after = [ "nginx.service" ];
+    systemd.services.prometheus-nginx-exporter.requires = [ "nginx.service" ];
   })] ++ (mapAttrsToList (name: conf:
     mkExporterConf {
       inherit name;

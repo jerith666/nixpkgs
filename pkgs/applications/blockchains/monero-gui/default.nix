@@ -1,37 +1,38 @@
-{ mkDerivation, lib, makeDesktopItem, fetchFromGitHub
-, qtbase, qmake, qtmultimedia, qttools
-, qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtquickcontrols2
-, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
+{ stdenv, wrapQtAppsHook, makeDesktopItem
+, fetchFromGitHub, qmake, qttools, pkgconfig
+, qtbase, qtdeclarative, qtgraphicaleffects
+, qtmultimedia, qtxmlpatterns
+, qtquickcontrols, qtquickcontrols2
 , monero, unbound, readline, boost, libunwind
-, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
-, hidapi
+, libsodium, pcsclite, zeromq, libgcrypt, libgpgerror
+, hidapi, libusb-compat-0_1, protobuf, randomx
 }:
 
-with lib;
+with stdenv.lib;
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.14.1.2";
+  version = "0.16.0.3";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "1rm043r6y2mzy8pclnzbjjfxgps8pkfa2b92p66k8y8rdmgq6m1k";
+    sha256 = "0iwjp8x5swy8i8pzrlm5v55awhm54cf48pm1vz98lcq361lhfzk6";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig ];
+  nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation
-    qtquickcontrols qtquickcontrols2
-    qtwebchannel qtwebengine qtx11extras
-    qtxmlpatterns monero unbound readline
+    qtbase qtdeclarative qtgraphicaleffects
+    qtmultimedia qtquickcontrols qtquickcontrols2
+    qtxmlpatterns
+    monero unbound readline libgcrypt libgpgerror
     boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi
+    hidapi libusb-compat-0_1 protobuf randomx
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
 
   patches = [ ./move-log-file.patch ];
 
@@ -51,6 +52,10 @@ mkDerivation rec {
   preBuild = ''
     sed -i s#/opt/monero-wallet-gui##g Makefile
     make -C src/zxcvbn-c
+
+    # use nixpkgs monero sources
+    rmdir monero
+    ln -s "${monero.src}" monero
   '';
 
   desktopItem = makeDesktopItem {
@@ -59,7 +64,7 @@ mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Application;Network;Utility;";
+    categories  = "Network;Utility;";
   };
 
   postInstall = ''
@@ -78,7 +83,7 @@ mkDerivation rec {
 
   meta = {
     description  = "Private, secure, untraceable currency";
-    homepage     = https://getmonero.org/;
+    homepage     = "https://getmonero.org/";
     license      = licenses.bsd3;
     platforms    = platforms.all;
     badPlatforms = platforms.darwin;

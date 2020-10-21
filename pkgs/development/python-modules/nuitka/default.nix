@@ -12,13 +12,13 @@ let
   # Therefore we create a separate env for it.
   scons = pkgs.python27.withPackages(ps: [ pkgs.scons ]);
 in buildPythonPackage rec {
-  version = "0.6.5";
+  version = "0.6.8.4";
   pname = "Nuitka";
 
   # Latest version is not yet on PyPi
   src = fetchurl {
     url = "https://github.com/kayhayen/Nuitka/archive/${version}.tar.gz";
-    sha256 = "18vcmbyqdwsfa9gyj1sf518hsqczx7qlzrdc22hdb1zawzknb1pb";
+    sha256 = "0awhwksnmqmbciimqmd11wygp7bnq57khcg4n9r4ld53s147rmqm";
   };
 
   checkInputs = [ vmprof pyqt4 ];
@@ -46,7 +46,7 @@ in buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
-    homepage = http://nuitka.net/;
+    homepage = "https://nuitka.net/";
   };
 
 }

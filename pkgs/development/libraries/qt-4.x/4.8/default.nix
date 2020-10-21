@@ -3,8 +3,9 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
-, buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
+, buildMultimedia ? false # ancient gstreamer is broken
+, alsaLib, gstreamer, gst-plugins-base
+, buildWebkit ? false
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
@@ -93,6 +94,12 @@ stdenv.mkDerivation rec {
       #})
       ./qt4-gcc6.patch
       ./qt4-openssl-1.1.patch
+      (fetchpatch {
+        name = "gcc9-foreach.patch";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
+          + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
+        sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
+      })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
@@ -119,7 +126,7 @@ stdenv.mkDerivation rec {
       ];
 
   preConfigure = ''
-    export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     configureFlags+="
       -docdir $out/share/doc/${name}
       -plugindir $out/lib/qt4/plugins
@@ -200,13 +207,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
 
   NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 
@@ -231,7 +238,7 @@ stdenv.mkDerivation rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
 
   meta = {
-    homepage    = http://qt-project.org/;
+    homepage    = "http://qt-project.org/";
     description = "A cross-platform application framework for C++";
     license     = lib.licenses.lgpl21Plus; # or gpl3
     maintainers = with lib.maintainers; [ orivej lovek323 phreedom sander ];

@@ -10,8 +10,8 @@
 , stdenv
 , tesseract4
 , unpaper
+, substituteAll
 }:
-
 let
   inherit (python3Packages) buildPythonApplication;
 
@@ -26,16 +26,17 @@ let
     pillow
   ];
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "9.0.3";
+  version = "10.3.0";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "1qnjdcbwkxxqfahylzl0wj1gk51yi9m8akd4d1rrq37vg2vwdkjy";
+    sha256 = "0c6v7846lmkmbyfla07s35mpba4h09h0fx6pxqf0yvdjxmj46q8c";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -48,12 +49,13 @@ in buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     cffi
     chardet
+    coloredlogs
     img2pdf
     pdfminer
+    pluggy
     pikepdf
     pillow
     reportlab
-    ruffus
     setuptools
     tqdm
   ];
@@ -66,33 +68,17 @@ in buildPythonApplication rec {
     pytestcov
     pytestrunner
     python-xmp-toolkit
-    setuptools
+    pytestCheckHook
   ] ++ runtimeDeps;
 
-  postPatch = ''
-    substituteInPlace src/ocrmypdf/leptonica.py \
-      --replace "ffi.dlopen(find_library('lept'))" \
-      'ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
-  '';
-
-  # The tests take potentially 20+ minutes, depending on machine
-  doCheck = false;
-
-  # These tests fail and it might be upstream problem... or packaging. :)
-  # development is happening on macos and the pinned test versions are
-  # significantly newer than nixpkgs has. Program still works...
-  # (to the extent I've used it) -- Kiwi
-  checkPhase = ''
-    export HOME=$TMPDIR
-    pytest -k 'not test_force_ocr_on_pdf_with_no_images \
-    and not test_tesseract_crash \
-    and not test_tesseract_crash_autorotate \
-    and not test_ghostscript_pdfa_failure \
-    and not test_gs_render_failure \
-    and not test_gs_raster_failure \
-    and not test_bad_utf8 \
-    and not test_old_unpaper'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./liblept.patch;
+      liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+    # https://github.com/jbarlow83/OCRmyPDF/pull/596
+    ./0001-Make-compatible-with-pdfminer.six-version-20200720.patch
+  ];
 
   makeWrapperArgs = [ "--prefix PATH : ${stdenv.lib.makeBinPath [ ghostscript jbig2enc pngquant qpdf tesseract4 unpaper ]}" ];
 

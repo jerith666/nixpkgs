@@ -74,13 +74,17 @@ let
       akregator = callPackage ./akregator.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
+      bovo = callPackage ./bovo.nix {};
+      bomber = callPackage ./bomber.nix {};
       calendarsupport = callPackage ./calendarsupport.nix {};
       dolphin = callPackage ./dolphin.nix {};
       dolphin-plugins = callPackage ./dolphin-plugins.nix {};
       dragon = callPackage ./dragon.nix {};
+      elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
+      granatier = callPackage ./granatier.nix {};
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
@@ -88,14 +92,14 @@ let
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
       kalarmcal = callPackage ./kalarmcal.nix {};
+      kapptemplate = callPackage ./kapptemplate.nix { };
       kate = callPackage ./kate.nix {};
+      kbreakout = callPackage ./kbreakout.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
       kcalc = callPackage ./kcalc.nix {};
-      kcalcore = callPackage ./kcalcore.nix {};
       kcalutils = callPackage ./kcalutils.nix {};
       kcharselect = callPackage ./kcharselect.nix {};
       kcolorchooser = callPackage ./kcolorchooser.nix {};
-      kcontacts = callPackage ./kcontacts.nix {};
       kdav = callPackage ./kdav.nix {};
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
@@ -109,6 +113,7 @@ let
       kdialog = callPackage ./kdialog.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
+      kfloppy = callPackage ./kfloppy.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
@@ -121,6 +126,7 @@ let
       kio-extras = callPackage ./kio-extras.nix {};
       kldap = callPackage ./kldap.nix {};
       kleopatra = callPackage ./kleopatra.nix {};
+      kmahjongg = callPackage ./kmahjongg.nix {};
       kmail = callPackage ./kmail.nix {};
       kmail-account-wizard = callPackage ./kmail-account-wizard.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
@@ -138,6 +144,7 @@ let
       konquest = callPackage ./konquest.nix {};
       konqueror = callPackage ./konqueror.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       ksmtp = callPackage ./ksmtp {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
@@ -145,6 +152,8 @@ let
       krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       kruler = callPackage ./kruler.nix {};
+      kspaceduel = callPackage ./kspaceduel.nix {};
+      ksudoku = callPackage ./ksudoku.nix {};
       ksystemlog = callPackage ./ksystemlog.nix {};
       ktnef = callPackage ./ktnef.nix {};
       ktouch = callPackage ./ktouch.nix {};
@@ -158,6 +167,7 @@ let
       libkgapi = callPackage ./libkgapi.nix {};
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
+      libkmahjongg = callPackage ./libkmahjongg.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
@@ -168,6 +178,7 @@ let
       messagelib = callPackage ./messagelib.nix {};
       minuet = callPackage ./minuet.nix {};
       okular = callPackage ./okular.nix {};
+      picmi = callPackage ./picmi.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};

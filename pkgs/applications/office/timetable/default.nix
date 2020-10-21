@@ -1,9 +1,9 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , glib
 , gtk3
 , vala
-, hicolor-icon-theme
 , json-glib
 , libgee
 , meson
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timetable";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "1n02y7vpi4lb888iic06xifc86n2xirk50s1ssf84vlc5md1kq9f";
+    sha256 = "12c8kdrbz6x2mlrvr0nq9y5khj0qiiwlxf7aqc2z3dnrawjgy1rb";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     json-glib
     libgee
     pantheon.granite
@@ -49,10 +48,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Plot out your own timetable for the week and organize it";
     homepage = "https://github.com/lainsce/timetable";
-    maintainers = [ maintainers.kjuvi ] ++ pantheon.maintainers;
+    maintainers = [ maintainers.xiorcale ] ++ pantheon.maintainers;
     license = licenses.gpl2Plus;
   };
 }

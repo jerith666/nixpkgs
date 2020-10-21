@@ -1,12 +1,14 @@
 { fetchurl, stdenv, perl, makeWrapper, procps }:
 
 stdenv.mkDerivation rec {
-  name = "parallel-20190922";
+  name = "parallel-20200722";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${name}.tar.bz2";
-    sha256 = "0qrw34rpp8g5knb2nhs8z1hz9i42nxjn6i12m4rblm0anhnfwbr8";
+    sha256 = "0vqd8nhf4lkvbfy7nnibxjkpzpfandpklqm0hrix5vki5x7x80a8";
   };
+
+  outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl procps ];
@@ -37,9 +39,9 @@ stdenv.mkDerivation rec {
          it possible to use output from GNU Parallel as input for other
          programs.
       '';
-    homepage = https://www.gnu.org/software/parallel/;
+    homepage = "https://www.gnu.org/software/parallel/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub vrthra ];
+    maintainers = with maintainers; [ pSub vrthra tomberek ];
   };
 }

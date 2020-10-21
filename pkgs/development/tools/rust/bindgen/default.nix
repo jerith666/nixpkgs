@@ -3,7 +3,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen";
-  version = "0.51.0";
+  version = "0.54.1";
 
   RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
@@ -11,10 +11,10 @@ rustPlatform.buildRustPackage rec {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hlak8b57pndmdfkpfl17xxc91a6b239698bcm4yzlvliyscjgz1";
+    sha256 = "116np72w6agsi94xa1bdn6h7sa9gd522h358zlixk9xrhrx7yfn3";
   };
 
-  cargoSha256 = "1311d0wjjj99m59zd2n6r4aq6lwbbpyj54ha2z9g4yd1hn344r91";
+  cargoSha256 = "12a7bd2579jcnkss073v5w5w68fxwvhq6c6ndjy8vp78wg83qich";
 
   libclang = llvmPackages.libclang.lib; #for substituteAll
 
@@ -51,16 +51,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "C and C++ binding generator";
+    description = "Automatically generates Rust FFI bindings to C (and some C++) libraries.";
     longDescription = ''
       Bindgen takes a c or c++ header file and turns them into
       rust ffi declarations.
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
     '';
-    homepage = https://github.com/rust-lang/rust-bindgen;
+    homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.ralith ];
+    maintainers = with maintainers; [ johntitor ralith ];
   };
 }

@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -17,7 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.2.3";
+  version = "2.2.5";
 
   repoName = "capnet-assist";
 
@@ -25,13 +26,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
+    sha256 = "09pl1ynrmqjj844np4ww2i18z7kgx5kmj5ggfp8lqmxgsny7g8m3";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
-    homepage = https://github.com/elementary/capnet-assist;
+    homepage = "https://github.com/elementary/capnet-assist";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

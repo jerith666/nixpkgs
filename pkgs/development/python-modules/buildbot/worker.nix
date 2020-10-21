@@ -1,13 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, setuptoolsTrial, mock, twisted, future,
-  coreutils }:
+{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
+  future, coreutils }:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.4.1";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1l2ax9ywrhgrs9f9yyhiq5nhcf34w916ikx6bjcd6f201ixky1xg";
+    sha256 = "0p1w6ailp6xpa6ckl5prj413ilxx5s3lga5mzqxj9nn00vni8ik2";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -20,7 +20,7 @@ buildPythonPackage (rec {
   '';
 
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;

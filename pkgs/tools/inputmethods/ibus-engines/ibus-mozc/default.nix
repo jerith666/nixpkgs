@@ -15,7 +15,7 @@ in clangStdenv.mkDerivation rec {
   meta = with clangStdenv.lib; {
     isIbusEngine = true;
     description  = "Japanese input method from Google";
-    homepage     = https://github.com/google/mozc;
+    homepage     = "https://github.com/google/mozc";
     license      = licenses.free;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ gebner ericsagnes ];
@@ -36,6 +36,11 @@ in clangStdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
       sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
+    })
+    # Support dates after 2019
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/mozc/-/raw/master/debian/patches/add_support_new_japanese_era.patch";
+      sha256 = "1dsiiglrmm8i8shn2hv0j2b8pv6miysjrimj4569h606j4lwmcw2";
     })
   ];
 

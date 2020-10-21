@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.24.0";
+  version = "0.27.0";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev    = version;
-    sha256 = "1szpmkxc1lqfphicfcj0z7b1nq97xmb4ppwf806p8w0fxj1shil3";
+    sha256 = "197g9lvwg8qnsf18kifcqdj3cpfdnxz9vay766rn9bi4nfz0s6j2";
   };
 
   checkInputs = with python3Packages; [ pytest ];
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Mastodon CLI interface";
     homepage    = "https://github.com/ihabunek/toot";
-    license     = licenses.mit;
+    license     = licenses.gpl3;
     maintainers = [ maintainers.matthiasbeyer ];
   };
 

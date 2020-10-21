@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-eventhub";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "05c6isg13dslds94kv28v6navxj4bp4c5lsd9df0g3ndsxvpdrxp";
+    sha256 = "1qisnwn0gqfsa3h5x0fdbsgdjwn92hdbg71gdijrja0kryb328k5";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure EventHub Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/event-hub?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

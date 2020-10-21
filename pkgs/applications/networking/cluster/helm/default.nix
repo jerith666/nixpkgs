@@ -1,48 +1,33 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
-  version = "2.14.3";
+buildGoModule rec {
   pname = "helm";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "18ly31db2kxybjlisz8dfz3cdxs7j2wsh4rx5lwhbm5hpp42h17d";
+    sha256 = "0bp2yscrvdm46w2nxas5zs9mcvdn2yp05k0wmcjl7gh42fs6hmcs";
   };
+  vendorSha256 = "0lccglh5qpm5kp8xp1pn7y4cfxjpax83gyzjmnhh9h5y9zwgqp03";
 
-  goPackagePath = "k8s.io/helm";
-  subPackages = [ "cmd/helm" "cmd/tiller" "cmd/rudder" ];
+  doCheck = false;
 
-  goDeps = ./deps.nix;
+  subPackages = [ "cmd/helm" ];
+  buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];
 
-  # Thsese are the original flags from the helm makefile
-  buildFlagsArray = ''
-    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version} -X k8s.io/helm/pkg/version.GitTreeState=clean -X k8s.io/helm/pkg/version.BuildMetadata=
-    -w
-    -s
-  '';
-
-  preBuild = ''
-    # This is a hack(?) to flatten the dependency tree the same way glide or dep would
-    # Otherwise you'll get errors like
-    # have DeepCopyObject() "k8s.io/kubernetes/vendor/k8s.io/apimachinery/pkg/runtime".Object
-    # want DeepCopyObject() "k8s.io/apimachinery/pkg/runtime".Object
-    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/kubernetes/vendor
-    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/apiextensions-apiserver/vendor
-  '';
-
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions
-    mkdir -p $bin/share/zsh/site-functions
-    $bin/bin/helm completion bash > $bin/share/bash-completion/completions/helm
-    $bin/bin/helm completion zsh > $bin/share/zsh/site-functions/_helm
+    $out/bin/helm completion bash > helm.bash
+    $out/bin/helm completion zsh > helm.zsh
+    installShellCompletion helm.{bash,zsh}
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kubernetes/helm;
+    homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
     license = licenses.asl20;
-    maintainers = [ maintainers.rlupton20 maintainers.edude03 ];
+    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman ];
   };
 }

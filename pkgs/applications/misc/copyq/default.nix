@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "CopyQ";
-  version = "3.9.2";
+  version = "3.11.1";
 
   src  = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "02zs444i7hnqishs1i6vp8ffjxlxk3xkrw935pdwnwppv9s9v202";
+    sha256 = "1xxf8d220pa77195d9f3l3scvvyqsh1pvlrbw4cq6ydj9qbp5kf0";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,7 +21,7 @@ mkDerivation rec {
   ] ++ lib.optional webkitSupport qtwebkit;
 
   meta = with lib; {
-    homepage    = https://hluk.github.io/CopyQ;
+    homepage    = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
     license     = licenses.gpl3;
     maintainers = [ maintainers.willtim ];

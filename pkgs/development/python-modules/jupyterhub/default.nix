@@ -16,6 +16,9 @@
 , notebook
 , pythonOlder
 , nodePackages
+, oauthlib
+, certipy
+, jupyter-telemetry
 }:
 
 let
@@ -51,12 +54,12 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "0.9.4";
+  version = "1.1.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7848bbb299536641a59eb1977ec3c7c95d931bace4a2803d7e9b28b9256714da";
+    sha256 = "1mqknz0rxqzx4nc57vscvfh2d4znzlzpy83ancqxdaq3b8i70al5";
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -107,7 +110,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
-    traitlets prometheus_client async_generator notebook
+    traitlets prometheus_client async_generator notebook certipy oauthlib
+    jupyter-telemetry
   ];
 
   # Disable tests because they take an excessive amount of time to complete.
@@ -116,7 +120,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Serves multiple Jupyter notebook instances";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
   };

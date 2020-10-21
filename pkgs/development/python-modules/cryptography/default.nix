@@ -2,15 +2,14 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, isPy27
+, ipaddress
 , openssl
 , cryptography_vectors
 , darwin
-, asn1crypto
 , packaging
 , six
 , pythonOlder
-, enum34
-, ipaddress
 , isPyPy
 , cffi
 , pytest
@@ -18,15 +17,16 @@
 , iso8601
 , pytz
 , hypothesis
+, enum34
 }:
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.7"; # Also update the hash in vectors.nix
+  version = "3.0"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1inlnr36kl36551c9rcad99jmhk81v33by3glkadwdcgmi17fd76";
+    sha256 = "0lr06a9317n2iwfqwz9mpalqm99acqwk1478arvyj1jj0ay4v4lf";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,12 +34,10 @@ buildPythonPackage rec {
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    asn1crypto
     packaging
     six
-  ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
-  ++ stdenv.lib.optional (pythonOlder "3.3") ipaddress
-  ++ stdenv.lib.optional (!isPyPy) cffi;
+  ] ++ stdenv.lib.optional (!isPyPy) cffi
+  ++ stdenv.lib.optionals isPy27 [ ipaddress enum34 ];
 
   checkInputs = [
     cryptography_vectors
@@ -50,17 +48,9 @@ buildPythonPackage rec {
     pytz
   ];
 
-  # remove when https://github.com/pyca/cryptography/issues/4998 is fixed
   checkPhase = ''
-    py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
+    py.test --disable-pytest-warnings tests
   '';
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pyca/cryptography/commit/e575e3d482f976c4a1f3203d63ea0f5007a49a2a.patch";
-      sha256 = "0vg9prqsizd6gzh5j7lscsfxzxlhz7pacvzhgqmj1vhdhjwbblcp";
-    })
-  ];
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
   # can do until nix 1.11's release
@@ -73,9 +63,11 @@ buildPythonPackage rec {
       common cryptographic algorithms such as symmetric ciphers, message
       digests, and key derivation functions.
       Our goal is for it to be your "cryptographic standard library". It
-      supports Python 2.7, Python 3.4+, and PyPy 5.3+.
+      supports Python 2.7, Python 3.5+, and PyPy 5.4+.
     '';
-    homepage = https://github.com/pyca/cryptography;
+    homepage = "https://github.com/pyca/cryptography";
+    changelog = "https://cryptography.io/en/latest/changelog/#v"
+      + replaceStrings [ "." ] [ "-" ] version;
     license = with licenses; [ asl20 bsd3 psfl ];
     maintainers = with maintainers; [ primeos ];
   };

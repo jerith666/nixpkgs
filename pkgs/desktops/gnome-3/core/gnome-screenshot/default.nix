@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-screenshot";
-  version = "3.33.90";
+  version = "3.36.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0bki99lkp20jvp1yjymy8y56k378vivpvqvfwfx9dwl8r3qal7i2";
+    sha256 = "0rhj6fkpxfm26jv3vsn7yb2ybkc2k86ggy23nxa945q74y4msj9k";
   };
 
   doCheck = true;
@@ -34,9 +34,9 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://en.wikipedia.org/wiki/GNOME_Screenshot;
+    homepage = "https://en.wikipedia.org/wiki/GNOME_Screenshot";
     description = "Utility used in the GNOME desktop environment for taking screenshots";
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

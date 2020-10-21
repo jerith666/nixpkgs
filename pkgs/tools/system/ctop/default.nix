@@ -2,22 +2,20 @@
 
 buildGoModule rec {
   pname = "ctop";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "bcicen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mm6hl5qklfv0yffj6cgypsgcrk4fq6p60djycfgj20yhz9cmf9x";
+    sha256 = "0y72l65xgfqrgghzbm1zcy776l5m31z0gn6vfr689zyi3k3f4kh8";
   };
 
-  patches = [
-    # Version 0.7.2 does not build with go 1.13.
-    # TODO: Remove once(and if) https://github.com/bcicen/ctop/pull/178 is merged and lands in a release.
-    ./go-1.13-deps.patch
-  ];
+  vendorSha256 = "1x4li44vg0l1x205v9a971cgphplxhsrn59q97gmj9cfy4m7jdfw";
 
-  modSha256 = "0ad1gvamckg94r7f68cnjdbq9nyz6c3hh339hy4hghxd3rd1qskn";
+  doCheck = false;
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.build=v${version}" ];
 
   meta = with lib; {
     description = "Top-like interface for container metrics";

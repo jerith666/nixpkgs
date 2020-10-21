@@ -74,7 +74,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flashplayer";
-  version = "32.0.0.255";
+  version = "32.0.0.414";
 
   src = fetchurl {
     url =
@@ -85,14 +85,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1hd5z8qmki36k2wdwgg3v4sj32g8590r5563gdrjrk7bmrqfjnji"
+          "184qy9zxk9ynp6avz1j0ca5mxqqqlhrc0m7d1cjxv39jfdiyz51i"
         else
-          "0y13bxdgkxaqsyab09skiqj8dfjw76n2lr7p525ba8lbfbc8xj52"
+          "1m8fay452zps5yw1qpsc6irxxdvqjhkwxg066ckxkjf68gln7cmn"
       else
         if arch == "x86_64" then
-          "0qkslkaiw3c9xk1rjcl4x9d0fi6i91k7g01mf0gq28wgzcyz4cw7"
+          "0ng04yig7msq4mv01ngfsh7mkxia18j3k9clnp0y0sbpr60z8s83"
         else
-          "0qblmaa3nq1g7825yhvz98pvd1591q3q7bsrhv5bbhdbmb9c1qd5";
+          "0fndnhznqz28wfmm32fafx30pi517vvkxy1isp4krsfvyl7fmzhn";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Adobe Flash Player browser plugin";
-    homepage = http://www.adobe.com/products/flashplayer/;
+    homepage = "http://www.adobe.com/products/flashplayer/";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" "i686-linux" ];

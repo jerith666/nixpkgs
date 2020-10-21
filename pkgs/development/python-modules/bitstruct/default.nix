@@ -2,15 +2,15 @@
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "6.0.0";
+  version = "8.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1znqgy2ikdqn6n6mv1ccfbl0q7x65bh3i9ph0yjl4rihwvxyg9fg";
+    sha256 = "0p9d5242pkzag7ac5b5zdjyfqwxvj2jisyjghp6yhjbbwz1z44rb";
   };
 
   meta = with lib; {
-    homepage = https://github.com/eerimoq/bitstruct;
+    homepage = "https://github.com/eerimoq/bitstruct";
     description = "Python bit pack/unpack package";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

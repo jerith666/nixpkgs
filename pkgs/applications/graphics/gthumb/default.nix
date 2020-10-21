@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.8.1";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "184zn79w4s9y1zy42ar31p3jsg8rmkxy8k6iry51nz8aizbcs7jb";
+    sha256 = "0j7cxp4hhkvkckyvll6pmqkv5rwrknlzq9j1my0grb01b8wzhw9y";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     gnome3.adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
     gtk3
     json-glib
     lcms2

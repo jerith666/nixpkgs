@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "geogebra";
-  version = "5-0-560-0";
+  version = "5-0-593-0";
 
   preferLocalBuild = true;
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
       "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       "http://web.archive.org/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
     ];
-    sha256 = "16w6z3axzb9g51w4cbyf5zj6gpm9qab65xbw1184v5wym5llf4iw";
+    sha256 = "d84c27a3299e6df08881733d22215a18decedcba4c2d97a9e5424c39cd57db35";
   };
 
   srcIcon = fetchurl {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       together geometry, algebra, spreadsheets, graphing, statistics and
       calculus in one easy-to-use package.
     '';
-    homepage = https://www.geogebra.org/;
+    homepage = "https://www.geogebra.org/";
     maintainers = with maintainers; [ ma27 ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;

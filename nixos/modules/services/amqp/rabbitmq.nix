@@ -17,6 +17,7 @@ in {
   options = {
     services.rabbitmq = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the RabbitMQ server, an Advanced Message
@@ -80,10 +81,12 @@ in {
       configItems = mkOption {
         default = {};
         type = types.attrsOf types.str;
-        example = {
-          "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
-          "auth_backends.1.authz" = "rabbit_auth_backend_internal";
-        };
+        example = literalExample ''
+          {
+            "auth_backends.1.authn" = "rabbit_auth_backend_ldap";
+            "auth_backends.1.authz" = "rabbit_auth_backend_internal";
+          }
+        '';
         description = ''
           Configuration options in RabbitMQ's new config file format,
           which is a simple key-value format that can not express nested
@@ -96,8 +99,8 @@ in {
           will be merged into these options by RabbitMQ at runtime to
           form the final configuration.
 
-          See http://www.rabbitmq.com/configure.html#config-items
-          For the distinct formats, see http://www.rabbitmq.com/configure.html#config-file-formats
+          See https://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 
@@ -114,8 +117,8 @@ in {
           The contents of this option will be merged into the <literal>configItems</literal>
           by RabbitMQ at runtime to form the final configuration.
 
-          See the second table on http://www.rabbitmq.com/configure.html#config-items
-          For the distinct formats, see http://www.rabbitmq.com/configure.html#config-file-formats
+          See the second table on https://www.rabbitmq.com/configure.html#config-items
+          For the distinct formats, see https://www.rabbitmq.com/configure.html#config-file-formats
         '';
       };
 
@@ -163,7 +166,10 @@ in {
       after = [ "network.target" "epmd.socket" ];
       wants = [ "network.target" "epmd.socket" ];
 
-      path = [ cfg.package pkgs.procps ];
+      path = [
+        cfg.package
+        pkgs.coreutils # mkdir/chown/chmod for preStart
+      ];
 
       environment = {
         RABBITMQ_MNESIA_BASE = "${cfg.dataDir}/mnesia";

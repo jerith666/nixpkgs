@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "SPAdes";
-  version = "3.13.1";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "http://cab.spbu.ru/files/release${version}/${pname}-${version}.tar.gz";
-    sha256 = "0giayz197lmq2108filkn9izma3i803sb3iskv9hs5snzdr9p8ld";
+    sha256 = "1ji3afn6yvx7ysg7p9j0d1g28zrnxg1b7x90mhs2bj3lgs7vfafn";
   };
 
   nativeBuildInputs = [ cmake ];

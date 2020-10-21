@@ -13,7 +13,6 @@
 , libgnomekbd
 , lcms2
 , libpulseaudio
-, mousetweaks
 , alsaLib
 , libcanberra-gtk3
 , upower
@@ -41,19 +40,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.34.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0dvkq6pwrvqsm30wa965q0wf15v7nmnv6xfb9sli2sc62yc9gr3w";
+    sha256 = "0jzf2nznpcrjqq7fjwk66kw8a6x87kgbdjidc2msaqmm379xncry";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit tzdata mousetweaks;
+      inherit tzdata;
     })
-    ./global-backlight-helper.patch
   ];
 
   nativeBuildInputs = [
@@ -99,17 +97,10 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
-  NIX_CFLAGS_COMPILE = [
-    # Default for release buildtype but passed manually because
-    # we're using plain
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  # Default for release buildtype but passed manually because
+  # we're using plain
+  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
-  # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
-  postFixup = ''
-    mkdir -p $out/bin/gnome-settings-daemon
-    ln -s $out/libexec/gsd-backlight-helper $out/bin/gnome-settings-daemon/gsd-backlight-helper
-  '';
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
@@ -127,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

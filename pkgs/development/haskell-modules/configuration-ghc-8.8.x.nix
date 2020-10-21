@@ -41,13 +41,19 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # GHC 8.8.x can build haddock version 2.23.*
+  haddock = self.haddock_2_23_1;
+  haddock-api = self.haddock-api_2_23_1;
+
+  # These builds need Cabal 3.2.x.
+  cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_0_0; };
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
-  cabal-install = doJailbreak super.cabal-install;
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   chell = doJailbreak super.chell;
-  cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
   hashable = doJailbreak super.hashable;
@@ -64,52 +70,41 @@ self: super: {
   tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   test-framework = doJailbreak super.test-framework;
   th-expand-syns = doJailbreak super.th-expand-syns;
-
-  # use latest version to fix the build
-  hackage-db = self.hackage-db_2_1_0;
-  lens = self.lens_4_18_1;
-  memory = self.memory_0_15_0;
-  microlens = self.microlens_0_4_11_2;
-  optparse-applicative = self.optparse-applicative_0_15_1_0;
-  primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
-  regex-base = self.regex-base_0_94_0_0;
-  regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
-  regex-posix = self.regex-posix_0_96_0_0;
-  regex-tdfa = self.regex-tdfa_1_3_0;
-  shelly = self.shelly_1_9_0;
-  tls = self.tls_1_5_1;
-  xmonad-contrib = self.xmonad-contrib_0_16;
-
-  # These packages don't work and need patching and/or an update.
-  hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
-    sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
-  });
-  polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
-    sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
-  });
+  # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
+  snap-server = doJailbreak super.snap-server;
+  exact-pi = doJailbreak super.exact-pi;
+  time-compat = doJailbreak super.time-compat;
+  http-media = doJailbreak super.http-media;
+  servant-server = doJailbreak super.servant-server;
   foundation = dontCheck super.foundation;
-  haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
-    sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
-  });
   vault = dontHaddock super.vault;
-  monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
-  # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
-  alex = appendPatch super.alex (pkgs.fetchpatch {
-    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
-    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
-  });
+  # https://github.com/snapframework/snap-core/issues/288
+  snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
-  # mark broken packages
-  bencode = markBrokenVersion "0.6.0.0" super.bencode;
-  easytest = markBroken super.easytest;
-  easytest_0_3 = markBroken super.easytest_0_3;
-  haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
+  # https://github.com/kowainik/relude/issues/241
+  relude = dontCheck super.relude;
+
+  # The tests for semver-range need to be updated for the MonadFail change in
+  # ghc-8.8:
+  # https://github.com/adnelson/semver-range/issues/15
+  semver-range = dontCheck super.semver-range;
+
+  # The current version 2.14.2 does not compile with ghc-8.8.x or newer because
+  # of issues with Cabal 3.x.
+  darcs = dontDistribute super.darcs;
+
+  # Only 0.7 is compatible with ghc 8.7 https://hackage.haskell.org/package/apply-refact/changelog
+  apply-refact = super.apply-refact_0_7_0_0;
+
+  # The package needs the latest Cabal version.
+  cabal-install-parsers = super.cabal-install-parsers.overrideScope (self: super: { Cabal = self.Cabal_3_2_0_0; });
+
+  # cabal-fmt requires Cabal3
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_0_0; };
 
 }

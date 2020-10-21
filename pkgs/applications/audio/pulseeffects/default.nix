@@ -32,7 +32,6 @@
 , rubberband
 , mda_lv2
 , lsp-plugins
-, hicolor-icon-theme
 }:
 
 let
@@ -47,13 +46,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "pulseeffects";
-  version = "4.6.8";
+  version = "4.7.3";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "pulseeffects";
     rev = "v${version}";
-    sha256 = "09crsg73mvqdknvh6lczwx16x73zb2vb3m53bsapqiaq4lmwy3qr";
+    sha256 = "1xsw3v9vapd8q1dxacdgy2wk0xf3adqwbmcqiimdkd34llbdv88f";
   };
 
   nativeBuildInputs = [
@@ -86,7 +85,6 @@ in stdenv.mkDerivation rec {
     dbus
     fftwFloat
     zita-convolver
-    hicolor-icon-theme
   ];
 
   postPatch = ''
@@ -101,9 +99,14 @@ in stdenv.mkDerivation rec {
     )
   '';
 
+  # Meson is no longer able to pick up Boost automatically.
+  # https://github.com/NixOS/nixpkgs/issues/86131
+  BOOST_INCLUDEDIR = "${stdenv.lib.getDev boost}/include";
+  BOOST_LIBRARYDIR = "${stdenv.lib.getLib boost}/lib";
+
   meta = with stdenv.lib; {
     description = "Limiter, compressor, reverberation, equalizer and auto volume effects for Pulseaudio applications";
-    homepage = https://github.com/wwmm/pulseeffects;
+    homepage = "https://github.com/wwmm/pulseeffects";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;

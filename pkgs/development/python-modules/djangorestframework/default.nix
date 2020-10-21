@@ -1,11 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, django }:
+{ stdenv, buildPythonPackage, fetchPypi, django, isPy27 }:
+
 buildPythonPackage rec {
-  version = "3.9.4";
+  version = "3.11.1";
   pname = "djangorestframework";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c12869cfd83c33d579b17b3cb28a2ae7322a53c3ce85580c2a2ebe4e3f56c4fb";
+    sha256 = "6dd02d5a4bd2516fb93f80360673bf540c3b6641fec8766b1da2870a5aa00b32";
   };
 
   # Test settings are missing
@@ -15,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Web APIs for Django, made easy";
-    homepage = https://www.django-rest-framework.org/;
+    homepage = "https://www.django-rest-framework.org/";
     maintainers = with maintainers; [ desiderius ];
     license = licenses.bsd2;
   };

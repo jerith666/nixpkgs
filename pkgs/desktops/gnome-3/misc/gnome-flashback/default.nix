@@ -17,23 +17,51 @@
 , libxml2
 , pkgconfig
 , polkit
+, gdm
+, systemd
 , upower
+, pam
 , wrapGAppsHook
 , writeTextFile
 , writeShellScriptBin
 , xkeyboard_config
+, runCommand
 }:
 
 let
   pname = "gnome-flashback";
-  version = "3.34.0";
-  requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
+  version = "3.36.3";
+
+  # From data/sessions/Makefile.am
+  requiredComponentsCommon = [
+    "gnome-flashback"
+    "gnome-panel"
+  ];
+  requiredComponentsGsd = [
+    "org.gnome.SettingsDaemon.A11ySettings"
+    "org.gnome.SettingsDaemon.Color"
+    "org.gnome.SettingsDaemon.Datetime"
+    "org.gnome.SettingsDaemon.Housekeeping"
+    "org.gnome.SettingsDaemon.Keyboard"
+    "org.gnome.SettingsDaemon.MediaKeys"
+    "org.gnome.SettingsDaemon.Power"
+    "org.gnome.SettingsDaemon.PrintNotifications"
+    "org.gnome.SettingsDaemon.Rfkill"
+    "org.gnome.SettingsDaemon.ScreensaverProxy"
+    "org.gnome.SettingsDaemon.Sharing"
+    "org.gnome.SettingsDaemon.Smartcard"
+    "org.gnome.SettingsDaemon.Sound"
+    "org.gnome.SettingsDaemon.UsbProtection"
+    "org.gnome.SettingsDaemon.Wacom"
+    "org.gnome.SettingsDaemon.XSettings"
+  ];
+  requiredComponents = wmName: "RequiredComponents=${stdenv.lib.concatStringsSep ";" ([wmName] ++ requiredComponentsCommon ++ requiredComponentsGsd)};";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "1ryr28psrjr3kp0in99a12y4vy6kvi2mvhp174dli2a56ds16mgj";
+      sha256 = "19y1a4kq6db6a19basss76l4rypiz0lwr32ajli1ra1d1yj9xfid";
     };
 
     # make .desktop Execs absolute
@@ -75,13 +103,20 @@ let
       libpulseaudio
       libxkbfile
       polkit
+      gdm
+      gnome-panel
+      systemd
       upower
+      pam
       xkeyboard_config
     ];
 
     doCheck = true;
 
     enableParallelBuilding = true;
+
+    PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
+    PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
 
     passthru = {
       updateScript = gnome3.updateScript {
@@ -140,14 +175,23 @@ let
           Type=Application
           DesktopNames=GNOME-Flashback;GNOME;
         '';
+      } // {
+        providedSessions = [ "gnome-flashback-${wmName}" ];
       };
+
+      mkSystemdTargetForWm = { wmName }:
+        runCommand "gnome-flashback-${wmName}.target" {} ''
+          mkdir -p $out/lib/systemd/user
+          cp "${gnome-flashback}/lib/systemd/user/gnome-session-x11@gnome-flashback-metacity.target" \
+            "$out/lib/systemd/user/gnome-session-x11@gnome-flashback-${wmName}.target"
+        '';
     };
 
     meta = with stdenv.lib; {
       description = "GNOME 2.x-like session for GNOME 3";
-      homepage = https://wiki.gnome.org/Projects/GnomeFlashback;
+      homepage = "https://wiki.gnome.org/Projects/GnomeFlashback";
       license = licenses.gpl2;
-      maintainers = gnome3.maintainers;
+      maintainers = teams.gnome.members;
       platforms = platforms.linux;
     };
   };

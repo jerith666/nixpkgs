@@ -21,6 +21,7 @@
 , tables
 , xlwt
 , runtimeShell
+, isPy38
 , libcxx ? null
 }:
 
@@ -30,11 +31,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.1";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xm9dmbngsq46vj836csnb5j0bs88b1d713b0b5vx1q6gdxijbnb";
+    sha256 = "b39508562ad0bb3f384b0db24da7d68a2608b9ddc85b1d931ccaaa92d5e45273";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -67,6 +68,14 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+  # Parallel Cythonization is broken in Python 3.8 on Darwin. Fixed in the next
+  # release. https://github.com/pandas-dev/pandas/pull/30862
+  setupPyBuildFlags = optionals (!(isPy38 && isDarwin)) [
+    # As suggested by
+    # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
+    "--parallel=$NIX_BUILD_CORES"
+  ];
+
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
@@ -84,6 +93,14 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
+    # ordering logic has changed
+    "numpy_ufuncs_other"
+    "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
+    # Fails with 1.0.5
+    "test_constructor_list_frames"
+    "test_constructor_with_embedded_frames"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -111,7 +128,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = "https://pandas.pydata.org/";
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

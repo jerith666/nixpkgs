@@ -1,23 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
 , lsb-release, glog, protobuf, cbc, zlib
-, ensureNewerSourcesForZipFilesHook, python, swig
-, pythonProtobuf }:
+, ensureNewerSourcesForZipFilesHook, python, swig }:
 
 stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.3";
+  version = "7.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "0q06vxmds6nm3dpjw4y5jzr8j98qgfb9i8pbm9pfhmqigv791hwc";
+    sha256 = "06ig9a1afmzgzcg817y0rdq49ahll0q9y7bhhg9d89x6zy959ypv";
   };
-
-  patches = [
-    ./build.patch # https://github.com/google/or-tools/pull/1619
-    ./protobuf.patch # Otherwise it tries to install protobuf from pypi.
-  ];
 
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We
@@ -35,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+    "PROTOBUF_PYTHON_DESC=${python.pkgs.protobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
   ];
   buildFlags = [ "cc" "pypi_archive" ];
 
@@ -56,7 +50,7 @@ stdenv.mkDerivation rec {
   ];
   propagatedBuildInputs = [
     abseil-cpp gflags glog protobuf cbc
-    pythonProtobuf python.pkgs.six
+    python.pkgs.protobuf python.pkgs.six
   ];
 
   enableParallelBuilding = true;
@@ -64,12 +58,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/google/or-tools;
+    homepage = "https://github.com/google/or-tools";
     license = licenses.asl20;
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux;
   };
 }

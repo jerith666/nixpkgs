@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.3.1";
+  version = "6.1.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "102qgc7isfxwq0zsj6m9apcyj2hk8c8c4fz7656lxlpmvxgazs4q";
+    sha256 = "b360f8d4638bc577a4656e93f86298db755f915098dc763f6fc05da0c5d7a595";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter protocol implementation and client libraries";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

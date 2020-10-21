@@ -31,9 +31,32 @@ let
     load-module module-position-event-sounds
   '';
 
+  defaultSessionName = config.services.xserver.displayManager.defaultSession;
+
+  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "enable"
+    ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ] [
+      "services"
+      "xserver"
+      "displayManager"
+      "autoLogin"
+      "user"
+    ])
+  ];
+
+  meta = {
+    maintainers = teams.gnome.members;
+  };
 
   ###### interface
 
@@ -49,48 +72,32 @@ in
         debugging messages in GDM
       '';
 
-      autoLogin = mkOption {
-        default = {};
+      # Auto login options specific to GDM
+      autoLogin.delay = mkOption {
+        type = types.int;
+        default = 0;
         description = ''
-          Auto login configuration attrset.
+          Seconds of inactivity after which the autologin will be performed.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as the sepecified <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the autologin.
-              '';
-            };
-
-            delay = mkOption {
-              type = types.int;
-              default = 0;
-              description = ''
-                Seconds of inactivity after which the autologin will be performed.
-              '';
-            };
-
-          };
-        };
       };
 
       wayland = mkOption {
+        type = types.bool;
         default = true;
         description = ''
-          Allow GDM run on Wayland instead of Xserver
+          Allow GDM to run on Wayland instead of Xserver.
+          Note to enable Wayland with Nvidia you need to
+          enable the <option>nvidiaWayland</option>.
         '';
+      };
+
+      nvidiaWayland = mkOption {
         type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow wayland to be used with the proprietary
+          NVidia graphics driver.
+        '';
       };
 
       autoSuspend = mkOption {
@@ -109,12 +116,6 @@ in
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
-
-    assertions = [
-      { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
-        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
-      }
-    ];
 
     services.xserver.displayManager.lightdm.enable = false;
 
@@ -138,7 +139,7 @@ in
         environment = {
           GDM_X_SERVER_EXTRA_ARGS = toString
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
-          XDG_DATA_DIRS = "${cfg.session.desktops}/share/";
+          XDG_DATA_DIRS = "${cfg.sessionData.desktops}/share/";
         } // optionalAttrs (xSessionWrapper != null) {
           # Make GDM use this wrapper before running the session, which runs the
           # configured setupCommands. This relies on a patched GDM which supports
@@ -146,21 +147,36 @@ in
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
-        preStart = optionalString config.hardware.pulseaudio.enable ''
-          mkdir -p /run/gdm/.config/pulse
-          ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
-          chown -R gdm:gdm /run/gdm/.config
-        '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
-          # Create stamp file for gnome-initial-setup to prevent run.
-          mkdir -p /run/gdm/.config
-          cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
-          yes
-          EOF
+        preStart = optionalString (defaultSessionName != null) ''
+          # Set default session in session chooser to a specified values – basically ignore session history.
+          ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
         '';
       };
 
-    # Because sd_login_monitor_new requires /run/systemd/machines
-    systemd.services.display-manager.wants = [ "systemd-machined.service" ];
+    systemd.tmpfiles.rules = [
+      "d /run/gdm/.config 0711 gdm gdm"
+    ] ++ optionals config.hardware.pulseaudio.enable [
+      "d /run/gdm/.config/pulse 0711 gdm gdm"
+      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
+    ] ++ optionals config.services.gnome3.gnome-initial-setup.enable [
+      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+    ];
+
+    # Otherwise GDM will not be able to start correctly and display Wayland sessions
+    systemd.packages = with pkgs.gnome3; [ gnome-session gnome-shell ];
+    environment.systemPackages = [ pkgs.gnome3.adwaita-icon-theme ];
+
+    systemd.services.display-manager.wants = [
+      # Because sd_login_monitor_new requires /run/systemd/machines
+      "systemd-machined.service"
+      # setSessionScript wants AccountsService
+      "accounts-daemon.service"
+      # Failed to open gpu '/dev/dri/card0': GDBus.Error:org.freedesktop.DBus.Error.AccessDenied: Operation not permitted
+      # https://github.com/NixOS/nixpkgs/pull/25311#issuecomment-609417621
+      "systemd-udev-settle.service"
+    ];
+
     systemd.services.display-manager.after = [
       "rc-local.service"
       "systemd-machined.service"
@@ -168,10 +184,12 @@ in
       "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
+      "systemd-udev-settle.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
-      "plymouth-quit.service"
+       "getty@tty${gdm.initialVT}.service"
+       # TODO: Add "plymouth-quit.service" so GDM can control when plymouth quits.
+       # Currently this breaks switching configurations while using plymouth.
     ];
     systemd.services.display-manager.onFailure = [
       "plymouth-quit.service"
@@ -182,7 +200,6 @@ in
       KillMode = "mixed";
       IgnoreSIGPIPE = "no";
       BusName = "org.gnome.DisplayManager";
-      StandardOutput = "syslog";
       StandardError = "inherit";
       ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
       KeyringMode = "shared";
@@ -195,6 +212,19 @@ in
     services.accounts-daemon.enable = true;
 
     services.dbus.packages = [ gdm ];
+
+    # We duplicate upstream's udev rules manually to make wayland with nvidia configurable
+    services.udev.extraRules = ''
+      # disable Wayland on Cirrus chipsets
+      ATTR{vendor}=="0x1013", ATTR{device}=="0x00b8", ATTR{subsystem_vendor}=="0x1af4", ATTR{subsystem_device}=="0x1100", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      # disable Wayland on Hi1710 chipsets
+      ATTR{vendor}=="0x19e5", ATTR{device}=="0x1711", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ${optionalString (!cfg.gdm.nvidiaWayland) ''
+        DRIVER=="nvidia", RUN+="${gdm}/libexec/gdm-disable-wayland"
+      ''}
+      # disable Wayland when modesetting is disabled
+      IMPORT{cmdline}="nomodeset", RUN+="${gdm}/libexec/gdm-disable-wayland"
+    '';
 
     systemd.user.services.dbus.wantedBy = [ "default.target" ];
 
@@ -217,7 +247,7 @@ in
       customDconfDb = pkgs.stdenv.mkDerivation {
         name = "gdm-dconf-db";
         buildCommand = ''
-          ${pkgs.gnome3.dconf}/bin/dconf compile $out ${customDconf}/dconf
+          ${pkgs.dconf}/bin/dconf compile $out ${customDconf}/dconf
         '';
       };
     in pkgs.stdenv.mkDerivation {
@@ -239,14 +269,14 @@ in
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
       WaylandEnable=${if cfg.gdm.wayland then "true" else "false"}
-      ${optionalString cfg.gdm.autoLogin.enable (
+      ${optionalString cfg.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true
-          TimedLogin=${cfg.gdm.autoLogin.user}
+          TimedLogin=${cfg.autoLogin.user}
           TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
         '' else ''
           AutomaticLoginEnable=true
-          AutomaticLogin=${cfg.gdm.autoLogin.user}
+          AutomaticLogin=${cfg.autoLogin.user}
         '')
       }
 
@@ -262,7 +292,7 @@ in
       ${optionalString cfg.gdm.debug "Enable=true"}
     '';
 
-    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.session.wrapper;
+    environment.etc."gdm/Xsession".source = config.services.xserver.displayManager.sessionData.wrapper;
 
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {

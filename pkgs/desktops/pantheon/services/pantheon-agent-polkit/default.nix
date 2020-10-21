@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -7,24 +8,25 @@
 , vala
 , gtk3
 , libgee
+, granite
 , polkit
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "0.1.6";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1g9l2jzpvv0dbvxh93w98a7ijsfqv3s3382li4s256179gihhd67";
+    sha256 = "1kd6spwfwy5r2mrf7xh5l2wrazqia8vr4j3g27s97vn7fcg4pgb0";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -37,6 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    granite
     gtk3
     libgee
     polkit
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Polkit Agent for the Pantheon Desktop";
-    homepage = https://github.com/elementary/pantheon-agent-polkit;
+    homepage = "https://github.com/elementary/pantheon-agent-polkit";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

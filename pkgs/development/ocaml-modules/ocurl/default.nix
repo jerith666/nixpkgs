@@ -5,10 +5,10 @@ then throw "ocurl is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocurl-0.8.2";
+  name = "ocurl-0.9.1";
   src = fetchurl {
     url = "http://ygrek.org.ua/p/release/ocurl/${name}.tar.gz";
-    sha256 = "1ax3xdlzgb1zg7d0wr9nwgmh6a45a764m0wk8p6mx07ad94hz0q9";
+    sha256 = "0n621cxb9012pj280c7821qqsdhypj8qy9qgrah79dkh6a8h2py6";
   };
 
   buildInputs = [ pkgconfig ocaml findlib ncurses ];

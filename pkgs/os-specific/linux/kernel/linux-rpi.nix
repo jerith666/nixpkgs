@@ -1,8 +1,8 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.71";
-  tag = "1.20190906";
+  modDirVersion = "4.19.118";
+  tag = "1.20200601";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -11,14 +11,14 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = "9532eb3c84d8d952ef28da3d135683ac01adc9b8";
-    sha256 = "0168wz8kkdzbyha41iqlgn1z1kcy4smg89rgxkgadzq78y7fglpl";
+    rev = "raspberrypi-kernel_${tag}-1";
+    sha256 = "11jzsmnd1qry2ir9vmsv0nfdzjpgkn5yab5ylxcz406plc073anp";
   };
 
   defconfig = {
     "1" = "bcmrpi_defconfig";
     "2" = "bcm2709_defconfig";
-    "3" = "bcmrpi3_defconfig";
+    "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
@@ -33,7 +33,7 @@ lib.overrideDerivation (buildLinux (args // {
     platforms = with lib.platforms; [ arm aarch64 ];
     hydraPlatforms = [ "aarch64-linux" ];
   };
-})) (oldAttrs: {
+} // (args.argsOverride or {}))) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'

@@ -106,6 +106,12 @@ let
 
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
+    (mkRemovedOptionModule [ "services" "tor" "relay" "isBridge" ] "Use services.tor.relay.role instead.")
+    (mkRemovedOptionModule [ "services" "tor" "relay" "isExit" ] "Use services.tor.relay.role instead.")
+  ];
+
   options = {
     services.tor = {
       enable = mkOption {
@@ -153,7 +159,7 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Wheter to enable Tor control socket. Control socket is created
+            Whether to enable Tor control socket. Control socket is created
             in <literal>${torRunDirectory}/control</literal>
           '';
         };

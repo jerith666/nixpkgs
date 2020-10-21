@@ -20,14 +20,14 @@
 }:
 
 mkDerivation rec {
-  version = "0.10.1";
+  version = "0.11.0";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "107w6dlr1m5g60j342p2b6ipfn1r8kyad8av58nh8ibzycghbfv2";
+    sha256 = "1lpjrij6y8l738hd7bfig0piglqinnqbadidzw9k0nm53bh4pqrr";
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities ]
@@ -39,12 +39,19 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake qttools ];
 
+  # No tests are available by upstream, but we test --help anyway
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/syncthingtray --help | grep ${version}
+  '';
+
   cmakeFlags = [
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/lib/qt-5"
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
+    ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
   ;
 
   meta = with lib; {

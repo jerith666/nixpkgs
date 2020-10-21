@@ -17,10 +17,13 @@ let
       hba_file = '${pkgs.writeText "pg_hba.conf" cfg.authentication}'
       ident_file = '${pkgs.writeText "pg_ident.conf" cfg.identMap}'
       log_destination = 'stderr'
+      log_line_prefix = '${cfg.logLinePrefix}'
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
     '';
+
+  groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
 
@@ -32,13 +35,7 @@ in
 
     services.postgresql = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to run PostgreSQL.
-        '';
-      };
+      enable = mkEnableOption "PostgreSQL Server";
 
       package = mkOption {
         type = types.package;
@@ -58,9 +55,13 @@ in
 
       dataDir = mkOption {
         type = types.path;
+        defaultText = "/var/lib/postgresql/\${config.services.postgresql.package.psqlSchema}";
         example = "/var/lib/postgresql/11";
         description = ''
-          Data directory for PostgreSQL.
+          The data directory for PostgreSQL. If left as the default value
+          this directory will automatically be created before the PostgreSQL server starts, otherwise
+          the sysadmin is responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
         '';
       };
 
@@ -85,6 +86,16 @@ in
           The general form is:
 
           map-name system-username database-username
+        '';
+      };
+
+      initdbArgs = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [ "--data-checksums" "--allow-group-access" ];
+        description = ''
+          Additional arguments passed to <literal>initdb</literal> during data dir
+          initialisation.
         '';
       };
 
@@ -180,6 +191,17 @@ in
         '';
       };
 
+      logLinePrefix = mkOption {
+        type = types.str;
+        default = "[%p] ";
+        example = "%m [%p] ";
+        description = ''
+          A printf-style string that is output at the beginning of each log line.
+          Upstream default is <literal>'%m [%p] '</literal>, i.e. it includes the timestamp. We do
+          not include the timestamp, because journal has it anyway.
+        '';
+      };
+
       extraPlugins = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -220,7 +242,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.postgresql.enable {
+  config = mkIf cfg.enable {
 
     services.postgresql.package =
       # Note: when changing the default, make it conditional on
@@ -231,14 +253,12 @@ in
             else if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql_9_5
             else throw "postgresql_9_4 was removed, please upgrade your postgresql version.");
 
-    services.postgresql.dataDir =
-      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/postgresql/${config.services.postgresql.package.psqlSchema}"
-                 else "/var/db/postgresql");
+    services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
     services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
-        local all all              ident
+        local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';
@@ -272,38 +292,30 @@ in
 
         preStart =
           ''
-            # Create data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              mkdir -m 0700 -p ${cfg.dataDir}
+              # Cleanup the data directory.
               rm -f ${cfg.dataDir}/*.conf
-              chown -R postgres:postgres ${cfg.dataDir}
-            fi
-          ''; # */
 
-        script =
-          ''
-            # Initialise the database.
-            if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U ${cfg.superUser}
+              # Initialise the database.
+              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
+
             ln -sfn "${configFile}" "${cfg.dataDir}/postgresql.conf"
             ${optionalString (cfg.recoveryConfig != null) ''
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-
-             exec postgres
           '';
 
-        serviceConfig =
+        serviceConfig = mkMerge [
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             User = "postgres";
             Group = "postgres";
-            PermissionsStartOnly = true;
             RuntimeDirectory = "postgresql";
-            Type = if lib.versionAtLeast cfg.package.version "9.6"
+            Type = if versionAtLeast cfg.package.version "9.6"
                    then "notify"
                    else "simple";
 
@@ -315,36 +327,48 @@ in
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
             TimeoutSec = 120;
-          };
 
-        # Wait for PostgreSQL to be ready to accept connections.
-        postStart =
-          ''
-            PSQL="${pkgs.sudo}/bin/sudo -u ${cfg.superUser} psql --port=${toString cfg.port}"
+            ExecStart = "${postgresql}/bin/postgres";
 
-            while ! $PSQL -d postgres -c "" 2> /dev/null; do
-                if ! kill -0 "$MAINPID"; then exit 1; fi
-                sleep 0.1
-            done
+            # Wait for PostgreSQL to be ready to accept connections.
+            ExecStartPost =
+              let
+                setupScript = pkgs.writeScript "postgresql-setup" (''
+                  #!${pkgs.runtimeShell} -e
 
-            if test -e "${cfg.dataDir}/.first_startup"; then
-              ${optionalString (cfg.initialScript != null) ''
-                $PSQL -f "${cfg.initialScript}" -d postgres
-              ''}
-              rm -f "${cfg.dataDir}/.first_startup"
-            fi
-          '' + optionalString (cfg.ensureDatabases != []) ''
-            ${concatMapStrings (database: ''
-              $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
-            '') cfg.ensureDatabases}
-          '' + ''
-            ${concatMapStrings (user: ''
-              $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc "CREATE USER ${user.name}"
-              ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
-                $PSQL -tAc 'GRANT ${permission} ON ${database} TO ${user.name}'
-              '') user.ensurePermissions)}
-            '') cfg.ensureUsers}
-          '';
+                  PSQL="${pkgs.utillinux}/bin/runuser -u ${cfg.superUser} -- psql --port=${toString cfg.port}"
+
+                  while ! $PSQL -d postgres -c "" 2> /dev/null; do
+                      if ! kill -0 "$MAINPID"; then exit 1; fi
+                      sleep 0.1
+                  done
+
+                  if test -e "${cfg.dataDir}/.first_startup"; then
+                    ${optionalString (cfg.initialScript != null) ''
+                      $PSQL -f "${cfg.initialScript}" -d postgres
+                    ''}
+                    rm -f "${cfg.dataDir}/.first_startup"
+                  fi
+                '' + optionalString (cfg.ensureDatabases != []) ''
+                  ${concatMapStrings (database: ''
+                    $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${database}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${database}"'
+                  '') cfg.ensureDatabases}
+                '' + ''
+                  ${concatMapStrings (user: ''
+                    $PSQL -tAc "SELECT 1 FROM pg_roles WHERE rolname='${user.name}'" | grep -q 1 || $PSQL -tAc 'CREATE USER "${user.name}"'
+                    ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                      $PSQL -tAc 'GRANT ${permission} ON ${database} TO "${user.name}"'
+                    '') user.ensurePermissions)}
+                  '') cfg.ensureUsers}
+                '');
+              in
+                "+${setupScript}";
+          }
+          (mkIf (cfg.dataDir == "/var/lib/postgresql/${cfg.package.psqlSchema}") {
+            StateDirectory = "postgresql postgresql/${cfg.package.psqlSchema}";
+            StateDirectoryMode = if groupAccessAvailable then "0750" else "0700";
+          })
+        ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };
@@ -352,5 +376,5 @@ in
   };
 
   meta.doc = ./postgresql.xml;
-  meta.maintainers = with lib.maintainers; [ thoughtpolice ];
+  meta.maintainers = with lib.maintainers; [ thoughtpolice danbst ];
 }

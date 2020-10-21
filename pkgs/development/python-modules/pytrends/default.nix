@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , requests
 , lxml
 , pandas
@@ -8,11 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytrends";
-  version = "4.6.0";
+  version = "4.7.3";
+  disabled = isPy27; # python2 pandas is too old
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03gnn2mgjvpc7pbcijy7xilrhgjg7x2pp6ci96pdyqnhkqv02d3n";
+    sha256 = "8ccb06c57c31fa157b978a0d810de7718ee46583d28cf818250d45f36abd2faa";
   };
 
   doCheck = false;

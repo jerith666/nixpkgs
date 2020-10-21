@@ -9,6 +9,7 @@
 , pygobject3
 , pyserial
 , setuptools
+, dbus-python
 
 , file
 , acpi
@@ -23,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "py3status";
-  version = "3.20";
+  version = "3.28";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14p0ikbgy1pgphy00gvi6zpkz2kf5mwmawbdqs0l57s0fzrz7xwz";
+    sha256 = "103c63f43ddfd86e5a3f0bebb34b0f2eaaf6dbd58281d25c8a16937eb8e7f194";
   };
 
   doCheck = false;
   propagatedBuildInputs = [
-    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools
+    pytz requests tzlocal i3ipc pydbus pygobject3 pyserial setuptools dbus-python
   ];
   buildInputs = [ file ];
   prePatch = ''
@@ -51,7 +52,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Extensible i3status wrapper";
     license = licenses.bsd3;
-    homepage = https://github.com/ultrabug/py3status;
+    homepage = "https://github.com/ultrabug/py3status";
     maintainers = with maintainers; [ ];
   };
 }

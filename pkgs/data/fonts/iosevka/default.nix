@@ -1,5 +1,5 @@
-{ stdenv, lib, pkgs, fetchFromGitHub
-, nodejs, nodePackages, remarshal, ttfautohint-nox, otfcc
+{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
+, ttfautohint-nox, otfcc
 
 # Custom font set options.
 # See https://github.com/be5invis/Iosevka#build-your-own-style
@@ -13,27 +13,30 @@
 #   ];
 # };
 , privateBuildPlan ? null
-# Extra parameters. Can be used for ligature mapping.
+  # Extra parameters. Can be used for ligature mapping.
+  # It must be a raw toml string.
+  #
+  # Ex:
+  # [[iosevka.compLig]]
+  # unicode = 57808 # 0xe1d0
+  # featureTag = 'XHS0'
+  # sequence = "+>"
 , extraParameters ? null
-# Custom font set name. Required if any custom settings above.
-, set ? null
-}:
+  # Custom font set name. Required if any custom settings above.
+, set ? null }:
 
 assert (privateBuildPlan != null) -> set != null;
 
 stdenv.mkDerivation rec {
-  pname =
-    if set != null
-    then "iosevka-${set}"
-    else "iosevka";
+  pname = if set != null then "iosevka-${set}" else "iosevka";
 
-  version = "2.3.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "Iosevka";
     rev = "v${version}";
-    sha256 = "1qnbxhx9wvij9zia226mc3sy8j7bfsw5v1cvxvsbbwjskwqdamvv";
+    sha256 = "1wbnp6gr3ywvspwk6i0jn68zwjmsd38arn4n2dkh7mdkrmvah81k";
   };
 
   nativeBuildInputs = [
@@ -44,9 +47,10 @@ stdenv.mkDerivation rec {
     ttfautohint-nox
   ];
 
-  privateBuildPlanJSON = builtins.toJSON { buildPlans.${pname} = privateBuildPlan; };
-  extraParametersJSON = builtins.toJSON { ${pname} = extraParameters; };
-  passAsFile = [ "privateBuildPlanJSON" "extraParametersJSON" ];
+  privateBuildPlanJSON =
+    builtins.toJSON { buildPlans.${pname} = privateBuildPlan; };
+  inherit extraParameters;
+  passAsFile = [ "privateBuildPlanJSON" "extraParameters" ];
 
   configurePhase = ''
     runHook preConfigure
@@ -55,20 +59,22 @@ stdenv.mkDerivation rec {
     ''}
     ${lib.optionalString (extraParameters != null) ''
       echo -e "\n" >> parameters.toml
-      remarshal -i "$extraParametersJSONPath" -if json -of toml >> parameters.toml
+      cat "$extraParametersPath" >> parameters.toml
     ''}
-    ln -s ${nodePackages."iosevka-build-deps-../../data/fonts/iosevka"}/lib/node_modules/iosevka-build-deps/node_modules .
+    ln -s ${
+      nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
+    }/lib/node_modules/iosevka-build-deps/node_modules .
     runHook postConfigure
   '';
 
   buildPhase = ''
     runHook preBuild
-    npm run build -- ttf::$pname
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
     runHook postBuild
   '';
 
   installPhase = ''
-    fontdir="$out/share/fonts/$pname"
+    fontdir="$out/share/fonts/truetype"
     install -d "$fontdir"
     install "dist/$pname/ttf"/* "$fontdir"
   '';
@@ -76,8 +82,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://be5invis.github.io/Iosevka;
-    downloadPage = https://github.com/be5invis/Iosevka/releases;
+    homepage = "https://be5invis.github.io/Iosevka";
+    downloadPage = "https://github.com/be5invis/Iosevka/releases";
     description = ''
       Slender monospace sans-serif and slab-serif typeface inspired by Pragmata
       Pro, M+ and PF DIN Mono, designed to be the ideal font for programming.

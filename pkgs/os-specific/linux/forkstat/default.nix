@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "forkstat";
-  version = "0.02.11";
+  version = "0.02.15";
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/forkstat/forkstat-${version}.tar.xz";
-    sha256 = "06lj8fl4083rp40i3sn8zggj165nvs3cq9dca66wcp9glb1d6yki";
+    sha256 = "11dvg7bbklpfywx6i6vb29vvc28pbfk3mff0g18n5imxvzsd7jxs";
   };
   installFlags = [ "DESTDIR=$(out)" ];
   postInstall = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Process fork/exec/exit monitoring tool";
-    homepage = https://kernel.ubuntu.com/~cking/forkstat/;
+    homepage = "https://kernel.ubuntu.com/~cking/forkstat/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];

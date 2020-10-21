@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -9,7 +9,7 @@
 , qtwebengine
 
 , akonadi-contacts
-, kcalcore
+, kcalendarcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -26,14 +26,13 @@
 , exiv2
 , ffmpeg
 , flex
-, jasper
+, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
 , lcms2
 , lensfun
 , libgphoto2
 , libkipi
 , libksane
 , liblqr1
-, libqtav
 , libusb1
 , marble
 , libGL
@@ -52,13 +51,11 @@
 
 mkDerivation rec {
   pname   = "digikam";
-  version = "6.2.0";
+  version = "6.4.0";
 
-  src = fetchFromGitHub {
-    owner  = "KDE";
-    repo   = "digikam";
-    rev    = "v${version}";
-    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
+  src = fetchurl {
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0vwd97zkxv30y8x0z76s4fsj4w9ysgsmpjclp2h2bpava7zi4l3p";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -70,14 +67,12 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
-    jasper
     lcms2
     lensfun
     libgphoto2
     libkipi
     libksane
     liblqr1
-    libqtav
     libusb1
     libGL
     libGLU
@@ -90,7 +85,7 @@ mkDerivation rec {
     qtwebengine
 
     akonadi-contacts
-    kcalcore
+    kcalendarcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
@@ -103,7 +98,8 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ]
+  ++ lib.optionals withJpeg2k [ jasper ];
 
   enableParallelBuilding = true;
 
@@ -125,8 +121,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Photo Management Program";
     license = licenses.gpl2;
-    homepage = https://www.digikam.org;
-    maintainers = with maintainers; [ the-kenny ];
+    homepage = "https://www.digikam.org";
     platforms = platforms.linux;
   };
 }

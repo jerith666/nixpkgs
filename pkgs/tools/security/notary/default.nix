@@ -26,7 +26,7 @@ buildGoPackage rec {
 
   installPhase = ''
     runHook preInstall
-    install -D bin/notary $bin/bin/notary
+    install -D bin/notary $out/bin/notary
     runHook postInstall
   '';
 
@@ -58,8 +58,8 @@ buildGoPackage rec {
       integrity of the received content.
     '';
     license = licenses.asl20;
-    homepage = https://github.com/theupdateframework/notary;
-    maintainers = with maintainers; [ vdemeester ma27 ];
+    homepage = "https://github.com/theupdateframework/notary";
+    maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.unix;
   };
 }

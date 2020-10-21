@@ -4,7 +4,9 @@ buildGoModule rec {
   pname = "shiori";
   version = "1.5.0";
 
-  modSha256 = "142raxqh6mipw0dyhzgc8ha6vn74wdin25qrl1nkd68mpcvsbblg";
+  vendorSha256 = "1ik5faysc880kz7nymvbmjj006l1fsqfy76036szwzg314v78643";
+
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "go-shiori";

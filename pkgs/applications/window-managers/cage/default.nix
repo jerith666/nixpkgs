@@ -1,30 +1,33 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, makeWrapper
-, wlroots, wayland, wayland-protocols, pixman, libxkbcommon
-, systemd, mesa, libX11
+, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
+, wlroots, wayland-protocols, pixman, libxkbcommon
+, systemd, libGL, libX11
 , xwayland ? null
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.1";
+  version = "0.1.2.1";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
-    repo = pname;
+    repo = "cage";
     rev = "v${version}";
-    sha256 = "1vp4mfkflrjmlgyx5mkbzdi3iq58m76q7l9dfrsk85xn0642d6q1";
+    sha256 = "1i4rm3dpmk7gkl6hfs6a7vwz76ba7yqcdp63nlrdbnq81m9cy2am";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper ];
+  postPatch = ''
+    substituteInPlace meson.build --replace \
+      "0.1.2" "${version}"
+  '';
+
+  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon
-    # TODO: Not specified but required:
-    systemd mesa libX11
+    systemd libGL libX11
   ];
-
-  enableParallelBuilding = true;
 
   mesonFlags = [ "-Dxwayland=${stdenv.lib.boolToString (xwayland != null)}" ];
 
@@ -32,9 +35,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/cage --prefix PATH : "${xwayland}/bin"
   '';
 
+  # Tests Cage using the NixOS module by launching xterm:
+  passthru.tests.basic-nixos-module-functionality = nixosTests.cage;
+
   meta = with stdenv.lib; {
-    description = "A Wayland kiosk";
-    homepage    = https://www.hjdskes.nl/projects/cage/;
+    description = "A Wayland kiosk that runs a single, maximized application";
+    homepage    = "https://www.hjdskes.nl/projects/cage/";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];

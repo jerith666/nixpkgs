@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "1.0.4";
+  version = "1.0.6";
 
   repoName = "camera";
 
@@ -31,13 +32,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1p532f961cjdg7szmxw7hw3av9v342hv5rx7in3bbhlc7adxflyc";
+    sha256 = "13jg224h2436swd6kdkfs22icg0ja9lshvxwg5bqnb5fshspkjba";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Camera app designed for elementary OS";
-    homepage = https://github.com/elementary/camera;
+    homepage = "https://github.com/elementary/camera";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

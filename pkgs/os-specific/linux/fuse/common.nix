@@ -2,7 +2,7 @@
 
 { stdenv, fetchFromGitHub, fetchpatch
 , fusePackages, utillinux, gettext
-, meson, ninja, pkgconfig
+, meson, ninja, pkg-config
 , autoreconfHook
 , python3Packages, which
 }:
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
       else [ ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch ]);
 
   nativeBuildInputs = if isFuse3
-    then [ meson ninja pkgconfig ]
+    then [ meson ninja pkg-config ]
     else [ autoreconfHook gettext ];
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
@@ -60,6 +60,10 @@ in stdenv.mkDerivation rec {
       # ./fuse3-install_man.patch)
       install -D -m444 doc/fusermount3.1 $out/share/man/man1/fusermount3.1
       install -D -m444 doc/mount.fuse3.8 $out/share/man/man8/mount.fuse3.8
+
+      # TODO: Temporary version fix:
+      substituteInPlace meson.build \
+        --replace "version: '3.9.3'" "version: '${version}'"
     '' else ''
       sed -e 's@CONFIG_RPATH=/usr/share/gettext/config.rpath@CONFIG_RPATH=${gettext}/share/gettext/config.rpath@' -i makeconf.sh
       ./makeconf.sh
@@ -84,8 +88,17 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    description = "Library that allows filesystems to be implemented in user space";
+    longDescription = ''
+      FUSE (Filesystem in Userspace) is an interface for userspace programs to
+      export a filesystem to the Linux kernel. The FUSE project consists of two
+      components: The fuse kernel module (maintained in the regular kernel
+      repositories) and the libfuse userspace library (this package). libfuse
+      provides the reference implementation for communicating with the FUSE
+      kernel module.
+    '';
     inherit (src.meta) homepage;
-    description = "Kernel module and library that allows filesystems to be implemented in user space";
+    changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl21 ];
     maintainers = [ maintainers.primeos ];

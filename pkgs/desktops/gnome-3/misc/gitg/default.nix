@@ -24,7 +24,6 @@
 , meson
 , ninja
 , python3
-, hicolor-icon-theme
 , libdazzle
 }:
 
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    hicolor-icon-theme
     gettext
     meson
     ninja
@@ -90,7 +88,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Gitg;
+    homepage = "https://wiki.gnome.org/Apps/Gitg";
     description = "GNOME GUI client to view git repositories";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl2;

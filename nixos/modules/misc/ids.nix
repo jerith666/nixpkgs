@@ -11,6 +11,9 @@
 
 { lib, ... }:
 
+let
+  inherit (lib) types;
+in
 {
   options = {
 
@@ -19,6 +22,7 @@
       description = ''
         The user IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
     ids.gids = lib.mkOption {
@@ -26,6 +30,7 @@
       description = ''
         The group IDs used in NixOS.
       '';
+      type = types.attrsOf types.int;
     };
 
   };
@@ -75,8 +80,8 @@
       #kdm = 39; # dropped in 17.03
       #ghostone = 40; # dropped in 18.03
       git = 41;
-      fourstore = 42;
-      fourstorehttp = 43;
+      #fourstore = 42; # dropped in 20.03
+      #fourstorehttp = 43; # dropped in 20.03
       virtuoso = 44;
       rtkit = 45;
       dovecot2 = 46;
@@ -128,7 +133,7 @@
       tcpcryptd = 93; # tcpcryptd uses a hard-coded uid. We patch it in Nixpkgs to match this choice.
       firebird = 95;
       #keys = 96; # unused
-      haproxy = 97;
+      #haproxy = 97; # dynamically allocated as of 2020-03-11
       mongodb = 98;
       openldap = 99;
       #users = 100; # unused
@@ -193,7 +198,7 @@
       bosun = 161;
       kubernetes = 162;
       peerflix = 163;
-      chronos = 164;
+      #chronos = 164; # removed 2020-08-15
       gitlab = 165;
       tox-bootstrapd = 166;
       cadvisor = 167;
@@ -234,7 +239,6 @@
       shout = 206;
       gateone = 207;
       namecoin = 208;
-      dnschain = 209;
       #lxd = 210; # unused
       kibana = 211;
       xtreemfs = 212;
@@ -243,7 +247,7 @@
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
       nm-openvpn = 217;
-      mathics = 218;
+      # mathics = 218; # unused, removed 2020-08-15
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
@@ -294,7 +298,7 @@
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
       fcron = 273;
@@ -341,6 +345,7 @@
       zoneminder = 314;
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
+      zigbee2mqtt = 317;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -443,7 +448,7 @@
       #tcpcryptd = 93; # unused
       firebird = 95;
       keys = 96;
-      haproxy = 97;
+      #haproxy = 97; # dynamically allocated as of 2020-03-11
       #mongodb = 98; # unused
       openldap = 99;
       munin = 102;
@@ -544,7 +549,6 @@
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;
-      #dnschain = 209; #unused
       lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;
@@ -595,7 +599,7 @@
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused
       fcron = 273;
@@ -642,6 +646,7 @@
       zoneminder = 314;
       paperless = 315;
       #mailman = 316;  # removed 2019-08-30
+      zigbee2mqtt = 317;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

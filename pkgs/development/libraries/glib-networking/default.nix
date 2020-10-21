@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.62.0";
+  version = "2.64.3";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1p7vgav0g03r00qiafhrdiad2gh1w6wsd1a7nnn79psng5gnh8ck";
+    sha256 = "0s518l4bwvdvcp51lbjqcw8g0vq18bznpf5hq2zi6a054jqhcylk";
   };
 
   patches = [
@@ -79,15 +79,15 @@ stdenv.mkDerivation rec {
     };
 
     tests = {
-      installedTests = nixosTests.glib-networking;
+      installedTests = nixosTests.installed-tests.glib-networking;
     };
   };
 
   meta = with stdenv.lib; {
     description = "Network-related giomodules for glib";
-    homepage = https://gitlab.gnome.org/GNOME/glib-networking;
+    homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

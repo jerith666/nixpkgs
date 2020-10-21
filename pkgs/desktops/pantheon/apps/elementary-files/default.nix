@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -23,12 +24,14 @@
 , zeitgeist
 , glib-networking
 , elementary-icon-theme
+, libcloudproviders
+, libgit2-glib
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.1.9";
+  version = "4.4.4";
 
   repoName = "files";
 
@@ -38,13 +41,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "12p1li9a7kqdlgkq20svaly5kr661ww93qngaiic6zv1bdw2bpmv";
+    sha256 = "1hsh9kg30l90r2aqrrap1nfmgjf0la8mfd8h4xm6d7acailcnhmb";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -66,8 +68,10 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libcanberra
+    libcloudproviders
     libdbusmenu-gtk3
     libgee
+    libgit2-glib
     libnotify
     libunity
     pango
@@ -76,7 +80,9 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [ ./hardcode-gsettings.patch ];
+  patches = [
+    ./hardcode-gsettings.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py
@@ -88,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "File browser designed for elementary OS";
-    homepage = https://github.com/elementary/files;
+    homepage = "https://github.com/elementary/files";
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;

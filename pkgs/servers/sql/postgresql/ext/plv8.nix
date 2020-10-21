@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "plv8";
-  version = "2.3.13";
+  version = "2.3.15";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ v8 postgresql ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "plv8";
     repo = "plv8";
     rev = "v${version}";
-    sha256 = "12xpcc1ylzyy75wi1m4vijknzv2gxab05w9z90jb03faq18cnlql";
+    sha256 = "1cv94n49gq2b377gqyq7pjjzw98czv4mwl3sx97y18c20zwp6rk3";
   };
 
   makefile = "Makefile.shared";

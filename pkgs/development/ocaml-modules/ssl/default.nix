@@ -15,11 +15,11 @@ buildDunePackage rec {
   propagatedBuildInputs = [openssl];
 
   meta = {
-    homepage = http://savonet.rastageeks.org/;
+    homepage = "http://savonet.rastageeks.org/";
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
     maintainers = [
-      lib.maintainers.z77z
+      lib.maintainers.maggesi
     ];
   };
 }

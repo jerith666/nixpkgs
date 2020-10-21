@@ -24,19 +24,20 @@ pipShellHook() {
       export PATH="$tmp_path/bin:$PATH"
       export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
       mkdir -p "$tmp_path/@pythonSitePackages@"
-      @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" >&2
+      @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" \
+         --no-build-isolation >&2
     fi
 
     runHook postShellHook
     echo "Finished executing pipShellHook"
 }
 
-if [ -z "$dontUsePipBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUsePipBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using pipBuildPhase"
     buildPhase=pipBuildPhase
 fi
 
-if [ -z "$shellHook" ]; then
+if [ -z "${shellHook-}" ]; then
     echo "Using pipShellHook"
     shellHook=pipShellHook
 fi

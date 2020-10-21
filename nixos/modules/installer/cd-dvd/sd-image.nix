@@ -18,6 +18,7 @@ with lib;
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
     inherit (config.sdImage) storePaths;
+    compressImage = true;
     populateImageCommands = config.sdImage.populateRootCommands;
     volumeLabel = "NIXOS_SD";
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
@@ -62,12 +63,20 @@ in
       '';
     };
 
+    firmwarePartitionName = mkOption {
+      type = types.str;
+      default = "FIRMWARE";
+      description = ''
+        Name of the filesystem which holds the boot firmware.
+      '';
+    };
+
     rootPartitionUUID = mkOption {
       type = types.nullOr types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
-        UUID for the main NixOS partition on the SD card.
+        UUID for the filesystem on the main NixOS partition on the SD card.
       '';
     };
 
@@ -90,7 +99,7 @@ in
     };
 
     populateRootCommands = mkOption {
-      example = literalExample "''\${extlinux-conf-builder} -t 3 -c \${config.system.build.toplevel} -d ./files/boot''";
+      example = literalExample "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
@@ -104,7 +113,7 @@ in
       default = true;
       description = ''
         Whether the SD image should be compressed using
-        <command>bzip2</command>.
+        <command>zstd</command>.
       '';
     };
 
@@ -113,7 +122,7 @@ in
   config = {
     fileSystems = {
       "/boot/firmware" = {
-        device = "/dev/disk/by-label/FIRMWARE";
+        device = "/dev/disk/by-label/${config.sdImage.firmwarePartitionName}";
         fsType = "vfat";
         # Alternatively, this could be removed from the configuration.
         # The filesystem is not needed at runtime, it could be treated
@@ -128,10 +137,11 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
-    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs, mtools, libfaketime, utillinux, bzip2 }: stdenv.mkDerivation {
+    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
+    mtools, libfaketime, utillinux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux bzip2 ];
+      nativeBuildInputs = [ dosfstools e2fsprogs mtools libfaketime utillinux zstd ];
 
       inherit (config.sdImage) compressImage;
 
@@ -140,13 +150,20 @@ in
         export img=$out/sd-image/${config.sdImage.imageName}
 
         echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
-        echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+        if test -n "$compressImage"; then
+          echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
+        else
+          echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+        fi
+
+        echo "Decompressing rootfs image"
+        zstd -d --no-progress "${rootfsImage}" -o ./root-fs.img
 
         # Gap in front of the first partition, in MiB
         gap=8
 
         # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-        rootSizeBlocks=$(du -B 512 --apparent-size ${rootfsImage} | awk '{ print $1 }')
+        rootSizeBlocks=$(du -B 512 --apparent-size ./root-fs.img | awk '{ print $1 }')
         firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
         imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
         truncate -s $imageSize $img
@@ -164,12 +181,12 @@ in
 
         # Copy the rootfs into the SD image
         eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=${rootfsImage} of=$img seek=$START count=$SECTORS
+        dd conv=notrunc if=./root-fs.img of=$img seek=$START count=$SECTORS
 
         # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
         eval $(partx $img -o START,SECTORS --nr 1 --pairs)
         truncate -s $((SECTORS * 512)) firmware_part.img
-        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n FIRMWARE firmware_part.img
+        faketime "1970-01-01 00:00:00" mkfs.vfat -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
         # Populate the files intended for /boot/firmware
         mkdir firmware
@@ -181,7 +198,7 @@ in
         fsck.vfat -vn firmware_part.img
         dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
         if test -n "$compressImage"; then
-            bzip2 $img
+            zstd -T$NIX_BUILD_CORES --rm $img
         fi
       '';
     }) {};

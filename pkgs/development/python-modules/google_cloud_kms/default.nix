@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-kms";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ypn95swjj93kvdcrvmijmh3vzpr499a3krk923a86m8vlcwcvjm";
+    sha256 = "9d108b2754cb2c6ccc60604d27855c7139dad4b2455342e1e7bfffc27c5193bd";
   };
 
   checkInputs = [ pytest mock ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Cloud Key Management Service (KMS) API API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

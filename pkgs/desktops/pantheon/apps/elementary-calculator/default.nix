@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, nix-update-script
 , pantheon
 , pkgconfig
 , meson
@@ -18,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
-  version = "1.5.2";
+  version = "1.5.5";
 
   repoName = "calculator";
 
@@ -26,13 +27,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1vdgl89hdf9q1ya6as7310hlr0xls3w7js2gzsd9z8arb6037ccl";
+    sha256 = "1csxsr2c8qvl97xz9ahwn91z095nzgr0i1mbcb1spljll2sr9lkj";
   };
 
   passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/elementary/calculator;
+    homepage = "https://github.com/elementary/calculator";
     description = "Calculator app designed for elementary OS";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

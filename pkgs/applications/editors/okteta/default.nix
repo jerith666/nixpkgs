@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
+{ mkDerivation, stdenv, fetchurl, extra-cmake-modules, kdoctools, qtscript, kconfig
 , kinit, karchive, kcrash, kcmutils, kconfigwidgets, knewstuff, kparts
 , qca-qt5, shared-mime-info }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "okteta";
-  version = "0.26.2";
+  version = "0.26.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/okteta/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "0k38hd9wq6jvzy0225y61rzr7lgwbac1haalhsrfpmyjy6d833dv";
+    sha256 = "00qgzm5mqx0j8f0fznhnw76l9pjyw3lxirvy8ssq59nqqjbb08pg";
   };
 
   nativeBuildInputs = [ qtscript extra-cmake-modules kdoctools ];

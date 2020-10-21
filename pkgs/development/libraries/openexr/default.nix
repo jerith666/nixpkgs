@@ -1,54 +1,60 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig, zlib, ilmbase, }:
+{ lib
+, stdenv
+, buildPackages
+, fetchFromGitHub
+, zlib
+, ilmbase
+, fetchpatch
+, cmake
+, libtool
+}:
 
 let
-  # Doesn't really do anything when not crosscompiling
-  emulator = stdenv.hostPlatform.emulator buildPackages;
+  non_glibc_fpstate_patch =
+    # Fix ilmbase/openexr using glibc-only fpstate.
+    # Found via https://git.alpinelinux.org/aports/tree/community/openexr/10-musl-_fpstate.patch?id=80d9611b7b8e406a554c6f511137e03ff26acbae,
+    # TODO Remove when https://github.com/AcademySoftwareFoundation/openexr/pull/798 is merged and available.
+    #      Remove it from `ilmbase` as well then.
+    (fetchpatch {
+      name = "ilmbase-musl-_fpstate.patch.patch";
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/80bbc168faa25448bd3399f4df331b836e74b85c/srcpkgs/ilmbase/patches/musl-_fpstate.patch";
+      sha256 = "0appzbs9pd6dia5pzxmrs9ww35shlxi329ks6lchwzw4f2a81arz";
+    });
 in
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = lib.getVersion ilmbase;
+  version = "2.4.1";
 
-  src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "19jywbs9qjvsbkvlvzayzi81s976k53wg53vw4xj66lcgylb6v7x";
+  src = fetchFromGitHub {
+    owner = "AcademySoftwareFoundation";
+    repo = "openexr";
+    rev = "v${version}";
+    sha256 = "020gyl8zv83ag6gbcchmqiyx9rh2jca7j8n52zx1gk4rck7kwc01";
   };
 
-  patches = [
-    ./bootstrap.patch
-  ];
-
   outputs = [ "bin" "dev" "out" "doc" ];
-
-  # Needed because there are some generated sources. Solution: just run them under QEMU.
-  postPatch = ''
-    for file in b44ExpLogTable dwaLookups
-    do
-      # Ecape for both sh and Automake
-      emu=${lib.escapeShellArg (lib.replaceStrings ["$"] ["$$"] emulator)}
-      before="./$file > $file.h"
-      after="$emu $before"
-      substituteInPlace IlmImf/Makefile.am \
-        --replace "$before" "$after"
-    done
-
-    # Make sure the patch succeeded
-    [[ $(grep "$emu" IlmImf/Makefile.am | wc -l) = 2 ]]
-  '';
-
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
-
-  nativeBuildInputs = [ pkgconfig autoconf automake libtool ];
+  nativeBuildInputs = [ cmake libtool ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
+  postPatch =
+    if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "glibc")
+      then
+        ''
+          patch -p0 < ${non_glibc_fpstate_patch}
+        ''
+      else null; # `null` avoids rebuild on glibc
+
   enableParallelBuilding = true;
-  doCheck = false; # fails 1 of 1 tests
+
+  passthru = {
+    # So that ilmbase (sharing the same source code) can re-use this patch.
+    inherit non_glibc_fpstate_patch;
+  };
 
   meta = with stdenv.lib; {
-    homepage = https://www.openexr.com/;
+    description = "A high dynamic-range (HDR) image file format";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

@@ -14,7 +14,7 @@ let
     inherit pname version;
 
     src = fetchurl {
-      url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.bz";
+      url = "https://labs.consol.de/assets/downloads/nagios/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -43,7 +43,7 @@ let
     '';
 
     meta = with stdenv.lib; {
-      homepage    = https://labs.consol.de/;
+      homepage    = "https://labs.consol.de/";
       license     = licenses.gpl2;
       maintainers = with maintainers; [ peterhoeg ];
       inherit description;

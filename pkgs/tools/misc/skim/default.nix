@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.6.9";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "lotabout";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ygnjrljar4caybh8lqfjif4vhb33aam80ffnzgqxz6s6g85ifrb";
+    sha256 = "0paxrf03rqzahbpr4gnsj62vl09vcxvw248n9wzhjq14dqlwcr9w";
   };
 
   outputs = [ "out" "vim" ];
 
-  cargoSha256 = "1vcxcyhhqncjii0pad775x10j1kp62y82q1mii65jclr1karml3p";
+  cargoSha256 = "0rxxdad60fpwkb4wx5407ihd89wqpf2ldcnp7nsx17xh4brp1l9r";
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
@@ -36,9 +36,8 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Command-line fuzzy finder written in Rust";
-    homepage = https://github.com/lotabout/skim;
+    homepage = "https://github.com/lotabout/skim";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
   };
 }

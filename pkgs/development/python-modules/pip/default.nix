@@ -2,7 +2,7 @@
 , python
 , buildPythonPackage
 , bootstrapped-pip
-, fetchPypi
+, fetchFromGitHub
 , mock
 , scripttest
 , virtualenv
@@ -14,13 +14,20 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.2.3";
+  version = "20.1.1";
   format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "01wq01ysv0ijcrg8a4mj72zb8al15b8vw8g3ywhxq53kbsyhfxn4";
+    name = "${pname}-${version}-source";
   };
+
+  # Remove when solved https://github.com/NixOS/nixpkgs/issues/81441
+  # Also update pkgs/development/interpreters/python/hooks/pip-install-hook.sh accordingly
+  patches = [ ./reproducible.patch ];
 
   nativeBuildInputs = [ bootstrapped-pip ];
 
@@ -34,8 +41,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
-    license = lib.licenses.mit;
-    homepage = https://pip.pypa.io/;
+    license = with lib.licenses; [ mit ];
+    homepage = "https://pip.pypa.io/";
     priority = 10;
   };
 }

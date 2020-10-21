@@ -1,4 +1,5 @@
 { stdenv, fetchurl, python, buildPythonApplication
+, libselinux
 # Propagated to blivet
 , useNixUdev ? true
 # Needed by NixOps
@@ -10,15 +11,14 @@
 let
   blivet = import ./blivet.nix {
     inherit stdenv fetchurl buildPythonApplication;
-    inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
+    inherit pykickstart pyparted pyblock cryptsetup libselinux multipath_tools;
     inherit useNixUdev;
     inherit (pkgs) lsof utillinux systemd;
-    libselinux = pkgs.libselinux.override { enablePython = true; };
   };
 
   cryptsetup = import ./cryptsetup.nix {
     inherit stdenv fetchurl python;
-    inherit (pkgs) pkgconfig libgcrypt libuuid popt lvm2;
+    inherit (pkgs) fetchpatch pkgconfig libgcrypt libuuid popt lvm2;
   };
 
   dmraid = import ./dmraid.nix {
@@ -27,17 +27,17 @@ let
 
   lvm2 = import ./lvm2.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) pkgconfig utillinux systemd coreutils;
+    inherit (pkgs) fetchpatch pkgconfig utillinux systemd coreutils;
   };
 
   multipath_tools = import ./multipath-tools.nix {
     inherit stdenv fetchurl lvm2;
-    inherit (pkgs) readline systemd libaio gzip;
+    inherit (pkgs) fetchpatch readline systemd libaio gzip;
   };
 
   parted = import ./parted.nix {
     inherit stdenv fetchurl;
-    inherit (pkgs) utillinux readline libuuid gettext check lvm2;
+    inherit (pkgs) fetchpatch utillinux readline libuuid gettext check lvm2;
   };
 
   pyblock = import ./pyblock.nix {
@@ -73,6 +73,5 @@ in buildPythonApplication rec {
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

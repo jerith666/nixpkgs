@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
          if stdenv.hostPlatform.system == "x86_64-freebsd" then "bsd"           else
          if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
          throw "Don't know what arch to select for tachyon build";
-  makeFlags = arch;
+  makeFlags = [ arch ];
   patches = [
     # Remove absolute paths in Make-config (and unset variables so they can be set in preBuild)
     ./no-absolute-paths.patch
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     cp tachyon "$out"/bin
     cp libtachyon.* "$out/lib"
     cd ../..
+    cp src/*.h "$out/include/"
     cp Changes Copyright README "$out/share/doc/tachyon"
     cp -r scenes "$out/share/tachyon/scenes"
   '';
@@ -69,6 +70,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = with stdenv.lib.platforms; linux ++ cygwin ++ darwin;
-    homepage = http://jedi.ks.uiuc.edu/~johns/tachyon/;
+    homepage = "http://jedi.ks.uiuc.edu/~johns/tachyon/";
   };
 }

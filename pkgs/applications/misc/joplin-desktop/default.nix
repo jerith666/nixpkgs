@@ -1,15 +1,20 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
+{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3, makeDesktopItem }:
 
 let
   pname = "joplin-desktop";
-  version = "1.0.167";
-in appimageTools.wrapType2 rec {
+  version = "1.0.233";
   name = "${pname}-${version}";
+
   src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}-x86_64.AppImage";
-    sha256 = "062f2av60490ffrml0q8zv68yir6zaqif0g3d32c985gcvmgn9lw";
+    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.AppImage";
+    sha256 = "1fmk56b9b70ly1r471mhppr8fz1wm2gpxji1v760ynha8fqy7qg1";
   };
 
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
+  };
+in appimageTools.wrapType2 rec {
+  inherit name src;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -18,7 +23,15 @@ in appimageTools.wrapType2 rec {
 
   multiPkgs = null; # no 32bit needed
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
-  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
+  extraInstallCommands = ''
+    mv $out/bin/{${name},${pname}}
+    install -m 444 -D ${appimageContents}/joplin.desktop $out/share/applications/joplin.desktop
+    install -m 444 -D ${appimageContents}/joplin.png \
+      $out/share/pixmaps/joplin.png
+    substituteInPlace $out/share/applications/joplin.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
+  '';
+
 
   meta = with lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
@@ -29,9 +42,9 @@ in appimageTools.wrapType2 rec {
       applications directly or from your own text editor. The notes are in
       Markdown format.
     '';
-    homepage = https://joplin.cozic.net/;
+    homepage = "https://joplinapp.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rafaelgg raquelgb ];
+    maintainers = with maintainers; [ hugoreeves ];
     platforms = [ "x86_64-linux" ];
   };
 }

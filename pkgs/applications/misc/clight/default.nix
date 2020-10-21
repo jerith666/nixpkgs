@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , dbus, cmake, pkgconfig, bash-completion
-, gsl, popt, clightd, systemd, libconfig
+, gsl, popt, clightd, systemd, libconfig, libmodule
 , withGeoclue ? true, geoclue2
 , withUpower ? true, upower }:
 
 stdenv.mkDerivation rec {
   pname = "clight";
-  version = "3.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
-    sha256 = "0rzcr1x9h4llnmklhgzs9r7xwhsrw1qkqvfffkp8fs90nycaqx81";
+    sha256 = "1j7va217g1k8lxl3lly13js8myf0shjc6knalq8q6lakc6j1mkxx";
   };
 
   # bash-completion.pc completionsdir=${bash-completion.out}
@@ -42,12 +42,13 @@ stdenv.mkDerivation rec {
     systemd
     geoclue2
     libconfig
+    libmodule
   ] ++ optional withGeoclue geoclue2
     ++ optional withUpower upower;
 
   meta = with lib; {
     description = "A C daemon that turns your webcam into a light sensor";
-    homepage = https://github.com/FedeDP/Clight;
+    homepage = "https://github.com/FedeDP/Clight";
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = with maintainers; [

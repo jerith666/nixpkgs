@@ -1,6 +1,6 @@
 { lib, buildGoPackage, fetchFromGitHub, ... }:
 
-let version = "0.12.5"; in
+let version = "0.16.0"; in
 
 buildGoPackage {
   pname = "kubecfg";
@@ -10,14 +10,14 @@ buildGoPackage {
     owner = "bitnami";
     repo = "kubecfg";
     rev = "v${version}";
-    sha256 = "0pn37qkwn3kdsd0z3qxk95lqjn2zak7gkk0pwlqp26jmrx0vv18l";
+    sha256 = "1ipw7r9fyqbh1bjvk7ifmj3skh799ly90y4ph37r8mqk1wb92rz4";
   };
 
   goPackagePath = "github.com/bitnami/kubecfg";
 
   meta = {
     description = "A tool for managing Kubernetes resources as code";
-    homepage = https://github.com/bitnami/kubecfg;
+    homepage = "https://github.com/bitnami/kubecfg";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ benley ];
     platforms = lib.platforms.unix;

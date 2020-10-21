@@ -10,7 +10,7 @@ let
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
 in mkDerivation rec {
-  version = "3.8.3";
+  version = "3.10.7";
   pname = "qgis";
   name = "${pname}-unwrapped-${version}";
 
@@ -18,7 +18,7 @@ in mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "16axjih48qn8ri3p71d8f7k0y3rd05wghmg1fcbyda871b45b2f8";
+    sha256 = "0z593n5g3zwhlzhs0z7nlpblz6z2rl3y7y3j1wf1rdx76i8p3qgf";
   };
 
   passthru = {
@@ -49,7 +49,7 @@ in mkDerivation rec {
 
   meta = {
     description = "A Free and Open Source Geographic Information System";
-    homepage = http://www.qgis.org;
+    homepage = "http://www.qgis.org";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ lsix ];

@@ -36,12 +36,7 @@ in
 
     services.ircdHybrid = {
 
-      enable = mkOption {
-        default = false;
-        description = "
-          Enable IRCD.
-        ";
-      };
+      enable = mkEnableOption "IRCD";
 
       serverName = mkOption {
         default = "hades.arpa";
@@ -112,9 +107,8 @@ in
 
   config = mkIf config.services.ircdHybrid.enable {
 
-    users.users = singleton
-      { name = "ircd";
-        description = "IRCD owner";
+    users.users.ircd =
+      { description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };

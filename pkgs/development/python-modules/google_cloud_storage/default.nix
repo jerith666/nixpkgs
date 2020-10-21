@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , google_resumable_media
@@ -6,28 +6,40 @@
 , google_cloud_core
 , pytest
 , mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.15.1";
+  version = "1.29.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8032e576e2f91a1d3de2355118040c3bcd9916e0453a6b3f64c1b42ed151690a";
+    sha256 = "07lsdrxypz5i21x99m1zkxwiax89q80v0av6ak0k4fkys48spj0m";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_resumable_media google_api_core google_cloud_core ];
+  propagatedBuildInputs = [
+    google_api_core
+    google_cloud_core
+    google_resumable_media
+    setuptools
+  ];
+  checkInputs = [
+    mock
+    pytest
+  ];
 
+  # remove directory from interferring with importing modules
+  # ignore tests which require credentials
   checkPhase = ''
-   pytest tests/unit
+    rm -r google
+    pytest tests/unit -k 'not (create or get or post)'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google Cloud Storage API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

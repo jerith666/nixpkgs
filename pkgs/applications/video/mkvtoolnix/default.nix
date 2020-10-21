@@ -13,13 +13,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "37.0.0";
+  version = "48.0.0";
 
   src = fetchFromGitLab {
     owner  = "mbunkus";
     repo   = "mkvtoolnix";
     rev    = "release-${version}";
-    sha256 = "0r1qzvqc6xx7rmv4v4fjc70cqy832h8v0fjf6c5ljbg1c6pgkl0l";
+    sha256 = "0lbl3w2m12blymda3m00afl9racgahvl0z4b2clwbawhvypc5vfc";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (enableFeature withGUI "qt")
   ];
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++14";
+  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
 
   dontWrapQtApps = true;
   postFixup = optionalString withGUI ''
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform tools for Matroska";
-    homepage    = http://www.bunkus.org/videotools/mkvtoolnix/;
+    homepage    = "http://www.bunkus.org/videotools/mkvtoolnix/";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ codyopel fuuzetsu rnhmjoj ];
+    maintainers = with maintainers; [ codyopel rnhmjoj ];
     platforms   = platforms.linux
       ++ optionals (!withGUI) platforms.darwin;
   };

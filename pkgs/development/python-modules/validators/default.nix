@@ -1,20 +1,21 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , six
 , decorator
-, pytest
+, pytestCheckHook
 , isort
 , flake8
 }:
 
 buildPythonPackage rec {
   pname = "validators";
-  version = "0.14.0";
+  version = "0.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bhla1l8gbks572zp4f254acz23822dz2mp122djxvp328i87b7h";
+    sha256 = "31e8bb01b48b48940a021b8a9576b840f98fa06b91762ef921d02cb96d38727a";
   };
 
   propagatedBuildInputs = [
@@ -23,18 +24,16 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     flake8
     isort
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = lib.optionals isPy27 [ "url" ];
 
   meta = with lib; {
     description = "Python Data Validation for Humans™";
-    homepage = https://github.com/kvesteri/validators;
+    homepage = "https://github.com/kvesteri/validators";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

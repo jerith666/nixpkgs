@@ -6,12 +6,12 @@ let
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
-      sha256 = "04wb6h57daxmnv3a3xrcsznawbx7r8wyi1vk1g26z2l2ppcnsbzv";
+      sha256 = "149p43zaz45malmff1274r2bwjcyjwsdickivk3pd0mvnjbfid2r";
     };
 
     x86_64-darwin = {
       system = "mac64";
-      sha256 = "0f8j7m8ardaaw8pv02vxhwkqbcm34366bln0np0j0ig21d4fag09";
+      sha256 = "1xpyqxpsz3r653ls67s6alv4g2vr4lxf29gyxc162ikywyrx80nr";
     };
   };
 
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "chromedriver";
-  version = "76.0.3809.68";
+  version = "83.0.4103.39";
 
   src = fetchurl {
     url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://sites.google.com/a/chromium.org/chromedriver;
+    homepage = "https://sites.google.com/a/chromium.org/chromedriver";
     description = "A WebDriver server for running Selenium tests on Chrome";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ maintainers.goibhniu maintainers.marsam ];
     platforms = attrNames allSpecs;
   };
 }

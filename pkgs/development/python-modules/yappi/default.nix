@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, nose }:
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.0";
+  version = "1.2.5";
+  disabled = isPy27; # invalid syntax
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gs48c5sy771lsjhca3m4j8ljc6yhk5qnim3n5idnlaxa4ql30bz";
+    sha256 = "ad5fa4caf2859e480ffc4ec3e85615a6f7dea852c8f035f2db723f824ed4ba11";
   };
 
   patches = [ ./tests.patch ];
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   checkInputs = [ nose ];
 
   meta = with lib; {
-    homepage = https://github.com/sumerc/yappi;
+    homepage = "https://github.com/sumerc/yappi";
     description = "Python profiler that supports multithreading and measuring CPU time";
     license = licenses.mit;
     maintainers = with maintainers; [ orivej ];

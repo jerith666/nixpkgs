@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "nginx_exporter";
-  version = "0.4.2";
+  version = "0.6.0";
 
   goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
 
@@ -14,10 +14,12 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
-    sha256 = "023nl83w0fic7sj0yxxgj7jchyafqnmv6dq35amzz37ikx92mdcj";
+    sha256 = "1rwafmm9x0sxj4z7x4axhrjgdy15z70a1y00hw6smq30fcpkazhq";
   };
 
   doCheck = true;
+
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) nginx; };
 
   meta = with stdenv.lib; {
     description = "NGINX Prometheus Exporter for NGINX and NGINX Plus";

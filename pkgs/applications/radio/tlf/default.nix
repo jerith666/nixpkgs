@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tlf";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0gniysjm8aq5anq0a0az31vd6h1vyg56bifc7rpf53lsh9hkzmgc";
+    sha256 = "1xpgs4k27pjd9mianfknknp6mf34365bcp96wrv5xh4dhph573rj";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf automake pkgconfig perl ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       EU SPRINT shortwave contests (single operator) as well as a LOT MORE basic
       contests, general QSO and DXpedition mode.
     '';
-    homepage = https://tlf.github.io/;
+    homepage = "https://tlf.github.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ etu ];
     platforms = platforms.linux;
