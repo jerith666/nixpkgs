@@ -7,7 +7,7 @@ git fetch --all
 
 current=$(nixos-version --revision);
 
-if git merge-base --is-ancestor channels/nixos-unstable $current; then
+if git merge-base --is-ancestor origin/nixos-unstable $current; then
     echo "current version ($current) already contains latest nixos-unstable";
     exit 0;
 fi;
@@ -28,7 +28,7 @@ for commit in ${PRE_CHERRY:-}; do
     git cherry-pick -x $commit;
 done
 
-git merge channels/nixos-unstable -m "Merge remote-tracking branch 'channels/nixos-unstable'";
+git merge origin/nixos-unstable -m "Merge remote-tracking branch 'origin/nixos-unstable'";
 
 for commit in ${POST_REVERT:-}; do
     git revert --no-edit $commit;
