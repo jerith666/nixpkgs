@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, makeWrapper
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper
 , nixosTests, rclone }:
 
 buildGoModule rec {
@@ -13,12 +13,6 @@ buildGoModule rec {
   };
 
   vendorSha256 = "1pfixq3mbfn12gyablc4g0j8r00md3887q0l8xgxy76z0d8w924s";
-
-  patches = [ ( fetchpatch {
-    # https://github.com/restic/restic/issues/2571
-    url = "https://github.com/MichaelEischer/restic/commit/c76b7588cc53a53fdc1fad06b66a39beb2e90b3c.patch";
-    sha256 = "0g23dh0617fmj6l8n9nzxlyc6b5x69r0rldnl3xmwrsmr75dfgar";
-  } ) ];
 
   subPackages = [ "cmd/restic" ];
 
