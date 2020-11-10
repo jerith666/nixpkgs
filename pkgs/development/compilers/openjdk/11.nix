@@ -16,7 +16,7 @@ let
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}.${minor}.${update}+${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";

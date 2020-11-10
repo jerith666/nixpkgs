@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, buildPythonPackage, fetchPypi, pythonOlder, python
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, pythonOlder, python
 , fonttools, defcon, lxml, fs, unicodedata2, zopfli, brotlipy, fontpens
 , brotli, fontmath, mutatormath, booleanoperations
 , ufoprocessor, ufonormalizer, psautohint, tqdm
