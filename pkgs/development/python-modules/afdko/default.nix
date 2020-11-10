@@ -17,10 +17,15 @@ buildPythonPackage rec {
     sha256 = "1qg7dgl81yq0sp50pkhgvmf8az1svx20zmpkfa68ka9d0ssh1wjw";
   };
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/adobe-type-tools/afdko/commit/12575a5f0b4f04d95f234832ee42b6df89e11a1f.patch";
-    sha256 = "0p6a485mmzrbfldfbhgfghsypfiad3cabcw7qlw2rh993ivpnibf";
-  }) ];
+  # Skip date-dependent test. See
+  # https://github.com/adobe-type-tools/afdko/pull/1232
+  # https://github.com/NixOS/nixpkgs/pull/98158#issuecomment-704321117
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/adobe-type-tools/afdko/commit/2c36ad10f9d964759f643e8ed7b0972a27aa26bd.patch";
+      sha256 = "0p6a485mmzrbfldfbhgfghsypfiad3cabcw7qlw2rh993ivpnibf";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools_scm ];
 

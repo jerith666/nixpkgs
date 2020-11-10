@@ -1,4 +1,5 @@
 907th/vim-auto-save
+aca/completion-tabnine
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajh17/Spacegray.vim
@@ -82,6 +83,7 @@ digitaltoad/vim-pug
 direnv/direnv.vim
 dleonard0/pony-vim-syntax
 dmix/elvish.vim
+dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
@@ -97,6 +99,7 @@ elmcast/elm-vim
 elzr/vim-json
 embear/vim-localvimrc
 enomsg/vim-haskellConcealPlus
+enricobacis/vim-airline-clock
 ensime/ensime-vim
 ervandew/supertab
 esneider/YUNOcommit.vim
@@ -106,6 +109,7 @@ fatih/vim-go
 fcpg/vim-osc52
 FelikZ/ctrlp-py-matcher
 fenetikm/falcon
+fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
@@ -156,7 +160,6 @@ iamcco/coc-vimlsp
 ianks/vim-tsx
 idanarye/vim-merginal
 idris-hackers/idris-vim
-ihsanturk/neuron.vim
 Inazuma110/deoplete-greek
 inkarkat/vim-SyntaxRange
 int3/vim-extradite
@@ -368,6 +371,8 @@ numirias/semshi
 nvie/vim-flake8
 nvim-lua/completion-nvim
 nvim-lua/diagnostic-nvim
+nvim-lua/lsp_extensions.nvim
+nvim-lua/telescope.nvim
 nvim-treesitter/completion-treesitter
 nvim-treesitter/nvim-treesitter
 ocaml/vim-ocaml
@@ -424,6 +429,7 @@ rhysd/vim-operator-surround
 rodjek/vim-puppet
 romainl/vim-cool
 roman/golden-ratio
+romgrk/barbar.nvim
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -493,7 +499,6 @@ thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tiagofumo/vim-nerdtree-syntax-highlight
 tikhomirov/vim-glsl
-tjdevries/lsp_extensions.nvim
 tmhedberg/SimpylFold
 tmsvg/pear-tree
 tmux-plugins/vim-tmux
@@ -549,6 +554,7 @@ unblevable/quick-scope
 urbit/hoon.vim
 Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
+vigoux/LanguageTool.nvim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
 vim-pandoc/vim-pandoc

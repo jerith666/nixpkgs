@@ -340,7 +340,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee $out/layer.tar | tarsum)
+      tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf - . | tee -p $out/layer.tar | tarsum)
 
       # Add a 'checksum' field to the JSON, with the value set to the
       # checksum of the tarball.
@@ -425,7 +425,7 @@ rec {
         echo "Packing layer..."
         mkdir -p $out
         tarhash=$(tar -C layer --hard-dereference --sort=name --mtime="@$SOURCE_DATE_EPOCH" -cf - . |
-                    tee $out/layer.tar |
+                    tee -p $out/layer.tar |
                     ${tarsum}/bin/tarsum)
 
         cat ${baseJson} | jshon -s "$tarhash" -i checksum > $out/json
@@ -819,7 +819,13 @@ rec {
       '';
       result = runCommand "stream-${name}" {
         inherit (conf) imageName;
-        passthru = { inherit (conf) imageTag; };
+        passthru = {
+          inherit (conf) imageTag;
+
+          # Distinguish tarballs and exes at the Nix level so functions that
+          # take images can know in advance how the image is supposed to be used.
+          isExe = true;
+        };
         buildInputs = [ makeWrapper ];
       } ''
         makeWrapper ${streamScript} $out --add-flags ${conf}

@@ -2,22 +2,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gitstatus";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "gitstatus";
     rev = "v${version}";
-    sha256 = "0zan1sa8c24hpqwj66y9srd4n15f4nk64fc5jrd4smgfgn22wph8";
+    sha256 = "03zaywncds7pjrl07rvdf3fh39gnp2zfvgsf0afqwv317sgmgpzf";
   };
 
   buildInputs = [ (callPackage ./romkatv_libgit2.nix {}) ];
   patchPhase = ''
+    sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.sh
     sed -i '1i GITSTATUS_AUTO_INSTALL=''${GITSTATUS_AUTO_INSTALL-0}' gitstatus.plugin.zsh
     sed -i "1a GITSTATUS_DAEMON=$out/bin/gitstatusd" install
   '';
   installPhase = ''
     install -Dm755 usrbin/gitstatusd $out/bin/gitstatusd
+    install -Dm444 gitstatus.plugin.sh $out
     install -Dm444 gitstatus.plugin.zsh $out
     install -Dm555 install $out
     install -Dm444 build.info $out
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
   # should not need to worry about.
   pathsToLink = [
     "/bin/gitstatusd"
+    "/gitstatus.plugin.sh"
     "/gitstatus.plugin.zsh"
   ];
 

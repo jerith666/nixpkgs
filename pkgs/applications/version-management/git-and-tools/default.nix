@@ -34,6 +34,8 @@ let
 
   gh = callPackage ./gh { };
 
+  ghorg = callPackage ./ghorg { };
+
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
@@ -71,6 +73,8 @@ let
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
+
+  git-chglog = callPackage ./git-chglog { };
 
   git-cinnabar = callPackage ./git-cinnabar { };
 
@@ -131,6 +135,8 @@ let
   git-recent = callPackage ./git-recent {
     utillinux = if stdenv.isLinux then utillinuxMinimal else utillinux;
   };
+
+  git-remote-codecommit = python3Packages.callPackage ./git-remote-codecommit { };
 
   git-remote-gcrypt = callPackage ./git-remote-gcrypt { };
 
@@ -236,6 +242,8 @@ let
   top-git = callPackage ./topgit { };
 
   transcrypt = callPackage ./transcrypt { };
+
+  git-vanity-hash = callPackage ./git-vanity-hash { };
 
   ydiff = pkgs.python3.pkgs.toPythonApplication pkgs.python3.pkgs.ydiff;
 

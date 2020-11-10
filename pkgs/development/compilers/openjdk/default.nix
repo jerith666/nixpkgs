@@ -31,6 +31,10 @@ let
       gtk3 gnome_vfs GConf glib
     ];
 
+    passthru = {
+      inherit gtk3;
+    };
+
     patches = [
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
@@ -91,6 +95,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/

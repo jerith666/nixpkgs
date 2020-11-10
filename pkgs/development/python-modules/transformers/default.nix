@@ -7,6 +7,7 @@
 , requests
 , numpy
 , parameterized
+, protobuf
 , sacremoses
 , sentencepiece
 , timeout-decorator
@@ -17,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "3.2.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jj94153kgdyklra30xcszxv11hwzfigzy82fgvgzvbwlxv3a1j5";
+    sha256 = "1v09gryxsg57d2cjwagna1535m8mbxlazdbhsww210lxa818m5qj";
   };
 
   propagatedBuildInputs = [
-    boto3
     filelock
     numpy
+    protobuf
     regex
     requests
     sacremoses
@@ -44,17 +45,15 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tokenizers == 0.8.1.rc2" "tokenizers>=0.8"
-  '';
-
   preCheck = ''
     export HOME="$TMPDIR"
 
-    # This test requires the nlp module, which we haven't
-    # packaged yet. However, nlp is optional for transformers
-    # itself
+    # This test requires the `datasets` module to download test
+    # data. However, since we cannot download in the Nix sandbox
+    # and `dataset` is an optional dependency for transformers
+    # itself, we will just remove the tests files that import
+    # `dataset`.
+    rm tests/test_retrieval_rag.py
     rm tests/test_trainer.py
   '';
 
@@ -64,8 +63,10 @@ buildPythonPackage rec {
 
   # Disable tests that require network access.
   disabledTests = [
-    "PegasusTokenizationTest"
-    "T5TokenizationTest"
+    "BlenderbotSmallTokenizerTest"
+    "Blenderbot3BTokenizerTests"
+    "TokenizationTest"
+    "TestTokenizationBart"
     "test_all_tokenizers"
     "test_batch_encoding_is_fast"
     "test_batch_encoding_pickle"

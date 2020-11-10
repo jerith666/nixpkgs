@@ -10,8 +10,9 @@
 
 let
   major = "11";
-  update = ".0.8";
-  build = "ga";
+  minor = "0";
+  update = "9";
+  build = "11";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -19,7 +20,7 @@ let
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1av13l7lccagg7g2r2l1s29fw75csaza8ffxzbm3fshws7pgsx9c";
+      sha256 = "fc2ee2ee5822f2440e66114c8fa76888fea7ddd351282940c222d34b5f871858";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
@@ -84,6 +85,7 @@ let
       mkdir -p $out/share
       ln -s $out/lib/openjdk/include $out/include
       ln -s $out/lib/openjdk/man $out/share/man
+      ln -s $out/lib/openjdk/lib/src.zip $out/lib/src.zip
 
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/

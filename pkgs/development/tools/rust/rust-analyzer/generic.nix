@@ -16,10 +16,9 @@ rustPlatform.buildRustPackage {
     inherit rev sha256;
   };
 
+  # FIXME: Temporary fixes for our rust 1.46.0
   patches = [
-    # FIXME: Temporary fix for our rust 1.45.0 since rust-analyzer requires 1.46.0
-    ./no-loop-in-const-fn.patch
-    ./no-option-zip.patch
+    ./no-track_env_var.patch # Requires rustc 1.47.0
   ];
 
   buildAndTestSubdir = "crates/rust-analyzer";

@@ -10,11 +10,12 @@ let
     else if stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "x86_64-darwin" then "x86-64"
     else if stdenv.hostPlatform.system == "armv7l-linux" then "armv7l"
     else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64"
+    else if stdenv.hostPlatform.system == "powerpc64le-linux" then "ppc64le"
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "7.0.10-27";
-    sha256 = "1fqwbg2ws6ix3bymx7ncb4k4f6bg8q44n9xnlvngjapflnrmhcph";
+    version = "7.0.10-35";
+    sha256 = "0hcqvn3n3ip2fia48d1nb1m4r5ir00vbaa62xqni30kglh3n2sfh";
     patches = [];
   };
 in

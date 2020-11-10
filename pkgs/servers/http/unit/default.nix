@@ -30,14 +30,14 @@ let
   php74-unit = php74.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.19.0";
+  version = "1.20.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "0k3q42q198sb0w6hyyymw92dbhz67axn6w6vnzr0d883xw3sva7k";
+    sha256 = "1qmcz01ifmd80qgpvf1y8nhad6yk56772xdhqvwfxn3mdjfqvcs8";
   };
 
   nativeBuildInputs = [ which ];
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
   passthru.tests.unit-php = nixosTests.unit-php;
 
   meta = {
-    description = "Dynamic web and application server, designed to run applications in multiple languages.";
+    description = "Dynamic web and application server, designed to run applications in multiple languages";
     homepage    = "https://unit.nginx.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux;

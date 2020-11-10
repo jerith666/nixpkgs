@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "0.8.7";
+  version = "0.9.2-1";
 
   src = fetchurl {
     url = "https://onepassword.s3.amazonaws.com/linux/appimage/${pname}-${version}.AppImage";
-    sha256 = "1101q5yavzl8imf8gqa3h929gcyy6lh7dy2dw0zs52qdcrb4z49j";
+    sha256 = "19m8qfhmdzgz76xba9wi5cb12jqwr17afqzajvgq681i52fij0lr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://1password.com/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ danieldk timstott ];
     platforms = [ "x86_64-linux" ];
   };
 }

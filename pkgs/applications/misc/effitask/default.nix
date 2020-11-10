@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , gtk3
+, rust
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,8 +13,8 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sanpii";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "09bffxdp43s8b1rpmsgqr2kyz3i4jbd2yrwbxw21fj3sf3mwb9ig";
   };
 
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   # default installPhase don't install assets
   installPhase = ''
     runHook preInstall
-    make install PREFIX="$out"
+    make install PREFIX="$out" TARGET="target/${rust.toRustTarget stdenv.hostPlatform}/release/effitask"
     runHook postInstall
   '';
 
