@@ -725,6 +725,7 @@ in
   mlterm = callPackage ../applications/terminal-emulators/mlterm {
     libssh2 = null;
     openssl = null;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
@@ -3355,6 +3356,10 @@ in
 
   dog = callPackage ../tools/system/dog { };
 
+  dogdns = callPackage ../tools/networking/dogdns {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
@@ -5901,7 +5906,8 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = nomad_0_11;
+  nomad = nomad_0_12;
+
   # Nomad never updates major go versions within a release series and is unsupported
   # on Go versions that it did not ship with. Due to historic bugs when compiled
   # with different versions we pin Go for all versions.
@@ -8096,7 +8102,11 @@ in
 
   unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
 
-  unbound = callPackage ../tools/networking/unbound { };
+  unbound = callPackage ../tools/networking/unbound {};
+
+  unbound-with-systemd = unbound.override {
+    withSystemd = true;
+  };
 
   unicorn = callPackage ../development/libraries/unicorn { };
 
@@ -11955,6 +11965,8 @@ in
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   vagrant = callPackage ../development/tools/vagrant {};
+
+  vala-language-server = callPackage ../development/tools/vala-language-server {};
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
 
@@ -16609,7 +16621,7 @@ in
 
   inherit (callPackages ../servers/asterisk { })
     asterisk asterisk-stable asterisk-lts
-    asterisk_13 asterisk_16 asterisk_17;
+    asterisk_13 asterisk_16 asterisk_17 asterisk_18;
 
   asterisk-module-sccp = callPackage ../servers/asterisk/sccp { };
 
@@ -20758,6 +20770,8 @@ in
 
   exercism = callPackage ../applications/misc/exercism { };
 
+  go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
+
   go-motion = callPackage ../development/tools/go-motion { };
 
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
@@ -23025,6 +23039,8 @@ in
   };
 
   pistol = callPackage ../tools/misc/pistol { };
+
+  plater = libsForQt5.callPackage ../applications/misc/plater { };
 
   plexamp = callPackage ../applications/audio/plexamp { };
 
@@ -26888,6 +26904,8 @@ in
     lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
+
+  convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
     jre = openjdk11;

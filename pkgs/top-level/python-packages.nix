@@ -913,6 +913,8 @@ in {
 
   bluepy = callPackage ../development/python-modules/bluepy { };
 
+  bme680 = callPackage ../development/python-modules/bme680 { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -1199,6 +1201,8 @@ in {
   click-default-group = callPackage ../development/python-modules/click-default-group { };
 
   click-didyoumean = callPackage ../development/python-modules/click-didyoumean { };
+
+  click-help-colors = callPackage ../development/python-modules/click-help-colors { };
 
   click-log = callPackage ../development/python-modules/click-log { };
 
@@ -2526,6 +2530,8 @@ in {
 
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
+  googlemaps = callPackage ../development/python-modules/googlemaps { };
+
   google-music = callPackage ../development/python-modules/google-music { };
 
   google-music-proto = callPackage ../development/python-modules/google-music-proto { };
@@ -2559,6 +2565,10 @@ in {
   gpy = callPackage ../development/python-modules/gpy { };
 
   gpyopt = callPackage ../development/python-modules/gpyopt { };
+
+  gradient_sdk = callPackage ../development/python-modules/gradient_sdk { };
+
+  gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
@@ -2826,6 +2836,8 @@ in {
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
 
+  hyperopt = callPackage ../development/python-modules/hyperopt { };
+
   hypothesis_4 = callPackage ../development/python-modules/hypothesis/2.nix
     { }; # File name is called 2.nix because this one will need to remain for Python 2.
 
@@ -2924,6 +2936,8 @@ in {
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
   infoqscraper = callPackage ../development/python-modules/infoqscraper { };
+
+  inform = callPackage ../development/python-modules/inform { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
 
@@ -4000,6 +4014,8 @@ in {
 
   nest-asyncio = callPackage ../development/python-modules/nest-asyncio { };
 
+  nestedtext = callPackage ../development/python-modules/nestedtext { };
+
   netaddr = callPackage ../development/python-modules/netaddr { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
@@ -4230,6 +4246,8 @@ in {
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
+
+  openrouteservice = callPackage ../development/python-modules/openrouteservice/default.nix { };
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
@@ -6651,6 +6669,8 @@ in {
   smart_open = callPackage ../development/python-modules/smart_open { };
 
   smartypants = callPackage ../development/python-modules/smartypants { };
+
+  smbus-cffi = callPackage ../development/python-modules/smbus-cffi { };
 
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
