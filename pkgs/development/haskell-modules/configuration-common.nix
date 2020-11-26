@@ -1069,7 +1069,11 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   amazonka-core = doJailbreak super.amazonka-core;
-  amazonka = doJailbreak super.amazonka;
+  amazonka = appendPatches (doJailbreak super.amazonka) [
+    #https://github.com/brendanhay/amazonka/pull/572
+    #with leading path stripped
+    ./patches/amazonka-core-MonadUnliftIO.patch
+  ];
 
   # base <4.13, regex-base ==0.93.*, regex-posix >=0.95.1 && <0.96
   regex-compat = doJailbreak super.regex-compat;
