@@ -17,14 +17,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "14.31.14";
+  version = "14.31.17";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    sha256 = "1qmy4iqn5xgd4m9hs4w9cn9rzkwmpgdb5azd93cypp05s4nmjsnm";
+    sha256 = "1cg3a56bbvlq5wfjgwclg9vsj61kmj6fnqvgf7fdvklhdvnijla2";
   };
 
   patchPhase = ''
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
      homepage = "https://sourceforge.net/projects/jmol";
      license = licenses.lgpl2;
      platforms = platforms.all;
-     maintainers = with maintainers; [ timokau mounium ];
+     maintainers = with maintainers; [ mounium ] ++ teams.sage.members;
   };
 }

@@ -90,6 +90,18 @@
     </para>
    </listitem>
    <listitem>
+     <para>
+       <literal>rubyMinimal</literal> was removed due to being unused and
+       unusable. The default ruby interpreter includes JIT support, which makes
+       it reference it's compiler. Since JIT support is probably needed by some
+       Gems, it was decided to enable this feature with all cc references by
+       default, and allow to build a Ruby derivation without references to cc,
+       by setting <literal>jitSupport = false;</literal> in an overlay. See
+       <link xlink:href="https://github.com/NixOS/nixpkgs/pull/90151">#90151</link>
+       for more info.
+     </para>
+   </listitem>
+   <listitem>
     <para>
      The option <option>fonts.enableFontDir</option> has been renamed to
      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
@@ -112,6 +124,13 @@
     <para>
       The socket for the <literal>pdns-recursor</literal> module was moved from <literal>/var/lib/pdns-recursor</literal>
       to <literal>/run/pdns-recursor</literal> to match upstream.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      Paperwork was updated to version 2. The on-disk format slightly changed,
+      and it is not possible to downgrade from Paperwork 2 back to Paperwork
+      1.3. Back your documents up before upgrading. See <link xlink:href="https://forum.openpaper.work/t/paperwork-2-0/112/5">this thread</link> for more details.
     </para>
    </listitem>
    <listitem>
@@ -158,6 +177,12 @@
       changed to <literal>false</literal> to preserve the existing default
       behaviour. If you have this explicitly set to <literal>true</literal>,
       please note that your non-root pools will now be forcibly imported.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <package>openafs</package> now points to <package>openafs_1_8</package>,
+     which is the new stable release.  OpenAFS 1.6 was removed.
     </para>
    </listitem>
   </itemizedlist>

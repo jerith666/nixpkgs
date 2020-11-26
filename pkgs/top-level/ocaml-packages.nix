@@ -70,6 +70,8 @@ let
 
     bos = callPackage ../development/ocaml-modules/bos { };
 
+    ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
+
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
@@ -529,7 +531,11 @@ let
 
     metrics = callPackage ../development/ocaml-modules/metrics { };
 
+    metrics-influx = callPackage ../development/ocaml-modules/metrics/influx.nix { };
+
     metrics-lwt = callPackage ../development/ocaml-modules/metrics/lwt.nix { };
+
+    metrics-mirage = callPackage ../development/ocaml-modules/metrics/mirage.nix { };
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
@@ -538,6 +544,8 @@ let
     mezzo = callPackage ../development/compilers/mezzo { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
+
+    mirage = callPackage ../development/ocaml-modules/mirage { };
 
     mirage-block = callPackage ../development/ocaml-modules/mirage-block { };
 
@@ -598,8 +606,6 @@ let
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
     mparser =  callPackage ../development/ocaml-modules/mparser { };
-
-    mstruct =  callPackage ../development/ocaml-modules/mstruct { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
