@@ -1534,4 +1534,6 @@ self: super: {
 
   language-ecmascript = doJailbreak super.language-ecmascript;
 
+  servant-js = doJailbreak super.servant-js;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
