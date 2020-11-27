@@ -1530,4 +1530,8 @@ self: super: {
     excludes = [ "stack.yaml" "sources.json" "src/Cachix/Types/Session.hs" "src/Cachix/API/Signing.hs" "cachix-api.cabal" "workflows/test.yml" ];
   });
 
+  size-based = doJailbreak super.size-based;
+
+  language-ecmascript = doJailbreak super.language-ecmascript;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
