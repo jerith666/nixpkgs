@@ -4105,6 +4105,10 @@ in {
 
   nmigen-soc = callPackage ../development/python-modules/nmigen-soc { };
 
+  nocasedict = callPackage ../development/python-modules/nocasedict { };
+
+  nocaselist = callPackage ../development/python-modules/nocaselist { };
+
   nodeenv = callPackage ../development/python-modules/nodeenv { };
 
   node-semver = callPackage ../development/python-modules/node-semver { };
@@ -4463,6 +4467,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pdoc3 = callPackage ../development/python-modules/pdoc3 { };
+
   pecan = callPackage ../development/python-modules/pecan { };
 
   peewee = callPackage ../development/python-modules/peewee { };
@@ -4772,6 +4778,8 @@ in {
   psutil = callPackage ../development/python-modules/psutil { };
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
+
+  psycopg2cffi = callPackage ../development/python-modules/psycopg2cffi { };
 
   ptable = callPackage ../development/python-modules/ptable { };
 
@@ -5453,6 +5461,8 @@ in {
   Pyro5 = callPackage ../development/python-modules/pyro5 { };
 
   pyroma = callPackage ../development/python-modules/pyroma { };
+
+  pyro-api = callPackage ../development/python-modules/pyro-api { };
 
   pyro-ppl = callPackage ../development/python-modules/pyro-ppl { };
 
@@ -6999,6 +7009,8 @@ in {
 
   sumo = callPackage ../development/python-modules/sumo { };
 
+  sumtypes = callPackage ../development/python-modules/sumtypes { };
+
   sunpy = callPackage ../development/python-modules/sunpy { };
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
@@ -7819,6 +7831,8 @@ in {
   yamale = callPackage ../development/python-modules/yamale { };
 
   yamllint = callPackage ../development/python-modules/yamllint { };
+
+  yamlloader = callPackage ../development/python-modules/yamlloader { };
 
   yamlordereddictloader = callPackage ../development/python-modules/yamlordereddictloader { };
 

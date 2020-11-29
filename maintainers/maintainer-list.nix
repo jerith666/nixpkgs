@@ -5496,6 +5496,12 @@
     githubId = 1191859;
     name = "Maxim Krivchikov";
   };
+  mazurel = {
+    email = "mateusz.mazur@yahoo.com";
+    github = "Mazurel";
+    githubId = 22836301;
+    name = "Mateusz Mazur";
+  };
   mbakke = {
     email = "mbakke@fastmail.com";
     github = "mbakke";
@@ -9997,5 +10003,11 @@
     email = "1838397+pulsation@users.noreply.github.com";
     github = "pulsation";
     githubId = 1838397;
+  };
+  zupo = {
+    name = "Nejc Zupan";
+    email = "nejczupan+nix@gmail.com";
+    github = "zupo";
+    githubId = 311580;
   };
 }
