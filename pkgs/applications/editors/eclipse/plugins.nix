@@ -357,9 +357,6 @@ rec {
       url = srcUrl;
       sha512 = "2qzc1iszqfrfnw8xip78n3kp6hlwrvrr708vlmdk7nv525xhs0ssjaxriqdhcr0s6jripmmazxivv3763rnk2bfkh31hmbnckpx4r3m";
       extraPostFetch = ''
-        # work around https://github.com/NixOS/nixpkgs/issues/38649
-        chmod go-w $out;
-
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
         find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;

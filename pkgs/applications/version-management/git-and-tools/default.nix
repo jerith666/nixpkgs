@@ -86,6 +86,8 @@ let
 
   git-crypt = callPackage ./git-crypt { };
 
+  git-delete-merged-branches = callPackage ./git-delete-merged-branches { };
+
   git-dit = callPackage ./git-dit {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -200,6 +202,8 @@ let
   gitui = callPackage ./gitui {
     inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
+
+  glab = callPackage ./glab { };
 
   grv = callPackage ./grv { };
 
