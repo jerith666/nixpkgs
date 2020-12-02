@@ -7961,6 +7961,8 @@ in
     openssl = null;
   };
 
+  globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
+
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
