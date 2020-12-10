@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, darwin } :
+{ stdenv, fetchurl, pkgconfig, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib, fetchgit, PCSC } :
 
 assert (openssl != null) == (gnutls == null);
 
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.PCSC;
+    ++ stdenv.lib.optional stdenv.isDarwin PCSC;
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
