@@ -3,7 +3,8 @@
   openssl ? null, gnutls ? null,
   gmp, libxml2, stoken, zlib,
   nettools, gawk, openresolv, coreutils, gnugrep,
-  PCSC } :
+  PCSC
+} :
 
 assert (openssl != null) == (gnutls == null);
 
