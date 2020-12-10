@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A GlobalProtect VPN client (GUI) for Linux based on OpenConnect and built with Qt5, supports SAML auth mode.";
+    description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
     license = licenses.gpl3;
     maintainers = [ maintainers.jerith666 ];
