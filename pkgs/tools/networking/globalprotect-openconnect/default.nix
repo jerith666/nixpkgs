@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub,
-  qmake,
-  qtwebsockets, qtwebengine,
-  openconnect } :
+{ stdenv, fetchFromGitHub
+, qmake, qtwebsockets, qtwebengine, openconnect
+} :
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
