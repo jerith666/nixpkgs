@@ -16,8 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  buildInputs = [ openconnect
-                  qtwebsockets qtwebengine ];
+  buildInputs = [ openconnect qtwebsockets qtwebengine ];
 
   patchPhase = ''
     for f in GPClient/GPClient.pro \
