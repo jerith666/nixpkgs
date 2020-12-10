@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     for f in GPClient/GPClient.pro \
-             GPClient/com.yuezk.qt.gpclient.desktop \
-             GPService/GPService.pro \
-             GPService/dbus/com.yuezk.qt.GPService.service \
-             GPService/systemd/gpservice.service; do
+      GPClient/com.yuezk.qt.gpclient.desktop \
+      GPService/GPService.pro \
+      GPService/dbus/com.yuezk.qt.GPService.service \
+      GPService/systemd/gpservice.service; do
         substituteInPlace $f --replace /usr $out;
         substituteInPlace $f --replace /etc $out/lib;
     done;
