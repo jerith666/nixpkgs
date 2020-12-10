@@ -4,7 +4,7 @@
   openconnect } :
 
 stdenv.mkDerivation rec {
-  name = "globalprotect-openconnect-${version}";
+  pname = "globalprotect-openconnect";
   version = "1.2.6";
 
   src = fetchFromGitHub {
