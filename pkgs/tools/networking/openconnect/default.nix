@@ -22,16 +22,16 @@ let
     buildInputs = [ makeWrapper ];
 
     installPhase = ''
-      mkdir -p $out/bin;
-      cp vpnc-script $out/bin;
+      mkdir -p $out/bin
+      cp vpnc-script $out/bin
 
       substituteInPlace $out/bin/vpnc-script \
         --replace "which" "type -P" \
-        --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf";
+        --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf"
 
       wrapProgram $out/bin/vpnc-script \
         --set OS ${os} \
-        --prefix PATH : "${stdenv.lib.makeBinPath [ nettools gawk openresolv coreutils gnugrep ]}";
+        --prefix PATH : "${stdenv.lib.makeBinPath [ nettools gawk openresolv coreutils gnugrep ]}"
     '';
   };
 
