@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "yuezk";
     repo = "GlobalProtect-openconnect";
-    fetchSubmodules = true;
     rev = "c14a6ad1d2b62f8d297bc4cfbcb1dcea4d99112f";
+    fetchSubmodules = true;
     sha256 = "1zkc3vk1j31n2zs5ammzv23dah7x163gfrzz222ynbkvsccrhzrk";
   };
 
