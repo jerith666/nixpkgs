@@ -598,10 +598,10 @@ let
 
   Appcpm = buildPerlModule {
     pname = "App-cpm";
-    version = "0.995";
+    version = "0.996";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.995.tar.gz";
-      sha256 = "b17fb0b7f97eb86430952bf387b6f08b5252413cb97474d1bf26e3376a4cc496";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.996.tar.gz";
+      sha256 = "5684535511e5abc0aa8eb6105b13f5759b5d03b6808f30149508358b0a11f595";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParallelPipes locallib ];
@@ -8266,6 +8266,22 @@ let
     };
   };
 
+  FileUtilTempdir = buildPerlPackage {
+    pname = "File-Util-Tempdir";
+    version = "0.034";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/File-Util-Tempdir-0.034.tar.gz";
+      sha256 = "076wdwbvqsg64wr5np8j6pnmmhs9li64g9mw2h33zbbgbv7f47fi";
+    };
+    buildInputs = [ Perlosnames TestException ];
+    meta = {
+      homepage = "https://metacpan.org/release/File-Util-Tempdir";
+      description = "Cross-platform way to get system-wide & user private temporary directory";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   FileWhich = buildPerlPackage {
     pname = "File-Which";
     version = "1.23";
@@ -9882,6 +9898,22 @@ let
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/miyagawa/HTTP-Server-Simple-PSGI";
      };
+  };
+
+  HTTPTinyCache = buildPerlPackage {
+    pname = "HTTP-Tiny-Cache";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/HTTP-Tiny-Cache-0.002.tar.gz";
+      sha256 = "08c6274x7fxl9r7cw1yiq21wv2mjgxw7db0wv5r80dyw377vfzbk";
+    };
+    propagatedBuildInputs = [ FileUtilTempdir Logger ];
+    meta = {
+      homepage = "https://metacpan.org/release/HTTP-Tiny-Cache";
+      description = "Cache HTTP::Tiny responses";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   HTTPTinyish = buildPerlPackage {
@@ -11529,6 +11561,21 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ PathTiny TestWarn ];
+  };
+
+  Logger = buildPerlPackage {
+    pname = "Log-ger";
+    version = "0.037";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/Log-ger-0.037.tar.gz";
+      sha256 = "0f5078g8lkyw09ijpz7dna5xw6yvpd0m283fdrw3s152xmr43qn2";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Log-ger";
+      description = "A lightweight, flexible logging framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   LogHandler = buildPerlModule {
@@ -13312,10 +13359,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.63";
+    version = "8.67";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.63.tar.gz";
-      sha256 = "1nw500wi6kdyawc2aq37lnx6zfkpby3sczflh5pjz623i8nw4b66";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.67.tar.gz";
+      sha256 = "0b1ajsfvpzcmy7qp1rjr2n1z263yk5bkzmal0kx72ajg1l1dd85v";
     };
     meta = {
       homepage = "https://mojolicious.org";

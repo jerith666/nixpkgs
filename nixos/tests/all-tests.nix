@@ -103,6 +103,7 @@ in
   ergo = handleTest ./ergo.nix {};
   etcd = handleTestOn ["x86_64-linux"] ./etcd.nix {};
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
+  etesync-dav = handleTest ./etesync-dav.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   ferm = handleTest ./ferm.nix {};
@@ -231,6 +232,7 @@ in
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix {};
   mysql-backup = handleTest ./mysql/mysql-backup.nix {};
   mysql-replication = handleTest ./mysql/mysql-replication.nix {};
+  n8n = handleTest ./n8n.nix {};
   nagios = handleTest ./nagios.nix {};
   nano = handleTest ./nano.nix {};
   nar-serve = handleTest ./nar-serve.nix {};
