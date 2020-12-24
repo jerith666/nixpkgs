@@ -20929,7 +20929,7 @@ in
   echoip = callPackage ../servers/echoip { };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk14;
+    jdk = jdk15;
   });
 
   eclipsesJdk8 = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
