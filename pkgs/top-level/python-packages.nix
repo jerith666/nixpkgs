@@ -3554,6 +3554,8 @@ in {
     inherit (pkgs.jsonnet) name src;
   };
 
+  jsonfield = callPackage ../development/python-modules/jsonfield { };
+
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
