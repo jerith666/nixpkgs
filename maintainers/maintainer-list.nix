@@ -7333,6 +7333,12 @@
     githubId = 14829269;
     name = "Ram Kromberg";
   };
+  ranfdev = {
+    email = "ranfdev@gmail.com";
+    name = "Lorenzo Miglietta";
+    github = "ranfdev";
+    githubId = 23294184;
+  };
   rardiol = {
     email = "ricardo.ardissone@gmail.com";
     github = "rardiol";
@@ -9793,6 +9799,12 @@
     github = "yochai";
     githubId = 1322201;
     name = "Yochai";
+  };
+  yoctocell = {
+    email = "public@yoctocell.xyz";
+    github = "yoctocell";
+    githubId = 40352765;
+    name = "Yoctocell";
   };
   yorickvp = {
     email = "yorickvanpelt@gmail.com";

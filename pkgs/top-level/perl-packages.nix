@@ -8704,8 +8704,13 @@ let
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.048.tar.gz";
       sha256 = "01dx5w6r4nl3rgnz7wvgvqfaa48xmzy90p95d5k6315q44610kx6";
     };
+    checkInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     meta = {
+      broken = true; # TODO: tests failing because "failed to load libregress.so"
+      # see https://github.com/NixOS/nixpkgs/pull/68115
+      # and https://github.com/NixOS/nixpkgs/issues/68116
+      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = stdenv.lib.licenses.lgpl2Plus;
     };
@@ -13495,6 +13500,22 @@ let
       homepage = "https://github.com/jhthorsen/mojo-redis";
       description = "Redis driver based on Mojo::IOLoop";
       license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  MojoSAML = buildPerlModule {
+    pname = "Mojo-SAML";
+    version = "0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mojo-SAML-0.07.tar.gz";
+      sha256 = "03biykpz281z9nmd846jlxwzbaqlqwvh987aw9spl7bgvfn4rhkj";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ CryptOpenSSLRSA CryptOpenSSLX509 DataGUID Mojolicious XMLCanonicalizeXML ];
+    meta = {
+      description = "A SAML2 toolkit using the Mojo toolkit";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
     };
   };
@@ -22885,6 +22906,21 @@ let
     meta = {
       description = "XCB bindings for X";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XMLCanonicalizeXML = buildPerlPackage {
+    pname = "XML-CanonicalizeXML";
+    version = "0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SJ/SJZASADA/XML-CanonicalizeXML-0.10.tar.gz";
+      sha256 = "1vl6wbqmq91mc0hkgfwlndbxcv2jm01hj7kpzprw3d6bh144ca77";
+    };
+    buildInputs = [ pkgs.libxml2 ];
+    meta = {
+      description = "Perl extension for inclusive (1.0 and 1.1) and exclusive canonicalization of XML using libxml2";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
