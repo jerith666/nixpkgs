@@ -91,6 +91,7 @@ dpelle/vim-LanguageTool
 dracula/vim as dracula-vim
 drewtempelmeyer/palenight.vim
 drmingdrmer/xptemplate
+dstein64/nvim-scrollview@main
 dylanaraps/wal.vim
 eagletmt/ghcmod-vim
 eagletmt/neco-ghc
@@ -180,6 +181,7 @@ ivanov/vim-ipython
 jackguo380/vim-lsp-cxx-highlight
 jacoborus/tender.vim
 jakwings/vim-pony
+jamessan/vim-gnupg@main
 jaredgorski/SpaceCamp
 jaxbot/semantic-highlight.vim
 JazzCore/ctrlp-cmatcher
@@ -228,6 +230,7 @@ justincampbell/vim-eighties
 justinj/vim-pico8-syntax
 justinmk/vim-dirvish
 justinmk/vim-sneak
+jvoorhis/coq.vim
 KabbAmine/vCoolor.vim
 KabbAmine/zeavim.vim
 kalbasit/vim-colemak
@@ -246,6 +249,7 @@ keith/swift.vim
 kien/rainbow_parentheses.vim
 knubie/vim-kitty-navigator
 konfekt/fastfold
+konfekt/vim-DetectSpellLang
 kristijanhusak/defx-git
 kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
@@ -255,6 +259,7 @@ kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 kyazdani42/nvim-tree.lua
 kyazdani42/nvim-web-devicons
+lambdalisue/fern.vim
 lambdalisue/vim-gista
 lambdalisue/vim-manpager
 lambdalisue/vim-pager
@@ -399,7 +404,9 @@ nvim-treesitter/nvim-treesitter-textobjects
 nvim-treesitter/playground
 ocaml/vim-ocaml
 octol/vim-cpp-enhanced-highlight
-Olical/conjure@main
+ojroques/vim-oscyank@main
+Olical/aniseed
+Olical/conjure
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
 osyo-manga/vim-anzu
@@ -545,6 +552,7 @@ tommcdo/vim-ninja-feet
 tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
+tpope/vim-capslock
 tpope/vim-commentary
 tpope/vim-dadbod
 tpope/vim-dispatch
@@ -553,6 +561,7 @@ tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship
 tpope/vim-fugitive
+tpope/vim-git
 tpope/vim-liquid
 tpope/vim-obsession
 tpope/vim-pathogen
