@@ -1586,6 +1586,7 @@ self: super: {
   # Fixed by https://github.com/haskell-servant/servant/commit/08579ca0039410e04d6c36c975ddc20165819db6
   servant-client      = doJailbreak super.servant-client;
   servant-client-core = doJailbreak super.servant-client-core;
+  universe-base       = doJailbreak super.universe-base;
 
   # overly strict dependency on aeson
   # https://github.com/jaspervdj/profiteur/issues/33
