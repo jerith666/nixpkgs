@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "ATI Catalyst display drivers";
     homepage = "http://support.amd.com/us/gpudownload/Pages/index.aspx";
     license = licenses.unfree;
