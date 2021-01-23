@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchgit,
-  pkgconfig, makeWrapper,
+  pkg-config, makeWrapper,
   openssl ? null, gnutls ? null,
   gmp, libxml2, stoken, zlib,
   nettools, gawk, openresolv, coreutils, gnugrep,
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
     ++ lib.optional stdenv.isDarwin PCSC;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
