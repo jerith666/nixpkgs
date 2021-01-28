@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
-, pkgconfig
+, pkg-config
 , gettext
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -43,6 +43,7 @@
 , cups ? null
 , AppKit
 , Cocoa
+, broadwaySupport ? true
 }:
 
 assert cupsSupport -> cups != null;
@@ -87,6 +88,7 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=${boolToString withGtkDoc}"
     "-Dtests=false"
     "-Dtracker3=${boolToString trackerSupport}"
+    "-Dbroadway_backend=${boolToString broadwaySupport}"
   ];
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
@@ -115,7 +117,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     sassc
   ] ++ setupHooks ++ optionals withGtkDoc [

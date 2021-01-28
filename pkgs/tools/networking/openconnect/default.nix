@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchgit,
-  pkgconfig, makeWrapper,
+{ lib, stdenv, fetchurl, fetchgit,
+  pkg-config, makeWrapper,
   openssl ? null, gnutls ? null,
   gmp, libxml2, stoken, zlib,
   nettools, gawk, openresolv, coreutils, gnugrep,
@@ -55,14 +55,14 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gmp libxml2 stoken zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin PCSC;
-  nativeBuildInputs = [ pkgconfig ];
+    ++ lib.optional stdenv.isDarwin PCSC;
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
     homepage = "http://www.infradead.org/openconnect/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

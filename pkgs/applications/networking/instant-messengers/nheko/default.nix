@@ -19,7 +19,7 @@
 , spdlog
 , fmt
 , olm
-, pkgconfig
+, pkg-config
 , nlohmann_json
 }:
 
@@ -37,7 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     lmdbxx
     cmake
-    pkgconfig
+    pkg-config
   ];
 
   buildInputs = [
@@ -57,7 +57,11 @@ mkDerivation rec {
     qtgraphicaleffects
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+  ];
+
+  meta = with lib; {
     description = "Desktop client for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];

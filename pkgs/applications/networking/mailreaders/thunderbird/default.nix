@@ -38,7 +38,7 @@
 , nss_3_53
 , pango
 , perl
-, pkgconfig
+, pkg-config
 , python2
 , python3
 , runtimeShell
@@ -73,13 +73,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.6.0";
+  version = "78.6.1";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "0hx9gg3ngpvgshrz9j7ni4kh3chadqd5w5fpywjjw4naj0k53d0i9jjhq4p6fyvf6rb2g825ibqq794lr9drn6nrfndh5w1yn5lw69n";
+      "1vzka0msy6gqyxgwyp2dknp6rmgzhcjsyq2hf798wf4wrb7rrrsyrgqrd8skss929wakda0slqng505lhig79za7wyyh531f7i9qbv7";
   };
 
   nativeBuildInputs = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     nasm
     nodejs
     perl
-    pkgconfig
+    pkg-config
     python2
     python3
     rust-cbindgen
@@ -268,7 +268,7 @@ stdenv.mkDerivation rec {
       genericName = "Mail Reader";
       name = "thunderbird";
       exec = "thunderbird %U";
-      icon = "$out/lib/thunderbird/chrome/icons/default/default256.png";
+      icon = "thunderbird";
       mimeType = lib.concatStringsSep ";" [
         # Email
         "x-scheme-handler/mailto"
@@ -288,6 +288,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # TODO: Move to a dev output?
     rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
+    install -Dm 444 $out/lib/thunderbird/chrome/icons/default/default256.png $out/share/icons/hicolor/256x256/apps/thunderbird.png
   '';
 
   # Note on GPG support:

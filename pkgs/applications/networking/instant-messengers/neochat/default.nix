@@ -1,41 +1,67 @@
-{ mkDerivation, stdenv, fetchFromGitLab
-, pkgconfig, wrapQtAppsHook
+{ mkDerivation
+, lib, stdenv
+, fetchFromGitLab
+, pkg-config
 , cmake
-, qtbase, qttools, qtquickcontrols2, qtmultimedia, qtkeychain
-, libpulseaudio
-# Not mentioned but seems needed
+, qtbase
+, qttools
+, qtquickcontrols2
+, qtmultimedia
 , qtgraphicaleffects
-, qtdeclarative
-, qtmacextras
-, olm, libsecret, cmark, extra-cmake-modules, kirigami2, ki18n, knotifications, kdbusaddons, kconfig, libquotient
-, KQuickImageEdit, kitemmodels
+, qtkeychain
+, libpulseaudio
+, olm
+, libsecret
+, cmark
+, extra-cmake-modules
+, kirigami2
+, kitemmodels
+, ki18n
+, knotifications
+, kdbusaddons
+, kconfig
+, libquotient
+, kquickimageedit
 }:
 
-let
-qtkeychain-qt5 = qtkeychain.override {
-  inherit qtbase qttools;
-  withQt5 = true;
-};
-
-in mkDerivation rec {
+mkDerivation rec {
   pname = "neochat";
-  version = "v1.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
-    rev = version;
-    sha256 = "1r9n83kvc5v215lzmzh6hyc5q9i3w6znbf508qk0mdwdzxz4zry9";
+    rev = "v${version}";
+    sha256 = "sha256-xGqGFJHyoZXHLv/n3UGr/KVbgs5Gc9kKKWIuKMr9DtQ=";
   };
 
-  nativeBuildInputs = [ pkgconfig cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ qtbase qtkeychain-qt5 qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative olm libsecret cmark kirigami2 ki18n knotifications kdbusaddons kconfig libquotient KQuickImageEdit kitemmodels libpulseaudio ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    qtkeychain
+    qtquickcontrols2
+    qtmultimedia
+    qtgraphicaleffects
+    olm
+    libsecret
+    cmark
+    kirigami2
+    kitemmodels
+    ki18n
+    knotifications
+    kdbusaddons
+    kconfig
+    libquotient
+    kquickimageedit
+    libpulseaudio
+  ];
+
+  meta = with lib; {
     description = "A client for matrix, the decentralized communication protocol.";
     homepage = "https://apps.kde.org/en/neochat";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ mjlbach peterhoeg ];
     platforms = with platforms; linux;
   };
 }

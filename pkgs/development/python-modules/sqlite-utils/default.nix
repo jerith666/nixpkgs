@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.1";
+  version = "3.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "53950eb89f77066d6caf553c52ec01701a8bebbaffa9e0a627df3f229ca8720f";
+    sha256 = "1linla3za1gb3w0n0k6h3q8in62qhipizff259p14gzmyr95rjjv";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +35,6 @@ buildPythonPackage rec {
     pytestrunner
     black
     hypothesis
-  ];
-
-  # disabled until upstream updates tests
-  disabledTests = lib.optionals (lib.versionAtLeast sqlite.version "3.34.0") [
-    "test_optimize"
   ];
 
   meta = with lib; {

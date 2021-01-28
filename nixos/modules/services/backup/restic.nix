@@ -245,10 +245,12 @@ in
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+            ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
                         ++ pruneCmd;
             User = backup.user;
             RuntimeDirectory = "restic-backups-${name}";
+            CacheDirectory = "restic-backups-${name}";
+            CacheDirectoryMode = "0700";
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };

@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , gobject-introspection
 , bison
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     bison
     flex
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
     "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
   ] ++ lib.optionals stdenv.isDarwin [
-    # darwin.libunwind doesn't have pkgconfig definitions so meson doesn't detect it.
+    # darwin.libunwind doesn't have pkg-config definitions so meson doesn't detect it.
     "-Dlibunwind=disabled"
     "-Dlibdw=disabled"
   ];
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$dev/bin/"*; do
         # We can't use --suffix here due to quoting so we craft the export command by hand
-        wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH=$GST_PLUGIN_SYSTEM_PATH''${GST_PLUGIN_SYSTEM_PATH:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
+        wrapProgram "$prog" --run 'export GST_PLUGIN_SYSTEM_PATH_1_0=$GST_PLUGIN_SYSTEM_PATH_1_0''${GST_PLUGIN_SYSTEM_PATH_1_0:+:}$(unset _tmp; for profile in $NIX_PROFILES; do _tmp="$profile/lib/gstreamer-1.0''${_tmp:+:}$_tmp"; done; printf '%s' "$_tmp")'
     done
   '';
 
