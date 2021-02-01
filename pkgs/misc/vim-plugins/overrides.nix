@@ -14,6 +14,7 @@
 , buildVimPluginFrom2Nix
 , nodePackages
 , dasht
+, sqlite
 
 # deoplete-khard dependency
 , khard
@@ -283,6 +284,10 @@ self: super: {
 
   skim-vim = super.skim-vim.overrideAttrs(old: {
     dependencies = [ self.skim ];
+  });
+
+  sql-nvim = super.sql-nvim.overrideAttrs(old: {
+    buildInputs = [ sqlite ];
   });
 
   sved = let
@@ -693,7 +698,7 @@ self: super: {
         ln -s ${fzy-lua-native}/static $target/${fzy-lua-native-path}/static
         ln -s ${fzy-lua-native}/lua $target/${fzy-lua-native-path}/lua
       '';
-    meta.platforms = stdenv.lib.platforms.all;
+    meta.platforms = lib.platforms.all;
   });
 
 } // (
