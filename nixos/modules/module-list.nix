@@ -374,6 +374,7 @@
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
+  ./services/hardware/power-profiles-daemon.nix
   ./services/hardware/ratbagd.nix
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
@@ -651,7 +652,6 @@
   ./services/networking/fireqos.nix
   ./services/networking/firewall.nix
   ./services/networking/flannel.nix
-  ./services/networking/flashpolicyd.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
   ./services/networking/gale.nix
