@@ -893,6 +893,7 @@
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/keycloak.nix
   ./services/web-apps/limesurvey.nix
+  ./services/web-apps/mastodon.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
   ./services/web-apps/miniflux.nix
