@@ -2103,6 +2103,12 @@
     email = "christoph.senjak@googlemail.com";
     name = "Christoph-Simon Senjak";
   };
+  davhau = {
+    email = "d.hauer.it@gmail.com";
+    name = "David Hauer";
+    github = "DavHau";
+    githubId = 42246742;
+  };
   david-sawatzke = {
     email = "d-nix@sawatzke.dev";
     github = "david-sawatzke";
@@ -5865,6 +5871,12 @@
     github = "maxeaubrey";
     githubId = 35892750;
     name = "Maxine Aubrey";
+  };
+  maxhbr = {
+    email = "nixos@maxhbr.dev";
+    github = "maxhbr";
+    githubId = 1187050;
+    name = "Maximilian Huber";
   };
   maxxk = {
     email = "maxim.krivchikov@gmail.com";
