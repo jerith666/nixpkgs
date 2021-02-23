@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qmake, qtwebsockets, qtwebengine, openconnect
+, qmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
 } :
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zkc3vk1j31n2zs5ammzv23dah7x163gfrzz222ynbkvsccrhzrk";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine ];
 
