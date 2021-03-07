@@ -1,38 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, curl
-, makeWrapper
-, jdk
-, writeScript
-, common-updater-scripts
-, cacert
-, git
-, nixfmt
-, nix
-, jq
-, coreutils
-, gnused
-}:
+{ lib, stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk, writeScript
+, common-updater-scripts, cacert, git, nixfmt, nix, jq, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "830b72140583e2790bbd3649890ac8ef5371d0c6";
-  version = "2021-02-04";
+  rev = "2c582cdbb37dd487bf2140010ddd2e20f3c1394e";
+  version = "2021-03-03";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "0wq2mf8s254ns0sss5q394c1j2rnvl42x9l6kkrav505hbx0gyq6";
+    sha256 = "1j4j46gzw05bis7akvzfdj36xdwxcabq66wyf917z8vsy31vvajp";
   };
 
   dontBuild = true;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     substituteInPlace bin/sbt --replace 'declare java_cmd="java"' 'declare java_cmd="${jdk}/bin/java"'
@@ -40,6 +27,8 @@ stdenv.mkDerivation rec {
     install bin/sbt $out/bin
 
     wrapProgram $out/bin/sbt --prefix PATH : ${lib.makeBinPath [ which curl ]}
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;

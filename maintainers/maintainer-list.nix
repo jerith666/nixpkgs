@@ -273,7 +273,7 @@
     name = "James Alexander Feldman-Crough";
   };
   aforemny = {
-    email = "alexanderforemny@googlemail.com";
+    email = "aforemny@posteo.de";
     github = "aforemny";
     githubId = 610962;
     name = "Alexander Foremny";
@@ -1711,6 +1711,12 @@
     githubId = 2245737;
     name = "Christopher Mark Poole";
   };
+  chuahou = {
+    email = "human+github@chuahou.dev";
+    github = "chuahou";
+    githubId = 12386805;
+    name = "Chua Hou";
+  };
   chvp = {
     email = "nixpkgs@cvpetegem.be";
     github = "chvp";
@@ -2417,6 +2423,16 @@
     githubId = 6806011;
     name = "Robert Schütz";
   };
+  dottedmag = {
+    email = "dottedmag@dottedmag.net";
+    github = "dottedmag";
+    githubId = 16120;
+    name = "Misha Gusarov";
+    keys = [{
+      longkeyid = "rsa4096/0x9D20F6503E338888";
+      fingerprint = "A8DF 1326 9E5D 9A38 E57C  FAC2 9D20 F650 3E33 8888";
+    }];
+  };
   doublec = {
     email = "chris.double@double.co.nz";
     github = "doublec";
@@ -3060,6 +3076,12 @@
     github = "workflow";
     githubId = 1276854;
     name = "Florian Peter";
+  };
+  fbrs = {
+    email = "yuuki@protonmail.com";
+    github = "cideM";
+    githubId = 4246921;
+    name = "Florian Beeres";
   };
   fdns = {
     email = "fdns02@gmail.com";
@@ -6055,7 +6077,7 @@
     name = "Celine Mercier";
   };
   metadark = {
-    email = "kira.bruneau@gmail.com";
+    email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
     github = "metadark";
     githubId = 382041;
@@ -7203,6 +7225,12 @@
     githubId = 157610;
     name = "Piotr Bogdan";
   };
+  pborzenkov = {
+    email = "pavel@borzenkov.net";
+    github = "pborzenkov";
+    githubId = 434254;
+    name = "Pavel Borzenkov";
+  };
   pblkt = {
     email = "pebblekite@gmail.com";
     github = "pblkt";
@@ -7419,6 +7447,16 @@
     githubId = 103822;
     name = "Patrick Mahoney";
   };
+  pmenke = {
+    email = "nixos@pmenke.de";
+    github = "pmenke-de";
+    githubId = 898922;
+    name = "Philipp Menke";
+    keys = [{
+      longkeyid = "rsa4096/0xEB7F2D4CCBE23B69";
+      fingerprint = "ED54 5EFD 64B6 B5AA EC61 8C16 EB7F 2D4C CBE2 3B69";
+    }];
+  };
   pmeunier = {
     email = "pierre-etienne.meunier@inria.fr";
     github = "P-E-Meunier";
@@ -7448,6 +7486,16 @@
     github = "pneumaticat";
     githubId = 11365056;
     name = "Kevin Liu";
+  };
+  pnotequalnp = {
+    email = "kevin@pnotequalnp.com";
+    github = "pnotequalnp";
+    githubId = 46154511;
+    name = "Kevin Mullins";
+    keys = [{
+      longkeyid = "rsa4096/361820A45DB41E9A";
+      fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A";
+    }];
   };
   polyrod = {
     email = "dc1mdp@gmail.com";
@@ -8032,6 +8080,12 @@
     github = "robertodr";
     githubId = 3708689;
     name = "Roberto Di Remigio";
+  };
+  robertoszek = {
+    email = "robertoszek@robertoszek.xyz";
+    github = "robertoszek";
+    githubId = 1080963;
+    name = "Roberto";
   };
   robgssp = {
     email = "robgssp@gmail.com";
@@ -10012,6 +10066,12 @@
     githubId = 7677567;
     name = "Victor SENE";
   };
+  vtuan10 = {
+    email = "mail@tuan-vo.de";
+    github = "vtuan10";
+    githubId = 16415673;
+    name = "Van Tuan Vo";
+  };
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
     github = "vyorkin";
@@ -10750,6 +10810,16 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  zseri = {
+    name = "zseri";
+    email = "zseri.devel@ytrizja.de";
+    github = "zseri";
+    githubId = 1618343;
+    keys = [{
+      longkeyid = "rsa4096/0x229E63AE5644A96D";
+      fingerprint = "7AFB C595 0D3A 77BD B00F  947B 229E 63AE 5644 A96D";
+    }];
+  };
   zupo = {
     name = "Nejc Zupan";
     email = "nejczupan+nix@gmail.com";
@@ -10761,5 +10831,17 @@
     email = "felix.scheinost@posteo.de";
     github = "felixscheinost";
     githubId = 31761492;
+  };
+  benneti = {
+    name = "Benedikt Tissot";
+    email = "benedikt.tissot@googlemail.com";
+    github = "benneti";
+    githubId = 11725645;
+  };
+  p3psi = {
+    name = "Elliot Boo";
+    email = "p3psi.boo@gmail.com";
+    github = "p3psi-boo";
+    githubId = 43925055;
   };
 }
