@@ -55,12 +55,12 @@ in
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which util-linux pkg-config python ]
+    nativeBuildInputs = [ which pkg-config python ]
       ++ optionals stdenv.isDarwin [ xcbuild ];
 
     configureFlags = let
       isCross = stdenv.hostPlatform != stdenv.buildPlatform;
-      inherit (stdenv.hostPlatform) gcc isArch32;
+      inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ [
       "--without-dtrace"
     ] ++ (optionals isCross [
@@ -132,7 +132,7 @@ in
 
     passthru.updateScript = import ./update.nix {
       inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
-      inherit (stdenv) lib;
+      inherit lib;
       inherit majorVersion;
     };
 

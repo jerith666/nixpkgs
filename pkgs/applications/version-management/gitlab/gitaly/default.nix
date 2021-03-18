@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
+{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
 , bundlerEnv, pkg-config
 # libgit2 + dependencies
 , libgit2, openssl, zlib, pcre, http-parser }:
@@ -33,17 +33,17 @@ let
       };
   };
 in buildGoModule rec {
-  version = "13.7.1";
+  version = "13.8.5";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1zmjll7sdan8kc7bq5vjaiyqwzlh5zmx1g4ql4dqmnwscpn1avjb";
+    sha256 = "sha256-hKIjKltPPmz50Ru7elpHdeoyGAqgp+txR3fKleqY7hM=";
   };
 
-  vendorSha256 = "15i1ajvrff1bfpv3kmb1wm1mmriswwfw2v4cml0nv0zp6a5n5187";
+  vendorSha256 = "sha256-oVw6vXI3CyOn4l02PkYx3HVpZfzQPi3yBuf9tRvoWoM=";
 
   passthru = {
     inherit rubyEnv;

@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , srht, pyyaml, PyGithub }:
 
 buildPythonPackage rec {

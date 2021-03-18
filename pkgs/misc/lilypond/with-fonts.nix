@@ -1,4 +1,4 @@
-{ lib, stdenv, lndir, symlinkJoin, makeWrapper
+{ lib, lndir, symlinkJoin, makeWrapper
 , lilypond, openlilylib-fonts
 }:
 
@@ -7,7 +7,8 @@ lib.appendToName "with-fonts" (symlinkJoin {
 
   paths = [ lilypond ] ++ openlilylib-fonts.all;
 
-  buildInputs = [ makeWrapper lndir ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ lndir ];
 
   postBuild = ''
     for p in $out/bin/*; do

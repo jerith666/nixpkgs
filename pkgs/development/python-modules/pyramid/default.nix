@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , webtest
@@ -32,6 +32,8 @@ buildPythonPackage rec {
   # Failing tests
   # https://github.com/Pylons/pyramid/issues/1899
   doCheck = !isPy35;
+
+  pythonImportsCheck = [ "pyramid" ];
 
   meta = with lib; {
     description = "The Pyramid Web Framework, a Pylons project";

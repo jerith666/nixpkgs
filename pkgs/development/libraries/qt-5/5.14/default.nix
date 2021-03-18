@@ -112,6 +112,7 @@ let
         sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
       })
       ./qtwebkit.patch
+      ./qtwebkit-icu68.patch
     ] ++ optionals stdenv.isDarwin [
       ./qtwebkit-darwin-no-readline.patch
       ./qtwebkit-darwin-no-qos-classes.patch
@@ -123,12 +124,12 @@ let
     import ../qtModule.nix
     {
       inherit perl;
-      inherit (stdenv) lib;
+      inherit lib;
       # Use a variant of mkDerivation that does not include wrapQtApplications
       # to avoid cyclic dependencies between Qt modules.
       mkDerivation =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; wrapQtAppsHook = null; }
+        { inherit lib; inherit debug; wrapQtAppsHook = null; }
         stdenvActual.mkDerivation;
     }
     { inherit self srcs patches; };
@@ -140,7 +141,7 @@ let
 
       mkDerivationWith =
         import ../mkDerivation.nix
-        { inherit (stdenv) lib; inherit debug; inherit (self) wrapQtAppsHook; };
+        { inherit lib; inherit debug; inherit (self) wrapQtAppsHook; };
 
       mkDerivation = mkDerivationWith stdenvActual.mkDerivation;
 
@@ -149,7 +150,7 @@ let
         patches = patches.qtbase;
         inherit bison cups harfbuzz libGL;
         withGtk3 = true; inherit dconf gtk3;
-        inherit developerBuild decryptSslTraffic;
+        inherit debug developerBuild decryptSslTraffic;
       };
 
       qtcharts = callPackage ../modules/qtcharts.nix {};
@@ -199,6 +200,7 @@ let
       qmake = makeSetupHook {
         deps = [ self.qtbase.dev ];
         substitutions = {
+          inherit debug;
           fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
         };
       } ../hooks/qmake-hook.sh;

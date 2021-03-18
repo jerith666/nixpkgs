@@ -14,7 +14,8 @@ let
       };
 
       nativeBuildInputs = [ cmake ];
-      buildInputs = [ fmt ];
+      # spdlog <1.3 uses a bundled version of fmt
+      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt;
 
       cmakeFlags = [
         "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
@@ -25,7 +26,9 @@ let
         "-DSPDLOG_FMT_EXTERNAL=ON"
       ];
 
-      outputs = [ "out" "doc" ];
+      outputs = [ "out" "doc" ]
+        # spdlog <1.4 is header only, no need to split libraries and headers
+        ++ lib.optional (lib.versionAtLeast version "1.4") "dev";
 
       postInstall = ''
         mkdir -p $out/share/doc/spdlog
@@ -46,8 +49,8 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.8.1";
-    sha256 = "sha256-EyZhYgcdtZC+vsOUKShheY57L0tpXltduHWwaoy6G9k=";
+    version = "1.8.2";
+    sha256 = "sha256-vYled5Z9fmxuO9193lefpFzIHAiSgvYn2iOfneLidQ8=";
   };
 
   spdlog_0 = generic {

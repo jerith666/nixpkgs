@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "vsh";
-  version = "0.7.2";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "fishi0x01";
     repo = "vsh";
     rev = "v${version}";
-    sha256 = "0k9bbfzqhijzimng8plk2xx9h37h7d2wj8g3plvvs3wrf7pmwxs7";
+    sha256 = "0dhn2aqd52fgasy4j3ar67fzwzcxfi1vl09kni8jwcna8rjgg3fj";
   };
 
-  # vendor dir is already part of repository
+  # vendor directory is part of repository
   vendorSha256 = null;
 
   # make sure version gets set at compile time

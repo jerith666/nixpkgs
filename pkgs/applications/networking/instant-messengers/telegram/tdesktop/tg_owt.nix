@@ -1,10 +1,11 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake, ninja, yasm
 , libjpeg, openssl, libopus, ffmpeg, alsaLib, libpulseaudio, protobuf
+, xorg, libXtst
 }:
 
 let
-  rev = "6eaebec41b34a0a0d98f02892d0cfe6bbcbc0a39";
-  sha256 = "0dbc36j09jmxvznal55hi3qrfyvj4y0ila6347nav9skcmk8fm64";
+  rev = "a19877363082da634a3c851a4698376504d2eaee";
+  sha256 = "03m6fkc3m2wbh821mr3ybsmd7sjllky44mizny96k4b249dkvzx7";
 
 in stdenv.mkDerivation {
   pname = "tg_owt";
@@ -23,6 +24,12 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     libjpeg openssl libopus ffmpeg alsaLib libpulseaudio protobuf
+    xorg.libX11 libXtst
+  ];
+
+  cmakeFlags = [
+    # Building as a shared library isn't officially supported and currently broken:
+    "-DBUILD_SHARED_LIBS=OFF"
   ];
 
   meta.license = lib.licenses.bsd3;

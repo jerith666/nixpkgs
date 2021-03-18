@@ -3,7 +3,6 @@
 , gettext, vim, bc, screen }:
 
 let
-  inherit (stdenv) lib;
   pythonEnv = python3.withPackages (ps: with ps; [ snack ]);
 in
 stdenv.mkDerivation rec {
@@ -17,7 +16,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ perl makeWrapper gettext ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl gettext ];
   propagatedBuildInputs = [ textual-window-manager screen ];
 
   postPatch = ''

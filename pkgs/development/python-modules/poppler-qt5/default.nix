@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, lib, stdenv, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
+{ buildPythonPackage, fetchPypi, lib, sip, qtbase, pyqt5, poppler, pkg-config, fetchpatch
 , substituteAll
 }:
 
@@ -33,6 +33,8 @@ buildPythonPackage rec {
 
   # no tests, just bindings for `poppler_qt5`
   doCheck = false;
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://github.com/wbsoft/python-poppler-qt5";

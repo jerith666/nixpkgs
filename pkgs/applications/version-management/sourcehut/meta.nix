@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , buildGoModule
 , pgpy, srht, redis, bcrypt, qrcode, stripe, zxcvbn, alembic, pystache
 , sshpubkeys, weasyprint }:

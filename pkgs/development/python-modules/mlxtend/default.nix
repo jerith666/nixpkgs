@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -45,5 +45,7 @@ buildPythonPackage rec {
     license= licenses.bsd3;
     maintainers = with maintainers; [ evax ];
     platforms = platforms.unix;
+    # incompatible with nixpkgs scikitlearn version
+    broken = true;
   };
 }

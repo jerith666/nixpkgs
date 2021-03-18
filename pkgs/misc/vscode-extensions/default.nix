@@ -1,4 +1,4 @@
-{ stdenv, config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8, llvmPackages_latest }:
+{ config, lib, callPackage, vscode-utils, nodePackages,llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -128,6 +128,18 @@ let
         };
       };
 
+      dbaeumer.vscode-eslint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-eslint";
+          publisher = "dbaeumer";
+          version = "2.1.14";
+          sha256 = "sha256-bVGmp871yu1Llr3uJ+CCosDsrxJtD4b1+CR+omMUfIQ=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       davidanson.vscode-markdownlint = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-markdownlint";
@@ -177,6 +189,22 @@ let
         };
       };
 
+      dracula-theme.theme-dracula = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "theme-dracula";
+          publisher = "dracula-theme";
+          version = "2.22.3";
+          sha256 = "0wni9sriin54ci8rly2s68lkfx8rj1cys6mgcizvps9sam6377w6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/dracula-theme.theme-dracula/changelog";
+          description = "Dark theme for many editors, shells, and more";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dracula-theme.theme-dracula";
+          homepage = "https://draculatheme.com/";
+          license = licenses.mit;
+        };
+      };
+
       eamodio.gitlens = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitlens";
@@ -186,6 +214,23 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      elmtooling.elm-ls-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "elm-ls-vscode";
+          publisher = "Elmtooling";
+          version = "2.0.1";
+          sha256 = "06x5ld2r1hzns2s052mvhmfiaawjzcn0jf5lkfprhmrkxnmfdd43";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/Elmtooling.elm-ls-vscode/changelog";
+          description = "Elm language server";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Elmtooling.elm-ls-vscode";
+          homepage = "https://github.com/elm-tooling/elm-language-client-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ mcwitt ];
         };
       };
 
@@ -241,6 +286,18 @@ let
           publisher = "formulahendry";
           version = "0.1.6";
           sha256 = "0cqg9mxkyf41brjq2c764w42lzyn6ffphw6ciw7xnqk1h1x8wwbs";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      formulahendry.code-runner = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "code-runner";
+          publisher = "formulahendry";
+          version = "0.11.2";
+          sha256 = "0qwcxr6m1xwhqmdl4pccjgpikpq1hgi2hgrva5abn8ixa2510hcy";
         };
         meta = {
           license = lib.licenses.mit;
@@ -308,8 +365,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.196";
-          sha256 = "1l4f290018f2p76q6hn2b2injps6wz65as7dm537wrsvsivyg2qz";
+          version = "0.0.201";
+          sha256 = "1hjck1r2byc45rp28gn15wbmcrl1wjng7kn5lyhr6mgjjwqh5pa8";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -327,6 +384,8 @@ let
           license = licenses.mit;
         };
       };
+
+      hashicorp.terraform = callPackage ./terraform {};
 
       hookyqr.beautify = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -465,6 +524,8 @@ let
         };
       };
 
+      ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
+
       ms-kubernetes-tools.vscode-kubernetes-tools = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-kubernetes-tools";
@@ -558,6 +619,18 @@ let
           publisher = "pkief";
           version = "4.4.0";
           sha256 = "1m9mis59j9xnf1zvh67p5rhayaa9qxjiw9iw847nyl9vsy73w8ya";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      rubbersheep.gi = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gi";
+          publisher = "rubbersheep";
+          version = "0.2.11";
+          sha256 = "0j9k6wm959sziky7fh55awspzidxrrxsdbpz1d79s5lr5r19rs6j";
         };
         meta = {
           license = lib.licenses.mit;
@@ -660,6 +733,18 @@ let
         };
       };
 
+      tomoki1207.pdf = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pdf";
+          publisher = "tomoki1207";
+          version = "1.1.0";
+          sha256 = "0pcs4iy77v4f04f8m9w2rpdzfq7sqbspr7f2sm1fv7bm515qgsvb";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       tyriar.sort-lines = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "sort-lines";
@@ -672,9 +757,19 @@ let
         };
       };
 
-      vadimcn.vscode-lldb = callPackage ./vscode-lldb {
-        lldb = llvmPackages_latest.lldb;
+      usernamehw.errorlens = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "errorlens";
+          publisher = "usernamehw";
+          version = "3.2.4";
+          sha256 = "0caxmf6v0s5kgp6cp3j1kk7slhspjv5kzhn4sq3miyl5jkrn95kx";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
       };
+
+      vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
 
       vincaslt.highlight-matching-tag = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -718,6 +813,18 @@ let
       llvm-org.lldb-vscode = llvmPackages_8.lldb;
 
       WakaTime.vscode-wakatime = callPackage ./wakatime {};
+
+      wholroyd.jinja = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jinja";
+          publisher = "wholroyd";
+          version = "0.0.8";
+          sha256 = "1ln9gly5bb7nvbziilnay4q448h9npdh7sd9xy277122h0qawkci";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
     };
 
     aliases = self: super: {

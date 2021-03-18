@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, qmake, qttools, qtwebkit, qttranslations, gpsbabel }:
+{ lib, mkDerivation, qmake, qttools, qtwebkit, qttranslations, gpsbabel }:
 
 mkDerivation {
   pname = "gpsbabel-gui";
@@ -9,6 +9,8 @@ mkDerivation {
 
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtwebkit ];
+
+  dontWrapQtApps = true;
 
   postPatch = ''
     substituteInPlace mainwindow.cc \

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, scikitimage }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytestrunner, scikitimage }:
 
 buildPythonPackage {
   pname = "image-match";
@@ -24,6 +24,7 @@ buildPythonPackage {
 
   # tests cannot work without elasticsearch
   doCheck = false;
+  pythonImportsCheck = [ "image_match" ];
 
   meta = with lib; {
     homepage = "https://github.com/ascribe/image-match";

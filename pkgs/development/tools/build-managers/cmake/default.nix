@@ -14,18 +14,18 @@
 assert withQt5 -> useQt4 == false;
 assert useQt4 -> withQt5 == false;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.19.2";
+  version = "3.19.4";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "1w67w0ak6vf37501dlz9yhnzlvvpw1w10n2nm3hi7yxp4cxzvq73";
+    sha256 = "sha256-fQIyufHFfo3oHzgHHvggPmgg/n7siuRqHfEl2I28wuE=";
   };
 
   patches = [
@@ -130,4 +130,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };
-}
+} // (if withQt5 then { dontWrapQtApps = true; } else {})
+)

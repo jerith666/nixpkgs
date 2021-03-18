@@ -1,4 +1,4 @@
-{ mkDerivation, cmake, fetchFromGitHub, libvncserver, qemu, qtbase, lib, stdenv
+{ mkDerivation, cmake, fetchFromGitHub, libvncserver, qemu, qtbase, lib
 }:
 
 mkDerivation rec {
@@ -22,5 +22,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ hrdinka ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }

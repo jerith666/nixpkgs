@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
+{ lib, fetchFromGitHub, erlang, makeWrapper, coreutils, bash, buildRebar3, buildHex }:
 
 { baseName ? "lfe"
 , version
@@ -87,7 +87,7 @@ buildRebar3 {
     downloadPage = "https://github.com/rvirding/lfe/releases";
 
     license      = licenses.asl20;
-    maintainers  = with maintainers; [ yurrriq ankhers ];
+    maintainers  = teams.beam.members;
     platforms    = platforms.unix;
   };
 }

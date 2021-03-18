@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , wrapQtAppsHook
 , pcsclite
@@ -10,13 +11,9 @@
 , qtgraphicaleffects
 , qtquickcontrols
 , qtquickcontrols2
-, qtdeclarative
-, qtsvg
 , yubikey-manager
 , yubikey-personalization
 }:
-
-let inherit (stdenv) lib; in
 
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
@@ -34,8 +31,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ pythonPackages.python qtbase qtgraphicaleffects qtquickcontrols qtquickcontrols2 pyotherside ];
-
-  enableParallelBuilding = true;
 
   pythonPath = [ yubikey-manager ];
 

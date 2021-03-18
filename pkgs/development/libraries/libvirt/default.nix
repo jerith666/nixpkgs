@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchgit
 , makeWrapper, autoreconfHook, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
+, coreutils, libxml2, gnutls, perl, python3, attr, glib, docutils
 , iproute, readline, lvm2, util-linux, systemd, libpciaccess, gettext
 , libtasn1, iptables, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -31,19 +31,19 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.8.0";
+  version = "7.0.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "https://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "0hhk2r0dnm9zmfwmnsnmnacm4pik6z60llp22axx7kcpqxv98nv5";
+        sha256 = "12fxkpy7j2qhfxypw9jg3bzdd9xx6vf6x96iy5kjihh89n236f6a";
       }
     else
       fetchgit {
         url = "https://gitlab.com/libvirt/libvirt.git";
         rev = "v${version}";
-        sha256 = "sha256-BQZPdmDE0g7xWd6QOHMKosP2HgVpIjsfgfohA9VxEHs=";
+        sha256 = "0xg9d410008mny73r2cp5ipghqpk0gz9gy7j32vcfk691dq75b3c";
         fetchSubmodules = true;
       };
 
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion pkg-config
-    libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
+    libxml2 gnutls perl python3 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib dbus
   ] ++ optionals stdenv.isLinux [
     audit libpciaccess lvm2 util-linux systemd libnl numad zfs
@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
-    patchShebangs . # fixes /usr/bin/python references
+    patchShebangs .
   ''
   + (lib.concatStringsSep "\n" (lib.mapAttrsToList patchBuilder overrides));
 
@@ -111,7 +111,6 @@ in stdenv.mkDerivation rec {
     "-Ddriver_esx=enabled"
     "-Ddriver_remote=enabled"
     "-Dpolkit=enabled"
-    "-Ddbus=enabled"
     (opt "storage_iscsi" enableIscsi)
   ] ++ optionals stdenv.isLinux [
     (opt "storage_zfs" (zfs != null))
@@ -119,8 +118,6 @@ in stdenv.mkDerivation rec {
     "-Dapparmor=enabled"
     "-Dsecdriver_apparmor=enabled"
     "-Dnumad=enabled"
-    "-Dmacvtap=enabled"
-    "-Dvirtualport=enabled"
     "-Dstorage_disk=enabled"
     (opt "storage_rbd" enableCeph)
   ] ++ optionals stdenv.isDarwin [

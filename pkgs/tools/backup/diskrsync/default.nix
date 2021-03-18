@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchFromGitHub, lib, stdenv, openssh, makeWrapper }:
+{ buildGoPackage, fetchFromGitHub, lib, openssh, makeWrapper }:
 
 buildGoPackage rec {
   pname = "diskrsync";
@@ -14,7 +14,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/dop251/diskrsync";
   goDeps = ./deps.nix;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   preFixup = ''
     wrapProgram "$out/bin/diskrsync" --argv0 diskrsync --prefix PATH : ${openssh}/bin

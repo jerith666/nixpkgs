@@ -1,5 +1,6 @@
-{ stdenv, fetchzip }@args:
-let lib = import ../extra-lib.nix {inherit (args.stdenv) lib;}; in
+{ lib, stdenv, fetchzip }@args:
+let lib' = lib; in
+let lib = import ../extra-lib.nix {lib = lib';}; in
 with builtins; with lib;
 let
   default-fetcher = {domain ? "github.com", owner ? "", repo, rev, name ? "source", sha256 ? null, ...}@args:
@@ -38,10 +39,13 @@ switch arg [
   { case = isPathString; out = { version = "dev"; src = arg; }; }
   { case = pred.union isVersion isShortVersion;
     out = let v = if isVersion arg then arg else shortVersion arg; in
-      if !release.${v}?sha256 then throw "meta-fetch: a sha256 must be provided for each release"
-      else {
-        version = release.${v}.version or v;
-        src = release.${v}.src or fetcher (location // { rev = releaseRev v; } // release.${v});
+      let
+        given-sha256 = release.${v}.sha256 or "";
+        sha256 = if given-sha256 == "" then lib.fakeSha256 else given-sha256;
+        rv = release.${v} // { inherit sha256; }; in
+      {
+        version = rv.version or v;
+        src = rv.src or fetcher (location // { rev = releaseRev v; } // rv);
       };
     }
   { case = isString;

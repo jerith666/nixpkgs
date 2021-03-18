@@ -1,19 +1,20 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
-  psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
-  qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
-, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch, three-merge, pyls-black, pyls-spyder
+{ lib, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree,
+  jedi, pycodestyle, psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint,
+  keyring, numpydoc, qtconsole, qtawesome, nbconvert, mccabe, pyopengl,
+  cloudpickle, pygments, spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle,
+  watchdog, python-language-server, pyqtwebengine, atomicwrites, pyxdg,
+  diff-match-patch, three-merge, pyls-black, pyls-spyder, flake8
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.2.0";
+  version = "4.2.1";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "44f51473b81c1bfde76097bfb957ec14f580a262b229ae8e90d18f5b82104c95";
+    sha256 = "7f93bc5b8b119cc1e195ce3efcc1598386e082c4096334c1fa2b018938ac79b9";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
@@ -23,6 +24,7 @@ buildPythonPackage rec {
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
     atomicwrites pyxdg diff-match-patch three-merge pyls-black pyls-spyder
+    flake8
   ];
 
   # There is no test for spyder

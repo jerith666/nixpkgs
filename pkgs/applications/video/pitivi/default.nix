@@ -1,5 +1,4 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib
 , fetchurl
 , pkg-config
 , gettext

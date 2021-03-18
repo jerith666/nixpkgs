@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchgit, buildPythonPackage
-, python
+{ lib, fetchgit, buildPythonPackage
 , buildGoModule
 , srht, redis, celery, pyyaml, markdown }:
 

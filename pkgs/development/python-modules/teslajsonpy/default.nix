@@ -1,33 +1,46 @@
 { lib
 , aiohttp
 , backoff
+, beautifulsoup4
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, pytest-asyncio
 , pytestCheckHook
 , wrapt
 }:
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "0.10.4";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18frynmy47i9c24mdy819y2dnjwmhnmkly5mbmhikpbmm6d0yjf1";
+    sha256 = "sha256-s0IZ1UNldYddaR3zJoYS6ey8Kjxd1fr4fOwf0gNNbow=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "dont-use-dummpy-module-bs4.patch";
+      url = "https://github.com/zabuldon/teslajsonpy/pull/138/commits/f5a788e47d8338c8ebb06d954f802ba1ec614db3.patch";
+      sha256 = "0rws7fhxmca8d5w0bkygx8scvzah3yvb3yfhn05qmp73mn3pmcb3";
+    })
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     backoff
+    beautifulsoup4
     wrapt
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  # Not all Home Assistant related check pass
-  disabledTests = [ "test_values_on_init" ];
   pythonImportsCheck = [ "teslajsonpy" ];
 
   meta = with lib; {

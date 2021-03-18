@@ -1,4 +1,4 @@
-{ lib, stdenv, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
+{ lib, appleDerivation, cpio, xnu, Libc, Libm, libdispatch, cctools, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolv, Libnotify, libplatform, libpthread
 , mDNSResponder, launchd, libutil, hfs, darling, darwin-stubs }:
@@ -114,6 +114,8 @@ appleDerivation {
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
+
+  appleHeaders = builtins.readFile ./headers.txt;
 
   meta = with lib; {
     description = "The Mac OS libc/libSystem (tapi library with pure headers)";

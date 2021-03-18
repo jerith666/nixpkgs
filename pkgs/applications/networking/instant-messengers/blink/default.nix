@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+{ lib, fetchdarcs, pythonPackages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
 mkDerivationWith pythonPackages.buildPythonApplication rec {
@@ -22,7 +22,7 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     cjson
     sipsimple
     twisted
-    google_api_python_client
+    google-api-python-client
   ];
 
   buildInputs = [

@@ -3,7 +3,6 @@
 , makeDesktopItem
 , copyDesktopItems
 , fetchFromGitHub
-, fetchpatch
 , gradleGen
 , jdk
 , perl
@@ -30,45 +29,31 @@ let
   # Note: when raising the version, ensure that all SNAPSHOT versions in
   # build.gradle are replaced by a fixed version
   # (the current one at the time of release) (see postPatch).
-  version = "122.1";
+  version = "126.1";
   buildVersion = makeBuildVersion version;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "18m4s81cfb2cr2fj61nf6spiln7cbvx25g42w6fypfikflv3qd8y";
+    sha256 = "cyg4TofSSFLv8pM3zzvc0FxXMiTm+OIchBJF9PDQrkg=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "0inzyj01442da7794cpxlaab7di9gv1snc97cbffqsdxgin16i7d";
+    sha256 = "uBIm82mt1etBB/HrNY6XGa7mmBfwd1E3RtqN8Rk5qeY=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # this is never pinned in upstream, see https://github.com/Anuken/Arc/issues/39
-    rev = "8553049c6fb0d1eaa7f57c1793b96219c84e8ba5";
-    sha256 = "076vnjs2qxd65qq5i37gbmj5v5i04a1vw0kznq986gv9190jj531";
+    rev = "b33dfc5178fcb2613ee68136f4a4869cadc0b06a";
+    sha256 = "1vf68i3pnsixch37285ib7afkwmlrc05v783395jsdjzj9i67lj3";
   };
 
   patches = [
     ./0001-fix-include-path-for-SDL2-on-linux.patch
-    # upstream fix for https://github.com/Anuken/Arc/issues/40, remove on next release
-    (fetchpatch {
-      url = "https://github.com/Anuken/Arc/commit/b2f3d212c1a88a62f140f5cb04f4c86e61332d1c.patch";
-      sha256 = "1yjp4drv7lk3kinzy47g8jhb2qazr92b85vbc79vsqrs8sycskan";
-      extraPrefix = "Arc/";
-      stripLen = 1;
-    })
-    # add resolveDependencies task, remove when and if it gets added upstream in a future release
-    (fetchpatch {
-      url = "https://github.com/Anuken/Mindustry/pull/4302.patch";
-      sha256 = "0yp42sray4fxkajhpdljal0wss8jh9rvmclysw6cixsa94pw5khq";
-      extraPrefix = "Mindustry/";
-      stripLen = 1;
-    })
   ];
 
   unpackPhase = ''
@@ -103,7 +88,7 @@ let
   '';
 
   # The default one still uses jdk8 (#89731)
-  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_7;
+  gradle_6 = (gradleGen.override (old: { java = jdk; })).gradle_6_8;
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
@@ -129,7 +114,7 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "09rwyrg2yv8r499b0dk1bzvymsf98d4j5b95bwd9s4xvrz71is3l";
+    outputHash = "Mw8LZ1iW6vn4RkBBs8SWHp6mo2Bhj7tMZjLbyuJUqSI=";
   };
 
 in

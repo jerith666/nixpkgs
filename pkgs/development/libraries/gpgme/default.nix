@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook, libgpgerror, gnupg, pkg-config, glib, pth, libassuan
 , file, which, ncurses
 , texinfo
@@ -8,7 +8,6 @@
 }:
 
 let
-  inherit (stdenv) lib;
   inherit (stdenv.hostPlatform) system;
 in
 
@@ -49,6 +48,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals pythonSupport [ python swig2 which ncurses ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  dontWrapQtApps = true;
 
   configureFlags = [
     "--enable-fixed-path=${gnupg}/bin"

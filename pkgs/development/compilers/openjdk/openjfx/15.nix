@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradleGen
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
-, ffmpeg_3, python, ruby }:
+, ffmpeg, python3, ruby }:
 
 let
   major = "15";
@@ -21,8 +21,8 @@ let
       sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
     };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg_3 ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python ruby ];
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
+    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
 
@@ -65,9 +65,7 @@ let
     # Downloaded AWT jars differ by platform.
     outputHash = {
       x86_64-linux = "0hmyr5nnjgwyw3fcwqf0crqg9lny27jfirycg3xmkzbcrwqd6qkw";
-      # The build-time dependencies don't currently build for i686, so no
-      # reason to fetch this one correctly either...
-      i686-linux = "0000000000000000000000000000000000000000000000000000";
+      i686-linux = "0hx69p2z96p7jbyq4r20jykkb8gx6r8q2cj7m30pldlsw3650bqx";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 

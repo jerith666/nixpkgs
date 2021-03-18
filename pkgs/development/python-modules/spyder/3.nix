@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
+{ lib, buildPythonPackage, fetchFromGitHub, jedi, pycodestyle,
   psutil, pyflakes, rope, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels_0_5, qtpy, pyzmq, chardet, pyqtwebengine
@@ -30,6 +30,8 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
+
+  pythonImportsCheck = [ "spyder" ];
 
   meta = with lib; {
     description = "Library providing a scientific python development environment";

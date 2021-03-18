@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
+{ lib, buildPythonPackage, fetchFromGitHub, pkgs, qtbase, qmake, soqt }:
 
 buildPythonPackage rec {
   pname = "pivy";
@@ -10,6 +10,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0vids7sxk8w5vr73xdnf8xdci71a7syl6cd35aiisppbqyyfmykx";
   };
+
+  dontUseCmakeConfigure = true;
 
   nativeBuildInputs = with pkgs; [
     swig qmake cmake
@@ -29,8 +31,7 @@ buildPythonPackage rec {
   ];
 
   dontUseQmakeConfigure = true;
-  dontUseCmakeConfigure = true;
-
+  dontWrapQtApps =true;
   doCheck = false;
 
   postPatch = ''

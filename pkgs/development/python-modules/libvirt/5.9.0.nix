@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchgit, pkg-config, lxml, libvirt, nose }:
+{ lib, buildPythonPackage, fetchgit, pkg-config, lxml, libvirt, nose }:
 
 buildPythonPackage rec {
   pname = "libvirt";
@@ -17,6 +17,10 @@ buildPythonPackage rec {
   checkPhase = ''
     nosetests
   '';
+
+  passthru = {
+    inherit libvirt;
+  };
 
   meta = with lib; {
     homepage = "http://www.libvirt.org/";

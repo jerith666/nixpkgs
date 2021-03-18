@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchFromGitLab
 , cargo
 , dbus
@@ -14,7 +14,6 @@
 , openssl
 , pkg-config
 , python3
-, rust
 , rustc
 , rustPlatform
 , sqlite

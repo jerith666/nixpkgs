@@ -1,5 +1,4 @@
-{ lib, stdenv, fetchhg, buildPythonPackage
-, python
+{ lib, fetchhg, buildPythonPackage
 , srht, hglib, scmsrht, unidiff }:
 
 buildPythonPackage rec {

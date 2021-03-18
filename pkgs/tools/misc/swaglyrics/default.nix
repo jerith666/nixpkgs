@@ -1,4 +1,4 @@
-{ stdenv, lib, python3, fetchFromGitHub, ncurses }:
+{ lib, python3, fetchFromGitHub, ncurses }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "swaglyrics";
@@ -42,6 +42,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

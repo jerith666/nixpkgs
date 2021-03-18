@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "lieer";
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     notmuch
     oauth2client
-    google_api_python_client
+    google-api-python-client
     tqdm
     setuptools
   ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
@@ -24,7 +24,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   buildTools = [];
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive

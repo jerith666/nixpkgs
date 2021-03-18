@@ -3,9 +3,10 @@
 , qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
 , dee, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 , tl-expected, hunspell
-# TODO: Shouldn't be required:
-, pcre, xorg, util-linux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
-, xdg_utils
+# Transitive dependencies:
+, pcre, xorg, util-linux, libselinux, libsepol, epoxy
+, at-spi2-core, libXtst, libthai, libdatrie
+, xdg-utils
 }:
 
 with lib;
@@ -22,12 +23,12 @@ let
 
 in mkDerivation rec {
   pname = "telegram-desktop";
-  version = "2.5.1";
+  version = "2.6.1";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1qpap599h2c4hlmr00k82r6138ym4zqrbfpvm97gm97adn3mxk7i";
+    sha256 = "0wwb18wnh9sbfc6h7m8lj8qmc2n2p0zmp2977ddif6k2gi6qr1y7";
   };
 
   postPatch = ''
@@ -44,12 +45,13 @@ in mkDerivation rec {
   nativeBuildInputs = [ pkg-config cmake ninja python3 wrapGAppsHook wrapQtAppsHook removeReferencesTo ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
+    qtbase qtimageformats gtk3 libsForQt5.kwayland libsForQt5.libdbusmenu enchant2 lz4 xxHash
     dee ffmpeg openalSoft minizip libopus alsaLib libpulseaudio range-v3
     tl-expected hunspell
     tg_owt
-    # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy at-spi2-core libXtst
+    # Transitive dependencies:
+    pcre xorg.libpthreadstubs xorg.libXdmcp util-linux libselinux libsepol epoxy
+    at-spi2-core libXtst libthai libdatrie
   ];
 
   cmakeFlags = [
@@ -83,7 +85,7 @@ in mkDerivation rec {
     wrapProgram $out/bin/telegram-desktop \
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}" \
-      --prefix PATH : ${xdg_utils}/bin \
+      --prefix PATH : ${xdg-utils}/bin \
       --set XDG_RUNTIME_DIR "XDG-RUNTIME-DIR"
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","

@@ -1,28 +1,34 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, poetry
 , isPy27
 , docopt
 , easywatch
 , jinja2
 , pytestCheckHook
+, pytest-check
 , markdown
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
-  version = "0.4.0";
+  version = "1.0.4";
+  format = "pyproject";
 
   disabled = isPy27; # 0.4.0 drops python2 support
 
-  # For some reason, in pypi the tests get disabled when using
-  # PY_IGNORE_IMPORTMISMATCH, so we just fetch from GitHub
+  # No tests in pypi
   src = fetchFromGitHub {
     owner = "staticjinja";
     repo = pname;
     rev = version;
-    sha256 = "0pysk8pzmcg1nfxz8m4i6bvww71w2zg6xp33zgg5vrf8yd2dfx9i";
+    sha256 = "1saz6f71s693gz9c2k3bq2di2mrkj65mgmfdg86jk0z0zzjk90y1";
   };
+
+  nativeBuildInputs = [
+    poetry
+  ];
 
   propagatedBuildInputs = [
     jinja2
@@ -32,13 +38,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    pytest-check
     markdown
   ];
 
-  # Import paths differ by a "build/lib" subdirectory, but the files are
-  # the same, so we ignore import mismatches.
+  # The tests need to find and call the installed staticjinja executable
   preCheck = ''
-    export PY_IGNORE_IMPORTMISMATCH=1
+    export PATH="$PATH:$out/bin";
   '';
 
   meta = with lib; {

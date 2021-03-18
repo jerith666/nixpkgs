@@ -447,7 +447,7 @@ rec {
 
     meta = with lib; {
       homepage = "https://github.com/ddekany/jbosstools-freemarker";
-      description = "Plugin that provides an editor for Apache FreeMarker .ftl (and .ftlh, .ftlx, etc.) files with syntax error markers as you type, syntax highlighting (for the template language only), and some code completion.";
+      description = "Plugin that provides an editor for Apache FreeMarker files";
     };
   };
 

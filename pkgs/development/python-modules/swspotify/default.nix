@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, requests, flask-cors, dbus-python, pytestCheckHook, mock, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, requests, flask-cors, dbus-python, pytestCheckHook, mock, isPy27 }:
 
 buildPythonPackage rec {
   pname = "SwSpotify";
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Library to get the currently playing song and artist from Spotify";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms = lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

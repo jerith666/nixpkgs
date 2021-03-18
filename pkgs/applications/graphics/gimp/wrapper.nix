@@ -1,4 +1,4 @@
-{ stdenv, lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome3, plugins ? null}:
+{ lib, symlinkJoin, gimp, makeWrapper, gimpPlugins, gnome3, plugins ? null}:
 
 let
 allPlugins = lib.filter (pkg: lib.isDerivation pkg && !pkg.meta.broken or false) (lib.attrValues gimpPlugins);
@@ -11,7 +11,7 @@ in symlinkJoin {
 
   paths = [ gimp ] ++ selectedPlugins;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
     for each in gimp-${versionBranch} gimp-console-${versionBranch}; do

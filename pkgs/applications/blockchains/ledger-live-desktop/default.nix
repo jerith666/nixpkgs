@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, appimageTools, imagemagick }:
+{ lib, fetchurl, appimageTools, imagemagick }:
 
 let
   pname = "ledger-live-desktop";
-  version = "2.19.0";
+  version = "2.23.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    sha256 = "13z4v64z58b8fxph3rgjqy1z1y2agmarfr8cihlkf0ndssicasdl";
+    sha256 = "0id9zbpfq3knv8qwkhplbl9pwrvdkn212pafwh4vpjbbp4yimhq5";
   };
 
   appimageContents = appimageTools.extractType2 {

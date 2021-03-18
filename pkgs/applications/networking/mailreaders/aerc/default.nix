@@ -1,7 +1,6 @@
-{ lib, stdenv, buildGoModule, fetchurl
-, go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante
-, fetchFromGitHub
+{ lib, buildGoModule, fetchurl
+, ncurses, notmuch, scdoc
+, python3, w3m, dante
 }:
 
 buildGoModule rec {

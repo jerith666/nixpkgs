@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , inflect
 , jinja2
 , jinja2_pluralize
@@ -6,7 +6,6 @@
 , six
 # test dependencies
 , coverage
-, flake8
 , mock
 , nose
 , pycodestyle

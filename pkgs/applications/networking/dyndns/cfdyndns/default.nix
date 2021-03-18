@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl }:
 
 with rustPlatform;
 
@@ -16,11 +16,6 @@ buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p $releaseDir/cfdyndns $out/bin/
-  '';
 
   meta = with lib; {
     description = "CloudFlare Dynamic DNS Client";

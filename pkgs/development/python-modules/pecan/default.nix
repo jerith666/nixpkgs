@@ -1,4 +1,4 @@
-{ lib, stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
 , isPy27
@@ -16,7 +16,6 @@
 , Kajiki
 , mock
 , sqlalchemy
-, uwsgi
 , virtualenv
 }:
 
