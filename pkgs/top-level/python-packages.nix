@@ -951,6 +951,8 @@ in {
 
   bellows = callPackage ../development/python-modules/bellows { };
 
+  beniget = callPackage ../development/python-modules/beniget { };
+
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
@@ -2184,6 +2186,8 @@ in {
 
   evernote = callPackage ../development/python-modules/evernote { };
 
+  evohome-async = callPackage ../development/python-modules/evohome-async { };
+
   ewmh = callPackage ../development/python-modules/ewmh { };
 
   exdown = callPackage ../development/python-modules/exdown { };
@@ -3253,6 +3257,8 @@ in {
   };
 
   imutils = callPackage ../development/python-modules/imutils { };
+
+  incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
 
@@ -5949,6 +5955,8 @@ in {
 
   pynest2d = callPackage ../development/python-modules/pynest2d { };
 
+  pynetdicom = callPackage ../development/python-modules/pynetdicom { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 { };
@@ -6777,6 +6785,8 @@ in {
   python-wink = callPackage ../development/python-modules/python-wink { };
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
+
+  pythran = callPackage ../development/python-modules/pythran { };
 
   pyeverlights = callPackage ../development/python-modules/pyeverlights { };
 
@@ -8849,6 +8859,8 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xml2rfc = callPackage ../development/python-modules/xml2rfc { };
+
+  xmldiff = callPackage ../development/python-modules/xmldiff { };
 
   xmljson = callPackage ../development/python-modules/xmljson { };
 
