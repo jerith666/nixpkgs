@@ -1530,8 +1530,6 @@ self: super: {
 
   cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
 
-  size-based = doJailbreak super.size-based;
-
   language-ecmascript = doJailbreak super.language-ecmascript;
 
   servant-js = doJailbreak super.servant-js;
