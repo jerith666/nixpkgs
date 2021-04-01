@@ -638,7 +638,7 @@ are disabled.
 
 #### Using pythonImportsCheck
 
-Although unit tests are highly prefered to valid correctness of a package. Not
+Although unit tests are highly prefered to validate correctness of a package, not
 all packages have test suites that can be ran easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.
@@ -1487,11 +1487,12 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   nixpkgs.config.packageOverrides = super: {
     python = super.python.override {
       packageOverrides = python-self: python-super: {
-        zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-          src = super.fetchgit {
-            url = "https://github.com/sametmax/0bin";
-            rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-            sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+        twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+          src = super.fetchPipy {
+            pname = "twisted";
+            version = "19.10.0";
+            sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+            extension = "tar.bz2";
           };
         });
       };
@@ -1499,9 +1500,11 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
   };
 ```
 
-`pythonPackages.zerobin` is now globally overridden. All packages and also the
-`zerobin` NixOS service use the new definition. Note that `python-super` refers
-to the old package set and `python-self` to the new, overridden version.
+`pythonPackages.twisted` is now globally overridden.
+All packages and also all NixOS services that reference `twisted`
+(such as `services.buildbot-worker`) now use the new definition.
+Note that `python-super` refers to the old package set and `python-self`
+to the new, overridden version.
 
 To modify only a Python package set instead of a whole Python derivation, use
 this snippet:
@@ -1509,7 +1512,7 @@ this snippet:
 ```nix
   myPythonPackages = pythonPackages.override {
     overrides = self: super: {
-      zerobin = ...;
+      twisted = ...;
     };
   }
 ```
@@ -1522,11 +1525,12 @@ Use the following overlay template:
 self: super: {
   python = super.python.override {
     packageOverrides = python-self: python-super: {
-      zerobin = python-super.zerobin.overrideAttrs (oldAttrs: {
-        src = super.fetchgit {
-          url = "https://github.com/sametmax/0bin";
-          rev = "a344dbb18fe7a855d0742b9a1cede7ce423b34ec";
-          sha256 = "16d769kmnrpbdr0ph0whyf4yff5df6zi4kmwx7sz1d3r6c8p6xji";
+      twisted = python-super.twisted.overrideAttrs (oldAttrs: {
+        src = super.fetchPypi {
+          pname = "twisted";
+          version = "19.10.0";
+          sha256 = "7394ba7f272ae722a74f3d969dcf599bc4ef093bc392038748a490f1724a515d";
+          extension = "tar.bz2";
         };
       });
     };
@@ -1551,13 +1555,11 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 
 ### Contributing guidelines
 
-Following rules are desired to be respected:
+The following rules are desired to be respected:
 
 * Python libraries are called from `python-packages.nix` and packaged with
   `buildPythonPackage`. The expression of a library should be in
   `pkgs/development/python-modules/<name>/default.nix`.
-* Libraries in `pkgs/top-level/python-packages.nix` are sorted
-  alphanumerically to avoid merge conflicts and ease locating attributes.
 * Python applications live outside of `python-packages.nix` and are packaged
   with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
@@ -1567,8 +1569,11 @@ Following rules are desired to be respected:
   case, when you disable tests, leave a comment explaining why.
 * Commit names of Python libraries should reflect that they are Python
   libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
-* Attribute names in `python-packages.nix` should be normalized according to
-  [PEP 0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This
-  means that characters should be converted to lowercase and `.` and `_` should
-  be replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz )
-* Attribute names in `python-packages.nix` should be sorted alphanumerically.
+* Attribute names in `python-packages.nix` as well as `pname`s should match the
+  library's name on PyPI, but be normalized according to [PEP
+  0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means
+  that characters should be converted to lowercase and `.` and `_` should be
+  replaced by a single `-` (foo-bar-baz instead of Foo__Bar.baz).
+  If necessary, `pname` has to be given a different value within `fetchPypi`.
+* Attribute names in `python-packages.nix` should be sorted alphanumerically to
+  avoid merge conflicts and ease locating attributes.

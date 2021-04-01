@@ -155,6 +155,7 @@
   ./programs/nm-applet.nix
   ./programs/npm.nix
   ./programs/oblogout.nix
+  ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
@@ -177,6 +178,7 @@
   ./programs/tmux.nix
   ./programs/traceroute.nix
   ./programs/tsm-client.nix
+  ./programs/turbovnc.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
   ./programs/vim.nix
@@ -460,6 +462,8 @@
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/dwm-status.nix
+  ./services/misc/dysnomia.nix
+  ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
   ./services/misc/domoticz.nix
   ./services/misc/errbot.nix
@@ -682,6 +686,7 @@
   ./services/networking/i2p.nix
   ./services/networking/icecream/scheduler.nix
   ./services/networking/icecream/daemon.nix
+  ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
@@ -884,6 +889,7 @@
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
+  ./services/web-apps/bookstack.nix
   ./services/web-apps/convos.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
@@ -922,6 +928,7 @@
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/virtlyst.nix
+  ./services/web-apps/wiki-js.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wordpress.nix
   ./services/web-apps/youtrack.nix

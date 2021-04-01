@@ -10,7 +10,7 @@ let
 
 common =
   { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , bash, coreutils, gzip, gnutar
+  , bash, coreutils, util-linuxMinimal, gzip, gnutar
   , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
@@ -41,6 +41,7 @@ common =
 
       nativeBuildInputs =
         [ pkg-config ]
+        ++ lib.optionals (is24 && stdenv.isLinux) [ util-linuxMinimal ]
         ++ lib.optionals is24
           [ autoreconfHook
             autoconf-archive
@@ -139,7 +140,7 @@ common =
       doInstallCheck = true; # not cross
 
       # socket path becomes too long otherwise
-      preInstallCheck = lib.optional stdenv.isDarwin ''
+      preInstallCheck = lib.optionalString stdenv.isDarwin ''
         export TMPDIR=$NIX_BUILD_TOP
       '';
 
@@ -213,13 +214,13 @@ in rec {
 
   nixUnstable = lib.lowPrio (callPackage common rec {
     name = "nix-2.4${suffix}";
-    suffix = "pre20210308_1c0e3e4";
+    suffix = "pre20210326_dd77f71";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "1c0e3e453d41b869e4ac7e25dc1c00c349a7c411";
-      sha256 = "17killwp42d25f17yq2jida64j7d0ipz6zish78iqi450yrd9wrd";
+      rev = "dd77f71afe6733e9790dd001125c423cb648b7ce";
+      sha256 = "rVHzrsCtdiWjyLuHnDplG2mx+7dw5VyzZ9ReXxuCvHY=";
     };
 
     inherit storeDir stateDir confDir boehmgc;

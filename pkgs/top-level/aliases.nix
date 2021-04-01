@@ -92,6 +92,7 @@ mapAliases ({
   cargo-tree = throw "cargo-tree has been removed, use the builtin `cargo tree` command instead."; # added 2020-08-20
   casperjs = throw "casperjs has been removed, it was abandoned by upstream and broken.";
   catfish = xfce.catfish; # added 2019-12-22
+  ccnet = throw "ccnet has been removed because seafile does not depend on it anymore"; # added 2021-03-25
   cgmanager = throw "cgmanager was deprecated by lxc and therefore removed from nixpkgs."; # added 2020-06-05
   checkbashism = checkbashisms; # added 2016-08-16
   chronos = throw "chronos has been removed from nixpkgs, as it was unmaintained"; # added 2020-08-15
@@ -99,12 +100,23 @@ mapAliases ({
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   cifs_utils = cifs-utils; # added 2016-08
   ckb = ckb-next; # added 2018-10-21
+
+  # these are for convenience, not for backward compat and shouldn't expire
+  clang5Stdenv = lowPrio llvmPackages_5.stdenv;
+  clang6Stdenv = lowPrio llvmPackages_6.stdenv;
+  clang7Stdenv = lowPrio llvmPackages_7.stdenv;
+  clang8Stdenv = lowPrio llvmPackages_8.stdenv;
+  clang9Stdenv = lowPrio llvmPackages_9.stdenv;
+  clang10Stdenv = lowPrio llvmPackages_10.stdenv;
+  clang11Stdenv = lowPrio llvmPackages_11.stdenv;
+
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   codimd = hedgedoc; # added 2020-11-29
   compton = picom; # added 2019-12-02
   compton-git = compton; # added 2019-05-20
+  concurrencykit = libck; # added 2021-03
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
   coprthr = throw "coprthr has been removed."; # added 2019-12-08
@@ -138,9 +150,6 @@ mapAliases ({
   dbus_glib = dbus-glib; # added 2018-02-25
   dbus_libs = dbus; # added 2018-04-25
   diffuse = throw "diffuse has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
-  disnix = throw "disnix has been removed."; # added 2021-01-27
-  disnixos = throw "disnixos has been removed."; # added 2021-01-27
-  DisnixWebService = throw "DisnixWebService has been removed."; # added 2021-01-27
   dbus_tools = dbus.out; # added 2018-04-25
   deadbeef-mpris2-plugin = deadbeefPlugins.mpris2; # added 2018-02-23
   deadpixi-sam = deadpixi-sam-unstable;
@@ -157,8 +166,6 @@ mapAliases ({
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
-  dydisnix = throw "dydisnix has been removed."; # added 2021-01-27
-  dysnomia = throw "dysnomia has been removed."; # added 2021-01-27
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwm-git = throw "dwm-git has been removed from nixpkgs, as it had no updates for 2 years not serving it's purpose."; # added 2021-02-07
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
@@ -301,6 +308,7 @@ mapAliases ({
   inboxer = throw "inboxer has been removed as it is no longer maintained and no longer works as Google shut down the inbox service this package wrapped.";
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
+  inter-ui = inter; # added 2021-03-27
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
   jamomacore = throw "jamomacore has been removed: abandoned upstream."; # added 2020-11-21
   jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
@@ -458,6 +466,7 @@ mapAliases ({
   openssh_with_kerberos = openssh; # added 2018-01-28
   onnxruntime = throw "onnxruntime has been removed due to poor maintainability"; # added 2020-12-04
   osquery = throw "osquery has been removed."; # added 2019-11-24
+  osxfuse = macfuse-stubs; # added 2021-03-20
   otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
@@ -560,7 +569,9 @@ mapAliases ({
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
+  prometheus-cups-exporter = throw "outdated and broken by design; removed by developer."; # added 2021-03-16
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
+  pyload = throw "pyload has been removed from nixpkgs, as it was unmaintained."; # added 2021-03-21
   pyo3-pack = maturin;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
@@ -633,7 +644,8 @@ mapAliases ({
   sambaMaster = throw "sambaMaster was removed in 2019-09-13: outdated and no longer needed";
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
-  saneBackendsGit = sane-backends-git; # added 2016-01-02
+  saneBackendsGit = sane-backends; # added 2016-01-02
+  sane-backends-git = sane-backends; # added 2021-02-19
   saneFrontends = sane-frontends; # added 2016-01-02
   sapic = throw "sapic was deprecated on 2019-1-19: sapic is bundled with 'tamarin-prover' now";
   scaff = throw "scaff is deprecated - replaced by https://gitlab.com/jD91mZM2/inc (not in nixpkgs yet)"; # added 2020-03-01
@@ -690,7 +702,9 @@ mapAliases ({
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   spice_gtk = spice-gtk; # added 2018-02-25
   spice_protocol = spice-protocol; # added 2018-02-25
-  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_60 instead."; # added 2019-10-16
+  spidermonkey_38 = throw "spidermonkey_38 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
+  spidermonkey_52 = throw "spidermonkey_52 has been removed. Please use spidermonkey_78 instead."; # added 2019-10-16
+  spidermonkey_60 = throw "spidermonkey_60 has been removed. Please use spidermonkey_78 instead."; # added 2021-03-21
   spring-boot = spring-boot-cli; # added 2020-04-24
   sqlite3_analyzer = sqlite-analyzer; # added 2018-05-22
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
@@ -940,16 +954,33 @@ mapAliases ({
     yakuake
   ;
   inherit (plasma5Packages)
-    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth discover
-    kactivitymanagerd kde-cli-tools kde-gtk-config kdeplasma-addons kgamma5
-    kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
-    kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-browser-integration
-    plasma-desktop plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
-    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
-    systemsettings xdg-desktop-portal-kde
+    bluedevil breeze-gtk breeze-qt5 breeze-grub breeze-plymouth
+    discover
+    kactivitymanagerd
+    kde-cli-tools kde-gtk-config kdeplasma-addons
+    kgamma5
+    kinfocenter
+    kmenuedit
+    kscreen kscreenlocker ksshaskpass ksysguard
+    kwallet-pam kwayland-integration kwin kwrited
+    milou
+    oxygen
+    plasma-browser-integration
+    plasma-desktop
+    plasma-integration
+    plasma-nm
+    plasma-pa
+    plasma-systemmonitor
+    plasma-thunderbolt
+    plasma-vault
+    plasma-workspace plasma-workspace-wallpapers
+    polkit-kde-agent powerdevil
+    sddm-kcm systemsettings
+    xdg-desktop-portal-kde
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
+    plasma-applet-virtual-desktop-bar
     kwin-dynamic-workspaces
     kwin-tiling
     krohnkite
