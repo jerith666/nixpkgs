@@ -1527,8 +1527,6 @@ self: super: {
 
   cachix = generateOptparseApplicativeCompletion "cachix" super.cachix;
 
-  language-ecmascript = doJailbreak super.language-ecmascript;
-
   servant-js = doJailbreak super.servant-js;
 
   # 2020-11-23: Jailbreaking until: https://github.com/michaelt/text-pipes/pull/29
