@@ -1129,8 +1129,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
-  threadscope = doJailbreak super.threadscope;
-
   # https://github.com/haskell-servant/servant-blaze/issues/17
   servant-blaze = doJailbreak super.servant-blaze;
 
