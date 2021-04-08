@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e31b472ac92e04ea943723cf781ec168e15049d91a3052203defb81652d2b086";
+    sha256 = "e02f79fba7a470d438eb39017d503498faaf760b17b6b46af1a9de12fd58d311";
   };
 
   pythonImportsCheck = [ "bitarray" ];

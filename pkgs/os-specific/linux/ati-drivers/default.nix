@@ -92,11 +92,11 @@ stdenv.mkDerivation rec {
                  ./patches/4.14.21_4.15.5-npfeiler-flush_tlb_one_kernel.patch
                  ./patches/4.17-manjaro.patch ];
 
+  nativeBuildInputs = [ unzip ];
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
       xorg.libXrandr xorg.libXxf86vm xorg.xorgproto xorg.imake xorg.libICE
       patchelf
-      unzip
       libGLU libGL
       fontconfig
       freetype

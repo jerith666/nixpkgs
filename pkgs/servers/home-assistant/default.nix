@@ -28,6 +28,21 @@ let
     (mkOverride "astral" "1.10.1"
       "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
 
+    # Pinned due to API changes in iaqualink>=2.0, remove after
+    # https://github.com/home-assistant/core/pull/48137 was merged
+    (self: super: {
+      iaqualink = super.iaqualink.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.4";
+        src = fetchFromGitHub {
+          owner = "flz";
+          repo = "iaqualink-py";
+          rev = "v${version}";
+          sha256 = "16mn6nd9x3hm6j6da99qhwbqs95hh8wx21r1h1m9csl76z77n9lh";
+        };
+        checkInputs = oldAttrs.checkInputs ++ [ python3.pkgs.asynctest ];
+      });
+    })
+
     # Pinned due to bug in ring-doorbell 0.7.0
     # https://github.com/tchellomello/python-ring-doorbell/issues/240
     (mkOverride "ring-doorbell" "0.6.2"
@@ -66,7 +81,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.3.3";
+  hassVersion = "2021.3.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -85,7 +100,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "0kfvjpzz6ynw8bwd91nm0aiw1pkrmaydwf1r93dnwi8rmzq10zpb";
+    sha256 = "110pvin39lr40zd3lhb8zvh2wafl0k0dy3nbmc483yafy31xa4kw";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -178,6 +193,7 @@ in with py.pkgs; buildPythonApplication rec {
     "conversation"
     "counter"
     "cover"
+    "deconz"
     "default_config"
     "demo"
     "derivative"
@@ -213,6 +229,7 @@ in with py.pkgs; buildPythonApplication rec {
     "html5"
     "http"
     "hue"
+    "iaqualink"
     "ifttt"
     "image"
     "image_processing"
@@ -250,6 +267,7 @@ in with py.pkgs; buildPythonApplication rec {
     "mqtt_statestream"
     "mullvad"
     "notify"
+    "notion"
     "number"
     "ozw"
     "panel_custom"
@@ -274,13 +292,17 @@ in with py.pkgs; buildPythonApplication rec {
     "search"
     "shell_command"
     "shopping_list"
+    "simplisafe"
     "simulated"
+    "sma"
     "sensor"
     "smarttub"
     "smtp"
+    "solaredge"
     "sql"
     "ssdp"
     "stream"
+    "subaru"
     "sun"
     "switch"
     "system_health"
