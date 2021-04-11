@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.4.0";
+  version = "2021.4.3";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -116,7 +116,7 @@
     "circuit" = ps: with ps; [ ]; # missing inputs: circuit-webhook
     "cisco_ios" = ps: with ps; [ pexpect ];
     "cisco_mobility_express" = ps: with ps; [ ciscomobilityexpress ];
-    "cisco_webex_teams" = ps: with ps; [ ]; # missing inputs: webexteamssdk
+    "cisco_webex_teams" = ps: with ps; [ webexteamssdk ];
     "citybikes" = ps: with ps; [ ];
     "clementine" = ps: with ps; [ ]; # missing inputs: python-clementine-remote
     "clickatell" = ps: with ps; [ ];
@@ -357,7 +357,7 @@
     "homekit" = ps: with ps; [ HAP-python pyqrcode pyturbojpeg aiohttp-cors base36 fnvhash ha-ffmpeg zeroconf ];
     "homekit_controller" = ps: with ps; [ aiohomekit aiohttp-cors zeroconf ];
     "homematic" = ps: with ps; [ pyhomematic ];
-    "homematicip_cloud" = ps: with ps; [ ]; # missing inputs: homematicip
+    "homematicip_cloud" = ps: with ps; [ homematicip ];
     "homeworks" = ps: with ps; [ ]; # missing inputs: pyhomeworks
     "honeywell" = ps: with ps; [ ]; # missing inputs: somecomfort
     "horizon" = ps: with ps; [ ]; # missing inputs: horimote
@@ -581,7 +581,7 @@
     "oem" = ps: with ps; [ ]; # missing inputs: oemthermostat
     "ohmconnect" = ps: with ps; [ defusedxml ];
     "ombi" = ps: with ps; [ ]; # missing inputs: pyombi
-    "omnilogic" = ps: with ps; [ ]; # missing inputs: omnilogic
+    "omnilogic" = ps: with ps; [ omnilogic ];
     "onboarding" = ps: with ps; [ aiohttp-cors pillow ];
     "ondilo_ico" = ps: with ps; [ aiohttp-cors ]; # missing inputs: ondilo
     "onewire" = ps: with ps; [ ]; # missing inputs: pi1wire pyownet

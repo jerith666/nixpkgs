@@ -95,7 +95,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.4.0";
+  hassVersion = "2021.4.3";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -114,7 +114,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "1gkbkyxqsw3isdyskzi0ib07fgqvirnr20jkhrz86vl0k9ix8hwf";
+    sha256 = "00jgnk8vssvk7mdnlijwddwaj56hs1hcyw83r1jqhn5nk5qj3b7q";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -241,6 +241,7 @@ in with py.pkgs; buildPythonApplication rec {
     "homekit_controller"
     "homeassistant"
     "homematic"
+    "homematicip_cloud"
     "html5"
     "http"
     "hue"
@@ -258,6 +259,7 @@ in with py.pkgs; buildPythonApplication rec {
     "intent_script"
     "ipp"
     "kmtronic"
+    "kodi"
     "light"
     "litterrobot"
     "local_file"
@@ -286,6 +288,7 @@ in with py.pkgs; buildPythonApplication rec {
     "notify"
     "notion"
     "number"
+    "omnilogic"
     "ozw"
     "panel_custom"
     "panel_iframe"

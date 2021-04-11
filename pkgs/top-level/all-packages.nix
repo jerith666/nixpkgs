@@ -563,6 +563,7 @@ in
   ociTools = callPackage ../build-support/oci-tools { };
 
   octant = callPackage ../applications/networking/cluster/octant { };
+  octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
   starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -4889,6 +4890,8 @@ in
 
   github-backup = callPackage ../tools/misc/github-backup { };
 
+  github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
+
   gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
@@ -5079,6 +5082,8 @@ in
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
   ldmtool = callPackage ../tools/misc/ldmtool { };
+
+  gphotos-sync = callPackage ../tools/backup/gphotos-sync { };
 
   gpodder = callPackage ../applications/audio/gpodder { };
 
@@ -5338,6 +5343,8 @@ in
     gfortran = null;
     szip = null;
   };
+
+  hdf5_1_10 = callPackage ../tools/misc/hdf5/1.10.nix { };
 
   hdf5-mpi = appendToName "mpi" (hdf5.override {
     szip = null;
@@ -6933,7 +6940,9 @@ in
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
-  ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
+  ntfs3g = callPackage ../tools/filesystems/ntfs-3g {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
 
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
@@ -11182,14 +11191,14 @@ in
   rust_1_45 = callPackage ../development/compilers/rust/1_45.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust_1_50 = callPackage ../development/compilers/rust/1_50.nix {
+  rust_1_51 = callPackage ../development/compilers/rust/1_51.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_50;
+  rust = rust_1_51;
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_50 = rust_1_50.packages.stable;
-  rustPackages = rustPackages_1_50;
+  rustPackages_1_51 = rust_1_51.packages.stable;
+  rustPackages = rustPackages_1_51;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -14208,7 +14217,9 @@ in
 
   cfitsio = callPackage ../development/libraries/science/astronomy/cfitsio { };
 
-  fontconfig = callPackage ../development/libraries/fontconfig { };
+  fontconfig = callPackage ../development/libraries/fontconfig {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
 
   folly = callPackage ../development/libraries/folly { };
 
@@ -17672,7 +17683,9 @@ in
     inherit (llvmPackages) openmp;
   };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
@@ -18307,6 +18320,10 @@ in
     python3Packages = python36Packages;
   };
 
+  doh-proxy-rust = callPackage ../servers/dns/doh-proxy-rust {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   dgraph = callPackage ../servers/dgraph { };
 
   dico = callPackage ../servers/dico { };
@@ -18413,6 +18430,8 @@ in
   gerbera = callPackage ../servers/gerbera {};
 
   gobetween = callPackage ../servers/gobetween { };
+
+  gobgpd = callPackage ../servers/misc/gobgpd { };
 
   graph-cli = callPackage ../tools/graphics/graph-cli { };
 
@@ -19096,6 +19115,9 @@ in
   smcroute = callPackage ../servers/smcroute { };
 
   sogo = callPackage ../servers/web-apps/sogo { };
+
+  spacecookie =
+    haskell.lib.justStaticExecutables haskellPackages.spacecookie;
 
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
@@ -23942,6 +23964,8 @@ in
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
 
+  kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
+
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
@@ -27301,6 +27325,8 @@ in
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
   cbonsai = callPackage ../games/cbonsai { };
+
+  cdogs-sdl = callPackage ../games/cdogs-sdl { };
 
   chessdb = callPackage ../games/chessdb { };
 

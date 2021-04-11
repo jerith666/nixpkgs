@@ -22,7 +22,10 @@ let
 
   namePrefix = python.libPrefix + "-";
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  bootstrapped-pip = if isPy3k then
+    callPackage ../development/python-modules/bootstrapped-pip { }
+  else
+    callPackage ../development/python-modules/bootstrapped-pip/2.nix { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -275,6 +278,8 @@ in {
   aiohttp-socks = callPackage ../development/python-modules/aiohttp-socks { };
 
   aiohttp-swagger = callPackage ../development/python-modules/aiohttp-swagger { };
+
+  aiohttp-wsgi = callPackage ../development/python-modules/aiohttp-wsgi { };
 
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
@@ -935,6 +940,8 @@ in {
   base36 = callPackage ../development/python-modules/base36 { };
 
   base58 = callPackage ../development/python-modules/base58 { };
+
+  baseline = callPackage ../development/python-modules/baseline { };
 
   baselines = callPackage ../development/python-modules/baselines { };
 
@@ -2248,6 +2255,8 @@ in {
 
   executor = callPackage ../development/python-modules/executor { };
 
+  exif = callPackage ../development/python-modules/exif { };
+
   exifread = callPackage ../development/python-modules/exifread { };
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
@@ -3119,6 +3128,8 @@ in {
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   homeassistant-pyozw = callPackage ../development/python-modules/homeassistant-pyozw { };
+
+  homematicip = callPackage ../development/python-modules/homematicip { };
 
   homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
 
@@ -4794,6 +4805,8 @@ in {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  omnilogic = callPackage ../development/python-modules/omnilogic { };
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   onnx = callPackage ../development/python-modules/onnx { };
@@ -5008,6 +5021,8 @@ in {
 
   pathtools = callPackage ../development/python-modules/pathtools { };
 
+  pathvalidate = callPackage ../development/python-modules/pathvalidate { };
+
   patiencediff = callPackage ../development/python-modules/patiencediff { };
 
   patool = callPackage ../development/python-modules/patool { };
@@ -5156,7 +5171,10 @@ in {
 
   pint = callPackage ../development/python-modules/pint { };
 
-  pip = callPackage ../development/python-modules/pip { };
+  pip = if isPy3k then
+    callPackage ../development/python-modules/pip { }
+  else
+    callPackage ../development/python-modules/pip/20.nix { };
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
@@ -5229,6 +5247,8 @@ in {
   pluginbase = callPackage ../development/python-modules/pluginbase { };
 
   plugwise = callPackage ../development/python-modules/plugwise { };
+
+  plum-py = callPackage ../development/python-modules/plum-py { };
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
@@ -6271,6 +6291,8 @@ in {
     inherit (pkgs) xmlsec;
   };
 
+  pysatochip = callPackage ../development/python-modules/pysatochip { };
+
   pysc2 = callPackage ../development/python-modules/pysc2 { };
 
   pyscard = callPackage ../development/python-modules/pyscard {
@@ -6444,16 +6466,22 @@ in {
 
   pytest_5 = callPackage
     ../development/python-modules/pytest/5.nix {
-      # hypothesis tests require pytest that causes dependency cycle
+      # hypothesis & pygments tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override {
+        doCheck = false;
+      };
+      pygments = self.pygments.override {
         doCheck = false;
       };
     };
 
   pytest_6 =
     callPackage ../development/python-modules/pytest {
-      # hypothesis tests require pytest that causes dependency cycle
+      # hypothesis & pygments tests require pytest that causes dependency cycle
       hypothesis = self.hypothesis.override {
+        doCheck = false;
+      };
+      pygments = self.pygments.override {
         doCheck = false;
       };
     };
@@ -8149,9 +8177,13 @@ in {
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tables = if isPy3k then
-    callPackage ../development/python-modules/tables { }
+    callPackage ../development/python-modules/tables {
+      hdf5 = pkgs.hdf5_1_10;
+    }
   else
-    callPackage ../development/python-modules/tables/3.5.nix { };
+    callPackage ../development/python-modules/tables/3.5.nix {
+      hdf5 = pkgs.hdf5_1_10;
+    };
 
   tablib = callPackage ../development/python-modules/tablib { };
 
@@ -8841,6 +8873,8 @@ in {
   webdavclient3 = callPackage ../development/python-modules/webdavclient3 { };
 
   webencodings = callPackage ../development/python-modules/webencodings { };
+
+  webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
 
   webhelpers = callPackage ../development/python-modules/webhelpers { };
 
