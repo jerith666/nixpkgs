@@ -16,7 +16,7 @@ if nixos-rebuild dry-build -I nixpkgs=$wt 2>dryout >dryout; then
         system=$(grep nixos-system dryout);
         echo "building new system store path $system";
         echo;
-        nix build $system;
+        nix build --keep-going $system;
     else
         echo "nixos-rebuild dry-build succeeded without producing a nixos-system path";
         echo "perhaps the system is already built; proceeding with nixos-rebuild";
