@@ -5492,6 +5492,8 @@ in
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
+  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
+
   iftop = callPackage ../tools/networking/iftop { };
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
@@ -6030,7 +6032,9 @@ in
     inherit (python3Packages) ansi2html;
   };
 
-  medfile = callPackage ../development/libraries/medfile { };
+  medfile = callPackage ../development/libraries/medfile {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
 
   meilisearch = callPackage ../servers/search/meilisearch {
     inherit (darwin.apple_sdk.frameworks) IOKit Security;
@@ -6039,6 +6043,8 @@ in
   memtester = callPackage ../tools/system/memtester { };
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
+
+  mftrace = callPackage ../tools/typesetting/tex/mftrace { };
 
   mhonarc = perlPackages.MHonArc;
 
@@ -8666,6 +8672,8 @@ in
 
   tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
+  tf2pulumi = callPackage ../development/tools/tf2pulumi { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
@@ -10825,6 +10833,8 @@ in
 
   javacard-devkit = pkgsi686Linux.callPackage ../development/compilers/javacard-devkit { };
 
+  juniper = callPackage ../development/compilers/juniper/default.nix { };
+
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -11046,6 +11056,8 @@ in
   };
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
+
+  roslyn = callPackage ../development/compilers/roslyn { mono = mono6; };
 
   msbuild = callPackage ../development/tools/build-managers/msbuild { mono = mono6; };
 
@@ -11326,10 +11338,10 @@ in
   rustracerd = callPackage ../development/tools/rust/racerd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  inherit (callPackage ../development/tools/rust/rust-analyzer {
+  rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-  })
-    rust-analyzer-unwrapped rust-analyzer;
+  };
+  rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -13291,6 +13303,10 @@ in
 
   schemaspy = callPackage ../development/tools/database/schemaspy { };
 
+  scenebuilder = callPackage ../development/tools/scenebuilder { };
+
+  scenic-view = callPackage ../development/tools/scenic-view { };
+
   shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
@@ -14764,6 +14780,8 @@ in
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
   hdt = callPackage ../misc/hdt {};
+
+  hfinger = callPackage ../tools/security/hfinger { };
 
   herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
@@ -17277,6 +17295,7 @@ in
     s6-portable-utils = callPackage ../tools/misc/s6-portable-utils { };
     s6-rc = callPackage ../tools/system/s6-rc { };
 
+    mdevd = callPackage ../os-specific/linux/mdevd { };
     nsss = callPackage ../development/libraries/nsss { };
     utmps = callPackage ../development/libraries/utmps { };
     sdnotify-wrapper = callPackage ../os-specific/linux/sdnotify-wrapper { };
@@ -19293,6 +19312,8 @@ in
 
   alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
 
+  alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
+
   alsa-firmware = callPackage ../os-specific/linux/alsa-firmware { };
 
   alsaLib = callPackage ../os-specific/linux/alsa-lib { };
@@ -20269,6 +20290,8 @@ in
 
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
+
+  inherit (skawarePackages) mdevd;
 
   metastore = callPackage ../os-specific/linux/metastore { };
 
@@ -21751,6 +21774,8 @@ in
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+  foxitreader = libsForQt512.callPackage ../applications/misc/foxitreader { };
+
   aeolus = callPackage ../applications/audio/aeolus { };
 
   aewan = callPackage ../applications/editors/aewan { };
@@ -22574,8 +22599,6 @@ in
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
-  esniper = callPackage ../applications/networking/esniper { };
-
   eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
 
   etebase-server = with python3Packages; toPythonApplication etebase-server;
@@ -22690,6 +22713,8 @@ in
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
+
+  foliate = callPackage ../applications/office/foliate { };
 
   fondo = callPackage ../applications/graphics/fondo { };
 
@@ -23904,6 +23929,8 @@ in
     ffmpeg = ffmpeg_2;
   };
 
+  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
@@ -23919,6 +23946,8 @@ in
   kondo = callPackage ../applications/misc/kondo { };
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
+
+  kooha = callPackage ../applications/video/kooha { };
 
   kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
@@ -24880,6 +24909,8 @@ in
   obs-gstreamer = callPackage ../applications/video/obs-studio/obs-gstreamer.nix { };
 
   obs-move-transition = callPackage ../applications/video/obs-studio/obs-move-transition.nix { };
+
+  obs-multi-rtmp = libsForQt5.callPackage ../applications/video/obs-studio/obs-multi-rtmp.nix { };
 
   obs-v4l2sink = libsForQt5.callPackage ../applications/video/obs-studio/v4l2sink.nix { };
 
@@ -25890,7 +25921,6 @@ in
 
   inherit (callPackages ../applications/networking/syncthing { })
     syncthing
-    syncthing-cli
     syncthing-discovery
     syncthing-relay;
 
@@ -26568,6 +26598,10 @@ in
   wmname = callPackage ../applications/misc/wmname { };
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
+
+  wmderland = callPackage ../applications/window-managers/wmderland { };
+
+  wmderlandc = callPackage ../applications/window-managers/wmderlandc { };
 
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
@@ -27925,6 +27959,8 @@ in
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
+  shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
+
   sienna = callPackage ../games/sienna { love = love_0_10; };
 
   sil = callPackage ../games/sil { };
@@ -29220,7 +29256,6 @@ in
 
   celestia = callPackage ../applications/science/astronomy/celestia {
     autoreconfHook = buildPackages.autoreconfHook269;
-    lua = lua5_1;
     inherit (pkgs.gnome2) gtkglext;
   };
 
@@ -29476,6 +29511,8 @@ in
   });
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
+
+  deepspeech = callPackage ../misc/deepspeech { };
 
   dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
@@ -30585,6 +30622,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
+  yapesdl = callPackage ../misc/emulators/yapesdl { };
+
   x16-emulator = callPackage ../misc/emulators/commander-x16/emulator.nix { };
   x16-rom = callPackage ../misc/emulators/commander-x16/rom.nix { };
 
@@ -30710,6 +30749,10 @@ in
   opengrm-ngram = callPackage ../development/libraries/opengrm-ngram {};
 
   openring = callPackage ../applications/misc/openring { };
+
+  openvino = callPackage ../development/libraries/openvino {
+    python = python3;
+  };
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {};
 
