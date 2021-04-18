@@ -561,7 +561,7 @@ rec {
       sha256 = "03wjrv9k4c0g0fm0nypmrfl83k3qqk6z9k01qzy2q26a6qiyzlvb";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://www.eclipse.org/mat/;
       description = "The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption";
       license = licenses.epl10;
