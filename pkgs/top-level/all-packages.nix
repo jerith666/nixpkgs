@@ -758,6 +758,8 @@ in
 
   agda-pkg = callPackage ../development/tools/agda-pkg { };
 
+  agi = callPackage ../tools/graphics/agi { };
+
   agrep = callPackage ../tools/text/agrep { };
 
   aha = callPackage ../tools/text/aha { };
@@ -870,6 +872,8 @@ in
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
   nimmm = callPackage ../applications/terminal-emulators/nimmm { };
+
+  pikchr = callPackage ../tools/graphics/pikchr { };
 
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
@@ -3620,6 +3624,8 @@ in
   cowpatty = callPackage ../tools/security/cowpatty { };
 
   cpio = callPackage ../tools/archivers/cpio { };
+
+  cpufetch = callPackage ../tools/misc/cpufetch { };
 
   crackxls = callPackage ../tools/security/crackxls { };
 
@@ -9036,9 +9042,7 @@ in
 
   uwsgi = callPackage ../servers/uwsgi { };
 
-  v2ray = callPackage ../tools/networking/v2ray {
-    buildGoModule = buildGo115Module;
-  };
+  v2ray = callPackage ../tools/networking/v2ray { };
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
@@ -10745,27 +10749,33 @@ in
     else
       openjdk11.override { headless = true; };
 
-  openjdk15-bootstrap =
-    if adoptopenjdk-hotspot-bin-14.meta.available then
-      adoptopenjdk-hotspot-bin-14
+  openjdk16-bootstrap =
+    if adoptopenjdk-hotspot-bin-15.meta.available then
+      adoptopenjdk-hotspot-bin-15
     else
       /* adoptopenjdk not available for i686, so fall back to our old builds of 12, 13, & 14 for bootstrapping */
-      callPackage ../development/compilers/openjdk/14.nix {
+      callPackage ../development/compilers/openjdk/15.nix {
         openjfx = openjfx11; /* need this despite next line :-( */
         enableJavaFX = false;
         headless = true;
         inherit (gnome2) GConf gnome_vfs;
-        openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
+        openjdk15-bootstrap = callPackage ../development/compilers/openjdk/14.nix {
           openjfx = openjfx11; /* need this despite next line :-( */
           enableJavaFX = false;
           headless = true;
           inherit (gnome2) GConf gnome_vfs;
-          openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
-            stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+          openjdk14-bootstrap = callPackage ../development/compilers/openjdk/13.nix {
             openjfx = openjfx11; /* need this despite next line :-( */
             enableJavaFX = false;
             headless = true;
             inherit (gnome2) GConf gnome_vfs;
+            openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
+              stdenv = gcc8Stdenv; /* build segfaults with gcc9 or newer, so use gcc8 like Debian does */
+              openjfx = openjfx11; /* need this despite next line :-( */
+              enableJavaFX = false;
+              headless = true;
+              inherit (gnome2) GConf gnome_vfs;
+            };
           };
         };
       };
@@ -10774,27 +10784,27 @@ in
   jdk11_headless = openjdk11_headless;
 
   /* Latest JDK */
-  openjdk15 =
+  openjdk16 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
     else
-      callPackage ../development/compilers/openjdk {
+      callPackage ../development/compilers/openjdk/16.nix {
         openjfx = openjfx15;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk15_headless =
+  openjdk16_headless =
     if stdenv.isDarwin then
-      openjdk15
+      openjdk16
     else
-      openjdk15.override { headless = true; };
+      openjdk16.override { headless = true; };
 
-  jdk15 = openjdk15;
-  jdk15_headless = openjdk15_headless;
+  jdk16 = openjdk16;
+  jdk16_headless = openjdk16_headless;
 
   /* default JDK */
 
-  jdk = jdk15;
+  jdk = jdk16;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -10803,13 +10813,13 @@ in
   # 'jre_minimal' to build a bespoke JRE containing only the modules you need.
   #
   # For a general-purpose system, 'jre' defaults to the full JDK:
-  jre = jdk15;
-  jre_headless = jdk15_headless;
+  jre = jdk16;
+  jre_headless = jdk16_headless;
 
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
-  openjdk = openjdk15;
-  openjdk_headless = openjdk15_headless;
+  openjdk = openjdk16;
+  openjdk_headless = openjdk16_headless;
 
   inherit (callPackages ../development/compilers/graalvm {
     gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
@@ -11657,15 +11667,6 @@ in
 
   groovy = callPackage ../development/interpreters/groovy { };
 
-  guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
-
-  # Needed for autogen
-  guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
-
-  guile_2_2 = callPackage ../development/interpreters/guile { };
-
-  guile = guile_2_2;
-
   inherit (callPackages ../applications/networking/cluster/hadoop {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   })
@@ -12087,7 +12088,18 @@ in
 
   gImageReader = callPackage ../applications/misc/gImageReader { };
 
+  guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
+
+  # Needed for autogen
+  guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
+
+  guile_2_2 = callPackage ../development/interpreters/guile { };
+
+  guile = guile_2_2;
+
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
+
+  guile-commonmark = callPackage ../development/guile-modules/guile-commonmark { };
 
   guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
 
@@ -13957,6 +13969,8 @@ in
 
   cog = callPackage ../development/web/cog { };
 
+  cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
+
   ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
@@ -15063,6 +15077,8 @@ in
   krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };
 
+  kronosnet = callPackage ../development/libraries/kronosnet { };
+
   l-smash = callPackage ../development/libraries/l-smash {
     stdenv = gccStdenv;
   };
@@ -15530,6 +15546,8 @@ in
 
   libexosip = callPackage ../development/libraries/exosip {};
 
+  libexsid = callPackage ../development/libraries/libexsid { };
+
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
@@ -15865,7 +15883,9 @@ in
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
-  libminc = callPackage ../development/libraries/libminc { };
+  libminc = callPackage ../development/libraries/libminc {
+    hdf5 = hdf5_1_10;
+  };
 
   libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { };
 
@@ -18959,7 +18979,6 @@ in
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_5
     postgresql_9_6
     postgresql_10
     postgresql_11
@@ -20989,6 +21008,8 @@ in
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
+  courier-prime = callPackage ../data/fonts/courier-prime { };
+
   cozette = callPackage ../data/fonts/cozette { };
 
   culmus = callPackage ../data/fonts/culmus { };
@@ -21306,6 +21327,8 @@ in
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  man-pages-posix = callPackage ../data/documentation/man-pages-posix { };
+
   manrope = callPackage ../data/fonts/manrope { };
 
   marwaita = callPackage ../data/themes/marwaita { };
@@ -21478,8 +21501,6 @@ in
   pop-icon-theme = callPackage ../data/icons/pop-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  posix_man_pages = callPackage ../data/documentation/man-pages-posix { };
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
@@ -22664,6 +22685,8 @@ in
 
   gspeech = callPackage ../applications/audio/gspeech { };
 
+  haruna = libsForQt5.callPackage ../applications/video/haruna { };
+
   icesl = callPackage ../applications/misc/icesl { };
 
   keepassx = callPackage ../applications/misc/keepassx { };
@@ -23515,6 +23538,8 @@ in
     wxGTK = wxGTK30;
   };
 
+  haunt = callPackage ../applications/misc/haunt { };
+
   hugo = callPackage ../applications/misc/hugo { };
 
   go-org = callPackage ../applications/misc/go-org { };
@@ -23990,7 +24015,7 @@ in
 
   kooha = callPackage ../applications/video/kooha { };
 
-  kotatogram-desktop = libsForQt514.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
+  kotatogram-desktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop { };
 
   kpt = callPackage ../applications/networking/cluster/kpt { };
 
@@ -25604,7 +25629,9 @@ in
 
   rtl-ais = callPackage ../applications/radio/rtl-ais { };
 
+  # librtlsdr is a friendly fork with additional features
   rtl-sdr = callPackage ../applications/radio/rtl-sdr { };
+  librtlsdr = callPackage ../development/libraries/librtlsdr { };
 
   rtv = callPackage ../applications/misc/rtv { };
 
@@ -26128,6 +26155,8 @@ in
   };
 
   timewarrior = callPackage ../applications/misc/timewarrior { };
+
+  timg = callPackage ../tools/graphics/timg { };
 
   timidity = callPackage ../tools/misc/timidity { };
 
@@ -26824,13 +26853,17 @@ in
 
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
-  kodi = callPackage ../applications/video/kodi { };
+  kodi = callPackage ../applications/video/kodi {
+    jre_headless = jdk11_headless;
+  };
 
   kodi-wayland = callPackage ../applications/video/kodi {
+    jre_headless = jdk11_headless;
     waylandSupport = true;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
+    jre_headless = jdk11_headless;
     gbmSupport = true;
   };
 
@@ -30340,6 +30373,7 @@ in
     terraform_0_12
     terraform_0_13
     terraform_0_14
+    terraform_0_15
     terraform_plugins_test
     ;
 
