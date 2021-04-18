@@ -31,7 +31,7 @@ let
 
       wrapProgram $out/bin/vpnc-script \
         --set OS ${os} \
-        --prefix PATH : "${stdenv.lib.makeBinPath [nettools gawk openresolv coreutils gnugrep]}"
+        --prefix PATH : "${lib.makeBinPath [nettools gawk openresolv coreutils gnugrep]}"
     '';
   };
 
