@@ -5579,6 +5579,10 @@ in
 
   infamousPlugins = callPackage ../applications/audio/infamousPlugins { };
 
+  innernet = callPackage ../tools/networking/innernet {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   innoextract = callPackage ../tools/archivers/innoextract { };
 
   input-utils = callPackage ../os-specific/linux/input-utils { };
@@ -9314,6 +9318,8 @@ in
   tm = callPackage ../tools/system/tm { };
 
   tradcpp = callPackage ../development/tools/tradcpp { };
+
+  traitor = callPackage ../tools/security/traitor { };
 
   tre = callPackage ../development/libraries/tre { };
 
@@ -24249,6 +24255,8 @@ in
     libsoundio = null;
     portaudio = null;
   };
+
+  losslesscut-bin = callPackage ../applications/video/losslesscut-bin { };
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
