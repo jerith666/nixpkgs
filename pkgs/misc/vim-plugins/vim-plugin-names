@@ -25,6 +25,7 @@ ap/vim-css-color
 arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
 autozimu/LanguageClient-neovim
+axelf4/vim-strip-trailing-whitespace
 ayu-theme/ayu-vim
 bakpakin/fennel.vim
 bazelbuild/vim-bazel
@@ -131,6 +132,7 @@ fiatjaf/neuron.vim
 fisadev/vim-isort
 flazz/vim-colorschemes
 floobits/floobits-neovim
+folke/lsp-colors.nvim@main
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fruit-in/brainfuck-vim
@@ -528,6 +530,7 @@ roxma/nvim-cm-racer
 roxma/nvim-completion-manager
 roxma/nvim-yarp
 roxma/vim-tmux-clipboard
+RRethy/nvim-base16
 RRethy/vim-hexokinase
 RRethy/vim-illuminate
 rstacruz/vim-closer
@@ -656,6 +659,7 @@ tremor-rs/tremor-vim@main
 triglav/vim-visual-increment
 troydm/zoomwintab.vim
 tversteeg/registers.nvim@main
+tweekmonster/wstrip.vim
 twerth/ir_black
 twinside/vim-haskellconceal
 Twinside/vim-hoogle
