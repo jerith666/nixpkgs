@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "VPN Client for Cisco's AnyConnect SSL VPN";
-    homepage = "http://www.infradead.org/openconnect/";
-    license = licenses.lgpl21;
+    homepage = "https://www.infradead.org/openconnect/";
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ pradeepchhetri tricktron ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
