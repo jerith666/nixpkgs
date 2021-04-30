@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub
 , qmake, qtwebsockets, qtwebengine, wrapQtAppsHook, openconnect
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
       GPService/GPService.pro \
       GPService/dbus/com.yuezk.qt.GPService.service \
       GPService/systemd/gpservice.service; do
-        substituteInPlace $f --replace /usr $out;
-        substituteInPlace $f --replace /etc $out/lib;
+        substituteInPlace $f \
+          --replace /usr $out \
+          --replace /etc $out/lib;
     done;
 
     substituteInPlace GPService/gpservice.h \
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = [ maintainers.jerith666 ];
     platforms = platforms.linux;
   };
