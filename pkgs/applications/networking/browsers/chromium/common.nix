@@ -7,8 +7,8 @@
 , xdg-utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkg-config
-, nspr, systemd, kerberos
+, python2Packages, python3Packages, perl, pkg-config
+, nspr, systemd, libkrb5
 , util-linux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
@@ -42,6 +42,16 @@ with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  # TODO: Python 3 support is incomplete and "python3 ../../build/util/python2_action.py"
+  # currently doesn't work due to mixed Python 2/3 dependencies:
+  pythonPackages = if chromiumVersionAtLeast "93"
+    then python3Packages
+    else python2Packages;
+  forcePython3Patch = (githubPatch
+    # Reland #8 of "Force Python 3 to be used in build."":
+    "a2d3c362802d9e6b62f895fcda75a3695b77b1b8"
+    "1r9spr2wmjk9x9l3m1gzn6692mlvbxdz0r5hlr5rfwiwr900rxi2"
+  );
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -127,15 +137,15 @@ let
 
     nativeBuildInputs = [
       llvmPackages.lldClang.bintools
-      ninja which python2Packages.python perl pkg-config
-      python2Packages.ply python2Packages.jinja2 nodejs
-      gnutar python2Packages.setuptools
+      ninja which pythonPackages.python perl pkg-config
+      pythonPackages.ply pythonPackages.jinja2 nodejs
+      gnutar pythonPackages.setuptools
     ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
       util-linux alsaLib
-      bison gperf kerberos
+      bison gperf libkrb5
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
@@ -156,9 +166,21 @@ let
       # To fix the build of chromiumBeta and chromiumDev:
       "b5b80df7dafba8cafa4c6c0ba2153dfda467dfc9" # add dependency on opus in webcodecs
       "1r4wmwaxz5xbffmj5wspv2xj8s32j9p6jnwimjmalqg3al2ba64x"
-    );
+    ) ++ optional (versionRange "89" "90.0.4422.0") (fetchpatch {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/61b0ab526d2aa3c62fa20bb756461ca9a482f6c6/trunk/chromium-fix-libva-redef.patch";
+      sha256 = "1qj4sn1ngz0p1l1w3346kanr1sqlr3xdzk1f1i86lqa45mhv77ny";
+    }) ++ optional (chromiumVersionAtLeast "90")
+      ./patches/fix-missing-atspi2-dependency.patch
+    ++ optionals (chromiumVersionAtLeast "91") [
+      ./patches/closure_compiler-Use-the-Java-binary-from-the-system.patch
+    ];
 
-    postPatch = ''
+    postPatch = lib.optionalString (chromiumVersionAtLeast "91") ''
+      # Required for patchShebangs (unsupported):
+      chmod -x third_party/webgpu-cts/src/tools/deno
+    '' + optionalString (chromiumVersionAtLeast "92") ''
+      patch -p1 --reverse < ${forcePython3Patch}
+    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then

@@ -5,9 +5,10 @@
 , makeWrapper
 , pkg-config
 , which
-, yacc
+, bison
 , gnuplot
 , libxls
+, libxlsxwriter
 , libxml2
 , libzip
 , ncurses
@@ -15,26 +16,24 @@
 
 stdenv.mkDerivation rec {
   pname = "sc-im";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "andmarti1424";
     repo = "sc-im";
     rev = "v${version}";
-    sha256 = "sha256-/eG2BdkyfEGoSzPu6jT+Bn1RZTGT1D3etGj1tYchm1M=";
+    sha256 = "sha256-AIYa3d1ml1f5GNLKijeFPX+UabgEqzdXiP60BGvBPsQ=";
   };
 
   sourceRoot = "${src.name}/src";
 
-  # make default colors readable on dark background
   patches = [
+    # libxls and libxlsxwriter are not found without the patch
+    # https://github.com/andmarti1424/sc-im/pull/542
     (fetchpatch {
-      url = "https://github.com/andmarti1424/sc-im/commit/78d2fdaaf2c578691e68fb5bd773803cb967ddba.patch";
-      sha256 = "09716zsqa9qdsj2qpkji8wlzsmp9gl66ggvrg7lmrwwnvli2zn2w";
-    })
-    (fetchpatch {
-      url = "https://github.com/andmarti1424/sc-im/commit/f29d6605c8170febcec0dea7bda9613bee3b7011.patch";
-      sha256 = "1zs1sb23g0k6lig4d0qdzq1wdhcdzl424ch567zyjl191lyhsjyg";
+      name = "use-pkg-config-for-libxls-and-libxlsxwriter.patch";
+      url = "https://github.com/andmarti1424/sc-im/commit/b62dc25eb808e18a8ab7ee7d8eb290e34efeb075.patch";
+      sha256 = "1yn32ps74ngzg3rbkqf8dn0g19jv4xhxrfgx9agnywf0x8gbwjh3";
     })
   ];
 
@@ -44,12 +43,13 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     which
-    yacc
+    bison
   ];
 
   buildInputs = [
     gnuplot
     libxls
+    libxlsxwriter
     libxml2
     libzip
     ncurses

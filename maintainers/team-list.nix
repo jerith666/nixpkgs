@@ -56,6 +56,15 @@ with lib.maintainers; {
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
   };
 
+  determinatesystems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      cole-h
+      grahamc
+    ];
+    scope = "Group registration for packages maintained by Determinate Systems.";
+  };
+
   freedesktop = {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
@@ -85,6 +94,16 @@ with lib.maintainers; {
       maxeaubrey
     ];
     scope = "Maintain GNOME desktop environment and platform.";
+  };
+
+  home-assistant = {
+    members = [
+      fab
+      globin
+      hexa
+      mic92
+    ];
+    scope = "Maintain the Home Assistant ecosystem";
   };
 
   jitsi = {

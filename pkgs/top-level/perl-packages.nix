@@ -4481,6 +4481,20 @@ let
     propagatedBuildInputs = [ Clone ];
   };
 
+  CSSMinifier = buildPerlPackage {
+    pname = "CSS-Minifier";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PM/PMICHAUX/CSS-Minifier-0.01.tar.gz";
+      sha256 = "0Kk0m46LfoOrcM+IVM+7Qv8pwfbHyCmPIlfdIaoMf+8=";
+    };
+    meta = with lib; {
+      description = "Perl extension for minifying CSS";
+      license = licenses.artistic1;
+      maintainers = teams.determinatesystems.members;
+    };
+  };
+
   CSSMinifierXS = buildPerlModule {
     pname = "CSS-Minifier-XS";
     version = "0.09";
@@ -10884,10 +10898,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "4.14";
+    version = "4.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.14.tar.gz";
-      sha256 = "16zaaw7p94nz7yclz30b9xph0riy5ailqg5rjkvi1yps2hr9ba7z";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-4.16.tar.gz";
+      sha256 = "0mhdczx2pxzi4lrrzkxl2a3r0s2b79ffsrar6g2l01idfpri6gi2";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
@@ -11259,10 +11273,10 @@ let
 
   LinkEmbedder = buildPerlPackage {
     pname = "LinkEmbedder";
-    version = "1.17";
+    version = "1.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.17.tar.gz";
-      sha256 = "10r1q2xfba59w818li5xaj6jlph9qla7vb99ir1ampq5n8g0s5i6";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/LinkEmbedder-1.18.tar.gz";
+      sha256 = "17gnixbawzr0r1k37dry7axb7ry6sj2xiahki28m8qbk1l69dfjz";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ Mojolicious ];
@@ -13524,10 +13538,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.10";
+    version = "9.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.10.tar.gz";
-      sha256 = "0y4ccy85vh7nily2y1c457f687qc8rwi4mnx13619hslkagw4rqw";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.17.tar.gz";
+      sha256 = "13dxjhr03dhh1f5bbxbb3jiwdv7jby96qqb97l3arf5x043yd9hd";
     };
     meta = {
       homepage = "https://mojolicious.org";
@@ -13586,10 +13600,10 @@ let
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "4.00";
+    version = "4.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-4.00.tar.gz";
-      sha256 = "1npnbygs12d683m5i6cgvdmw6glvppnv75f4qpp908fdz8lwcb2z";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-4.02.tar.gz";
+      sha256 = "0rkkkcd3y3gjj0kis0hrab6mz8rk1qd57nz4npy39bag6h1kpyfv";
     };
     propagatedBuildInputs = [ JSONValidator ];
     meta = {
@@ -13602,12 +13616,12 @@ let
 
   MojoliciousPluginStatus = buildPerlPackage {
     pname = "Mojolicious-Plugin-Status";
-    version = "1.12";
+    version = "1.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.12.tar.gz";
-      sha256 = "1hn333220ba3hxl9aks0ywx933zv6klyi3a0iw571q76z5a8r2jn";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-Plugin-Status-1.17.tar.gz";
+      sha256 = "1d475ch43vbfn3h4lsmr3n6rhgxgz670xqj4rcdjd4g1wfpiyasc";
     };
-    propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap Mojolicious ];
+    propagatedBuildInputs = [ BSDResource CpanelJSONXS FileMap Mojolicious Sereal ];
     meta = {
       homepage = "https://github.com/mojolicious/mojo-status";
       description = "Mojolicious server status plugin";
@@ -13618,10 +13632,10 @@ let
 
   MojoliciousPluginTextExceptions = buildPerlPackage {
     pname = "Mojolicious-Plugin-TextExceptions";
-    version = "0.01";
+    version = "0.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Mojolicious-Plugin-TextExceptions-0.01.tar.gz";
-      sha256 = "070daf284c5d3832b7fde42120eaf747aea4cc75de8ff807f77accc84fe4f22e";
+      url = "mirror://cpan/authors/id/M/MR/MRAMBERG/Mojolicious-Plugin-TextExceptions-0.02.tar.gz";
+      sha256 = "0x7qkd9nmarzb7kvk4dvhka4s44mfcd026zz3ikfwk3qql2p86rs";
     };
     propagatedBuildInputs = [ Mojolicious ];
     meta = {
@@ -15114,13 +15128,15 @@ let
 
   NetCIDRLite = buildPerlPackage {
     pname = "Net-CIDR-Lite";
-    version = "0.21";
+    version = "0.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOUGW/Net-CIDR-Lite-0.21.tar.gz";
-      sha256 = "cfa125e8a2aef9259bc3a44e07cbdfb7894b64d22e7c0cee92aee2f5c7915093";
+      url = "mirror://cpan/authors/id/S/ST/STIGTSP/Net-CIDR-Lite-0.22.tar.gz";
+      sha256 = "05w57db2lx4djb4vixzdr6qgrzyzkk047nl812g7nq8s6k5xh5s3";
     };
     meta = {
       description = "Perl extension for merging IPv4 or IPv6 CIDR addresses";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -15424,10 +15440,10 @@ let
 
   NetNetmask = buildPerlPackage {
     pname = "Net-Netmask";
-    version = "1.9104";
+    version = "2.0001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-1.9104.tar.gz";
-      sha256 = "17li2svymz49az35xl6galp4b9qcnb985gzklhikkvkn9da6rz3y";
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0001.tar.gz";
+      sha256 = "0waiix46wv93a5zzjjv7ypdnfdf7lizwrhx12128rcvzcvw6wd8p";
     };
     buildInputs = [ Test2Suite TestUseAllModules ];
     meta = {

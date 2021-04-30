@@ -142,6 +142,9 @@ let
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
       IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
+      IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
+      IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
       NET_CLS_BPF                 = whenAtLeast "4.4" module;
       NET_ACT_BPF                 = whenAtLeast "4.4" module;
       NET_SCHED                   = yes;
@@ -533,7 +536,7 @@ let
       KVM_VFIO                          = yes;
       KSM = yes;
       VIRT_DRIVERS = yes;
-      # We nneed 64 GB (PAE) support for Xen guest support
+      # We need 64 GB (PAE) support for Xen guest support
       HIGHMEM64G = { optional = true; tristate = mkIf (!stdenv.is64bit) "y";};
 
       VFIO_PCI_VGA = mkIf stdenv.is64bit yes;
@@ -680,7 +683,14 @@ let
       DEBUG_MEMORY_INIT     = option yes;
     });
 
-    misc = {
+    misc = let
+      # Use zstd for kernel compression if 64-bit and newer than 5.9, otherwise xz.
+      # i686 issues: https://github.com/NixOS/nixpkgs/pull/117961#issuecomment-812106375
+      useZstd = stdenv.buildPlatform.is64bit && versionAtLeast version "5.9";
+    in {
+      KERNEL_XZ            = mkIf (!useZstd) yes;
+      KERNEL_ZSTD          = mkIf useZstd yes;
+
       HID_BATTERY_STRENGTH = yes;
       # enabled by default in x86_64 but not arm64, so we do that here
       HIDRAW               = yes;
@@ -696,10 +706,6 @@ let
       MODULE_COMPRESS    = yes;
       MODULE_COMPRESS_XZ = yes;
 
-      # use zstd for kernel compression if newer than 5.9, else xz.
-      KERNEL_XZ          = whenOlder "5.9" yes;
-      KERNEL_ZSTD        = whenAtLeast "5.9" yes;
-
       SYSVIPC            = yes;  # System-V IPC
 
       AIO                = yes;  # POSIX asynchronous I/O
@@ -709,7 +715,6 @@ let
       MD                 = yes;     # Device mapper (RAID, LVM, etc.)
 
       # Enable initrd support.
-      BLK_DEV_RAM       = yes;
       BLK_DEV_INITRD    = yes;
 
       PM_TRACE_RTC         = no; # Disable some expensive (?) features.

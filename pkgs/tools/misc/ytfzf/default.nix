@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "1.1.1";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    sha256 = "sha256-286rN3g6leSnbZZ0VjWl43nhBAMPJDUMv7DhgVTsjKw=";
+    sha256 = "sha256-zRzd+rZxT5IJoFJl9sutTdQC4eMDUCBld5bTGfQWtco=";
   };
 
   patches = [

@@ -94,6 +94,8 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi-packages/vfs-libarchive { };
 
+  youtube = callPackage ../applications/video/kodi-packages/youtube { };
+
   # addon packages (dependencies)
 
   certifi = callPackage ../applications/video/kodi-packages/certifi { };
@@ -105,6 +107,10 @@ let self = rec {
   idna = callPackage ../applications/video/kodi-packages/idna { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi-packages/inputstream-adaptive { };
+
+  inputstream-ffmpegdirect = callPackage ../applications/video/kodi-packages/inputstream-ffmpegdirect { };
+
+  inputstream-rtmp = callPackage ../applications/video/kodi-packages/inputstream-rtmp { };
 
   inputstreamhelper = callPackage ../applications/video/kodi-packages/inputstreamhelper { };
 
