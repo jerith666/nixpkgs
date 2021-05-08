@@ -15,7 +15,7 @@
 , enableProprietaryCodecs ? true
 , gn
 , cups, darwin, openbsm, runCommand, xcbuild, writeScriptBin
-, ffmpeg_3 ? null
+, ffmpeg ? null
 , lib, stdenv, fetchpatch
 , version ? null
 , qtCompatVersion
@@ -140,9 +140,8 @@ qtModule {
     fi
   '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
-    then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
-    else optional enableProprietaryCodecs "-- -proprietary-codecs";
+  qmakeFlags = [ "--" "-system-ffmpeg" ]
+    ++ optional enableProprietaryCodecs "-proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
@@ -158,8 +157,7 @@ qtModule {
     harfbuzz icu
 
     libevent
-  ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
-    ffmpeg_3
+    ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
@@ -235,6 +233,8 @@ qtModule {
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";

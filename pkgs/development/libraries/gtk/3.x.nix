@@ -36,19 +36,17 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , wayland
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
@@ -143,7 +141,7 @@ stdenv.mkDerivation rec {
     # explicitly propagated, always needed
     Cocoa
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [

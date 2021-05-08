@@ -24,6 +24,8 @@ in
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   agda = handleTest ./agda.nix {};
+  airsonic = handleTest ./airsonic.nix {};
+  amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   ammonite = handleTest ./ammonite.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
@@ -47,7 +49,7 @@ in
   buildkite-agents = handleTest ./buildkite-agents.nix {};
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
-  cage = handleTest ./cage.nix {};
+  cage = handleTestOn ["x86_64-linux"] ./cage.nix {};
   cagebreak = handleTest ./cagebreak.nix {};
   calibre-web = handleTest ./calibre-web.nix {};
   cassandra_2_1 = handleTest ./cassandra.nix { testPackage = pkgs.cassandra_2_1; };
@@ -75,6 +77,7 @@ in
   containers-ip = handleTest ./containers-ip.nix {};
   containers-macvlans = handleTest ./containers-macvlans.nix {};
   containers-names = handleTest ./containers-names.nix {};
+  containers-nested = handleTest ./containers-nested.nix {};
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-portforward = handleTest ./containers-portforward.nix {};
   containers-reloadable = handleTest ./containers-reloadable.nix {};
@@ -185,6 +188,7 @@ in
   iodine = handleTest ./iodine.nix {};
   ipfs = handleTest ./ipfs.nix {};
   ipv6 = handleTest ./ipv6.nix {};
+  iscsi-root = handleTest ./iscsi-root.nix {};
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
@@ -322,6 +326,7 @@ in
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix {};
   plikd = handleTest ./plikd.nix {};
   plotinus = handleTest ./plotinus.nix {};
+  podgrab = handleTest ./podgrab.nix {};
   podman = handleTestOn ["x86_64-linux"] ./podman.nix {};
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   postfix = handleTest ./postfix.nix {};
@@ -382,6 +387,7 @@ in
   sssd-ldap = handleTestOn ["x86_64-linux"] ./sssd-ldap.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
+  sway = handleTest ./sway.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
   syncthing = handleTest ./syncthing.nix {};
@@ -410,6 +416,7 @@ in
   # traefik test relies on docker-containers
   trac = handleTest ./trac.nix {};
   traefik = handleTestOn ["x86_64-linux"] ./traefik.nix {};
+  trafficserver = handleTest ./trafficserver.nix {};
   transmission = handleTest ./transmission.nix {};
   trezord = handleTest ./trezord.nix {};
   trickster = handleTest ./trickster.nix {};

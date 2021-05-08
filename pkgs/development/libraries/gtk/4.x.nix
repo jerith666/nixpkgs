@@ -38,7 +38,7 @@
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
-, mesa
+, libGL
 , vulkan-loader
 , vulkan-headers
 , wayland
@@ -46,13 +46,11 @@
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
 , withGtkDoc ? stdenv.isLinux
-, cups ? null
+, cups
 , AppKit
 , Cocoa
 , broadwaySupport ? true
 }:
-
-assert cupsSupport -> cups != null;
 
 let
 
@@ -124,7 +122,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals trackerSupport [
     tracker
   ] ++ lib.optionals waylandSupport [
-    mesa
+    libGL
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
