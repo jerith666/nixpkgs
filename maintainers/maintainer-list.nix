@@ -428,6 +428,12 @@
     githubId = 782180;
     name = "Alex Vorobiev";
   };
+  alex-eyre = {
+    email = "A.Eyre@sms.ed.ac.uk";
+    github = "alex-eyre";
+    githubId = 38869148;
+    name = "Alex Eyre";
+  };
   algorith = {
     email = "dries_van_daele@telenet.be";
     name = "Dries Van Daele";
@@ -1315,6 +1321,12 @@
     email = "bmilanov11+nixpkgs@gmail.com";
     github = "bmilanov";
     githubId = 30090366;
+  };
+  bmwalters = {
+    name = "Bradley Walters";
+    email = "oss@walters.app";
+    github = "bmwalters";
+    githubId = 4380777;
   };
   bobakker = {
     email = "bobakk3r@gmail.com";
@@ -6374,6 +6386,12 @@
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
   };
+  mdsp = {
+    github = "Mdsp9070";
+    githubId = 44469426;
+    name = "Matheus de Souza Pessanha";
+    email = "matheus_pessanha2001@outlook.com";
+  };
   meatcar = {
     email = "nixpkgs@denys.me";
     github = "meatcar";
@@ -7195,6 +7213,16 @@
     githubId = 16385648;
     name = "Niko Pavlinek";
   };
+  nixbitcoin = {
+    email = "nixbitcoin@i2pmail.org";
+    github = "nixbitcoin";
+    githubId = 45737139;
+    name = "nixbitcoindev";
+    keys = [{
+      longkeyid = "rsa4096/0xDD11F9AD5308B3BA";
+      fingerprint = "577A 3452 7F3E 2A85 E80F  E164 DD11 F9AD 5308 B3BA";
+    }];
+  };
   nixinator = {
     email = "33lockdown33@protonmail.com";
     github = "nixinator";
@@ -7248,6 +7276,12 @@
     github = "noneucat";
     githubId = 40049608;
     name = "Andy Chun";
+  };
+  noreferences = {
+    email = "norkus@norkus.net";
+    github = "noreferences";
+    githubId = 13085275;
+    name = "Juozas Norkus";
   };
   norfair = {
     email = "syd@cs-syd.eu";
@@ -7416,6 +7450,12 @@
     github = "omnipotententity";
     githubId = 1538622;
     name = "Michael Reilly";
+  };
+  onsails = {
+    email = "andrey@onsails.com";
+    github = "onsails";
+    githubId = 107261;
+    name = "Andrey Kuznetsov";
   };
   onny = {
     email = "onny@project-insanity.org";

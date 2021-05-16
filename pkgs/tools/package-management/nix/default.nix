@@ -21,7 +21,7 @@ common =
   , storeDir
   , stateDir
   , confDir
-  , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+  , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
   , pname, version, suffix ? "", src
@@ -227,6 +227,12 @@ in rec {
     inherit storeDir stateDir confDir boehmgc;
   });
 
-  nixFlakes = nixUnstable;
+  nixExperimental = nixUnstable.overrideAttrs (prev: {
+    patches = (prev.patches or []) ++ [ ./enable-all-experimental.patch ];
+  });
+
+  nixFlakes = nixUnstable.overrideAttrs (prev: {
+    patches = (prev.patches or []) ++ [ ./enable-flakes.patch ];
+  });
 
 }
