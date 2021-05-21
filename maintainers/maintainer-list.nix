@@ -1394,12 +1394,6 @@
     githubId = 302429;
     name = "Marton Boros";
   };
-  branwright1 = {
-    email = "branwright@protonmail.com";
-    github = "branwright1";
-    githubId = 71175207;
-    name = "Brandon Wright";
-  };
   bramd = {
     email = "bram@bramd.nl";
     github = "bramd";
@@ -2516,6 +2510,12 @@
     github = "dkabot";
     githubId = 1316469;
     name = "Naomi Morse";
+  };
+  dlesl = {
+    email = "dlesl@dlesl.com";
+    github = "dlesl";
+    githubId = 28980797;
+    name = "David Leslie";
   };
   dmalikov = {
     email = "malikov.d.y@gmail.com";
@@ -3715,12 +3715,6 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
-  gnidorah = {
-    email = "gnidorah@users.noreply.github.com";
-    github = "gnidorah";
-    githubId = 12064730;
-    name = "gnidorah";
-  };
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
@@ -4765,12 +4759,6 @@
     githubId = 1102396;
     name = "Jussi Maki";
   };
-  joaquinito2051 = {
-    email = "joaquinito2051@gmail.com";
-    github = "heroku-miraheze";
-    githubId = 61781343;
-    name = "Joaquín Rufo Gutierrez";
-  };
   jobojeha = {
     email = "jobojeha@jeppener.de";
     github = "jobojeha";
@@ -5011,7 +4999,7 @@
     name = "Julien Dehos";
   };
   julm = {
-    email = "julm+nix@sourcephile.fr";
+    email = "julm+nixpkgs@sourcephile.fr";
     github = "ju1m";
     githubId = 21160136;
     name = "Julien Moutinho";
@@ -5885,6 +5873,12 @@
     github = "lowfatcomputing";
     githubId = 10626;
     name = "Andreas Wagner";
+  };
+  lromor = {
+    email = "leonardo.romor@gmail.com";
+    github = "lromor";
+    githubId = 1597330;
+    name = "Leonardo Romor";
   };
   lrworth = {
     email = "luke@worth.id.au";
@@ -7031,12 +7025,6 @@
     githubId = 1222539;
     name = "Roman Naumann";
   };
-  nand0p = {
-    email = "nando@hex7.com";
-    github = "nand0p";
-    githubId = 1916245;
-    name = "Fernando Jose Pando";
-  };
   nasirhm = {
     email = "nasirhussainm14@gmail.com";
     github = "nasirhm";
@@ -7718,12 +7706,6 @@
     github = "periklis";
     githubId = 152312;
     name = "Periklis Tsirakidis";
-  };
-  pesterhazy = {
-    email = "pesterhazy@gmail.com";
-    github = "pesterhazy";
-    githubId = 106328;
-    name = "Paulus Esterhazy";
   };
   petabyteboy = {
     email = "milan@petabyte.dev";
