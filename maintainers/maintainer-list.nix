@@ -3357,6 +3357,12 @@
     githubId = 10799507;
     name = "Karl Fischer";
   };
+  fitzgibbon = {
+    name = "Niall FitzGibbon";
+    email = "fitzgibbon.niall@gmail.com";
+    github = "fitzgibbon";
+    githubId = 617048;
+  };
   Flakebi = {
     email = "flakebi@t-online.de";
     github = "Flakebi";
@@ -3590,6 +3596,12 @@
     github = "gabesoft";
     githubId = 606000;
     name = "Gabriel Adomnicai";
+  };
+  Gabriel439 = {
+    email = "Gabriel439@gmail.com";
+    github = "Gabriel439";
+    githubId = 1313787;
+    name = "Gabriel Gonzalez";
   };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
@@ -4138,6 +4150,12 @@
     github = "hyphon81";
     githubId = 12491746;
     name = "Masato Yonekawa";
+  };
+  hyzual = {
+    email = "hyzual@gmail.com";
+    github = "Hyzual";
+    githubId = 2051507;
+    name = "Joris Masson";
   };
   hzeller = {
     email = "h.zeller@acm.org";
@@ -6086,6 +6104,12 @@
     githubId = 2914269;
     name = "Malo Bourgon";
   };
+  malvo = {
+    email = "malte@malvo.org";
+    github = "malte-v";
+    githubId = 34393802;
+    name = "Malte Voos";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
@@ -7322,6 +7346,12 @@
     github = "nthorne";
     githubId = 1839979;
     name = "Niklas Thörne";
+  };
+  nullx76 = {
+    email = "nix@xirion.net";
+    github = "NULLx76";
+    githubId = 1809198;
+    name = "Victor Roest";
   };
   numinit = {
     email = "me@numin.it";
@@ -11447,6 +11477,16 @@
     github = "pulsation";
     githubId = 1838397;
   };
+  ydlr = {
+    name = "ydlr";
+    email = "ydlr@ydlr.io";
+    github = "ydlr";
+    githubId = 58453832;
+    keys = [{
+      longkeyid = "rsa4096/0x43AB44130A29AD9D";
+      fingerprint = "FD0A C425 9EF5 4084 F99F 9B47 2ACC 9749 7C68 FAD4";
+    }];
+  };
   zane = {
     name = "Zane van Iperen";
     email = "zane@zanevaniperen.com";
@@ -11456,6 +11496,12 @@
       longkeyid = "rsa4096/0x68616B2D8AC4DCC5";
       fingerprint = "61AE D40F 368B 6F26 9DAE  3892 6861 6B2D 8AC4 DCC5";
     }];
+  };
+  zeri = {
+    name = "zeri";
+    email = "68825133+zeri42@users.noreply.github.com";
+    github = "zeri42";
+    githubId = 68825133;
   };
   zseri = {
     name = "zseri";

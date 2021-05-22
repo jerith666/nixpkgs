@@ -163,6 +163,7 @@
   ./programs/neovim.nix
   ./programs/nm-applet.nix
   ./programs/npm.nix
+  ./programs/noisetorch.nix
   ./programs/oblogout.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
@@ -690,6 +691,7 @@
   ./services/networking/gale.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
+  ./services/networking/ghostunnel.nix
   ./services/networking/git-daemon.nix
   ./services/networking/globalprotect-vpn.nix
   ./services/networking/gnunet.nix
@@ -897,6 +899,7 @@
   ./services/system/kerberos/default.nix
   ./services/system/nscd.nix
   ./services/system/saslauthd.nix
+  ./services/system/self-deploy.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
   ./services/torrent/flexget.nix

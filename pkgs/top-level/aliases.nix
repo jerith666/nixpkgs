@@ -63,6 +63,7 @@ mapAliases ({
   at_spi2_core = at-spi2-core; # added 2018-02-25
   aucdtect = throw "aucdtect: Upstream no longer provides download urls."; # added 2020-12-26
   avldrums-lv2 = x42-avldrums; # added 2020-03-29
+  avxsynth = throw "avxsynth was removed because it was broken"; # added 2021-05-18
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -607,6 +608,7 @@ mapAliases ({
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "ppl-address-book deprecated on 2019-05-02: abandoned by upstream.";
+  privateer = throw "privateer was removed because it was broken"; # added 2021-05-18
   processing3 = processing; # added 2019-08-16
   procps-ng = procps; # added 2018-06-08
   proj_5 = throw "Proj-5 has been removed from nixpkgs, use proj instead."; # added 2021-04-12
@@ -620,6 +622,7 @@ mapAliases ({
   phonon-backend-gstreamer = throw "phonon-backend-gstreamer: Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon-backend-vlc = throw "phonon-backend-vlc: Please use libsForQt5.phonon-backend-vlc, as Qt4 support in this package has been removed."; # added 2019-11-22
   phonon = throw "phonon: Please use libsForQt5.phonon, as Qt4 support in this package has been removed."; # added 2019-11-22
+  pybind11 = throw "pybind11 was removed because pythonPackages.pybind11 for the appropriate version of Python should be used"; # added 2021-05-14
   pynagsystemd = throw "pynagsystemd was removed as it was unmaintained and incompatible with recent systemd versions. Instead use its fork check_systemd."; # added 2020-10-24
   python2nix = throw "python2nix has been removed as it is outdated. Use e.g. nixpkgs-pytools instead."; # added 2021-03-08
   quagga = throw "quagga is no longer maintained upstream"; # added 2021-04-22
@@ -639,6 +642,7 @@ mapAliases ({
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version or 'readline81' for most recent version"; # added 2021-04-22
+  retroshare = throw "retroshare was removed because it was broken"; # added 2021-05-17
   rhc = throw "rhc was deprecated on 2019-04-09: abandoned by upstream.";
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
