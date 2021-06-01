@@ -25,6 +25,7 @@
    </listitem>
    <listitem>
     <para>The default Linux kernel was updated to the 5.10 LTS series, coming from the 5.4 LTS series.</para>
+    <para>The <package>linux_latest</package> kernel was updated to the 5.12 series. It currently is not officially supported for use with the zfs filesystem. If you use zfs, you should use a different kernel version (either the LTS kernel, or track a specific one). </para>
    </listitem>
    <listitem>
     <para>GNOME desktop environment was upgraded to 40, see the release notes for <link xlink:href="https://help.gnome.org/misc/release-notes/40.0/">40.0</link> and <link xlink:href="https://help.gnome.org/misc/release-notes/3.38/">3.38</link>. The <code>gnome3</code> attribute set has been renamed to <code>gnome</code> and so have been the NixOS options.</para>
@@ -98,6 +99,18 @@
     <para>
       <link xlink:href="https://nginx.org">Nginx</link> has been updated to stable version 1.20.0.
       Now nginx uses the zlib-ng library by default.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     KDE Gear (formerly KDE Applications) is upgraded to 21.04, see its
+     <link xlink:href="https://kde.org/announcements/gear/21.04/">release
+     notes</link> for details.
+    </para>
+    <para>
+     The <code>kdeApplications</code> package set is now <code>kdeGear</code>,
+     in keeping with the new name. The old name remains for compatibility, but
+     it is deprecated.
     </para>
    </listitem>
    <listitem>
@@ -196,6 +209,12 @@
      It was broken since the switch to cgroups-v2.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>linuxPackages.ati_drivers_x11</literal> kernel modules have been removed.
+     The drivers only supported kernels prior to 4.2, and thus have become obsolete.
+    </para>
+   </listitem>
     <listitem>
       <para>
         The <literal>systemConfig</literal> kernel parameter is no longer added to boot loader entries. It has been unused since September 2010, but if do have a system generation from that era, you will now be unable to boot into them.
@@ -289,6 +308,24 @@
    </listitem>
    <listitem>
      <para>
+       The <literal>mediatomb</literal> service is
+       now using by default the new and maintained fork
+       <literal>gerbera</literal> package instead of the unmaintained
+       <literal>mediatomb</literal> package. If you want to keep the old
+       behavior, you must declare it with:
+       <programlisting>
+       services.mediatomb.package = pkgs.mediatomb;
+       </programlisting>
+       One new option <literal>openFirewall</literal> has been introduced which
+       defaults to false. If you relied on the service declaration to add the
+       firewall rules itself before, you should now declare it with:
+       <programlisting>
+       services.mediatomb.openFirewall = true;
+       </programlisting>
+     </para>
+   </listitem>
+   <listitem>
+     <para>
        xfsprogs was update from 4.19 to 5.11. It now enables reflink support by default on filesystem creation.
        Support for reflinks was added with an experimental status to kernel 4.9 and deemed stable in kernel 4.16.
        If you want to be able to mount XFS filesystems created with this release of xfsprogs on kernel releases older than those, you need to format them
@@ -379,6 +416,15 @@
    </listitem>
    <listitem>
     <para>
+     The WireGuard module gained a new option
+     <option>networking.wireguard.interfaces.&lt;name&gt;.peers.*.dynamicEndpointRefreshSeconds</option>
+     that implements refreshing the IP of DNS-based endpoints periodically
+     (which WireGuard itself
+     <link xlink:href="https://lists.zx2c4.com/pipermail/wireguard/2017-November/002028.html">cannot do</link>).
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      MariaDB has been updated to 10.5.
      Before you upgrade, it would be best to take a backup of your database and read
      <link xlink:href="https://mariadb.com/kb/en/upgrading-from-mariadb-104-to-mariadb-105/#incompatible-changes-between-104-and-105">
@@ -409,7 +455,7 @@
     </para>
     <programlisting>
       TMPDIR=$(mktemp -d)
-      slaptest -f /path/to/slapd.conf $TMPDIR
+      slaptest -f /path/to/slapd.conf -F $TMPDIR
       slapcat -F $TMPDIR -n0 -H 'ldap:///???(!(objectClass=olcSchemaConfig))'
     </programlisting>
     <para>
@@ -818,6 +864,29 @@ environment.systemPackages = [
     </para>
    </listitem>
    <listitem>
+     <para>
+       The <literal>mediatomb</literal> service
+       declares new options. It also adapts existing options so the
+       configuration generation is now lazy. The existing option
+       <literal>customCfg</literal> (defaults to false), when enabled, stops
+       the service configuration generation completely. It then expects the
+       users to provide their own correct configuration at the right location
+       (whereas the configuration was generated and not used at all before).
+       The new option <literal>transcodingOption</literal> (defaults to no)
+       allows a generated configuration. It makes the mediatomb service pulls
+       the necessary runtime dependencies in the nix store (whereas it was
+       generated with hardcoded values before). The new option
+       <literal>mediaDirectories</literal> allows the users to declare autoscan
+       media directories from their nixos configuration:
+       <programlisting>
+       services.mediatomb.mediaDirectories = [
+         { path = "/var/lib/mediatomb/pictures"; recursive = false; hidden-files = false; }
+         { path = "/var/lib/mediatomb/audio"; recursive = true; hidden-files = false; }
+       ];
+       </programlisting>
+     </para>
+   </listitem>
+   <listitem>
     <para>
      The Unbound DNS resolver service (<literal>services.unbound</literal>) has been refactored to allow reloading, control sockets and to fix startup ordering issues.
     </para>
@@ -1101,6 +1170,19 @@ environment.systemPackages = [
      This prevents NVRAM from filling up, which ensures the latest diagnostic data is always stored and alleviates problems with writing new boot configurations.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Nixpkgs now contains <link xlink:href="https://github.com/NixOS/nixpkgs/pull/118232">automatically packaged GNOME Shell extensions</link> from the <link xlink:href="https://extensions.gnome.org/">GNOME Extensions</link> portal. You can find them, filed by their UUID, under <literal>gnome38Extensions</literal> attribute for GNOME 3.38 and under <literal>gnome40Extensions</literal> for GNOME 40. Finally, the <literal>gnomeExtensions</literal> attribute contains extensions for the latest GNOME Shell version in Nixpkgs, listed under a more human-friendly name. The unqualified attribute scope also contains manually packaged extensions. Note that the automatically packaged extensions are provided for convenience and are not checked or guaranteed to work.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Erlang/OTP versions older than R21 got dropped. We also dropped the cuter package, as it was purely an example of how to build a package.
+     We also dropped <literal>lfe_1_2</literal> as it could not build with R21+.
+     Moving forward, we expect to only support 3 yearly releases of OTP.
+    </para>
+   </listitem>
+
   </itemizedlist>
  </section>
 </section>

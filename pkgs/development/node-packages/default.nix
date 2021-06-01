@@ -75,6 +75,7 @@ let
 
     flood = super.flood.override {
       buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
     };
 
     expo-cli = super."expo-cli".override (attrs: {
@@ -116,6 +117,10 @@ let
             else ""
         }
       '';
+    };
+
+    markdownlint-cli = super.markdownlint-cli.override {
+      meta.mainProgram = "markdownlint";
     };
 
     mirakurun = super.mirakurun.override rec {
