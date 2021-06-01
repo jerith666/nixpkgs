@@ -85,7 +85,7 @@ in buildFHSUserEnv rec {
   targetPkgs = pkgs: with pkgs; [
     steamPackages.steam
     # License agreement
-    gnome3.zenity
+    gnome.zenity
   ] ++ commonTargetPkgs pkgs;
 
   multiPkgs = pkgs: with pkgs; [
@@ -105,6 +105,7 @@ in buildFHSUserEnv rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
+    json-glib # paradox launcher (Stellaris)
     libdrm
     libxkbcommon # paradox launcher
     mono
@@ -135,6 +136,13 @@ in buildFHSUserEnv rec {
     libuuid
     libbsd
     alsaLib
+
+    # Loop Hero
+    libidn2
+    libpsl
+    nghttp2.lib
+    openssl_1_1
+    rtmpdump
 
     # needed by getcap for vr startup
     libcap
@@ -202,7 +210,6 @@ in buildFHSUserEnv rec {
     SDL
     SDL2_image
     glew110
-    openssl
     libidn
     tbb
     wayland

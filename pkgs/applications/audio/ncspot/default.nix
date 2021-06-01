@@ -14,22 +14,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.5.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "1h1il2mzngxmcsl169431lwzl0skv420arg9i06856r5wil37jf7";
+    sha256 = "1qhdhybbgnn7ky9qdxwi07flwzjagp22qmlccbz1z3lhznm9a971";
   };
 
-  cargoSha256 = "13yn7l4hhl48lbpj0zsbraqzkkz6knc373j6rcf8d1p4z76yili4";
+  cargoSha256 = "1kv37ib0klykmjabm1qyz55frs7djkx225alj4rk4a92xq9m8i9v";
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
 
   nativeBuildInputs = [ pkg-config ];
-
-  cargoPatches = [ ./bump-security-framework-crate.patch ];
 
   buildInputs = [ ncurses openssl ]
     ++ lib.optional stdenv.isDarwin libiconv

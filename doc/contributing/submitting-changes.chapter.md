@@ -83,6 +83,52 @@ If a security fix applies to both master and a stable release then, similar to r
 
 Critical security fixes may by-pass the staging branches and be delivered directly to release branches such as `master` and `release-*`.
 
+## Deprecating/removing packages {#submitting-changes-deprecating-packages}
+
+There is currently no policy when to remove a package.
+
+Before removing a package, one should try to find a new maintainer or fix smaller issues first.
+
+### Steps to remove a package from Nixpkgs
+
+We use jbidwatcher as an example for a discontinued project here.
+
+1. Have Nixpkgs checked out locally and up to date.
+1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
+1. Remove the actual package including its directory, e.g. `rm -rf pkgs/applications/misc/jbidwatcher`
+1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
+1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/misc/vim-plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
+
+    For example in this case:
+    ```
+    jbidwatcher = throw "jbidwatcher was discontinued in march 2021"; # added 2021-03-15
+    ```
+
+    The throw message should explain in short why the package was removed for users that still have it installed.
+
+1. Test if the changes introduced any issues by running `nix-env -qaP -f . --show-trace`. It should show the list of packages without errors.
+1. Commit the changes. Explain again why the package was removed. If it was declared discontinued upstream, add a link to the source.
+
+    ```ShellSession
+    $ git add pkgs/applications/misc/jbidwatcher/default.nix pkgs/top-level/all-packages.nix pkgs/top-level/aliases.nix
+    $ git commit
+    ```
+
+    Example commit message:
+
+    ```
+    jbidwatcher: remove
+
+    project was discontinued in march 2021. the program does not work anymore because ebay changed the login.
+
+    https://web.archive.org/web/20210315205723/http://www.jbidwatcher.com/
+    ```
+
+1. Push changes to your GitHub fork with `git push`
+1. Create a pull request against Nixpkgs. Mention the package maintainer.
+
+This is how the pull request looks like in this case: [https://github.com/NixOS/nixpkgs/pull/116470](https://github.com/NixOS/nixpkgs/pull/116470)
+
 ## Pull Request Template {#submitting-changes-pull-request-template}
 
 The pull request template helps determine what steps have been made for a contribution so far, and will help guide maintainers on the status of a change. The motivation section of the PR should include any extra details the title does not address and link any existing issues related to the pull request.
@@ -115,7 +161,7 @@ Many Nix packages are designed to run on multiple platforms. As such, it’s imp
 
 ### Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests) {#submitting-changes-nixos-tests}
 
-Packages with automated tests are much more likely to be merged in a timely fashion because it doesn’t require as much manual testing by the maintainer to verify the functionality of the package. If there are existing tests for the package, they should be run to verify your changes do not break the tests. Tests only apply to packages with NixOS modules defined and can only be run on Linux. For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
+Packages with automated tests are much more likely to be merged in a timely fashion because it doesn’t require as much manual testing by the maintainer to verify the functionality of the package. If there are existing tests for the package, they should be run to verify your changes do not break the tests. Tests can only be run on Linux. For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
 
 ### Tested compilation of all pkgs that depend on this change using `nixpkgs-review` {#submitting-changes-tested-compilation}
 
@@ -192,7 +238,7 @@ The `staging` branch is a development branch where mass-rebuilds go. It should o
 
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 
-The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds should go via the `staging` branch. It should only see non-breaking commits that are fixing issues blocking it from being merged into the `master ` branch.
+The `staging-next` branch is for stabilizing mass-rebuilds submitted to the `staging` branch prior to merging them into `master`. Mass-rebuilds must go via the `staging` branch. It must only see non-breaking commits that are fixing issues blocking it from being merged into the `master ` branch.
 
 If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
 
@@ -201,6 +247,8 @@ If the branch is already in a broken state, please refrain from adding extra new
 For cherry-picking a commit to a stable release branch (“backporting”), use `git cherry-pick -x <original commit>` so that the original commit id is included in the commit.
 
 Add a reason for the backport by using `git cherry-pick -xe <original commit>` instead when it is not obvious from the original commit message. It is not needed when it's a minor version update that includes security and bug fixes but don't add new features or when the commit fixes an otherwise broken package.
+
+For backporting Pull Requests to stable branches, assign label `backport <branch>` to the original Pull Requests and automation should take care of the rest once the Pull Requests is merged.
 
 Here is an example of a cherry-picked commit message with good reason description:
 

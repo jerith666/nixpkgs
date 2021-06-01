@@ -14,20 +14,16 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    sha256 = "12gmn61mfrr58071x3cdsksad6swn1b23ghih128hjdpdzk1zxs3";
+    sha256 = "sha256-uNb5HCEft1vXASli+2zdKWzFzsAlI9/ILBWa7OQZBwE=";
   };
 
   outputs = [ "out" "man" ];
-
-  patches = [
-    ../../../applications/virtualization/podman/remove-unconfigured-runtime-warn.patch
-  ];
 
   vendorSha256 = null;
 

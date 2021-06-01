@@ -6,7 +6,7 @@
 # Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
-, withPerl ? true
+, withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 assert (
@@ -42,8 +42,10 @@ let
         substituteInPlace "$a" \
           --replace /bin/rm rm
       done
-    '' + optionalString (versionAtLeast version "1.1.1") ''
-      substituteInPlace config --replace '/usr/bin/env' '${coreutils}/bin/env'
+    ''
+    # config is a configure script which is not installed.
+    + optionalString (versionAtLeast version "1.1.1") ''
+      substituteInPlace config --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     '' + optionalString (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isMusl) ''
       substituteInPlace crypto/async/arch/async_posix.h \
         --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
@@ -67,19 +69,24 @@ let
         armv6l-linux = "./Configure linux-armv4 -march=armv6";
         armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
         x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        aarch64-darwin = "./Configure darwin64-arm64-cc";
         x86_64-linux = "./Configure linux-x86_64";
         x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
+        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_64
+          then "./Configure BSD-x86_64"
+        else if stdenv.hostPlatform.isBSD && stdenv.hostPlatform.isx86_32
+          then "./Configure BSD-x86" + lib.optionalString (stdenv.hostPlatform.parsed.kernel.execFormat.name == "elf") "-elf"
+        else if stdenv.hostPlatform.isBSD
+          then "./Configure BSD-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isMinGW
           then "./Configure mingw${optionalString
                                      (stdenv.hostPlatform.parsed.cpu.bits != 32)
                                      (toString stdenv.hostPlatform.parsed.cpu.bits)}"
         else if stdenv.hostPlatform.isLinux
-          then (if stdenv.hostPlatform.isx86_64
-            then "./Configure linux-x86_64"
-            else "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}")
+          then "./Configure linux-generic${toString stdenv.hostPlatform.parsed.cpu.bits}"
         else if stdenv.hostPlatform.isiOS
           then "./Configure ios${toString stdenv.hostPlatform.parsed.cpu.bits}-cross"
         else
@@ -119,8 +126,6 @@ let
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
-
-      mkdir -p $bin
     '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
@@ -134,9 +139,9 @@ let
       # "#!/usr/bin/env perl"
     ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl}/bin/perl "/usr/bin/env perl"
-    '' +
-    ''
-      mv $out/bin $bin/
+    '' + ''
+      mkdir -p $bin
+      mv $out/bin $bin/bin
 
       mkdir $dev
       mv $out/include $dev/

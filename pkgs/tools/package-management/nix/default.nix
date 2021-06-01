@@ -11,7 +11,7 @@ let
 common =
   { lib, stdenv, perl, curl, bzip2, sqlite, openssl ? null, xz
   , bash, coreutils, util-linuxMinimal, gzip, gnutar
-  , pkg-config, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
+  , pkg-config, boehmgc, libsodium, brotli, boost, editline, nlohmann_json
   , autoreconfHook, autoconf-archive, bison, flex
   , jq, libarchive, libcpuid
   , lowdown, mdbook
@@ -21,17 +21,16 @@ common =
   , storeDir
   , stateDir
   , confDir
-  , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
+  , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
   , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
   , enableStatic ? stdenv.hostPlatform.isStatic
-  , name, suffix ? "", src
+  , pname, version, suffix ? "", src
   , patches ? [ ]
   }:
   let
      sh = busybox-sandbox-shell;
      nix = stdenv.mkDerivation rec {
-      inherit name src patches;
-      version = lib.getVersion name;
+      inherit pname version src patches;
 
       is24 = lib.versionAtLeast version "2.4pre";
 
@@ -165,7 +164,7 @@ common =
       };
 
       passthru = {
-        perl-bindings = stdenv.mkDerivation {
+        perl-bindings = perl.pkgs.toPerlModule (stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
 
@@ -179,14 +178,14 @@ common =
             [ perl pkg-config curl nix libsodium boost autoreconfHook autoconf-archive nlohmann_json ];
 
           configureFlags =
-            [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
-              "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
+            [ "--with-dbi=${perl.pkgs.DBI}/${perl.libPrefix}"
+              "--with-dbd-sqlite=${perl.pkgs.DBDSQLite}/${perl.libPrefix}"
             ];
 
           preConfigure = "export NIX_STATE_DIR=$TMPDIR";
 
           preBuild = "unset NIX_INDENT_MAKE";
-        };
+        });
       };
     };
   in nix;
@@ -196,36 +195,36 @@ in rec {
   nix = nixStable;
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.10";
+    pname = "nix";
+    version = "2.3.11";
     src = fetchurl {
-      url = "https://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "a8a85e55de43d017abbf13036edfb58674ca136691582f17080c1cd12787b7ab";
+      url = "https://nixos.org/releases/nix/${pname}-${version}/${pname}-${version}.tar.xz";
+      sha256 = "89a8d7995305a78b1561e6670bbf1879c791fc4904eb094bc4f180775a61c128";
     };
-
-    patches = [(
-      fetchpatch {
-        url = "https://github.com/NixOS/nix/pull/4316.patch";
-        sha256 = "0bqlm4n9sac9prgr9xlfng92arisp1hiqvc9pfh4fibsppkgdfc5";
-      }
-    )];
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.4${suffix}";
-    suffix = "pre20210326_dd77f71";
+    pname = "nix";
+    version = "2.4${suffix}";
+    suffix = "pre20210503_6d2553a";
 
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "dd77f71afe6733e9790dd001125c423cb648b7ce";
-      sha256 = "rVHzrsCtdiWjyLuHnDplG2mx+7dw5VyzZ9ReXxuCvHY=";
+      rev = "6d2553ae1496288554e871c530836428f405fd67";
+      sha256 = "sha256-YeSeyOKhBAXHlkzo4mwYr8QIjIP9AgdpJ7YdhqOO2CA=";
     };
 
     inherit storeDir stateDir confDir boehmgc;
-  });
 
-  nixFlakes = nixUnstable;
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/8c7e043de2f673bc355d83f1e873baa93f30be62.patch";
+        sha256 = "sha256-aTcUnZXheewnyCT7yQKnTqQDKS2uDoN9plMQgxJH8Ag=";
+      })
+    ];
+  });
 
 }

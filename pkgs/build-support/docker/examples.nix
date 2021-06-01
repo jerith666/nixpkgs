@@ -497,4 +497,48 @@ rec {
       chown 1000 ./home/jane
     '';
   };
+
+  # tarball consisting of both bash and redis images
+  mergedBashAndRedis = pkgs.dockerTools.mergeImages [
+    bash
+    redis
+  ];
+
+  # tarball consisting of bash (without tag) and redis images
+  mergedBashNoTagAndRedis = pkgs.dockerTools.mergeImages [
+    bashNoTag
+    redis
+  ];
+
+  # tarball consisting of bash and layered image with different owner of the
+  # /home/jane directory
+  mergedBashFakeRoot = pkgs.dockerTools.mergeImages [
+    bash
+    layeredImageWithFakeRootCommands
+  ];
+
+  helloOnRoot = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+  };
+
+  helloOnRootNoStore = pkgs.dockerTools.streamLayeredImage {
+    name = "hello";
+    tag = "latest";
+    contents = [
+      (pkgs.buildEnv {
+        name = "hello-root";
+        paths = [ pkgs.hello ];
+      })
+    ];
+    config.Cmd = [ "hello" ];
+    includeStorePaths = false;
+  };
 }

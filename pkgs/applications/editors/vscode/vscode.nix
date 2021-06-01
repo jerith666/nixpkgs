@@ -13,19 +13,16 @@ let
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0z1diiiykv4ilsiljffz9sl2mlvrxq0xwm8ga2ralfvjwbhzr6dn";
-    x86_64-darwin = "02gzw46w3kzw1ya9nx8fkhvzi0mbpz2fyp47n58jki2zkdsfiwzh";
-    aarch64-linux = "0bkvgdxch95dqcb41ncsjkaaswmwv6zad4hzdsr3famjm2vym1ky";
-    armv7l-linux = "0wdp97ihdnx9bcyn2dh6wzhb7qvdj6x730r7ng1q3i9jhd19wfi3";
+    x86_64-linux = "08qrag9nzmngzzvs2cgbmc4zzxlb9kwn183v8caj6dvcrjvfqgbv";
+    x86_64-darwin = "0rlyr08lla3xadlh373xqcks8a9akk3x2cmakgn17q2b16988fmq";
+    aarch64-linux = "1m277940xsasqac4i88s05xrqsab99jhl3ka0zzfbixrgr2dj8q1";
+    armv7l-linux = "1qm4cggjj50vdnrx848x810gz3ahh0hndra22lsvcjdbsw8g35rk";
   }.${system};
 in
   callPackage ./generic.nix rec {
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
-
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.55.0";
+    version = "1.56.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -40,11 +37,14 @@ in
 
     sourceRoot = "";
 
+    updateScript = ./update-vscodium.sh;
+
     meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git

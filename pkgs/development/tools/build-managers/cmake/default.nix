@@ -7,25 +7,20 @@
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
-, useQt4 ? false, qt4
 , withQt5 ? false, qtbase
 }:
-
-assert withQt5 -> useQt4 == false;
-assert useQt4 -> withQt5 == false;
 
 stdenv.mkDerivation (rec {
   pname = "cmake"
           + lib.optionalString isBootstrap "-boot"
           + lib.optionalString useNcurses "-cursesUI"
-          + lib.optionalString withQt5 "-qt5UI"
-          + lib.optionalString useQt4 "-qt4UI";
-  version = "3.19.6";
+          + lib.optionalString withQt5 "-qt5UI";
+  version = "3.19.7";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "sha256-7IerZ8RfR8QoXyBCgMXN5I4ckgz8/tFVWyf7OxodILo=";
+    sha256 = "sha256-WKFfDVagr8zDzFNxI0/Oc/zGyPnb13XYmOUQuDF1WI4=";
   };
 
   patches = [
@@ -53,7 +48,6 @@ stdenv.mkDerivation (rec {
     ++ lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useOpenSSL openssl
     ++ lib.optional useNcurses ncurses
-    ++ lib.optional useQt4 qt4
     ++ lib.optional withQt5 qtbase;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
@@ -73,7 +67,7 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    ++ lib.optional withQt5 "--qt-gui"
     # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
     ++ lib.optionals stdenv.hostPlatform.is32bit [
       "CFLAGS=-D_FILE_OFFSET_BITS=64"
@@ -124,7 +118,7 @@ stdenv.mkDerivation (rec {
       configuration files, and generate native makefiles and workspaces that
       can be used in the compiler environment of your choice.
     '';
-    platforms = if useQt4 then qt4.meta.platforms else platforms.all;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };

@@ -3,7 +3,7 @@
 
 ## various stuff that can be plugged in
 , ffmpeg, xorg, alsaLib, libpulseaudio, libcanberra-gtk2, libglvnd, libnotify
-, gnome3/*.gnome-shell*/
+, gnome/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
 , fx_cast_bridge
@@ -115,8 +115,7 @@ let
                 };
               }
             ) {} extensions;
-          } //
-          {
+          } // lib.optionalAttrs usesNixExtensions {
             Extensions = {
               Install = lib.foldr (e: ret:
                 ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
@@ -258,20 +257,19 @@ let
 
         makeWrapper "$oldExe" \
           "$out${browser.execdir or "/bin"}/${browserName}${nameSuffix}" \
-            --suffix LD_LIBRARY_PATH ':' "$libs" \
+            --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
             --prefix PATH ':' "${xdg-utils}/bin" \
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            --set SNAP_NAME "firefox" \
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString forceWayland ''
               --set MOZ_ENABLE_WAYLAND "1" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
+                  --suffix XDG_DATA_DIRS : '${gnome.adwaita-icon-theme}/share'
                 ''
             }
         #############################

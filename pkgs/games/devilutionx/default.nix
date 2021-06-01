@@ -1,14 +1,19 @@
 { lib, stdenv, fetchFromGitHub, cmake, SDL2, SDL2_mixer, SDL2_ttf, libsodium, pkg-config }:
+
 stdenv.mkDerivation rec {
   pname = "devilutionx";
-  version = "unstable-2020-10-20";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "diasurgical";
     repo = "devilutionX";
-    rev = "432fbc8ef7b98e567b08e44ce91b198374a5ff01";
-    sha256 = "03w3bgmzwsbycx3fzvn47fsmabl069gw77yn2fqg89wlgaw1yrr9";
+    rev = version;
+    sha256 = "sha256-PgYlNO1p78d0uiL474bDJOL++SxJfeBLK65czdaylHU=";
   };
+
+  postPatch = ''
+    substituteInPlace Source/init.cpp --replace "/usr/share/diasurgical/devilutionx/" "${placeholder "out"}/share/diasurgical/devilutionx/"
+  '';
 
   NIX_CFLAGS_COMPILE = [
     "-I${SDL2_ttf}/include/SDL2"
@@ -17,6 +22,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBINARY_RELEASE=ON"
+    "-DVERSION_NUM=${version}"
   ];
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -31,6 +37,7 @@ stdenv.mkDerivation rec {
   '' else ''
     install -Dm755 -t $out/bin devilutionx
     install -Dt $out/share/fonts/truetype ../Packaging/resources/CharisSILB.ttf
+    install -Dt $out/share/diasurgical/devilutionx ../Packaging/resources/devilutionx.mpq
 
     # TODO: icons and .desktop (see Packages/{debian,fedora}/*)
   '') + ''

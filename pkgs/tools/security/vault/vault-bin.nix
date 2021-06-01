@@ -1,26 +1,26 @@
 { lib, stdenv, fetchurl, unzip }:
 
 let
-  version = "1.7.0";
+  version = "1.7.2";
 
   sources = let
     base = "https://releases.hashicorp.com/vault/${version}";
   in {
     x86_64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_amd64.zip";
-      sha256 = "0d8wqxqilv1jdf4dl7w2jp3lfh0w0rawidmhjlj3ykpg6l3gblma";
+      sha256 = "1g37pgj7hbi6vfpwq9rrh6is980lfwbq5jb4736jfp5m360vprjy";
     };
     i686-linux = fetchurl {
       url = "${base}/vault_${version}_linux_386.zip";
-      sha256 = "128r0phm5i1cpayz0ia8qsmnk1ia3qylidy9f8iwk3l8r834s4yd";
+      sha256 = "0777xkkfiy0s3nyygcfpw0nbfsm6yz1n5hxcvfafhzcdyr58fpb7";
     };
     x86_64-darwin = fetchurl {
       url = "${base}/vault_${version}_darwin_amd64.zip";
-      sha256 = "01vxjv95his8jqin2cwcw691wdwn6p876rp021bmvr6diw6clkrp";
+      sha256 = "0wzmah542bhyvrm9brhrx7drjyzan8vxhqnm0gjak5wlrcnf2dvx";
     };
     aarch64-linux = fetchurl {
       url = "${base}/vault_${version}_linux_arm64.zip";
-      sha256 = "0ahdv14fz7ybl11b61z7j13nbjd6hp6fcpc5bk6y8lh4qj8x0pzg";
+      sha256 = "0cs56ircad2z2msqgb0l5h53cwmwybi5rs4y2jigz4rq4ndx9f9b";
     };
   };
 
@@ -49,6 +49,6 @@ in stdenv.mkDerivation {
     description = "A tool for managing secrets, this binary includes the UI";
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
     license = licenses.mpl20;
-    maintainers = with maintainers; [ offline psyanticy mkaito Chili-Man ];
+    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man ];
   };
 }

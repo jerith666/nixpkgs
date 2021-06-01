@@ -28,9 +28,9 @@ let
   # 1) change all these hashes
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.19.3";
-  sha256 = "0zd1p9x32bwdc5cdqr0x8i9fpcykk1zczb8zdjawrrr92465d26y";
-  cargoSha256 = "0mlrbl85x1x2ynwrps94mxn95rjj1r7gb3vdivfaxqv1xvp25m41";
+  version = "0.19.5";
+  sha256 = "1qmb0sva28zv6r3c3j7xs9pc8bpwwhkb9vxxndw2zbdn9wkvmbmn";
+  cargoSha256 = "0hnjik3pymb1s7frhfpfzvd6w2k3lgpsmh6milpriwxmqsmkwdzz";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -70,6 +70,35 @@ let
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; };
     in
     lib.mapAttrs change grammars;
+
+  # Usage:
+  # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
+  #
+  # or for all grammars:
+  # pkgs.tree-sitter.withPlugins (_: allGrammars)
+  # which is equivalent to
+  # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
+  withPlugins = grammarFn:
+    let
+      grammars = grammarFn builtGrammars;
+    in
+    linkFarm "grammars"
+      (map
+        (drv:
+          let
+            name = lib.strings.getName drv;
+          in
+          {
+            name =
+              (lib.strings.removePrefix "tree-sitter-"
+                (lib.strings.removeSuffix "-grammar" name))
+              + stdenv.hostPlatform.extensions.sharedLibrary;
+            path = "${drv}/parser";
+          }
+        )
+        grammars);
+
+  allGrammars = builtins.attrValues builtGrammars;
 
 in
 rustPlatform.buildRustPackage {
@@ -111,7 +140,7 @@ rustPlatform.buildRustPackage {
     updater = {
       inherit update-all-grammars;
     };
-    inherit grammars builtGrammars;
+    inherit grammars builtGrammars withPlugins allGrammars;
 
     tests = {
       # make sure all grammars build

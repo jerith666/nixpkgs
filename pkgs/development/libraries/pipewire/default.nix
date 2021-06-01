@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitLab
-, fetchpatch
 , removeReferencesTo
 , meson
 , ninja
@@ -43,7 +42,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.24";
+    version = "0.3.27";
 
     outputs = [
       "out"
@@ -61,7 +60,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      hash = "sha256:PcY20FTtUtJYAwCscEs+HfkdwDksYPFZIVTVORP1ooI=";
+      sha256 = "sha256-GfcMODQWtcahBvXnZ98/PKIm4pkqLaz09oOy7zQR4IA=";
     };
 
     patches = [
@@ -75,11 +74,6 @@ let
       ./0070-installed-tests-path.patch
       # Add flag to specify configuration directory (different from the installation directory).
       ./0080-pipewire-config-dir.patch
-      # Fix JSON parser.
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/34800dc0191a4ee7a329eeb361a6f2ccf4a75176.diff";
-        sha256 = "0dzxzr408qqzf0252nwg14709p1lb2k826i3kdzg6djq8w98d5aj";
-      })
     ];
 
     nativeBuildInputs = [
@@ -152,29 +146,31 @@ let
       moveToOutput "bin/pipewire-pulse" "$pulse"
     '';
 
-    passthru.tests = {
-      installedTests = nixosTests.installed-tests.pipewire;
+    passthru = {
+      updateScript = ./update.sh;
+      tests = {
+        installedTests = nixosTests.installed-tests.pipewire;
 
-      # This ensures that all the paths used by the NixOS module are found.
-      test-paths = callPackage ./test-paths.nix {
-        paths-out = [
-          "share/alsa/alsa.conf.d/50-pipewire.conf"
-          "nix-support/etc/pipewire/client.conf.json"
-          "nix-support/etc/pipewire/client-rt.conf.json"
-          "nix-support/etc/pipewire/jack.conf.json"
-          "nix-support/etc/pipewire/pipewire.conf.json"
-          "nix-support/etc/pipewire/pipewire-pulse.conf.json"
-        ];
-        paths-out-media-session = [
-          "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
-          "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
-          "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
-          "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
-        ];
-        paths-lib = [
-          "lib/alsa-lib/libasound_module_pcm_pipewire.so"
-          "share/alsa-card-profile/mixer"
-        ];
+        # This ensures that all the paths used by the NixOS module are found.
+        test-paths = callPackage ./test-paths.nix {
+          paths-out = [
+            "share/alsa/alsa.conf.d/50-pipewire.conf"
+            "nix-support/etc/pipewire/client.conf.json"
+            "nix-support/etc/pipewire/jack.conf.json"
+            "nix-support/etc/pipewire/pipewire.conf.json"
+            "nix-support/etc/pipewire/pipewire-pulse.conf.json"
+          ];
+          paths-out-media-session = [
+            "nix-support/etc/pipewire/media-session.d/alsa-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/bluez-monitor.conf.json"
+            "nix-support/etc/pipewire/media-session.d/media-session.conf.json"
+            "nix-support/etc/pipewire/media-session.d/v4l2-monitor.conf.json"
+          ];
+          paths-lib = [
+            "lib/alsa-lib/libasound_module_pcm_pipewire.so"
+            "share/alsa-card-profile/mixer"
+          ];
+        };
       };
     };
 

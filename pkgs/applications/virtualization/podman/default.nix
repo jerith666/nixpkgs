@@ -1,7 +1,9 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , pkg-config
 , installShellFiles
+, makeWrapper
 , buildGoModule
 , gpgme
 , lvm2
@@ -16,13 +18,13 @@
 
 buildGoModule rec {
   pname = "podman";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    sha256 = "sha256-Cql9ikk0lo/LeWNykEJSKgfGnBSUU5vOh/zUIEvMapk=";
+    sha256 = "sha256-PS41e7myv5xCSJIeT+SRj4rLVCXpthq7KeHisYoSiOE=";
   };
 
   patches = [
@@ -35,7 +37,7 @@ buildGoModule rec {
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     btrfs-progs
@@ -68,6 +70,8 @@ buildGoModule rec {
     installShellCompletion --zsh completions/zsh/*
     MANDIR=$man/share/man make install.man-nobuild
   '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/podman \
+      --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
     install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
     install -Dm644 contrib/systemd/system/podman.{socket,service} -t $out/lib/systemd/system
   '' + ''

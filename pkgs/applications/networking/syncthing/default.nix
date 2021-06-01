@@ -3,23 +3,20 @@
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.14.0";
-      name = "${stname}-${version}";
+      pname = stname;
+      version = "1.16.0";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "1nkjbikin341v74fcwdaa2v5f3zhd8xr6pjhpka1fdw6vvnn4lnd";
+        sha256 = "sha256-AAJLtykSQLM13I77E7LD1W8hXLvZQ3XqgOWrTBGYn3k=";
       };
 
-      vendorSha256 = "1kr6yyigi7bbi4xwpk009q801wvmf3aaw4m40ki0s6gjn0wjl4j3";
+      vendorSha256 = "sha256-cN6Dgztq0/pAwfuBGFtTzK7XKXV7LrkgDGGzjkTDUN8=";
 
       doCheck = false;
 
-      patches = [
-        ./add-stcli-target.patch
-      ];
       BUILD_USER="nix";
       BUILD_HOST="nix";
 
@@ -81,12 +78,6 @@ in {
                  $out/lib/systemd/user/syncthing.service \
                  --replace /usr/bin/syncthing $out/bin/syncthing
     '';
-  };
-
-  syncthing-cli = common {
-    stname = "syncthing-cli";
-
-    target = "stcli";
   };
 
   syncthing-discovery = common {

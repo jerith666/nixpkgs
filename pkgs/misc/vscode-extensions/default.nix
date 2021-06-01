@@ -1,4 +1,4 @@
-{ config, lib, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
+{ config, lib, buildEnv, callPackage, vscode-utils, nodePackages, jdk, llvmPackages_8 }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -279,6 +279,23 @@ let
         };
       };
 
+      editorconfig.editorconfig = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "EditorConfig";
+          publisher = "EditorConfig";
+          version = "0.16.4";
+          sha256 = "0fa4h9hk1xq6j3zfxvf483sbb4bd17fjl5cdm3rll7z9kaigdqwg";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/EditorConfig.EditorConfig/changelog";
+          description = "EditorConfig Support for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig";
+          homepage = "https://github.com/editorconfig/editorconfig-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
       edonet.vscode-command-runner = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-command-runner";
@@ -390,6 +407,21 @@ let
         };
       };
 
+      foxundermoon.shell-format = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "shell-format";
+          publisher = "foxundermoon";
+          version = "7.1.0";
+          sha256 = "09z72mdr5bfdcb67xyzlv7lb9vyjlc3k9ackj4jgixfk40c68cnj";
+        };
+        meta = with lib; {
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=foxundermoon.shell-format";
+          homepage = "https://github.com/foxundermoon/vs-shell-format";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
+        };
+      };
+
       freebroccolo.reasonml = buildVscodeMarketplaceExtension {
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/freebroccolo.reasonml/changelog";
@@ -412,9 +444,8 @@ let
           mktplcRef = {
             name = "github-vscode-theme";
             publisher = "github";
-            version = "1.1.5";
-            sha256 =
-              "10f0098cce026d1f0c855fb7a66ea60b5d8acd2b76126ea94fe7361e49cd9ed2";
+            version = "4.1.1";
+            sha256 = "14wz2b0bn1rnmpj28c0mivz2gacla2dgg8ncv7qfx9bsxhf95g68";
           };
           meta = with lib; {
             description = "GitHub theme for VS Code";
@@ -465,8 +496,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.209";
-          sha256 = "1i0wq8zwax4kmy69hh0hclx9a47ycm3qp3gspjq8xpmcq3nmbfaq";
+          version = "0.0.213";
+          sha256 = "0fj7vvaqdldhbzm9dqh2plqlhg34jv5khd690xd87h418sv8rk95";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -508,6 +539,23 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      iciclesoft.workspacesort = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "workspacesort";
+          publisher = "iciclesoft";
+          version = "1.6.0";
+          sha256 = "1pbk8kflywll6lqhmffz9yjf01dn8xq8sk6rglnfn2kl2ildfhh6";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/iciclesoft.workspacesort/changelog";
+          description = "Sort workspace-folders alphabetically rather than in chronological order";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=iciclesoft.workspacesort";
+          homepage = "https://github.com/iciclesoft/workspacesort-for-VSCode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
         };
       };
 
@@ -654,9 +702,15 @@ let
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh {};
 
-      ms-python.python = callPackage ./python {
-        extractNuGet = callPackage ./python/extract-nuget.nix { };
-      };
+      ms-python.python = let
+        raw-package = callPackage ./python {
+          extractNuGet = callPackage ./python/extract-nuget.nix { };
+        };
+      in
+        buildEnv {
+          name = "vscode-extension-ms-python-python-full";
+          paths = [ raw-package self.ms-toolsai.jupyter ];
+        };
 
       msjsdiag.debugger-for-chrome = buildVscodeMarketplaceExtension {
         mktplcRef = {
@@ -667,6 +721,18 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "jupyter";
+          publisher = "ms-toolsai";
+          version = "2021.5.745244803";
+          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
+        };
+        meta = {
+          license = lib.licenses.unfree;
         };
       };
 
@@ -779,8 +845,8 @@ let
         mktplcRef = {
           name = "scala";
           publisher = "scala-lang";
-          version = "0.5.1";
-          sha256 = "0p9nhds2xn08xz8x822q15jdrdlqkg2wa1y7mk9k89n8n2kfh91g";
+          version = "0.5.3";
+          sha256 = "0isw8jh845hj2fw7my1i19b710v3m5qsjy2faydb529ssdqv463p";
         };
         meta = {
           license = lib.licenses.mit;
@@ -791,8 +857,8 @@ let
         mktplcRef = {
           name = "metals";
           publisher = "scalameta";
-          version = "1.9.13";
-          sha256 = "0vrg25ygmyjx1lwif2ypyv688b290ycfn1qf0izxbmgi2z3f0wf9";
+          version = "1.10.4";
+          sha256 = "0q6zjpdi98png4vpzz39q85nxmsh3h1nnan58saz5rr83d6jgj89";
         };
         meta = {
           license = lib.licenses.asl20;
@@ -857,6 +923,23 @@ let
         };
         meta = with lib; {
           license = licenses.mit;
+        };
+      };
+
+      stephlin.vscode-tmux-keybinding = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-tmux-keybinding";
+          publisher = "stephlin";
+          version = "0.0.6";
+          sha256 = "0mph2nval1ddmv9hpl51fdvmagzkqsn8ljwqsfha2130bb7la0d9";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/stephlin.vscode-tmux-keybinding/changelog";
+          description = "A simple extension for tmux behavior in vscode terminal.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stephlin.vscode-tmux-keybinding";
+          homepage = "https://github.com/StephLin/vscode-tmux-keybinding";
+          license = licenses.mit;
+          maintainers = with maintainers; [ dbirks ];
         };
       };
 

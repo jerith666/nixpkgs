@@ -29,11 +29,11 @@
 assert pulseaudioSupport -> libpulseaudio != null;
 
 let
-  version = "5.6.13632.0328";
+  version = "5.6.16888.0424";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "0nskpg3rbv40jcbih95sfdr0kfv5hjv50z9jdz1cddl8v7hbqg71";
+      sha256 = "H/G9cSVmxYM0AVfrdpXzm7ohssDbKq2xdvIBc4d+elc=";
     };
   };
 
@@ -79,7 +79,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir $out
-    tar -C $out -xf ${src}
+    tar -C $out -xf $src
     mv $out/usr/* $out/
     runHook postInstall
   '';

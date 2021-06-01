@@ -38,8 +38,8 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
   mktplcRef = {
     name = "vsliveshare";
     publisher = "ms-vsliveshare";
-    version = "1.0.4070";
-    sha256 = "18dddaz5g0kbrmj9l9k0fivdj6p6y5a6iw24ikvzmypz8zql7gd5";
+    version = "1.0.4272";
+    sha256 = "kH8ZiNzpAfR1BnKjYc+hcNMEmhBNyHlnOlj8fCdNGjY=";
   };
 }).overrideAttrs({ nativeBuildInputs ? [], buildInputs ? [], ... }: {
   nativeBuildInputs = nativeBuildInputs ++ [
@@ -128,7 +128,7 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
     description = "Live Share lets you achieve greater confidence at speed by streamlining collaborative editing, debugging, and more in real-time during development";
     homepage = "https://aka.ms/vsls-docs";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jraygauthier ];
+    maintainers = with maintainers; [ jraygauthier V ];
     platforms = [ "x86_64-linux" ];
   };
 })

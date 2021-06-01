@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ODD5XwLYVUJOHQCETVUqMUojL4Y8eWJ/xhmfzV9Cp3k=";
+    sha256 = "sha256-0sh9OuX52kvhTt681uZesOUttrxH8ZMxn6mTILQDQuU=";
   };
 
-  cargoSha256 = "sha256-PJOlXFx+MYfq7daaOEZ5wPuWD7gAr8gc/5AJG2SYTq4=";
+  cargoSha256 = "sha256-JBmSa2sc/eor0bCcIMhGGLmcJN+wCloP0Ao9DBybQbc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  checkFlags = [
+    # Username and Password use the same ports and causes collision
+    # https://github.com/mbrubeck/agate/issues/50
+    "--skip username"
+    "--skip password"
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''

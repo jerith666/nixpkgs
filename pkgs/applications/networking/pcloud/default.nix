@@ -21,19 +21,19 @@
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
   # AppImage, so we don't have to duplicate them here.
-  alsaLib, dbus-glib, fuse, gnome3, gtk3, libdbusmenu-gtk2, udev, nss
+  alsaLib, dbus-glib, fuse, gnome, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.1";
-  code = "XZXB3fXZgXyQbnTkTm5XOJH9i6NsKX9lL21V";
+  version = "1.9.2";
+  code = "XZCBKnXZdbHEAu1ec7bMDQCb1oCztBc169Py";
   name = "${pname}-${version}";
 
   # Archive link's code thanks to: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=pcloud-drive
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${name}.zip";
-    hash = "sha256-vUrz4thp9tcU9T8d52DJUAbt6Jnv+E3pbUytzMR8d/E=";
+    hash = "sha256-9I4xl9cO1MDvdXaTv6ER/NPdqKoo0y7HNWxGl0Fn1O0=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -59,6 +59,7 @@ in stdenv.mkDerivation {
     fuse
     gtk3
     libdbusmenu-gtk2
+    libXdamage
     nss
     udev
   ];
@@ -84,8 +85,8 @@ in stdenv.mkDerivation {
     substitute \
       app/pcloud.desktop \
       share/applications/pcloud.desktop \
-      --replace "Name=pcloud" "Name=pCloud" \
-      --replace "Exec=AppRun" "Exec=$out/bin/pcloud"
+      --replace 'Name=pcloud' 'Name=pCloud' \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
 
     # Build the main executable
     cat > bin/pcloud <<EOF
@@ -93,7 +94,7 @@ in stdenv.mkDerivation {
 
     # This is required for the file picker dialog - otherwise pcloud just
     # crashes
-    export XDG_DATA_DIRS="${gnome3.gsettings-desktop-schemas}/share/gsettings-schemas/${gnome3.gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
+    export XDG_DATA_DIRS="${gnome.gsettings-desktop-schemas}/share/gsettings-schemas/${gnome.gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
 
     exec "$out/app/pcloud"
     EOF

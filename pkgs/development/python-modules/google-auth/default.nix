@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-m9Q20ZqwRwAaE0ByDStinrlt1QMljFJJIewq8+6IqA4=";
+    sha256 = "9bd436d19ab047001a1340720d2b629eb96dd503258c524921ec2af3ee88a80e";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_request_with_timeout_success"
+    "test_request_with_timeout_failure"
+    "test_request_headers"
+    "test_request_error"
+    "test_request_basic"
   ];
 
   meta = with lib; {
