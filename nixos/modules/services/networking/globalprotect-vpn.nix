@@ -18,7 +18,7 @@ in
     csdWrapper = mkOption {
       description = ''
         A script that will produce a Host Integrity Protection (HIP) report,
-        as described at <link xlink:href=https://www.infradead.org/openconnect/hip.html" />
+        as described at <link xlink:href="https://www.infradead.org/openconnect/hip.html" />
       '';
       default = null;
       example = literalExample "\${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
