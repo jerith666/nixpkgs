@@ -31,9 +31,6 @@ in
 
     systemd.services.gpservice = {
       description = "GlobalProtect openconnect DBus service";
-      environment = {
-        LANG = "en_US.utf8";
-      };
       serviceConfig = {
         Type="dbus";
         BusName="com.yuezk.qt.GPService";
