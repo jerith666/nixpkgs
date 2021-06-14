@@ -4,6 +4,7 @@
 , version
 , src
 , buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
 , beamDeps ? [ ]
 , propagatedBuildInputs ? [ ]
 , postPatch ? ""
@@ -23,27 +24,22 @@ let
 
   pkg = self: stdenv.mkDerivation (attrs // {
     name = "${name}-${version}";
-    inherit version;
-    inherit src;
+    inherit version src;
 
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
 
-    # stripping does not have any effect on beam files
-    dontStrip = true;
-
     # add to ERL_LIBS so other modules can find at runtime.
     # http://erlang.org/doc/man/code.html#code-path
-    # Mix also searches the code path when compiling with the --no-deps-check
-    # flag, which is why there is no complicated booterstrapper like the one
-    # used by buildRebar3.
+    # Mix also searches the code path when compiling with the --no-deps-check flag
     setupHook = attrs.setupHook or
       writeText "setupHook.sh" ''
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
     '';
 
-    buildInputs = buildInputs ++ [ elixir hex ];
+    buildInputs = buildInputs ++ [ ];
+    nativeBuildInputs = nativeBuildInputs ++ [ elixir hex ];
     propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
 
     buildPhase = attrs.buildPhase or ''
@@ -74,6 +70,10 @@ let
 
       runHook postInstall
     '';
+
+    # stripping does not have any effect on beam files
+    # it is however needed for dependencies with NIFs like bcrypt for example
+    dontStrip = false;
 
     passthru = {
       packageName = name;

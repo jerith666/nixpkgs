@@ -139,6 +139,7 @@
   ./programs/flexoptix-app.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/gamemode.nix
   ./programs/geary.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
@@ -398,6 +399,7 @@
   ./services/hardware/ratbagd.nix
   ./services/hardware/sane.nix
   ./services/hardware/sane_extra_backends/brscan4.nix
+  ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
   ./services/hardware/spacenavd.nix
   ./services/hardware/tcsd.nix
@@ -492,7 +494,7 @@
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
-  ./services/misc/geoip-updater.nix
+  ./services/misc/geoipupdate.nix
   ./services/misc/gitea.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
@@ -548,10 +550,12 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/sdrplay.nix
   ./services/misc/sickbeard.nix
   ./services/misc/siproxd.nix
   ./services/misc/snapper.nix
   ./services/misc/sonarr.nix
+  ./services/misc/sourcehut
   ./services/misc/spice-vdagentd.nix
   ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
@@ -591,6 +595,7 @@
   ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/mackerel-agent.nix
+  ./services/monitoring/metricbeat.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
@@ -688,7 +693,6 @@
   ./services/networking/flannel.nix
   ./services/networking/freenet.nix
   ./services/networking/freeradius.nix
-  ./services/networking/gale.nix
   ./services/networking/gateone.nix
   ./services/networking/gdomap.nix
   ./services/networking/ghostunnel.nix
@@ -947,6 +951,7 @@
   ./services/web-apps/nextcloud.nix
   ./services/web-apps/nexus.nix
   ./services/web-apps/plantuml-server.nix
+  ./services/web-apps/plausible.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/moinmoin.nix
@@ -1114,6 +1119,7 @@
   ./virtualisation/openvswitch.nix
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman.nix
+  ./virtualisation/podman-network-socket-ghostunnel.nix
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/railcar.nix
   ./virtualisation/spice-usb-redirection.nix

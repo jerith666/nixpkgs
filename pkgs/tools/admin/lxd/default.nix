@@ -7,6 +7,7 @@
 , bash
 , installShellFiles
 , nftablesSupport ? false
+, nixosTests
 }:
 
 let
@@ -18,13 +19,13 @@ let
 in
 buildGoPackage rec {
   pname = "lxd";
-  version = "4.14";
+  version = "4.15";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1x9gv70j333w254jgg1n0kvxpwv6vww0v0i862pglq48xhdaa7hy";
+    sha256 = "sha256-UXipGNWclBKgr0r0wav85Gnhp2SXkTvDFr9gKJWismU=";
   };
 
   postPatch = ''
@@ -57,6 +58,8 @@ buildGoPackage rec {
 
     installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
+
+  passthru.tests.lxd = nixosTests.lxd;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev

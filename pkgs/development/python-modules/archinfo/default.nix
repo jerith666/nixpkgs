@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.0.7491";
+  version = "9.0.7912";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5mKXpvMhdcIKgvQkmj//YigvsgozZofvv6CvMdW3BHo=";
+    sha256 = "sha256-nHXF6Il6rHHrnGYEmv4FPQr6MsurzH1exkJS9UXThBs=";
   };
 
   checkInputs = [

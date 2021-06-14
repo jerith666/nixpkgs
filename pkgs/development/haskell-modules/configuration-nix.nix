@@ -196,6 +196,7 @@ self: super: builtins.intersectAttrs super {
   tcp-streams = dontCheck super.tcp-streams;
   holy-project = dontCheck super.holy-project;
   mustache = dontCheck super.mustache;
+  arch-web = dontCheck super.arch-web;
 
   # Tries to mess with extended POSIX attributes, but can't in our chroot environment.
   xattr = dontCheck super.xattr;
@@ -259,8 +260,18 @@ self: super: builtins.intersectAttrs super {
     '';
   }));
 
-  # Patch to consider NIX_GHC just like xmonad does
-  dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
+  dyre =
+    appendPatch
+      # dyre's tests appear to be trying to directly call GHC.
+      (dontCheck super.dyre)
+      # Dyre needs special support for reading the NIX_GHC env var.  This is
+      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
+      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
+      # next version.
+      (pkgs.fetchpatch {
+        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
+        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
+      });
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
@@ -803,4 +814,23 @@ self: super: builtins.intersectAttrs super {
   hw-prim-bits = overrideCabal super.hw-prim-bits {
     platforms = pkgs.lib.platforms.x86;
   };
+
+  # random 1.2.0 has tests that indirectly depend on
+  # itself causing an infinite recursion at evaluation
+  # time
+  random = dontCheck super.random;
+
+  # Since this package is primarily used by nixpkgs maintainers and is probably
+  # not used to link against by anyone, we can make it’s closure smaller.
+  cabal2nix-unstable = justStaticExecutables super.cabal2nix-unstable;
+
+  # test suite needs local redis daemon
+  nri-redis = dontCheck super.nri-redis;
+
+  # Make tophat find itself for _compiling_ its test suite
+  tophat = overrideCabal super.tophat (drv: {
+    postPatch = ''
+      sed -i 's|"tophat"|"./dist/build/tophat/tophat"|' app-test-bin/*.hs
+    '' + (drv.postPatch or "");
+  });
 }

@@ -40,8 +40,14 @@ mapAliases ({
   adobe_flex_sdk = apache-flex-sdk; # added 2018-06-01
   ag = silver-searcher; # added 2018-04-25
   aircrackng = aircrack-ng; # added 2016-01-14
-  alienfx = throw "alienfx has been removed."; # added 2019-12-08
   aleth = throw "aleth (previously packaged as cpp_ethereum) has been removed; abandoned upstream."; # added 2020-11-30
+  alienfx = throw "alienfx has been removed."; # added 2019-12-08
+  alsaLib = alsa-lib; # added 2021-06-09
+  alsaOss = alsa-oss; # added 2021-06-10
+  alsaPlugins = alsa-plugins; # added 2021-06-10
+  alsaPluginWrapper = alsa-plugins-wrapper; # added 2021-06-10
+  alsaTools = alsa-tools; # added 2021-06-10
+  alsaUtils = alsa-utils; # added 2021-06-10
   amazon-glacier-cmd-interface = throw "amazon-glacier-cmd-interface has been removed due to it being unmaintained."; # added 2020-10-30
   ammonite-repl = ammonite; # added 2017-05-02
   amsn = throw "amsn has been removed due to being unmaintained."; # added 2020-12-09
@@ -237,6 +243,7 @@ mapAliases ({
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
+  fsharp41 = throw "fsharp41 has been removed, please use dotnet-sdk_5 or later";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
@@ -340,6 +347,7 @@ mapAliases ({
   jikes = throw "jikes was deprecated on 2019-10-07: abandoned by upstream";
   joseki = apache-jena-fuseki; # added 2016-02-28
   json_glib = json-glib; # added 2018-02-25
+  kalk = kalker; # added 2021-06-03
   kdecoration-viewer = throw "kdecoration-viewer has been removed from nixpkgs, as there is no upstream activity"; # 2020-06-16
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # 2020-11-06
   kodiGBM = kodi-gbm;
@@ -481,6 +489,7 @@ mapAliases ({
   mxisd = throw "mxisd has been removed from nixpkgs as it has reached end of life, see https://github.com/kamax-matrix/mxisd/blob/535e0a5b96ab63cb0ddef90f6f42c5866407df95/EOL.md#end-of-life-notice . ma1sd may be a suitable alternative."; # added 2021-04-15
   mysqlWorkbench = mysql-workbench; # added 2017-01-19
   nagiosPluginsOfficial = monitoring-plugins;
+  navit = throw "navit has been removed from nixpkgs, due to being unmaintained"; # added 2021-06-07
   ncat = nmap;  # added 2016-01-26
   netcat-openbsd = libressl.nc; # added 2018-04-25
   netease-cloud-music = throw "netease-cloud-music has been removed together with deepin"; # added 2020-08-31
@@ -527,6 +536,11 @@ mapAliases ({
   pgp-tools = signing-party; # added 2017-03-26
   pg_tmp = ephemeralpg; # added 2018-01-16
 
+  # Obsolete PHP version aliases
+  php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases."; # added 2021-06-03
+  php73Packages = php73; # added 2021-06-03
+  php73Extensions = php73; # added 2021-06-03
+
   php-embed = throw ''
     php*-embed has been dropped, you can build something similar
     with the following snippet:
@@ -540,8 +554,8 @@ mapAliases ({
     similar with the following snippet:
     (php74.override { embedSupport = true; apxs2Support = false; }).packages
   ''; # added 2020-04-01
-  php74Packages-embed = phpPackages-embed;
   php73Packages-embed = phpPackages-embed;
+  php74Packages-embed = phpPackages-embed;
 
   php-unit = throw ''
     php*-unit has been dropped, you can build something similar with
@@ -570,8 +584,8 @@ mapAliases ({
       fpmSupport = false;
     }).packages
   ''; # added 2020-04-01
-  php74Packages-unit = phpPackages-unit;
   php73Packages-unit = phpPackages-unit;
+  php74Packages-unit = phpPackages-unit;
 
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
@@ -648,7 +662,6 @@ mapAliases ({
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
   readline80 = throw "readline-8.0 is no longer supported in nixpkgs, please use 'readline' for main supported version or 'readline81' for most recent version"; # added 2021-04-22
-  retroshare = throw "retroshare was removed because it was broken"; # added 2021-05-17
   rhc = throw "rhc was deprecated on 2019-04-09: abandoned by upstream.";
   rng_tools = rng-tools; # added 2018-10-24
   robomongo = robo3t; #added 2017-09-28
@@ -1070,5 +1083,12 @@ mapAliases ({
   inherit (libsForQt5)
     sddm
   ;
+
+  # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
+  llvmPackages_git = recurseIntoAttrs (callPackage ../development/compilers/llvm/git {
+    inherit (stdenvAdapters) overrideCC;
+    buildLlvmTools = buildPackages.llvmPackages_git.tools;
+    targetLlvmLibraries = targetPackages.llvmPackages_git.libraries;
+  });
 
 })

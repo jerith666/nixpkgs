@@ -276,6 +276,7 @@ let
     jqr = [ pkgs.jq.dev ];
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
+    lwgeom = [ pkgs.gdal pkgs.geos pkgs.proj ];
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl_1 ];
@@ -374,6 +375,7 @@ let
     affyio = [ pkgs.zlib.dev ];
     VariantAnnotation = [ pkgs.zlib.dev pkgs.curl.dev ];
     snpStats = [ pkgs.zlib.dev ];
+    hdf5r = [ pkgs.hdf5.dev ];
   };
 
   packagesWithBuildInputs = {
@@ -406,6 +408,7 @@ let
     gdtools = [ pkgs.pkg-config ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkg-config ];
+    lwgeom = [ pkgs.pkg-config pkgs.proj.dev pkgs.sqlite.dev ];
     magick = [ pkgs.pkg-config ];
     mwaved = [ pkgs.pkg-config ];
     odbc = [ pkgs.pkg-config ];

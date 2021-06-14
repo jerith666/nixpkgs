@@ -67,6 +67,8 @@ in lib.makeScopeWithSplicing
     HOST_SH = stdenv'.shell;
 
     MACHINE_ARCH = {
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
@@ -74,6 +76,8 @@ in lib.makeScopeWithSplicing
     MACHINE = {
       x86_64 = "amd64";
       aarch64 = "evbarm64";
+      i486 = "i386";
+      i586 = "i386";
       i686 = "i386";
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
@@ -96,6 +100,8 @@ in lib.makeScopeWithSplicing
     HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
   } // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
     HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
+  } // lib.optionalAttrs (stdenv'.isx86_32) {
+    USE_SSP = "no";
   } // lib.optionalAttrs (attrs.headersOnly or false) {
     installPhase = "includesPhase";
     dontBuild = true;
@@ -753,11 +759,11 @@ in lib.makeScopeWithSplicing
     version = "9.1";
     sha256 = "0ia9mqzdljly0vqfwflm5mzz55k7qsr4rw2bzhivky6k30vgirqa";
     meta.platforms = lib.platforms.netbsd;
-    LIBC_PIC = "${stdenv.cc.libc}/lib/libc_pic.a";
+    LIBC_PIC = "${self.libc}/lib/libc_pic.a";
     # Hack to prevent a symlink being installed here for compatibility.
     SHLINKINSTALLDIR = "/usr/libexec";
     USE_FORT = "yes";
-    makeFlags = [ "CLIBOBJ=${stdenv.cc.libc}/lib" ];
+    makeFlags = [ "BINDIR=$(out)/libexec" "CLIBOBJ=${self.libc}/lib" ];
     extraPaths = with self; [ libc.src ] ++ libc.extraPaths;
   };
 

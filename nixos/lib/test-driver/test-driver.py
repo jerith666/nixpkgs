@@ -21,6 +21,7 @@ import shutil
 import socket
 import subprocess
 import sys
+import telnetlib
 import tempfile
 import time
 import traceback
@@ -128,18 +129,18 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     return (vlan_nr, vde_socket, vde_process, fd)
 
 
-def retry(fn: Callable) -> None:
+def retry(fn: Callable, timeout: int = 900) -> None:
     """Call the given function repeatedly, with 1 second intervals,
     until it returns True or a timeout is reached.
     """
 
-    for _ in range(900):
+    for _ in range(timeout):
         if fn(False):
             return
         time.sleep(1)
 
     if not fn(True):
-        raise Exception("action timed out")
+        raise Exception(f"action timed out after {timeout} seconds")
 
 
 class Logger:
@@ -440,7 +441,7 @@ class Machine:
     def execute(self, command: str) -> Tuple[int, str]:
         self.connect()
 
-        out_command = "( {} ); echo '|!=EOF' $?\n".format(command)
+        out_command = "( set -euo pipefail; {} ); echo '|!=EOF' $?\n".format(command)
         self.shell.send(out_command.encode())
 
         output = ""
@@ -454,6 +455,16 @@ class Machine:
                 status_code = int(match[2])
                 return (status_code, output)
             output += chunk
+
+    def shell_interact(self) -> None:
+        """Allows you to interact with the guest shell
+
+        Should only be used during test development, not in the production test."""
+        self.connect()
+        self.log("Terminal is ready (there is no prompt):")
+        telnet = telnetlib.Telnet()
+        telnet.sock = self.shell  # type: ignore
+        telnet.interact()
 
     def succeed(self, *commands: str) -> str:
         """Execute each command and check that it succeeds."""
@@ -896,7 +907,6 @@ class Machine:
 def create_machine(args: Dict[str, Any]) -> Machine:
     global log
     args["log"] = log
-    args["redirectSerial"] = os.environ.get("USE_SERIAL", "0") == "1"
     return Machine(args)
 
 

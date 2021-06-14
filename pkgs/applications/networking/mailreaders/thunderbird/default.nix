@@ -58,7 +58,7 @@
 
 , debugBuild ? false
 
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
 , waylandSupport ? true, libdrm
@@ -73,13 +73,13 @@ assert waylandSupport -> gtk3Support == true;
 
 stdenv.mkDerivation rec {
   pname = "thunderbird";
-  version = "78.10.2";
+  version = "78.11.0";
 
   src = fetchurl {
     url =
       "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
     sha512 =
-      "3sc6n3n9bqnsq9qn9myanvxpgdx20c803prla3p236hwidz7snmyp2097ggn42xp765km55n11drxalnslsxdypgjikbfdqal05hf5r";
+      "1m12kx830pfzvby8j9i5nb9c5v71vlg4wr0qrjgg3pw5ml9j5x7myrqyfd49l2qppm3xjn08srvmf45avnwq0lrys4sb83iwsd46sf6";
   };
 
   nativeBuildInputs = [
@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     zip
     zlib
-  ] ++ lib.optional alsaSupport alsaLib
+  ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional gtk3Support gtk3
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optionals waylandSupport [ libxkbcommon libdrm ];
