@@ -6,7 +6,7 @@
 # Userspace dependencies
 , zlib, libuuid, python3, attr, openssl
 , libtirpc
-, nfs-utils
+, nfs-utils, samba
 , gawk, gnugrep, gnused, systemd
 , smartmontools, enableMail ? false
 , sysstat, pkg-config
@@ -55,6 +55,7 @@ let
           # And if it's enabled by default, only change that if we explicitly disable python to remove python from the closure
           nfs-utils.override (old: { enablePython = old.enablePython or true && enablePython; })
         }/bin/exportfs"
+        substituteInPlace ./lib/libshare/smb.h        --replace "/usr/bin/net"            "${samba}/bin/net"
         substituteInPlace ./config/user-systemd.m4    --replace "/usr/lib/modules-load.d" "$out/etc/modules-load.d"
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d" \
                                                       --replace "/etc/default"            "$out/etc/default"
@@ -194,22 +195,22 @@ in {
   # to be adapted
   zfsStable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.12";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
 
     # this package should point to the latest release.
-    version = "2.0.4";
+    version = "2.1.0";
 
-    sha256 = "sha256-ySTt0K3Lc0Le35XTwjiM5l+nIf9co7wBn+Oma1r8YHo=";
+    sha256 = "sha256-YdY4SStXZGBBdAHdM3R/unco7ztxI3s0/buPSNSeh5o=";
   };
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.13";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0-rc7";
+    version = "2.1.0";
 
-    sha256 = "11dvz8r5l7cbhbx2j02y6335i2vibh29dqrqk4kmw4lf87g1isni";
+    sha256 = "sha256-YdY4SStXZGBBdAHdM3R/unco7ztxI3s0/buPSNSeh5o=";
 
     isUnstable = true;
   };

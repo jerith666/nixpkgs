@@ -18,26 +18,26 @@ in
     csdWrapper = mkOption {
       description = ''
         A script that will produce a Host Integrity Protection (HIP) report,
-        as described at https://www.infradead.org/openconnect/hip.html
+        as described at <link xlink:href="https://www.infradead.org/openconnect/hip.html" />
       '';
       default = null;
-      example = "${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
+      example = literalExample "\${pkgs.openconnect}/libexec/openconnect/hipreport.sh";
       type = types.nullOr types.path;
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     services.dbus.packages = [ pkgs.globalprotect-openconnect ];
 
     systemd.services.gpservice = {
       description = "GlobalProtect openconnect DBus service";
       serviceConfig = {
-        Environment="\"LANG=en_US.utf8\"";
         Type="dbus";
         BusName="com.yuezk.qt.GPService";
         ExecStart=execStart;
       };
       wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
     };
   };
 }

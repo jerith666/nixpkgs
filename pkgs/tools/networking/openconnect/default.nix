@@ -9,7 +9,6 @@
 , stoken
 , zlib
 , vpnc-scripts
-, fetchgit
 , PCSC
 , head ? false
   , fetchFromGitLab

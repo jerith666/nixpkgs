@@ -21,14 +21,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.21.0";
+  version = "0.21.2";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-n8ipIQAfKPVApJhuTrlSSsd6dlPeCUvk7rdiVmL9i+4=";
+    sha256 = "0y0mg8rr18mn0wzym7v48x6kl0ixd5q387kr5jhbdln55ph2jk9d";
   };
 
   buildInputs = [
@@ -68,17 +68,21 @@ buildPythonApplication rec {
 
   dontConfigure = true;
 
-  buildPhase = if stdenv.isDarwin then ''
-    ${python.interpreter} setup.py kitty.app \
-    --update-check-interval=0 \
-    --disable-link-time-optimization
-    make man
-  '' else ''
-    ${python.interpreter} setup.py linux-package \
-    --update-check-interval=0 \
-    --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
-    --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
-    --canberra-library='${libcanberra}/lib/libcanberra.so'
+  buildPhase = ''
+    runHook preBuild
+    ${if stdenv.isDarwin then ''
+      ${python.interpreter} setup.py kitty.app \
+      --update-check-interval=0 \
+      --disable-link-time-optimization
+      make man
+    '' else ''
+      ${python.interpreter} setup.py linux-package \
+      --update-check-interval=0 \
+      --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
+      --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
+      --canberra-library='${libcanberra}/lib/libcanberra.so'
+    ''}
+    runHook postBuild
   '';
 
   checkInputs = [ pillow ];
