@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C0W5oMnKlQ5hg/0YLKZKiQfLghJ7yAJYW6k0G6eOFQE=";
+    rev = version;
+    sha256 = "sha256-FWJ7fSJysT5LVFio49nbN0T0b+zWwiV7NvEJlojbNKs=";
   };
 
-  cargoSha256 = "sha256-TqvUunBFpKIog0pG85M/JLz8orncgbRqnQolseXYSo4=";
+  cargoSha256 = "sha256-/VmCuHPURQTyeIumMaWVrFu18ZgVR0klpc/bO1f1w4o=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/casey/just";
-    changelog = "https://github.com/casey/just/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "A handy way to save and run project-specific commands";
     license = licenses.cc0;
     maintainers = with maintainers; [ xrelkd jk ];

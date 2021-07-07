@@ -22,6 +22,8 @@ let
 
     alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
 
+    alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
+
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
     angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -79,6 +81,8 @@ let
     bolt = callPackage ../development/ocaml-modules/bolt { };
 
     bos = callPackage ../development/ocaml-modules/bos { };
+
+    bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
 
@@ -213,10 +217,9 @@ let
 
     csexp = callPackage ../development/ocaml-modules/csexp { };
 
-    cstruct =
-      if lib.versionAtLeast ocaml.version "4.2"
-      then callPackage ../development/ocaml-modules/cstruct {}
-      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { };
+    cstruct = callPackage ../development/ocaml-modules/cstruct {};
+
+    cstruct-async = callPackage ../development/ocaml-modules/cstruct/async.nix { };
 
     cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix { };
 
@@ -230,6 +233,8 @@ let
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
     csv-lwt = callPackage ../development/ocaml-modules/csv/lwt.nix { };
+
+    cudf = callPackage ../development/ocaml-modules/cudf { };
 
     curly = callPackage ../development/ocaml-modules/curly {
       inherit (pkgs) curl;
@@ -274,6 +279,8 @@ let
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     domain-name = callPackage ../development/ocaml-modules/domain-name { };
+
+    dose3 = callPackage ../development/ocaml-modules/dose3 { };
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
@@ -606,7 +613,7 @@ let
     };
 
     lwt = callPackage ../development/ocaml-modules/lwt {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
     };
 
     ocaml_lwt = lwt;
@@ -640,6 +647,8 @@ let
     };
 
     markup = callPackage ../development/ocaml-modules/markup { };
+
+    mccs = callPackage ../development/ocaml-modules/mccs { };
 
     mdx = callPackage ../development/ocaml-modules/mdx { };
 
@@ -824,6 +833,7 @@ let
     gettext-stub = callPackage ../development/ocaml-modules/ocaml-gettext/stub.nix { };
 
     ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
+    ocamlgraph_gtk = callPackage ../development/ocaml-modules/ocamlgraph/gtk.nix { };
 
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
@@ -839,12 +849,12 @@ let
 
     ocaml-migrate-parsetree-1-8 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/1.8.x.nix { };
 
-    ocaml-migrate-parsetree-2-1 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/2.1.x.nix { };
+    ocaml-migrate-parsetree-2 = callPackage ../development/ocaml-modules/ocaml-migrate-parsetree/2.x.nix { };
 
     ocamlmod = callPackage ../development/tools/ocaml/ocamlmod { };
 
     ocaml-monadic = callPackage ../development/ocaml-modules/ocaml-monadic {
-      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2-1;
+      ocaml-migrate-parsetree = ocaml-migrate-parsetree-2;
     };
 
     ocaml_mysql = callPackage ../development/ocaml-modules/mysql { };
@@ -1029,6 +1039,8 @@ let
 
     tls = callPackage ../development/ocaml-modules/tls { };
 
+    tls-async = callPackage ../development/ocaml-modules/tls/async.nix { };
+
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
     torch = callPackage ../development/ocaml-modules/torch {
@@ -1141,7 +1153,11 @@ let
 
     reason = callPackage ../development/compilers/reason { };
 
+    reason-native = lib.recurseIntoAttrs (callPackage ../development/ocaml-modules/reason-native { });
+
     rope = callPackage ../development/ocaml-modules/rope { };
+
+    routes = callPackage ../development/ocaml-modules/routes { };
 
     rpclib = callPackage ../development/ocaml-modules/rpclib { };
 
@@ -1506,6 +1522,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_11 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.11.nix { });
 
   ocamlPackages_4_12 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.12.nix { });
+
+  ocamlPackages_4_13 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.13.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_12;
 
