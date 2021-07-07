@@ -874,6 +874,10 @@ in
     libgamemode32 = pkgsi686Linux.gamemode.lib;
   };
 
+  elkhound = callPackage ../development/tools/elkhound { };
+
+  weidu = callPackage ../tools/games/weidu { };
+
   gfshare = callPackage ../tools/security/gfshare { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
@@ -1022,6 +1026,8 @@ in
 
   timedoctor = callPackage ../applications/office/timedoctor { };
 
+  tvnamer = callPackage ../tools/misc/tvnamer { };
+
   twine = with python3Packages; toPythonApplication twine;
 
   wayst = callPackage ../applications/terminal-emulators/wayst { };
@@ -1086,6 +1092,8 @@ in
   };
 
   apkid = callPackage ../development/tools/apkid { };
+
+  apksigcopier = callPackage ../development/tools/apksigcopier { };
 
   apktool = callPackage ../development/tools/apktool {
     inherit (androidenv.androidPkgs_9_0) build-tools;
@@ -2889,6 +2897,8 @@ in
 
   jiten = callPackage ../applications/misc/jiten { };
 
+  kanjidraw = callPackage ../applications/misc/kanjidraw { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   joycond = callPackage ../os-specific/linux/joycond { };
@@ -2952,6 +2962,8 @@ in
   numatop = callPackage ../os-specific/linux/numatop { };
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
+
+  num-utils = callPackage ../tools/text/num-utils { };
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
@@ -3146,6 +3158,8 @@ in
   poweralertd = callPackage ../tools/misc/poweralertd { };
 
   ps_mem = callPackage ../tools/system/ps_mem { };
+
+  pscale = callPackage ../development/tools/pscale { };
 
   psstop = callPackage ../tools/system/psstop { };
 
@@ -4719,7 +4733,9 @@ in
 
   flatpak = callPackage ../development/libraries/flatpak { };
 
-  flatpak-builder = callPackage ../development/tools/flatpak-builder { };
+  flatpak-builder = callPackage ../development/tools/flatpak-builder {
+    binutils = binutils-unwrapped;
+  };
 
   fltrdr = callPackage ../tools/misc/fltrdr {
     icu = icu63;
@@ -5044,6 +5060,8 @@ in
   ghq = callPackage ../applications/version-management/git-and-tools/ghq { };
 
   ghr = callPackage ../applications/version-management/git-and-tools/ghr { };
+
+  gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
 
@@ -7918,11 +7936,7 @@ in
 
   pk2cmd = callPackage ../tools/misc/pk2cmd { };
 
-  plantuml = callPackage ../tools/misc/plantuml {
-    # Graphviz 2.39 and 2.40 are discouraged by the PlantUML project, see
-    # http://plantuml.com/faq (heading: "Which version of Graphviz should I use ?")
-    graphviz = graphviz_2_32;
-  };
+  plantuml = callPackage ../tools/misc/plantuml { };
 
   plantuml-server = callPackage ../tools/misc/plantuml-server { };
 
@@ -8202,6 +8216,8 @@ in
   };
 
   qhull = callPackage ../development/libraries/qhull { };
+
+  qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
 
@@ -11870,19 +11886,19 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_10 = llvmPackages_10.libllvm;
   };
-  rust_1_52 = callPackage ../development/compilers/rust/1_52.nix {
+  rust_1_53 = callPackage ../development/compilers/rust/1_53.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
     llvm_12 = llvmPackages_12.libllvm;
   };
-  rust = rust_1_52;
+  rust = rust_1_53;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
   rustPackages_1_45 = rust_1_45.packages.stable;
-  rustPackages_1_52 = rust_1_52.packages.stable;
-  rustPackages = rustPackages_1_52;
+  rustPackages_1_53 = rust_1_53.packages.stable;
+  rustPackages = rustPackages_1_53;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -13198,6 +13214,8 @@ in
 
   cfr = callPackage ../development/tools/java/cfr { };
 
+  checkra1n = callPackage ../development/mobile/checkra1n { };
+
   checkstyle = callPackage ../development/tools/analysis/checkstyle { };
 
   chromedriver = callPackage ../development/tools/selenium/chromedriver { gconf = gnome2.GConf; };
@@ -13302,6 +13320,8 @@ in
   cvise = python3Packages.callPackage ../development/tools/misc/cvise {
     inherit (llvmPackages_11) llvm libclang;
   };
+
+  dprint = callPackage ../development/tools/dprint { };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
@@ -15334,8 +15354,7 @@ in
   glpk = callPackage ../development/libraries/glpk { };
 
   glsurf = callPackage ../applications/science/math/glsurf {
-    libpng = libpng12;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_01_0;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
   };
 
   glui = callPackage ../development/libraries/glui {};
@@ -17809,8 +17828,9 @@ in
     python = python37;
   };
 
-  protobuf = protobuf3_16;
+  protobuf = protobuf3_17;
 
+  protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
   protobuf3_16 = callPackage ../development/libraries/protobuf/3.16.nix { };
   protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
   protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
@@ -20613,6 +20633,8 @@ in
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
+  juju = callPackage ../applications/networking/juju { };
+
   jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
@@ -20763,7 +20785,6 @@ in
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
       kernelPatches.rtl8761b_support
-      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20778,7 +20799,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -20786,7 +20806,6 @@ in
     kernelPatches = [
       kernelPatches.bridge_stp_helper
       kernelPatches.request_key_helper
-      kernelPatches.rtnetlink_fix_regression_in_bridge_vlan_configuration
     ];
   };
 
@@ -21443,6 +21462,10 @@ in
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   octomap = callPackage ../development/libraries/octomap { };
+
+  odin = callPackage ../development/compilers/odin {
+    llvmPackages = llvmPackages_11;
+  };
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
@@ -24768,6 +24791,7 @@ in
     lcms2 = null;
     openexr = null;
     libpng = null;
+    liblqr1 = null;
     librsvg = null;
     libtiff = null;
     libxml2 = null;
@@ -24798,6 +24822,7 @@ in
     lcms2 = null;
     openexr = null;
     libpng = null;
+    liblqr1 = null;
     librsvg = null;
     libtiff = null;
     libxml2 = null;
@@ -25094,6 +25119,8 @@ in
   linkerd = linkerd_edge;
 
   kile-wl = callPackage ../applications/misc/kile-wl { };
+
+  kiln = callPackage ../applications/misc/kiln { };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
@@ -26221,6 +26248,8 @@ in
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
+  pianoteq = callPackage ../applications/audio/pianoteq { };
+
   picard = callPackage ../applications/audio/picard { };
 
   picocom = callPackage ../tools/misc/picocom {
@@ -26268,6 +26297,8 @@ in
   purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
 
   purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
+
+  purple-mm-sms = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-mm-sms { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
@@ -27250,6 +27281,10 @@ in
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
   tonelib-gfx = callPackage ../applications/audio/tonelib-gfx { };
+
+  tonelib-jam = callPackage ../applications/audio/tonelib-jam { };
+
+  tonelib-zoom = callPackage ../applications/audio/tonelib-zoom { };
 
   tony = libsForQt514.callPackage ../applications/audio/tony { };
 
@@ -31560,6 +31595,8 @@ in
   unityhub = callPackage ../development/tools/unityhub { };
 
   urbit = callPackage ../misc/urbit { };
+
+  usb-reset = callPackage ../applications/misc/usb-reset { };
 
   usql = callPackage ../applications/misc/usql { };
 
