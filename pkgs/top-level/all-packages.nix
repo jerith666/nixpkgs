@@ -296,6 +296,8 @@ in
 
   glade = callPackage ../development/tools/glade { };
 
+  gpick = callPackage ../tools/misc/gpick { };
+
   hobbes = callPackage ../development/tools/hobbes { };
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
@@ -362,7 +364,6 @@ in
   grsync = callPackage ../applications/misc/grsync { };
 
   dockerTools = callPackage ../build-support/docker {
-    go = buildPackages.go_1_15;
     writePython3 = buildPackages.writers.writePython3;
   };
 
@@ -868,7 +869,7 @@ in
 
   auditwheel = callPackage ../tools/package-management/auditwheel { };
 
-  amidst = callPackage ../tools/games/amidst { };
+  amidst = callPackage ../tools/games/minecraft/amidst { };
 
   gamemode = callPackage ../tools/games/gamemode {
     libgamemode32 = pkgsi686Linux.gamemode.lib;
@@ -2881,6 +2882,8 @@ in
 
   ink = callPackage ../tools/misc/ink { };
 
+  inklecate = callPackage ../development/compilers/inklecate {};
+
   interlock = callPackage ../servers/interlock {};
 
   iotools = callPackage ../tools/misc/iotools { };
@@ -4350,6 +4353,8 @@ in
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
+
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
@@ -4812,6 +4817,8 @@ in
 
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
+  fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
+
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize {};
@@ -4946,6 +4953,8 @@ in
   fstl = qt5.callPackage ../applications/graphics/fstl { };
 
   fswebcam = callPackage ../os-specific/linux/fswebcam { };
+
+  fulcio = callPackage ../tools/security/fulcio { };
 
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
@@ -7662,6 +7671,8 @@ in
 
   openvswitch-lts = callPackage ../os-specific/linux/openvswitch/lts.nix { };
 
+  optifine = callPackage ../tools/games/minecraft/optifine { };
+
   optipng = callPackage ../tools/graphics/optipng {
     libpng = libpng12;
   };
@@ -9617,6 +9628,10 @@ in
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
+
+  via = callPackage ../tools/misc/via {};
+
+  vial = callPackage ../tools/misc/vial {};
 
   viking = callPackage ../applications/misc/viking { };
 
@@ -12339,7 +12354,7 @@ in
   erlang_nox = beam_nox.interpreters.erlang;
 
   inherit (beam.packages.erlang)
-    erlang-ls erlfmt
+    erlang-ls erlfmt elvis-erlang
     rebar rebar3 rebar3WithPlugins
     fetchHex beamPackages;
 
@@ -12681,7 +12696,7 @@ in
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
-  solargraph = callPackage ../development/ruby-modules/solargraph { };
+  solargraph = rubyPackages.solargraph;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
@@ -13802,6 +13817,8 @@ in
     (lib.optionalAttrs stdenv.isDarwin {
       stdenv = overrideCC stdenv llvmPackages_latest.clang;
     });
+
+  malt = callPackage ../development/tools/profiling/malt {};
 
   massif-visualizer = libsForQt5.callPackage ../development/tools/analysis/massif-visualizer { };
 
@@ -17083,6 +17100,8 @@ in
 
   libutempter = callPackage ../development/libraries/libutempter { };
 
+  libuldaq = callPackage ../development/libraries/libuldaq { };
+
   libunwind =
     if stdenv.isDarwin then darwin.libunwind
     else if stdenv.hostPlatform.isRiscV then llvmPackages_latest.libunwind
@@ -19507,6 +19526,10 @@ in
 
   leafnode = callPackage ../servers/news/leafnode { };
 
+  lemmy = callPackage ../servers/web-apps/lemmy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   lighttpd = callPackage ../servers/http/lighttpd { };
 
   livepeer = callPackage ../servers/livepeer { };
@@ -19752,8 +19775,8 @@ in
 
   libpulseaudio = libpulseaudio-vanilla;
 
-  pulseeffects-pw = callPackage ../applications/audio/pulseeffects {
-    boost = boost172;
+  easyeffects = callPackage ../applications/audio/easyeffects {
+    glibmm = glibmm_2_68;
   };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
@@ -19841,7 +19864,7 @@ in
     inherit (darwin) cctools developer_cmds;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost173; # Configure checks for specific version.
-    protobuf = protobuf3_7;
+    protobuf = protobuf3_11;
     icu =  icu67;
   };
 
@@ -20840,11 +20863,9 @@ in
     ];
   };
 
-  linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
+  linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
+    kernel = linux_5_13;
+    kernelPatches = kernel.kernelPatches;
   };
 
   linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
@@ -23474,6 +23495,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  dnd-tools = callPackage ../applications/misc/dnd-tools { };
+
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10;
 
@@ -24045,6 +24068,8 @@ in
   termshark = callPackage ../tools/networking/termshark { };
 
   fbida = callPackage ../applications/graphics/fbida { };
+
+  fcp = callPackage ../tools/misc/fcp { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
@@ -27494,7 +27519,32 @@ in
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
-    lua = luajit;
+    # neovim doesn't build with luajit on aarch64:
+    # ./luarocks init
+    # PANIC: unprotected error in call to Lua API (module 'luarocks.core.hardcoded' not found:
+    #         no field package.preload['luarocks.core.hardcoded']
+    #         no file '/private/tmp/nix-build-luarocks-3.2.1.drv-0/source/src/luarocks/core/hardcoded.lua'
+    #         no file './luarocks/core/hardcoded.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/luajit-2.1.0-beta3/luarocks/core/hardcoded.lua'
+    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded.lua'
+    #         no file '/usr/local/share/lua/5.1/luarocks/core/hardcoded/init.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded.lua'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/share/lua/5.1/luarocks/core/hardcoded/init.lua'
+    #         no file './luarocks/core/hardcoded.so'
+    #         no file '/usr/local/lib/lua/5.1/luarocks/core/hardcoded.so'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks/core/hardcoded.so'
+    #         no file '/usr/local/lib/lua/5.1/loadall.so'
+    #         no file './luarocks.so'
+    #         no file '/usr/local/lib/lua/5.1/luarocks.so'
+    #         no file '/nix/store/3s6c509q9vvq3db87rfi7qa38wzxwz8w-luajit-2.1.0-2021-05-29/lib/lua/5.1/luarocks.so'
+    #         no file '/usr/local/lib/lua/5.1/loadall.so')
+    # make: *** [GNUmakefile:57: luarocks] Error 1
+    #
+    # See https://github.com/NixOS/nixpkgs/issues/129099
+    # Possibly related: https://github.com/neovim/neovim/issues/7879
+    lua =
+      if stdenv.isAarch64 then lua5_1 else
+      luajit;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix { };
@@ -28301,6 +28351,13 @@ in
 
   aeon = callPackage ../applications/blockchains/aeon { };
 
+  alfis = callPackage ../applications/blockchains/alfis {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
+  };
+  alfis-nogui = alfis.override {
+    withGui = false;
+  };
+
   balanceofsatoshis = nodePackages.balanceofsatoshis;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin.nix { miniupnpc = miniupnpc_2; withGui = true; };
@@ -29061,6 +29118,8 @@ in
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth { target = "server"; };
 
+  powermanga = callPackage ../games/powermanga { };
+
   prboom = callPackage ../games/prboom { };
 
   pysolfc = python3Packages.callPackage ../games/pysolfc { };
@@ -29274,6 +29333,8 @@ in
   };
 
   tbe = libsForQt5.callPackage ../games/the-butterfly-effect { };
+
+  tecnoballz = callPackage ../games/tecnoballz { };
 
   teetertorture = callPackage ../games/teetertorture { };
 
@@ -29564,6 +29625,10 @@ in
     gtk = gtk2;
   };
 
+  arcan = recurseIntoAttrs (callPackage ../desktops/arcan {
+    callPackage = newScope pkgs.arcan;
+  });
+
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
@@ -29598,6 +29663,8 @@ in
     vlcSupport = true;
     gstreamerSupport = true;
   });
+
+  dkh = callPackage ../applications/science/chemistry/dkh { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
@@ -30945,6 +31012,8 @@ in
 
   mas = callPackage ../os-specific/darwin/mas { };
 
+  micromamba = callPackage ../tools/package-management/micromamba { };
+
   moltengamepad = callPackage ../misc/drivers/moltengamepad { };
 
   openzwave = callPackage ../development/libraries/openzwave { };
@@ -31142,6 +31211,8 @@ in
   };
 
   nix-linter = haskell.lib.justStaticExecutables (haskellPackages.nix-linter);
+
+  nixos-option = callPackage ../tools/nix/nixos-option { };
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
@@ -31656,6 +31727,9 @@ in
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb { };
   vimb = wrapFirefox vimb-unwrapped { };
+
+  vikunja-api = callPackage ../servers/web-apps/vikunja/api.nix { };
+  vikunja-frontend = callPackage ../servers/web-apps/vikunja/frontend.nix { };
 
   vips = callPackage ../tools/graphics/vips {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Foundation;

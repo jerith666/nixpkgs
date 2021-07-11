@@ -312,6 +312,7 @@ kristijanhusak/defx-icons
 kristijanhusak/deoplete-phpactor
 kristijanhusak/vim-carbon-now-sh
 kristijanhusak/vim-dadbod-completion
+kristijanhusak/vim-dadbod-ui
 kristijanhusak/vim-dirvish-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
@@ -419,6 +420,7 @@ ms-jpq/chadtree@chad
 mtikekar/vim-bsv
 mzlogin/vim-markdown-toc
 mzlogin/vim-smali
+nacro90/numb.nvim
 nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
@@ -494,6 +496,7 @@ ojroques/nvim-bufdel@main
 ojroques/vim-oscyank@main
 Olical/aniseed
 Olical/conjure
+olimorris/onedark.nvim
 onsails/lspkind-nvim
 OrangeT/vim-csharp
 osyo-manga/shabadou.vim
