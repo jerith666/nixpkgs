@@ -3890,7 +3890,9 @@ in
 
   cloud-utils = callPackage ../tools/misc/cloud-utils { };
 
-  cobalt = callPackage ../applications/misc/cobalt { };
+  cobalt = callPackage ../applications/misc/cobalt {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   cocoapods = callPackage ../development/mobile/cocoapods { };
 
@@ -10762,6 +10764,8 @@ in
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
   fasmg = callPackage ../development/compilers/fasmg { };
+
+  fennel = callPackage ../development/compilers/fennel { };
 
   flasm = callPackage ../development/compilers/flasm { };
 
