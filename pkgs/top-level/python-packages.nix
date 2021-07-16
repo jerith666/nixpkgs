@@ -4674,6 +4674,8 @@ in {
 
   names = callPackage ../development/python-modules/names { };
 
+  nampa = callPackage ../development/python-modules/nampa { };
+
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
   nanomsg-python = callPackage ../development/python-modules/nanomsg-python {
@@ -5644,6 +5646,8 @@ in {
   puremagic = callPackage ../development/python-modules/puremagic { };
 
   purl = callPackage ../development/python-modules/purl { };
+
+  push-receiver = callPackage ../development/python-modules/push-receiver { };
 
   pushbullet = callPackage ../development/python-modules/pushbullet { };
 
@@ -7427,6 +7431,8 @@ in {
   rasterio = callPackage ../development/python-modules/rasterio {
     gdal = pkgs.gdal_2;
   };
+
+  ratelim = callPackage ../development/python-modules/ratelim { };
 
   ratelimit = callPackage ../development/python-modules/ratelimit { };
 
