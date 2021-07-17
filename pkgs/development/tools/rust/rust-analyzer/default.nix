@@ -7,20 +7,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-06-28";
-  cargoSha256 = "sha256-Xpo/VK/w6BVbHUc+m/70AE0Cag8D3fT+wosOA8Lzz2A=";
+  version = "2021-07-12";
+  cargoSha256 = "sha256-wlo3GlB9OhyVXys5pHAqWPKHWZHzNjcQ0hiaYnp2SUc=";
 
   src = fetchFromGitHub {
     owner = "rust-analyzer";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-aWLqcCSeKRmCsETu4ri+SPQ5iB6nqaYELj0Qt3zW9/E=";
+    sha256 = "sha256-nd8valnltycywxBObSVFbt4fySEYQknFsFf5ZnEbgOk=";
   };
-
-  patches = [
-    # We have rustc 1.52.1 in nixpkgs.
-    ./no-rust-1-53-features.patch
-  ];
 
   buildAndTestSubdir = "crates/rust-analyzer";
 

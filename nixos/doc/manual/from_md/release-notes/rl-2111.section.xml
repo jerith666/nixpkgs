@@ -20,6 +20,12 @@
           PHP now defaults to PHP 8.0, updated from 7.4.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          kOps now defaults to 1.21.0, which uses containerd as the
+          default runtime.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-new-services">
@@ -63,6 +69,20 @@
           <link xlink:href="options.html#opt-programs.flashrom.enable">programs.flashrom.enable</link>
           and add themselves to the <literal>flashrom</literal> group to
           be able to access programmers supported by flashrom.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://vikunja.io">vikunja</link>, a to-do
+          list app. Available as
+          <link linkend="opt-services.vikunja.enable">services.vikunja</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.snapraid.it/">snapraid</link>, a
+          backup program for disk arrays. Available as
+          <link linkend="opt-snapraid.enable">snapraid</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -344,6 +364,13 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>pulseeffects</literal> package updated to
+          <link xlink:href="https://github.com/wwmm/easyeffects/releases/tag/v6.0.0">version
+          4.x</link> and renamed to <literal>easyeffects</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>libwnck</literal> package now defaults to the 3.x
           release instead of the old 2.31.0 version.
         </para>
@@ -459,6 +486,24 @@
         </itemizedlist>
       </listitem>
     </itemizedlist>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <literal>yggdrasil</literal> was upgraded to a new major
+          release with breaking changes, see
+          <link xlink:href="https://github.com/yggdrasil-network/yggdrasil-go/releases/tag/v0.4.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>icingaweb2</literal> was upgraded to a new release
+          which requires a manual database upgrade, see
+          <link xlink:href="https://github.com/Icinga/icingaweb2/releases/tag/v2.9.0">upstream
+          changelog</link>.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-notable-changes">
     <title>Other Notable Changes</title>
@@ -491,6 +536,14 @@
           soon <literal>foot</literal>) so this is only an issue when
           using a customized configuration and not installing
           <literal>rxvt-unicode</literal> explicitly.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>claws-mail</literal> package now references the
+          new GTK+ 3 release branch, major version 4. To use the GTK+ 2
+          releases, one can install the
+          <literal>claws-mail-gtk2</literal> package.
         </para>
       </listitem>
     </itemizedlist>

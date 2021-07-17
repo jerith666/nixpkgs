@@ -395,6 +395,10 @@ self: super: {
     dependencies = with self; [ ultisnips ];
   });
 
+  neogit = super.neogit.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
+  });
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });
@@ -621,7 +625,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-IKSnXNFdtykuajOxpw5CYsw2q/mkVLkRtPC49hiXsPc=";
+          cargoSha256 = "sha256-hcbNjp9KLJO0RANOvtopvdiK0w9ESUXk0KOTPvVcCX4=";
         };
       in
       ''

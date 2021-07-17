@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "scp";
-  version = "0.13.4";
+  version = "0.13.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e60948dd3e1aa13da21aa1bf8a025fabbbc2816ed04f1a1272410247d1a86f15";
+    sha256 = "sha256-CnL514LpaLCbEU1WB/lrHxb+mUKFevs1U5nt1VNy/PE=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +25,12 @@ buildPythonPackage rec {
   #The Pypi package doesn't include the test
   doCheck = false;
 
+  pythonImportsCheck = [ "scp" ];
+
   meta = with lib; {
     homepage = "https://github.com/jbardin/scp.py";
     description = "SCP module for paramiko";
-    license = licenses.lgpl3;
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ xnaveira ];
   };
 }

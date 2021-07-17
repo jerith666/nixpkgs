@@ -2,19 +2,17 @@
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-68Hs9kwv7GTGnYtoJh61ubaggPKbxFwz7qDwYaJ74c8=";
+    sha256 = "sha256-q97N9I1EzpcFlMuHe3X5rfZHt6XTytYO1inpGEvv1IQ=";
   };
-  vendorSha256 = "sha256-NgOpnCe0uGQVDVKYUIULqPTfvfkDtxIUQiCVwiE7nuc=";
+  vendorSha256 = "sha256-7XcAt0+slNIjxxf7pUl7XO/PAN2z8WmzTuI0FsjgrBM=";
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version} -X main.prerelease=")
-  '';
+  ldflags = [ "-s" "-w" "-X main.version=v${version}" "-X main.prerelease=" ];
 
   preCheck = ''
     # Remove tests that requires networking
