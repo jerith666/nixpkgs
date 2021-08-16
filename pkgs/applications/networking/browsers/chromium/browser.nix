@@ -16,6 +16,8 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
+    ${lib.optionalString (channel != "dev") ''cp -v "$buildPath/crashpad_handler" "$libExecPath/"''}
+    ${lib.optionalString (channel == "dev") ''cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"''}
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     # Swiftshader
@@ -62,8 +64,6 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
-  '' + lib.optionalString (channel != "stable") ''
-    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
   passthru = { inherit sandboxExecutableName; };
@@ -84,7 +84,7 @@ mkChromiumDerivation (base: rec {
       else "https://www.chromium.org/";
     maintainers = with maintainers; if ungoogled
       then [ squalus primeos ]
-      else [ primeos thefloweringash bendlas ];
+      else [ primeos thefloweringash ];
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     mainProgram = "chromium";

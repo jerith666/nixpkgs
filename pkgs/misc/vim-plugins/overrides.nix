@@ -86,6 +86,8 @@
 , iferr
 , impl
 , reftools
+# must be lua51Packages
+, luaPackages
 }:
 
 self: super: {
@@ -124,8 +126,8 @@ self: super: {
     buildInputs = [ tabnine ];
 
     postFixup = ''
-      mkdir $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
+      mkdir -p $target/binaries/${tabnine.version}
+      ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
   });
 
@@ -212,6 +214,14 @@ self: super: {
     dependencies = with self; [ vimproc-vim vimshell-vim self.self forms ];
   });
 
+  fcitx-vim = super.fcitx-vim.overrideAttrs (old: {
+    passthru.python3Dependencies = ps: with ps; [ dbus-python ];
+    meta = {
+      description = "Keep and restore fcitx state when leaving/re-entering insert mode or search mode";
+      license = lib.licenses.mit;
+    };
+  });
+
   forms = super.forms.overrideAttrs (old: {
     dependencies = with self; [ self.self ];
   });
@@ -251,6 +261,14 @@ self: super: {
       '';
     });
 
+  fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
+    # The plugin has a makefile which tries to run tests in a docker container.
+    # This prevents it.
+    prePatch = ''
+      rm Makefile
+    '';
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = with self; [ fzfWrapper ];
   });
@@ -274,6 +292,8 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  # plenary-nvim = super.toVimPlugin(luaPackages.plenary-nvim);
+
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
     dependencies = with self; [ lush-nvim ];
   });
@@ -290,8 +310,12 @@ self: super: {
   himalaya-vim = buildVimPluginFrom2Nix {
     pname = "himalaya-vim";
     inherit (himalaya) src version;
-    configurePhase = "cd vim/";
     dependencies = with self; [ himalaya ];
+    patchPhase = ''
+      rm -rf !"vim/"
+      cp -vaR vim/. .
+      rm -rf vim/
+    '';
     preFixup = ''
       substituteInPlace $out/share/vim-plugins/himalaya-vim/plugin/himalaya.vim \
         --replace 'if !executable("himalaya")' 'if v:false'
@@ -399,6 +423,10 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
+    path = "null-ls.nvim";
+  });
+
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
     dependencies = with self; [ popfix ];
   });
@@ -419,6 +447,10 @@ self: super: {
             ln -s ${grammars} parser
           '';
       });
+  });
+
+  onedark-nvim = super.onedark-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
@@ -477,6 +509,12 @@ self: super: {
 
   telescope-fzf-writer-nvim = super.telescope-fzf-writer-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
+  });
+
+  telescope-fzf-native-nvim = super.telescope-fzf-native-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+    buildPhase = "make";
+    meta.platforms = lib.platforms.all;
   });
 
   telescope-fzy-native-nvim = super.telescope-fzy-native-nvim.overrideAttrs (old: {
@@ -625,7 +663,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-hcbNjp9KLJO0RANOvtopvdiK0w9ESUXk0KOTPvVcCX4=";
+          cargoSha256 = "sha256-wYxUo9zfflU7RTsTb7W9wc/WBsXhz3OLjC8CwUkRRiE=";
         };
       in
       ''
