@@ -397,6 +397,8 @@ in {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+  alectryon = callPackage ../development/python-modules/alectryon { };
+
   alembic = callPackage ../development/python-modules/alembic { };
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
@@ -2784,6 +2786,8 @@ in {
 
   furl = callPackage ../development/python-modules/furl { };
 
+  furo = callPackage ../development/python-modules/furo { };
+
   fuse = callPackage ../development/python-modules/fuse-python {
     inherit (pkgs) fuse;
   };
@@ -2997,6 +3001,8 @@ in {
 
   google-cloud-core = callPackage ../development/python-modules/google-cloud-core { };
 
+  google-cloud-datacatalog = callPackage ../development/python-modules/google-cloud-datacatalog { };
+
   google-cloud-dataproc = callPackage ../development/python-modules/google-cloud-dataproc { };
 
   google-cloud-datastore = callPackage ../development/python-modules/google-cloud-datastore { };
@@ -3164,7 +3170,7 @@ in {
 
   grip = callPackage ../development/python-modules/grip { };
 
-  grpc_google_iam_v1 = callPackage ../development/python-modules/grpc_google_iam_v1 { };
+  grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
 
@@ -3578,6 +3584,8 @@ in {
   inkex = callPackage ../development/python-modules/inkex { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
+
+  inotifyrecursive = callPackage ../development/python-modules/inotifyrecursive { };
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
@@ -8481,6 +8489,8 @@ in {
 
   subliminal = callPackage ../development/python-modules/subliminal { };
 
+  subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
+
   subunit = callPackage ../development/python-modules/subunit {
     inherit (pkgs) subunit cppunit check;
   };
@@ -8737,6 +8747,8 @@ in {
   tidylib = callPackage ../development/python-modules/pytidylib { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
+
+  tika = callPackage ../development/python-modules/tika { };
 
   tiledb = callPackage ../development/python-modules/tiledb {
     inherit (pkgs) tiledb;
