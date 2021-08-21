@@ -52,13 +52,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arcan";
-  version = "0.6.1pre1+unstable=2021-07-07";
+  version = "0.6.1pre1+unstable=2021-07-30";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = "f3341ab94b32d02f3d15c3b91a512b2614e950a5";
-    hash = "sha256-YBtRA5uCk4tjX3Bsu5vMkaNaCLRlM6HVQ53sna3gDsY=";
+    rev = "885b2f0c9e031fd157af21302af2027ecbe3fe1f";
+    hash = "sha256-tj5kPa5OWCGt7LTzo4ZYV1UjBpOrjQHER/K+ZfL3h+8=";
   };
 
   postUnpack = ''

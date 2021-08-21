@@ -18,7 +18,7 @@
 , systemd
 
 # Loaded at runtime.
-, libexif
+, libexif, pciutils
 
 # Additional dependencies according to other distros.
 ## Ubuntu
@@ -62,7 +62,7 @@ let
     alsa-lib libXdamage libXtst libXrandr libxshmfence expat cups
     dbus gdk-pixbuf gcc-unwrapped.lib
     systemd
-    libexif
+    libexif pciutils
     liberation_ttf curl util-linux xdg-utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
@@ -146,9 +146,11 @@ in stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --add-flags ${escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,crashpad_handler,nacl_helper}; do
-      patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,crashpad_handler,chrome_crashpad_handler,nacl_helper}; do
+      if [ -f $elf ]; then
+          patchelf --set-rpath $rpath $elf
+          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      fi;
     done
   '';
 

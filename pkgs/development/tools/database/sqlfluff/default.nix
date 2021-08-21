@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
-  version = "0.6.0";
+  version = "0.6.3";
   disabled = python3.pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-RW3+NpKZns3Jo1b3GfTymUE74pVoJi9f0zi4j4mUGiY=";
+    sha256 = "sha256-rGtaxa75cFv7LjRI5yuTgKW7F2t8llejcrnjKlUdyEY=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,17 +21,16 @@ python3.pkgs.buildPythonApplication rec {
     click
     colorama
     configparser
-    diff_cover
+    diff-cover
     jinja2
     oyaml
     pathspec
     pytest
     tblib
     toml
+    typing-extensions
   ] ++ lib.optionals (pythonOlder "3.7") [
     dataclasses
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    typing-extensions
   ];
 
   checkInputs = with python3.pkgs; [
