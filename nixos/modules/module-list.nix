@@ -72,7 +72,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/ubertooth.nix
   ./hardware/usb-wwan.nix
-  ./hardware/onlykey.nix
+  ./hardware/onlykey/default.nix
   ./hardware/opentabletdriver.nix
   ./hardware/sata.nix
   ./hardware/wooting.nix
@@ -768,6 +768,7 @@
   ./services/networking/namecoind.nix
   ./services/networking/nar-serve.nix
   ./services/networking/nat.nix
+  ./services/networking/nats.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/networkmanager.nix
@@ -953,6 +954,7 @@
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/engelsystem.nix
+  ./services/web-apps/fluidd.nix
   ./services/web-apps/galene.nix
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
@@ -996,7 +998,7 @@
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-servers/apache-httpd/default.nix
-  ./services/web-servers/caddy.nix
+  ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/hitch/default.nix
