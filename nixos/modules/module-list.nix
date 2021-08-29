@@ -121,6 +121,7 @@
   ./programs/bash-my-aws.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
+  ./programs/calls.nix
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
@@ -462,6 +463,8 @@
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix #TODO is this the same?
   ./services/mail/pfix-srsd.nix
+  ./services/mail/postfixadmin.nix
+  ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
@@ -1037,6 +1040,7 @@
   ./services/x11/display-managers/sddm.nix
   ./services/x11/display-managers/slim.nix
   ./services/x11/display-managers/startx.nix
+  ./services/x11/display-managers/sx.nix
   ./services/x11/display-managers/xpra.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/libinput.nix

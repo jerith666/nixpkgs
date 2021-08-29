@@ -12,11 +12,11 @@ let
 in
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.40.0";
+  version = "1.41.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5RCeKTAtuFERQSoz4WinGz36tMuKtijnupPR/X02hCU=";
+    sha256 = "sha256-KLsTr8dKp8k7TcrC598ApDib7P0m9evmfdl8jbsZLdc=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    prometheus_client
+    prometheus-client
     psutil
     psycopg2
     pyasn1

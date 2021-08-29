@@ -3419,6 +3419,12 @@
     githubId = 454695;
     name = "Artur Taranchiev";
   };
+  exarkun = {
+    email = "exarkun@twistedmatrix.com";
+    github = "exarkun";
+    githubId = 254565;
+    name = "Jean-Paul Calderone";
+  };
   exfalso = {
     email = "0slemi0@gmail.com";
     github = "exfalso";
@@ -4937,6 +4943,12 @@
     github = "jduan";
     githubId = 452450;
   };
+  jecaro = {
+    email = "jeancharles.quillet@gmail.com";
+    github = "jecaro";
+    githubId = 17029738;
+    name = "Jean-Charles Quillet";
+  };
   jefdaj = {
     email = "jefdaj@gmail.com";
     github = "jefdaj";
@@ -5301,6 +5313,12 @@
     github = "jperras";
     githubId = 20675;
     name = "Joël Perras";
+  };
+  jpetrucciani = {
+    email = "j@cobi.dev";
+    github = "jpetrucciani";
+    githubId = 8117202;
+    name = "Jacobi Petrucciani";
   };
   jpierre03 = {
     email = "nix@prunetwork.fr";
@@ -7637,6 +7655,12 @@
     githubId = 628342;
     name = "Tim Steinbach";
   };
+  nerdypepper = {
+    email = "nerdy@peppe.rs";
+    github = "nerdypepper";
+    githubId = 23743547;
+    name = "Akshay Oppiliappan";
+  };
   nessdoor = {
     name = "Tomas Antonio Lopez";
     email = "entropy.overseer@protonmail.com";
@@ -9718,6 +9742,12 @@
     githubId = 1567527;
     name = "Sebastian Hyberts";
   };
+  sebbel = {
+    email = "hej@sebastian-ball.de";
+    github = "sebbel";
+    githubId = 1940568;
+    name = "Sebastian Ball";
+  };
   sebtm = {
     email = "mail@sebastian-sellmeier.de";
     github = "sebtm";
@@ -11342,6 +11372,12 @@
     github = "vidbina";
     githubId = 335406;
     name = "David Asabina";
+  };
+  vidister = {
+    email = "v@vidister.de";
+    github = "vidister";
+    githubId = 11413574;
+    name = "Fiona Weber";
   };
   vifino = {
     email = "vifino@tty.sh";

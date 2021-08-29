@@ -644,13 +644,13 @@ let
 
   Appcpm = buildPerlModule {
     pname = "App-cpm";
-    version = "0.997000";
+    version = "0.997006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.997000.tar.gz";
-      sha256 = "6bf25a25dfb2331dee623d5cc3d030d9be647e7c766e82196a383f16b92e419f";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-cpm-0.997006.tar.gz";
+      sha256 = "1mh4bg141qbch0vdvir2l9533zzm3k8hnqx36iwciwzhvpd9hl9s";
     };
     buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstall ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy ModuleCPANfile ParsePMFile ParallelPipes locallib ];
+    propagatedBuildInputs = [ CPAN02PackagesSearch CPANCommonIndex CPANDistnameInfo ClassTiny CommandRunner ExtUtilsInstall ExtUtilsInstallPaths FileCopyRecursive Filepushd HTTPTinyish MenloLegacy Modulecpmfile ModuleCPANfile ParsePMFile ParallelPipes locallib ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/cpm
@@ -3838,6 +3838,23 @@ let
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CPAN02PackagesSearch = buildPerlModule {
+    pname = "CPAN-02Packages-Search";
+    version = "0.001";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz";
+      sha256 = "02dgqplar99a2i2b08pnapznyp4il70wsvpm8163ywwfwqn1ap37";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    propagatedBuildInputs = [ TieHandleOffset ];
+    meta = {
+      homepage = "https://github.com/skaji/CPAN-02Packages-Search";
+      description = "Search packages in 02packages.details.txt";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
     };
   };
 
@@ -7492,10 +7509,10 @@ let
 
   ExtUtilsCChecker = buildPerlModule {
     pname = "ExtUtils-CChecker";
-    version = "0.10";
+    version = "0.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-CChecker-0.10.tar.gz";
-      sha256 = "50bfe76870fc1510f56bae4fa2dce0165d9ac4af4e7320d6b8fda14dfea4be0b";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/ExtUtils-CChecker-0.11.tar.gz";
+      sha256 = "1x8vafpff5nma18svxp1h3mp069fjmzlsdvnbcgn3z1pgrkkcxqi";
     };
     buildInputs = [ TestFatal ];
     meta = {
@@ -7621,10 +7638,10 @@ let
 
   ExtUtilsMakeMaker = buildPerlPackage {
     pname = "ExtUtils-MakeMaker";
-    version = "7.56";
+    version = "7.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.56.tar.gz";
-      sha256 = "05h058iwx81qs384kgyx34qnhqznavzwmhdsin65c434hga8jly9";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.62.tar.gz";
+      sha256 = "5022ad857fd76bd3f6b16af099fe2324639d9932e08f21e891fb313d9cae1705";
     };
     meta = {
       description = "Create a module Makefile";
@@ -8064,7 +8081,7 @@ let
       sha256 = "a02fbf285406a8a4d9399284f032f2d55c56975154c2e1674bd109837b8096ec";
     };
     buildInputs = [ ExtUtilsCChecker ];
-    perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
+    perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
     meta = {
       description = "Modify attributes of symlinks without dereferencing them";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -8628,13 +8645,13 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.49";
+    version = "0.52";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "0cm7cgfjrqs7jazl0f9q6lgkhz6k8qbawin1z36nrwh2ywc94zjb";
+      sha256 = "0dwij2r51vij91hx808zc2l5q38h55jahzrh73h4rn816jv597yx";
     };
     buildInputs = [ TestRefcount ];
-    propagatedBuildInputs = [ Future XSParseSublike ];
+    propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "Deferred subroutine syntax for futures";
@@ -9084,12 +9101,15 @@ let
 
   Graph = buildPerlPackage {
     pname = "Graph";
-    version = "0.9712";
+    version = "0.9722";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9712.tar.gz";
-      sha256 = "1as4ngbqxrjv9f31hm3wg8pyiyrz5fbbvlpfsrm68k1yskwkgkcg";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Graph-0.9722.tar.gz";
+      sha256 = "c113633833f3a1bef8fa8eb96680be36d00e41ef404bddd7fc0bb98703e28d4d";
     };
-    propagatedBuildInputs = [ HeapFibonacci ];
+    propagatedBuildInputs = [ HeapFibonacci SetObject ];
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   GraphicsTIFF = buildPerlPackage {
@@ -13226,6 +13246,23 @@ let
     };
   };
 
+  Modulecpmfile = buildPerlModule {
+    pname = "Module-cpmfile";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Module-cpmfile-0.002.tar.gz";
+      sha256 = "18dxc5wgds1way0dvd6dx5rhc2siyaa38nhpy4gb5v7ldnj3yjc8";
+    };
+    buildInputs = [ ModuleBuildTiny ModuleCPANfile Test2Suite ];
+    propagatedBuildInputs = [ YAMLPP ];
+    meta = {
+      homepage = "https://github.com/skaji/cpmfile";
+      description = "Parse cpmfile";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.zakame ];
+    };
+  };
+
   ModuleBuild = buildPerlPackage {
     pname = "Module-Build";
     version = "0.4231";
@@ -17122,10 +17159,6 @@ let
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
     };
-    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/perltidy
-    '';
   };
 
   PHPSerialization = buildPerlPackage {
@@ -24122,11 +24155,12 @@ let
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.06";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.06.tar.gz";
-      sha256 = "0nnr8akkxb2h2y3d5r51pr84vvxkq89ynmi9azkbnn79jmbcbgvq";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.12.tar.gz";
+      sha256 = "0crwhcw9ciqndvwvhycd93m6jgyhi77yyj4vi9xfyglpv84p3y68";
     };
+    buildInputs = [ ExtUtilsCChecker ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing keyword syntax";
@@ -24137,10 +24171,10 @@ let
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.10.tar.gz";
-      sha256 = "99a1bdda3ffa67514adb6aa189c902fa78dca41d778a42ae7079f604a045ac43";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.12.tar.gz";
+      sha256 = "08kpia48f1rqc44rvbns97h3jyy2y5c8qlkh4a95v1m0yr5cb22s";
     };
     buildInputs = [ TestFatal ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
