@@ -75,6 +75,10 @@ let
 
   suffix = if channel != "stable" then "-" + channel else "";
 
+  crashpadHandlerBinary = if lib.versionAtLeast version "94"
+    then "chrome_crashpad_handler"
+    else "crashpad_handler";
+
 in stdenv.mkDerivation {
   inherit version;
 
@@ -146,11 +150,9 @@ in stdenv.mkDerivation {
       --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
       --add-flags ${escapeShellArg commandLineArgs}
 
-    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,crashpad_handler,chrome_crashpad_handler,nacl_helper}; do
-      if [ -f $elf ]; then
-          patchelf --set-rpath $rpath $elf
-          patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
-      fi;
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,${crashpadHandlerBinary},nacl_helper}; do
+      patchelf --set-rpath $rpath $elf
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
   '';
 
