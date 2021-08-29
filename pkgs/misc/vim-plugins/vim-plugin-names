@@ -6,8 +6,8 @@ ahmedkhalf/lsp-rooter.nvim@main
 airblade/vim-gitgutter
 airblade/vim-rooter
 ajmwagar/vim-deus
-akinsho/nvim-bufferline.lua
-akinsho/nvim-toggleterm.lua
+akinsho/bufferline.nvim
+akinsho/toggleterm.nvim
 aklt/plantuml-syntax
 allendang/nvim-expand-expr@main
 altercation/vim-colors-solarized
@@ -193,6 +193,7 @@ google/vim-jsonnet
 google/vim-maktaba
 gorkunov/smartpairs.vim
 gotcha/vimelette
+gpanders/editorconfig.nvim
 gregsexton/gitv
 gruvbox-community/gruvbox as gruvbox-community
 gu-fan/riv.vim
@@ -666,6 +667,7 @@ sjl/gundo.vim
 sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
+smiteshp/nvim-gps
 sodapopcan/vim-twiggy
 solarnz/arcanist.vim
 sonph/onehalf

@@ -221,10 +221,7 @@ in
   knot = handleTest ./knot.nix {};
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
-  kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
-  # kubernetes.e2e should eventually replace kubernetes.rbac when it works
-  #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
-  kubernetes.rbac = handleTestOn ["x86_64-linux"] ./kubernetes/rbac.nix {};
+  kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
   latestKernel.hardened = handleTest ./hardened.nix { latestKernel = true; };
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
@@ -359,6 +356,7 @@ in
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   postfix = handleTest ./postfix.nix {};
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
+  postfixadmin = handleTest ./postfixadmin.nix {};
   postgis = handleTest ./postgis.nix {};
   postgresql = handleTest ./postgresql.nix {};
   postgresql-wal-receiver = handleTest ./postgresql-wal-receiver.nix {};
