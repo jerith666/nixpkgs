@@ -47,6 +47,11 @@ let
 
       postPatch = optionalString buildKernel ''
         patchShebangs scripts
+
+        # https://github.com/openzfs/zfs/issues/10107
+        substituteInPlace ./config/kernel.m4 \
+          --replace "make modules" "make CC=$CC modules"
+
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
         substituteInPlace ./module/os/linux/zfs/zfs_ctldir.c \
@@ -210,13 +215,14 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.14";
+    kernelCompatible = kernel.kernelAtLeast "3.10" && kernel.kernelOlder "5.15";
     latestCompatibleLinuxPackages = linuxPackages_5_13;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2.1.0";
+    version = "unstable-2021-08-30";
+    rev = "3b89d9518df2c7fd747e349873a3d4d498beb20e";
 
-    sha256 = "sha256-YdY4SStXZGBBdAHdM3R/unco7ztxI3s0/buPSNSeh5o=";
+    sha256 = "sha256-wVbjpVrPQmhJmMqdGUf0IwlCIoOsT7Zfj5lxSKcOsgg=";
 
     isUnstable = true;
   };
