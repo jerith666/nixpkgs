@@ -232,6 +232,13 @@
           <link linkend="opt-services.nats.enable">services.nats</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://git-scm.com">git</link>, a
+          distributed version control system. Available as
+          <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -1141,6 +1148,13 @@ Superuser created successfully.
           the setting <literal>ipfs.localDiscovery = true;</literal>.
           localDiscovery enables different instances to discover each
           other and share data.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lua</literal> and <literal>luajit</literal>
+          interpreters have been patched to avoid looking into /usr/lib
+          directories, thus increasing the purity of the build.
         </para>
       </listitem>
     </itemizedlist>
