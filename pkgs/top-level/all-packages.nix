@@ -2002,6 +2002,8 @@ with pkgs;
 
   blink = libsForQt5.callPackage ../applications/networking/instant-messengers/blink { };
 
+  blitz = callPackage ../development/libraries/blitz { };
+
   blockbook = callPackage ../servers/blockbook { };
 
   blockhash = callPackage ../tools/graphics/blockhash { };
@@ -3302,6 +3304,8 @@ with pkgs;
     inherit (darwin) libiconv;
   };
 
+  profetch = callPackage ../tools/misc/profetch { };
+
   psrecord = python3Packages.callPackage ../tools/misc/psrecord {};
 
   reg = callPackage ../tools/virtualization/reg { };
@@ -4341,7 +4345,9 @@ with pkgs;
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd = callPackage ../development/compilers/dmd { };
+  dmd = callPackage ../development/compilers/dmd {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
@@ -6684,6 +6690,7 @@ with pkgs;
 
   meilisearch = callPackage ../servers/search/meilisearch {
     inherit (darwin.apple_sdk.frameworks) Security;
+    inherit pkgs;
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -23990,7 +23997,9 @@ with pkgs;
     inherit (gnome2) libgnomeui GConf;
   };
 
-  corrscope = libsForQt5.callPackage ../applications/video/corrscope { };
+  corrscope = libsForQt5.callPackage ../applications/video/corrscope {
+    ffmpeg = ffmpeg-full;
+  };
 
   coreimage = libsForQt5.callPackage ../applications/graphics/coreimage { };
 
@@ -24090,7 +24099,7 @@ with pkgs;
   };
   datadog-process-agent = callPackage ../tools/networking/dd-agent/datadog-process-agent.nix { };
   datadog-integrations-core = extras: callPackage ../tools/networking/dd-agent/integrations-core.nix {
-    python = python27;
+    python = python3;
     extraIntegrations = extras;
   };
 
@@ -28457,9 +28466,7 @@ with pkgs;
     imlib2 = imlib2-nox;
   };
 
-  watson = callPackage ../applications/office/watson {
-    pythonPackages = python3Packages;
-  };
+  watson = callPackage ../applications/office/watson { };
 
   wapiti = callPackage ../tools/security/wapiti { };
 
@@ -29457,6 +29464,9 @@ with pkgs;
 
   crawl = callPackage ../games/crawl { };
 
+  inherit (import ../games/crossfire pkgs)
+    crossfire-server crossfire-arch crossfire-maps crossfire-client;
+
   crrcsim = callPackage ../games/crrcsim {};
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
@@ -29465,6 +29475,9 @@ with pkgs;
   cutemaze = libsForQt5.callPackage ../games/cutemaze {};
 
   cuyo = callPackage ../games/cuyo { };
+
+  inherit (import ../games/deliantra pkgs)
+    deliantra-server deliantra-arch deliantra-maps deliantra-data;
 
   devilutionx = callPackage ../games/devilutionx {};
 

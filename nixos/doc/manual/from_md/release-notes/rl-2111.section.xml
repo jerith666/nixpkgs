@@ -239,6 +239,17 @@
           <link xlink:href="options.html#opt-programs.git.enable">programs.git</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://domainaware.github.io/parsedmarc/">parsedmarc</link>,
+          a service which parses incoming
+          <link xlink:href="https://dmarc.org/">DMARC</link> reports and
+          stores or sends them to a downstream service for further
+          analysis. Documented in
+          <link linkend="module-services-parsedmarc">its manual
+          entry</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
@@ -355,6 +366,33 @@ Superuser created successfully.
           <link xlink:href="https://github.com/ledgerwatch/erigon/releases/tag/v2021.08.03">release
           notes</link>).
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="options.html#opt-users.users._name_.group">users.users.&lt;name&gt;.group</link>
+          no longer defaults to <literal>nogroup</literal>, which was
+          insecure. Out-of-tree modules are likely to require
+          adaptation: instead of
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+  };
+}
+</programlisting>
+        <para>
+          also create a group for your user:
+        </para>
+        <programlisting language="bash">
+{
+  users.users.foo = {
+    isSystemUser = true;
+    group = &quot;foo&quot;;
+  };
+  users.groups.foo = {};
+}
+</programlisting>
       </listitem>
       <listitem>
         <para>
@@ -925,6 +963,19 @@ Superuser created successfully.
           to 4.0.0. This introduces breaking changes in the
           <link xlink:href="https://todoman.readthedocs.io/en/stable/configure.html#configuration-file">configuration
           file</link> format.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>datadog-agent</literal>,
+          <literal>datadog-integrations-core</literal> and
+          <literal>datadog-process-agent</literal> packages were
+          upgraded from 6.11.2 to 7.30.2, git-2018-09-18 to 7.30.1 and
+          6.11.1 to 7.30.2, respectively. As a result
+          <literal>services.datadog-agent</literal> has had breaking
+          changes to the configuration file. For details, see the
+          <link xlink:href="https://github.com/DataDog/datadog-agent/blob/main/CHANGELOG.rst">upstream
+          changelog</link>.
         </para>
       </listitem>
     </itemizedlist>

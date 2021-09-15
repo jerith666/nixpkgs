@@ -281,6 +281,8 @@ in {
 
   aioguardian = callPackage ../development/python-modules/aioguardian { };
 
+  aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
+
   aioh2 = callPackage ../development/python-modules/aioh2 { };
 
   aioharmony = callPackage ../development/python-modules/aioharmony { };
@@ -960,6 +962,8 @@ in {
   azure-synapse-accesscontrol = callPackage ../development/python-modules/azure-synapse-accesscontrol { };
 
   azure-synapse-artifacts = callPackage ../development/python-modules/azure-synapse-artifacts { };
+
+  azure-synapse-managedprivateendpoints = callPackage ../development/python-modules/azure-synapse-managedprivateendpoints { };
 
   azure-synapse-spark = callPackage ../development/python-modules/azure-synapse-spark { };
 
@@ -4395,6 +4399,8 @@ in {
 
   makefun = callPackage ../development/python-modules/makefun { };
 
+  mailsuite = callPackage ../development/python-modules/mailsuite { };
+
   Mako = callPackage ../development/python-modules/Mako { };
 
   malduck= callPackage ../development/python-modules/malduck { };
@@ -5250,6 +5256,8 @@ in {
   parse = callPackage ../development/python-modules/parse { };
 
   parsedatetime = callPackage ../development/python-modules/parsedatetime { };
+
+  parsedmarc = callPackage ../development/python-modules/parsedmarc { };
 
   parsel = callPackage ../development/python-modules/parsel { };
 
