@@ -4,10 +4,14 @@
 
 let
   name = "around";
+  #when a required update is published, the launcher will fail
+  #and output a line like:
+  #desktopapp:updater Updater state changed:  {"type":"available","version":"0.54.8","downloadProgress":0,"isRequired":true} +118ms
+  version = "0.54.8";
 
   src = fetchurl {
-    url = "https://downloads.around.co/Around.AppImage";
-    sha256 = "1wq0jz8b1g9ahcjxqj33ng37jycqikc502dj91yq6cs30gcps34b";
+    url = "https://downloads.around.co/Around-${version}.AppImage";
+    sha256 = "0szdnw5q41msbsjbfd9v4rcrsdgq710a9l5maa944mbymjz2rvjw";
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
