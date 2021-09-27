@@ -37,6 +37,9 @@
 , xkb-switch
 , ycmd
 
+# test dependencies
+, neovim-unwrapped
+
   # command-t dependencies
 , rake
 , ruby
@@ -139,7 +142,7 @@ self: super: {
     dependencies = with self; [ completion-nvim ];
     buildInputs = [ tabnine ];
     postFixup = ''
-      mkdir $target/binaries
+      mkdir -p $target/binaries
       ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
     '';
   });
@@ -392,6 +395,12 @@ self: super: {
       substituteInPlace $out/bin/minimap_generator.sh \
         --replace "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
+
+    doCheck = true;
+    checkPhase = ''
+      ${neovim-unwrapped}/bin/nvim -n -u NONE -i NONE -V1 --cmd "set rtp+=$out" --cmd "runtime! plugin/*.vim" -c "MinimapToggle"  +quit!
+    '';
+
   });
 
   ncm2 = super.ncm2.overrideAttrs (old: {
@@ -677,7 +686,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "1hmbgqd22fy68n05vdb93wsdvws91m4i6nm1kq6bwwbhzhkvd7js";
+          cargoSha256 = "sha256-zg8PKuzC1srCOtn0ZcqI9cZxMwN9hsf+sNhYgDg93Gs=";
         };
       in
       ''
@@ -825,6 +834,11 @@ self: super: {
 
   vim-surround = super.vim-surround.overrideAttrs (old: {
     dependencies = with self; [ vim-repeat ];
+  });
+
+  vim-textobj-entire = super.vim-textobj-entire.overrideAttrs (old: {
+    dependencies = with self; [ vim-textobj-user ];
+    meta.maintainers = with lib.maintainers; [ farlion ];
   });
 
   vim-unimpaired = super.vim-unimpaired.overrideAttrs (old: {

@@ -66,6 +66,8 @@ mapAliases ({
   badtouch = authoscope; # Project was renamed, added 20210626
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
+  bash_5 = bash; # added 2021-08-20
+  bashInteractive_5 = bashInteractive; # added 2021-08-20
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
   bazaar = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy."; # added 2020-04-19
@@ -446,8 +448,41 @@ mapAliases ({
   libwnck3 = libwnck;
   lilypond-unstable = lilypond; # added 2021-03-11
   links = links2; # added 2016-01-31
-  linux_rpi0 = linux_rpi1;
-  linuxPackages_rpi0 = linuxPackages_rpi1;
+  linux_rpi0 = linuxKernel.kernels.linux_rpi1;
+  linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
+  linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
+  linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
+  linuxPackages_rt_5_11 = linuxKernel.packages.linux_rt_5_11;
+  linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
+  linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
+  linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
+  linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
+  linuxPackages_4_4 = linuxKernel.packages.linux_4_4;
+  linuxPackages_4_9 = linuxKernel.packages.linux_4_9;
+  linuxPackages_4_14 = linuxKernel.packages.linux_4_14;
+  linuxPackages_hardkernel_4_14 = linuxKernel.packages.hardkernel_4_14;
+  linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
+  linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
+  linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
+  linuxPackages_5_13 = linuxKernel.packages.linux_5_13;
+  linuxPackages_5_14 = linuxKernel.packages.linux_5_14;
+
+  linux_mptcp_95 = linuxKernel.kernels.linux_mptcp_95;
+  linux_rpi1 = linuxKernel.kernels.linux_rpi1;
+  linux_rpi2 = linuxKernel.kernels.linux_rpi2;
+  linux_rpi3 = linuxKernel.kernels.linux_rpi3;
+  linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linux_4_4 = linuxKernel.kernels.linux_4_4;
+  linux_4_9 = linuxKernel.kernels.linux_4_9;
+  linux_4_14 = linuxKernel.kernels.linux_4_14;
+  linux_4_19 = linuxKernel.kernels.linux_4_19;
+  linux_5_4 = linuxKernel.kernels.linux_5_4;
+  linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
+  linux_5_10 = linuxKernel.kernels.linux_5_10;
+  linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
+  linux-rt_5_11 = linuxKernel.kernels.linux_rt_5_11;
+  linux_5_13 = linuxKernel.kernels.linux_5_13;
+  linux_5_14 = linuxKernel.kernels.linux_5_14;
 
   # added 2020-04-04
   linuxPackages_testing_hardened = throw "linuxPackages_testing_hardened has been removed, please use linuxPackages_latest_hardened";

@@ -7,14 +7,14 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-Y+cRfx5WE+hb31E975xquuSmNgqr2AvaQnCE70sW91w=";
+    sha256 = "sha256-yjpBB51EgaJvFdfhC1AG5N7H5u6aJwD1UqJqIv22QpQ=";
   };
 
   patches = [
@@ -25,6 +25,13 @@ let chia = python3Packages.buildPythonApplication rec {
       sha256 = "1s5qjhd4kmi28z6ni7pc5n09czxvh8qnbwmnqsmms7cpw700g78s";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
+  '';
 
   nativeBuildInputs = [
     python3Packages.setuptools-scm
@@ -74,17 +81,6 @@ let chia = python3Packages.buildPythonApplication rec {
     "test_default_cached_master_passphrase"
     "test_using_legacy_keyring"
   ];
-
-  postPatch = ''
-    # tweak version requirements to what's available in Nixpkgs
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.7.4" "aiohttp>=3.7.4" \
-      --replace "sortedcontainers==2.3.0" "sortedcontainers>=2.3.0" \
-      --replace "click==7.1.2" "click>=7.1.2" \
-      --replace "clvm==0.9.7" "clvm>=0.9.7" \
-
-    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt mozilla-ca/cacert.pem
-  '';
 
   preCheck = ''
     export HOME=`mktemp -d`

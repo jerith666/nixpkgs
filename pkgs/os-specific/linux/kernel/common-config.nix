@@ -35,7 +35,12 @@ let
   options = {
 
     debug = {
-      DEBUG_INFO                = if (features.debug or false) then yes else no;
+      # Necessary for BTF
+      DEBUG_INFO                = mkMerge [
+        (whenOlder "5.2" (if (features.debug or false) then yes else no))
+        (whenAtLeast "5.2" yes)
+      ];
+      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
       DYNAMIC_DEBUG             = yes;
@@ -881,6 +886,22 @@ let
       # Keeping it a built-in ensures it will be used if possible.
       FB_SIMPLE = yes;
 
+    } // optionalAttrs (versionAtLeast version "5.4" && (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")) {
+      # Required for various hardware features on Chrome OS devices
+      CHROME_PLATFORMS = yes;
+      CHROMEOS_TBMC = module;
+
+      CROS_EC = module;
+
+      CROS_EC_I2C = module;
+      CROS_EC_SPI = module;
+      CROS_EC_LPC = module;
+      CROS_EC_ISHTP = module;
+
+      CROS_KBD_LED_BACKLIGHT = module;
+    } // optionalAttrs (versionAtLeast version "5.4" && stdenv.hostPlatform.system == "x86_64-linux") {
+      CHROMEOS_LAPTOP = module;
+      CHROMEOS_PSTORE = module;
     };
   };
 in

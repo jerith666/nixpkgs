@@ -699,7 +699,7 @@ self: super: builtins.intersectAttrs super {
     testTarget = "unit-tests";
   };
 
-  haskell-language-server = enableCabalFlag (enableCabalFlag (overrideCabal super.haskell-language-server (drv: {
+  haskell-language-server = overrideCabal super.haskell-language-server (drv: {
     postInstall = let
       inherit (pkgs.lib) concatStringsSep take splitString;
       ghc_version = self.ghc.version;
@@ -714,7 +714,7 @@ self: super: builtins.intersectAttrs super {
       export PATH=$PATH:$PWD/dist/build/haskell-language-server:$PWD/dist/build/haskell-language-server-wrapper
       export HOME=$TMPDIR
     '';
-  })) "all-plugins") "all-formatters";
+  });
 
   # tests depend on a specific version of solc
   hevm = dontCheck (doJailbreak super.hevm);
@@ -838,6 +838,16 @@ self: super: builtins.intersectAttrs super {
   });
   hls-pragmas-plugin = overrideCabal super.hls-pragmas-plugin (drv: {
     testToolDepends = [ pkgs.git ];
+    preCheck = ''
+      export HOME=$TMPDIR/home
+    '';
+  });
+  hiedb = overrideCabal super.hiedb (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/hiedb:$PATH
+    '';
+  });
+  hls-call-hierarchy-plugin = overrideCabal super.hls-call-hierarchy-plugin (drv: {
     preCheck = ''
       export HOME=$TMPDIR/home
     '';

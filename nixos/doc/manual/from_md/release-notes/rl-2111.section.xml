@@ -39,6 +39,13 @@
       </listitem>
       <listitem>
         <para>
+          spark now defaults to spark 3, updated from 2. A
+          <link xlink:href="https://spark.apache.org/docs/latest/core-migration-guide.html#upgrading-from-core-24-to-30">migration
+          guide</link> is available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Activation scripts can now opt int to be run when running
           <literal>nixos-rebuild dry-activate</literal> and detect the
           dry activation by reading <literal>$NIXOS_ACTION</literal>.
@@ -46,6 +53,32 @@
           change if the activation was really run. The users/modules
           activation script supports this and outputs some of is
           actions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          bash now defaults to major version 5.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Systemd was updated to version 249 (from 247).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Pantheon desktop has been updated to version 6. Due to changes
+          of screen locker, if locking doesn’t work for you, please try
+          <literal>gsettings set org.gnome.desktop.lockdown disable-lock-screen false</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>kubernetes-helm</literal> now defaults to 3.7.0,
+          which introduced some breaking changes to the experimental OCI
+          manifest format. See
+          <link xlink:href="https://github.com/helm/community/blob/main/hips/hip-0006.md">HIP
+          6</link> for more details.
         </para>
       </listitem>
     </itemizedlist>
@@ -85,6 +118,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://owncast.online/">owncast</link>,
+          self-hosted video live streaming solution. Available at
+          <link xlink:href="options.html#opt-services.owncast">services.owncast</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://sr.ht">sourcehut</link>, a
           collection of tools useful for software development. Available
           as
@@ -112,6 +152,13 @@
           <link xlink:href="https://vikunja.io">vikunja</link>, a to-do
           list app. Available as
           <link linkend="opt-services.vikunja.enable">services.vikunja</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/evilsocket/opensnitch">opensnitch</link>,
+          an application firewall. Available as
+          <link linkend="opt-services.opensnitch.enable">services.opensnitch</link>.
         </para>
       </listitem>
       <listitem>
@@ -182,8 +229,6 @@
           <link linkend="opt-services.isso.enable">isso</link>
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist spacing="compact">
       <listitem>
         <para>
           <link xlink:href="https://www.navidrome.org/">navidrome</link>,
@@ -192,8 +237,6 @@
           <link linkend="opt-services.navidrome.enable">navidrome</link>.
         </para>
       </listitem>
-    </itemizedlist>
-    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://docs.fluidd.xyz/">fluidd</link>, a
@@ -250,11 +293,41 @@
           entry</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://spark.apache.org/">spark</link>, a
+          unified analytics engine for large-scale data processing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/JoseExposito/touchegg">touchegg</link>,
+          a multi-touch gesture recognizer. Available as
+          <link linkend="opt-services.touchegg.enable">services.touchegg</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/pantheon-tweaks/pantheon-tweaks">pantheon-tweaks</link>,
+          an unofficial system settings panel for Pantheon. Available as
+          <link linkend="opt-programs.pantheon-tweaks.enable">programs.pantheon-tweaks</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-21.11-incompatibilities">
     <title>Backward Incompatibilities</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>security.wrappers</literal> option now requires
+          to always specify an owner, group and whether the
+          setuid/setgid bit should be set. This is motivated by the fact
+          that before NixOS 21.11, specifying either setuid or setgid
+          but not owner/group resulted in wrappers owned by
+          nobody/nogroup, which is unsafe.
+        </para>
+      </listitem>
       <listitem>
         <para>
           The <literal>paperless</literal> module and package have been
@@ -985,6 +1058,20 @@ Superuser created successfully.
     <itemizedlist>
       <listitem>
         <para>
+          The linux kernel package infrastructure was moved out of
+          <literal>all-packages.nix</literal>, and restructured. Linux
+          related functions and attributes now live under the
+          <literal>pkgs.linuxKernel</literal> attribute set. In
+          particular the versioned <literal>linuxPackages_*</literal>
+          package sets (such as <literal>linuxPackages_5_4</literal>)
+          and kernels from <literal>pkgs</literal> were moved there and
+          now live under <literal>pkgs.linuxKernel.packages.*</literal>.
+          The unversioned ones (such as
+          <literal>linuxPackages_latest</literal>) remain untouched.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The setting
           <link xlink:href="options.html#opt-services.openssh.logLevel"><literal>services.openssh.logLevel</literal></link>
           <literal>&quot;VERBOSE&quot;</literal>
@@ -1000,6 +1087,14 @@ Superuser created successfully.
           <literal>&quot;VERBOSE&quot;</literal>, so that
           <literal>fail2ban</literal> can observe the failed login
           attempts from the SSH logs.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link xlink:href="options.html#opt-services.xserver.extraLayouts"><literal>services.xserver.extraLayouts</literal></link>
+          no longer cause additional rebuilds when a layout is added or
+          modified.
         </para>
       </listitem>
       <listitem>
@@ -1042,10 +1137,26 @@ Superuser created successfully.
           The wordpress module provides a new interface which allows to
           use different webservers with the new option
           <link xlink:href="options.html#opt-services.wordpress.webserver"><literal>services.wordpress.webserver</literal></link>.
-          Currently <literal>httpd</literal> and
-          <literal>nginx</literal> are supported. The definitions of
+          Currently <literal>httpd</literal>, <literal>caddy</literal>
+          and <literal>nginx</literal> are supported. The definitions of
           wordpress sites should now be set in
           <link xlink:href="options.html#opt-services.wordpress.sites"><literal>services.wordpress.sites</literal></link>.
+        </para>
+        <para>
+          Sites definitions that use the old interface are automatically
+          migrated in the new option. This backward compatibility will
+          be removed in 22.05.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The dokuwiki module provides a new interface which allows to
+          use different webservers with the new option
+          <link xlink:href="options.html#opt-services.dokuwiki.webserver"><literal>services.dokuwiki.webserver</literal></link>.
+          Currently <literal>caddy</literal> and
+          <literal>nginx</literal> are supported. The definitions of
+          dokuwiki sites should now be set in
+          <link xlink:href="options.html#opt-services.dokuwiki.sites"><literal>services.dokuwiki.sites</literal></link>.
         </para>
         <para>
           Sites definitions that use the old interface are automatically
@@ -1173,6 +1284,24 @@ Superuser created successfully.
       </listitem>
       <listitem>
         <para>
+          MariaDB was upgraded from 10.5.x to 10.6.x. Please read the
+          <link xlink:href="https://mariadb.com/kb/en/changes-improvements-in-mariadb-106/">upstream
+          release notes</link> for changes and upgrade instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The MariaDB C client library, also known as libmysqlclient or
+          mariadb-connector-c, was upgraded from 3.1.x to 3.2.x. While
+          this should hopefully not have any impact, this upgrade comes
+          with some changes to default behavior, so you might want to
+          review the
+          <link xlink:href="https://mariadb.com/kb/en/changes-and-improvements-in-mariadb-connector-c-32/">upstream
+          release notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           GNOME desktop environment now enables
           <literal>QGnomePlatform</literal> as the Qt platform theme,
           which should avoid crashes when opening file chooser dialogs
@@ -1206,6 +1335,19 @@ Superuser created successfully.
           <literal>lua</literal> and <literal>luajit</literal>
           interpreters have been patched to avoid looking into /usr/lib
           directories, thus increasing the purity of the build.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Three new options,
+          <link linkend="opt-xdg.mime.addedAssociations">xdg.mime.addedAssociations</link>,
+          <link linkend="opt-xdg.mime.defaultApplications">xdg.mime.defaultApplications</link>,
+          and
+          <link linkend="opt-xdg.mime.removedAssociations">xdg.mime.removedAssociations</link>
+          have been added to the
+          <link linkend="opt-xdg.mime.enable">xdg.mime</link> module to
+          allow the configuration of
+          <literal>/etc/xdg/mimeapps.list</literal>.
         </para>
       </listitem>
     </itemizedlist>
