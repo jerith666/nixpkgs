@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "esbuild";
-  version = "0.12.22";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "evanw";
     repo = "esbuild";
     rev = "v${version}";
-    sha256 = "sha256-vZlrHfcXOz4QHTH9otpwtPIWHGxK4TAol5o/Tl0M98E=";
+    sha256 = "sha256-NPpWK99P4p8GM4MNaIT8MLPzRNHiRh2yrwqG1A0KluM=";
   };
 
-  vendorSha256 = "sha256-2ABWPqhK2Cf4ipQH7XvRrd+ZscJhYPc3SV2cGT0apdg=";
+  vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
 
   meta = with lib; {
     description = "An extremely fast JavaScript bundler";

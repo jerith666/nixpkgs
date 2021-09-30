@@ -10,15 +10,14 @@ in
 rec {
   thunderbird = common rec {
     pname = "thunderbird";
-    version = "91.0.1";
+    version = "91.1.1";
     application = "comm/mail";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "54e1f3233c544cf28302496512aaf2a5fb5486aab070680e82cefbdd1d12a33867c638ced61e43958bae47e40ff551592a2cf4d537f98c22ed1df31c5d5bb09c";
+      sha512 = "2da102f9ec42489fc785ccdabcc7fdbc826f2df5e8e76c65866a44a221e762f59647ea265fe4907c18f0d3f1e04199e809235b4587ea17bdc1155e829f57ff2f";
     };
     patches = [
-      ./no-buildconfig-90.patch
     ];
 
     meta = with lib; {
@@ -38,12 +37,12 @@ rec {
 
   thunderbird-78 = common rec {
     pname = "thunderbird";
-    version = "78.13.0";
+    version = "78.14.0";
     application = "comm/mail";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "daee9ea9e57bdfce231a35029807f279a06f8790d71efc8998c78eb42d99a93cf98623170947df99202da038f949ba9111a7ff7adbd43c161794deb6791370a0";
+      sha512 = "0zan30jvv45pd6i59l2kfyfjwivqk5qq6vyf77xhss2dk8qhk3mfrfxpfbkrab676l14b9hs09nr6ni1h1iwn82zx5k7fx5x8sh5dx6";
     };
     patches = [
       ./no-buildconfig-78.patch

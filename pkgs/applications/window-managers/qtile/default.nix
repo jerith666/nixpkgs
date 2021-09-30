@@ -10,14 +10,14 @@ let
   pythonPackages = python.pkgs;
 
   unwrapped = pythonPackages.buildPythonPackage rec {
-    name = "qtile-${version}";
-    version = "0.18.0";
+    pname = "qtile";
+    version = "0.18.1";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "sha256-S9G/EI18p9EAyWgI1ajDrLimeE+ETBC9feUDb/QthqI=";
+      sha256 = "0ln0fxarin9liy9n76zywmbr31xrjw8f7d3nr1mphci7wkc9bqmm";
     };
 
     postPatch = ''
@@ -61,6 +61,8 @@ let
   };
 in
   (python.withPackages (ps: [ unwrapped ])).overrideAttrs (_: {
+    # otherwise will be exported as "env", this restores `nix search` behavior
+    name = "${unwrapped.pname}-${unwrapped.version}";
     # export underlying qtile package
     passthru = { inherit unwrapped; };
   })

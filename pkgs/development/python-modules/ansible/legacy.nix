@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "ansible";
-  version = "2.9.25";
+  version = "2.9.26";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-i88sL1xgnluREUyosOQibWA7h/K+cdyzOOi30626oo8=";
+    sha256 = "sha256-OuAqrSu+3PtBnOdevSpkjp3rc+ni2N6GyC1gR7G962M=";
   };
 
   prePatch = ''
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "http://www.ansible.com";
+    homepage = "https://www.ansible.com";
     description = "Radically simple IT automation";
     license = [ licenses.gpl3 ] ;
     maintainers = with maintainers; [ joamaki costrouc hexa ];

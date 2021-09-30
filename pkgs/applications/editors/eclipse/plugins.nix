@@ -252,7 +252,7 @@ rec {
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/10.3/${name}/${name}.zip";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
       sha256 = "0zrxgb8mkrzc1zm5225hzn8awj9yl5fd2dcr92692g0yg61nv4jd";
     };
 
