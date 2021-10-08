@@ -11,6 +11,10 @@ let
     eula=true
   '';
 
+  opsFile = pkgs.writeText "ops.json"
+    (builtins.toJSON
+      (mapAttrsToList (n: v: { name = n; uuid = v; level = 4; }) cfg.ops));
+
   whitelistFile = pkgs.writeText "whitelist.json"
     (builtins.toJSON
       (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
@@ -58,7 +62,8 @@ in {
         description = ''
           Whether to use a declarative Minecraft server configuration.
           Only if set to <literal>true</literal>, the options
-          <option>services.minecraft-server.whitelist</option> and
+          <option>services.minecraft-server.ops</option>,
+          <option>services.minecraft-server.whitelist</option>, and
           <option>services.minecraft-server.serverProperties</option> will be
           applied.
         '';
@@ -88,6 +93,29 @@ in {
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
+        '';
+      };
+
+      ops = mkOption {
+        type = let
+          minecraftUUID = types.strMatching
+            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
+              description = "Minecraft UUID";
+            };
+          in types.attrsOf minecraftUUID;
+        default = {};
+        description = ''
+          Level 4 operators. Only has an effect when
+          <option>services.minecraft-server.declarative</option> is
+          <literal>true</literal>. This is a mapping from Minecraft usernames
+          to UUIDs. You can use <link xlink:href="https://mcuuid.net/"/> to
+          get a Minecraft UUID for a username.
+        '';
+        example = literalExample ''
+          {
+            username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+            username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+          };
         '';
       };
 
@@ -192,12 +220,14 @@ in {
 
           # Was declarative before, no need to back up anything
           ln -sf ${whitelistFile} whitelist.json
+          ln -sf ${opsFile} ops.json
           cp -f ${serverPropertiesFile} server.properties
 
         else
 
           # Declarative for the first time, backup stateful files
           ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+          ln -sb --suffix=.stateful ${opsFile} ops.json
           cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
           # server.properties must have write permissions, because every time
