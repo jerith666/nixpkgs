@@ -111,7 +111,7 @@ in {
           to UUIDs. You can use <link xlink:href="https://mcuuid.net/"/> to
           get a Minecraft UUID for a username.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
             username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
