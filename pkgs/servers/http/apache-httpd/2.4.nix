@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://httpd.apache.org/";
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ lovek323 peti ];
+    maintainers = with maintainers; [ lovek323 ];
     priority = 1;
   };
 }
