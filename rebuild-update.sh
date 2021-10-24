@@ -38,7 +38,7 @@ nix-store --realise --add-root client-ip-echo-result --indirect result;
 
 for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
     echo; echo "confirming that nix-shell works for ${sd}";
-    nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --run true;
+    nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
 done
 
 echo;
