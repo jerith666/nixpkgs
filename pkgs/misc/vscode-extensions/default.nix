@@ -852,8 +852,8 @@ let
         mktplcRef = {
           name = "todo-tree";
           publisher = "Gruntfuggly";
-          version = "0.0.213";
-          sha256 = "0fj7vvaqdldhbzm9dqh2plqlhg34jv5khd690xd87h418sv8rk95";
+          version = "0.0.214";
+          sha256 = "0rwxjnrl44rnhx3183037k6435xs4772p58a37azl5cahsyav1hk";
         };
         meta = with lib; {
           license = licenses.mit;
@@ -1176,17 +1176,7 @@ let
         };
       };
 
-      ms-toolsai.jupyter = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          name = "jupyter";
-          publisher = "ms-toolsai";
-          version = "2021.5.745244803";
-          sha256 = "0gjpsp61l8daqa87mpmxcrvsvb0pc2vwg7xbkvwn0f13c1739w9p";
-        };
-        meta = {
-          license = lib.licenses.unfree;
-        };
-      };
+      ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter {};
 
       mvllow.rose-pine = buildVscodeMarketplaceExtension {
         mktplcRef = {

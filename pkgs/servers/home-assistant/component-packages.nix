@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2021.10.4";
+  version = "2021.10.6";
   components = {
     "abode" = ps: with ps; [ abodepy ];
     "accuweather" = ps: with ps; [ accuweather ];
@@ -19,7 +19,7 @@
     "air_quality" = ps: with ps; [ ];
     "airly" = ps: with ps; [ airly ];
     "airnow" = ps: with ps; [ pyairnow ];
-    "airthings" = ps: with ps; [ ]; # missing inputs: airthings_cloud
+    "airthings" = ps: with ps; [ airthings-cloud ];
     "airtouch4" = ps: with ps; [ ]; # missing inputs: airtouch4pyapi
     "airvisual" = ps: with ps; [ pyairvisual ];
     "aladdin_connect" = ps: with ps; [ aladdin-connect ];
@@ -151,7 +151,7 @@
     "cover" = ps: with ps; [ ];
     "cppm_tracker" = ps: with ps; [ ]; # missing inputs: clearpasspy
     "cpuspeed" = ps: with ps; [ py-cpuinfo ];
-    "crownstone" = ps: with ps; [ aiohttp-cors pyserial pyudev ]; # missing inputs: crownstone-cloud crownstone-sse crownstone-uart
+    "crownstone" = ps: with ps; [ aiohttp-cors crownstone-cloud crownstone-sse crownstone-uart pyserial pyudev ];
     "cups" = ps: with ps; [ pycups ];
     "currencylayer" = ps: with ps; [ ];
     "daikin" = ps: with ps; [ pydaikin ];

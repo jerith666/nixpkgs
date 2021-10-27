@@ -1197,6 +1197,12 @@
     email = "sivaraman.balaji@gmail.com";
     name = "Balaji Sivaraman";
   };
+  balodja = {
+    email = "balodja@gmail.com";
+    github = "balodja";
+    githubId = 294444;
+    name = "Vladimir Korolev";
+  };
   baloo = {
     email = "nixpkgs@superbaloo.net";
     github = "baloo";
@@ -2436,6 +2442,12 @@
     github = "dalance";
     githubId = 4331004;
     name = "Naoya Hatta";
+  };
+  dalpd = {
+    email = "denizalpd@ogr.iu.edu.tr";
+    github = "dalpd";
+    githubId = 16895361;
+    name = "Deniz Alp Durmaz";
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -4082,6 +4094,12 @@
     githubId = 16470252;
     name = "Gemini Lasswell";
   };
+  gbtb = {
+    email = "goodbetterthebeast3@gmail.com";
+    github = "gbtb";
+    githubId = 37017396;
+    name = "gbtb";
+  };
   gebner = {
     email = "gebner@gebner.org";
     github = "gebner";
@@ -4408,6 +4426,16 @@
     github = "happy-river";
     githubId = 54728477;
     name = "Happy River";
+  };
+  hardselius = {
+    email = "martin@hardselius.dev";
+    github = "hardselius";
+    githubId = 1422583;
+    name = "Martin Hardselius";
+    keys = [{
+      longkeyid = "rsa4096/0x03A6E6F786936619";
+      fingerprint = "3F35 E4CA CBF4 2DE1 2E90  53E5 03A6 E6F7 8693 6619";
+    }];
   };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
@@ -6972,6 +7000,12 @@
     github = "martingms";
     githubId = 458783;
     name = "Martin Gammelsæter";
+  };
+  martfont = {
+    name = "Martino Fontana";
+    email = "tinozzo123@tutanota.com";
+    github = "SuperSamus";
+    githubId = 40663462;
   };
   marzipankaiser = {
     email = "nixos@gaisseml.de";
@@ -10507,6 +10541,13 @@
     githubId = 4477729;
     name = "Sergey Mironov";
   };
+  smitop = {
+    name = "Smitty van Bodegom";
+    email = "me@smitop.com";
+    matrix = "@smitop:kde.org";
+    github = "Smittyvb";
+    githubId = 10530973;
+  };
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "s-na";
@@ -12358,6 +12399,12 @@
     github = "yrashk";
     githubId = 452;
     name = "Yurii Rashkovskii";
+  };
+  yrd = {
+    name = "Yannik Rödel";
+    email = "nix@yannik.info";
+    github = "yrd";
+    githubId = 1820447;
   };
   ysndr = {
     email = "me@ysndr.de";
