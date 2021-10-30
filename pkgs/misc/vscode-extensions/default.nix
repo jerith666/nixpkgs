@@ -316,6 +316,8 @@ let
         };
       };
 
+      chenglou92.rescript-vscode = callPackage ./rescript { };
+
       cmschuetz12.wal = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "wal";
@@ -1079,6 +1081,18 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
+      mhutchie.git-graph = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "git-graph";
+          publisher = "mhutchie";
+          version = "1.30.0";
+          sha256 = "sha256-sHeaMMr5hmQ0kAFZxxMiRk6f0mfjkg2XMnA4Gf+DHwA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
         };
       };
 
