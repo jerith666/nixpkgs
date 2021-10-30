@@ -38,6 +38,10 @@ nix-store --realise --add-root client-ip-echo-result --indirect result;
 
 for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
     echo; echo "confirming that nix-shell works for ${sd}";
+    todo=$(nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --dry-run 2>&1 | grep '/nix/store/.*\.drv$' || true)
+    if echo $todo | grep '/nix/store/.*\.drv$' > /dev/null; then
+        nix build $todo --keep-going;
+    fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
 done
 
