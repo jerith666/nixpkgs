@@ -12,7 +12,6 @@
 , proto-plus
 , pytestCheckHook
 , pytest-asyncio
-, webapp2
 }:
 
 buildPythonPackage rec {
@@ -23,6 +22,11 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-SZ7tXxPKuAXIeAsNFKDZMan/HWXvzN2eaHctQOfa1MU=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "google-cloud-appengine-logging >= 0.1.0, < 1.0.0dev" "google-cloud-appengine-logging >= 0.1.0"
+  '';
 
   propagatedBuildInputs = [
     google-api-core

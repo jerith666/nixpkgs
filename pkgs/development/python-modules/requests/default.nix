@@ -39,6 +39,7 @@ buildPythonPackage rec {
     certifi
     idna
     urllib3
+    chardet
   ] ++ lib.optionals (isPy3k) [
     brotlicffi
     charset-normalizer
