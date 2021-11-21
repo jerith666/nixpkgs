@@ -1,7 +1,5 @@
 { lib
-, bash
 , buildPythonPackage
-, chardet
 , docker
 , entrypoints
 , escapism
@@ -11,7 +9,7 @@
 , pkgs-docker
 , python-json-logger
 , pythonOlder
-, ruamel_yaml
+, ruamel-yaml
 , semver
 , toml
 , traitlets
@@ -39,7 +37,7 @@ buildPythonPackage rec {
     jinja2
     pkgs-docker
     python-json-logger
-    ruamel_yaml
+    ruamel-yaml
     semver
     toml
     traitlets
