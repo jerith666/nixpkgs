@@ -78,6 +78,18 @@ let
       });
     })
 
+    (self: super: {
+      nettigo-air-monitor = super.nettigo-air-monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.1";
+        src = fetchFromGitHub {
+          owner = "bieniu";
+          repo = "nettigo-air-monitor";
+          rev = version;
+          sha256 = "sha256-OIB1d6XtstUr5P0q/dmyJS7+UbtkFQIiuSnzwcdP1mE=";
+        };
+      });
+    })
+
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
@@ -140,7 +152,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.11.3";
+  hassVersion = "2021.11.4";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -157,7 +169,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    sha256 = "sha256-HycMb29niuUp7flRdWgrKSOcnr0l3PqjULCrgrwLrFw=";
+    sha256 = "sha256-411oqzC8VTD7CM9vM/M3m4zW0Ygf2g2hoAXAxGBv7iw=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -193,7 +205,7 @@ in with py.pkgs; buildPythonApplication rec {
     pytz
     pyyaml
     requests
-    ruamel_yaml
+    ruamel-yaml
     voluptuous
     voluptuous-serialize
     yarl
@@ -813,8 +825,9 @@ in with py.pkgs; buildPythonApplication rec {
     "tests/auth/mfa_modules/test_notify.py"
     # emulated_hue/test_upnp.py: Tries to establish the public ipv4 address
     "tests/components/emulated_hue/test_upnp.py"
-    # tado/test_climate.py: Tries to connect to my.tado.com
+    # tado/test_{climate,water_heater}.py: Tries to connect to my.tado.com
     "tests/components/tado/test_climate.py"
+    "tests/components/tado/test_water_heater.py"
   ];
 
   disabledTests = [
