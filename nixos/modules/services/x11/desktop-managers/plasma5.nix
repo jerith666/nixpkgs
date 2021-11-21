@@ -62,6 +62,12 @@ let
     # See also: http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
     rm -fv $HOME/.cache/icon-cache.kcache
 
+    # more kde cache busting
+    # helped work around a crash of the alt-tab task switcher between 6c3e156bd2 and e04eff7610
+    ( cd $HOME/.cache
+      rm -rf kcmshell5/ kded5/ khelpcenter/ kioexec/ kio_http/ krunner* kscreenlocker_greet/ ksmserver-* ksplashqml/ ksycoca5* kwin/ main.kts.compiled.cache/ mesa mesa_shader_cache/ plasma* qt* radv_builtin_shaders* systemsettings/
+    )
+
     # xdg-desktop-settings generates this empty file but
     # it makes kbuildsyscoca5 fail silently. To fix this
     # remove that menu if it exists.
