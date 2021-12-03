@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
-  version = "1.2.6";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "yuezk";
