@@ -6580,7 +6580,7 @@
     githubId = 4158274;
     name = "Michiel Leenaars";
   };
-  legendofmiracles = {
+  lom = {
     email = "legendofmiracles@protonmail.com";
     matrix = "@legendofmiracles:matrix.org";
     github = "legendofmiracles";
@@ -8923,7 +8923,7 @@
     name = "pasqui23";
   };
   patryk27 = {
-    email = "wychowaniec.patryk@gmail.com";
+    email = "pwychowaniec@pm.me";
     github = "Patryk27";
     githubId = 3395477;
     name = "Patryk Wychowaniec";
@@ -12955,12 +12955,6 @@
     github = "zookatron";
     githubId = 1772064;
     name = "Tim Zook";
-  };
-  zoomulator = {
-    email = "zoomulator@gmail.com";
-    github = "zoomulator";
-    githubId = 1069303;
-    name = "Kim Simmons";
   };
   zopieux = {
     email = "zopieux@gmail.com";

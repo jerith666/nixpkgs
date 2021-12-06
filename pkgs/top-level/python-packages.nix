@@ -5359,6 +5359,8 @@ in {
 
   open-garage = callPackage ../development/python-modules/open-garage { };
 
+  open-meteo = callPackage ../development/python-modules/open-meteo { };
+
   openant = callPackage ../development/python-modules/openant { };
 
   openapi-schema-validator = callPackage ../development/python-modules/openapi-schema-validator { };
@@ -9623,6 +9625,8 @@ in {
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
   types-toml = callPackage ../development/python-modules/types-toml { };
+
+  types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 
