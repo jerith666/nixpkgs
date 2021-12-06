@@ -2,22 +2,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , simpleeval
-, isPy27
+, pythonOlder
 , coveralls
 , wcmatch
 }:
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.9.3";
+  version = "1.11.1";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pycasbin";
     rev = "v${version}";
-    sha256 = "sha256-PN31/1BpXcNqsqBZ8sS/MM3UL47/Bi24bUh+jGOJevk=";
+    sha256 = "sha256-gFGYpHd1kp4JMtoe47VbJ0uDnuGQegggbjXaw6nEMR4=";
   };
 
   propagatedBuildInputs = [

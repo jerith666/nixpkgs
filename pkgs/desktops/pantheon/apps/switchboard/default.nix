@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , nix-update-script
-, pantheon
 , pkg-config
 , meson
 , python3
@@ -13,7 +13,6 @@
 , libhandy
 , granite
 , gettext
-, clutter-gtk
 , elementary-icon-theme
 , wrapGAppsHook
 }:
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter-gtk
     elementary-icon-theme
     granite
     gtk3
@@ -75,5 +73,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.switchboard";
   };
 }

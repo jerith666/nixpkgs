@@ -134,7 +134,9 @@ rec {
       vlans = map (m: m.config.virtualisation.vlans) (lib.attrValues nodes);
       vms = map (m: m.config.system.build.vm) (lib.attrValues nodes);
 
-      nodeHostNames = map (c: c.config.system.name) (lib.attrValues nodes);
+      nodeHostNames = let
+        nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
+      in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
 
       # TODO: This is an implementation error and needs fixing
       # the testing famework cannot legitimately restrict hostnames further
@@ -209,11 +211,41 @@ rec {
     let
       nodes = qemu_pkg:
         let
+          testScript' =
+            # Call the test script with the computed nodes.
+            if lib.isFunction testScript
+            then testScript { nodes = nodes qemu_pkg; }
+            else testScript;
+
           build-vms = import ./build-vms.nix {
             inherit system lib pkgs minimal specialArgs;
             extraConfigurations = extraConfigurations ++ [(
+              { config, ... }:
               {
                 virtualisation.qemu.package = qemu_pkg;
+
+                # Make sure all derivations referenced by the test
+                # script are available on the nodes. When the store is
+                # accessed through 9p, this isn't important, since
+                # everything in the store is available to the guest,
+                # but when building a root image it is, as all paths
+                # that should be available to the guest has to be
+                # copied to the image.
+                virtualisation.additionalPaths =
+                  lib.optional
+                    # A testScript may evaluate nodes, which has caused
+                    # infinite recursions. The demand cycle involves:
+                    #   testScript -->
+                    #   nodes -->
+                    #   toplevel -->
+                    #   additionalPaths -->
+                    #   hasContext testScript' -->
+                    #   testScript (ad infinitum)
+                    # If we don't need to build an image, we can break this
+                    # cycle by short-circuiting when useNixStoreImage is false.
+                    (config.virtualisation.useNixStoreImage && builtins.hasContext testScript')
+                    (pkgs.writeStringReferencesToFile testScript');
+
                 # Ensure we do not use aliases. Ideally this is only set
                 # when the test framework is used by Nixpkgs NixOS tests.
                 nixpkgs.config.allowAliases = false;

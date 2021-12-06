@@ -1,10 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
 , linkFarm
 , substituteAll
 , elementary-greeter
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -128,5 +128,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.greeter";
   };
 }

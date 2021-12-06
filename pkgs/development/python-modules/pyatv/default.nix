@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , aiohttp
-, audio-metadata
 , bitarray
 , cryptography
 , deepdiff
@@ -21,26 +20,20 @@
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.5";
-
+  version = "0.9.6";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7aeXTR0ecrm5+KHRCdW3+HLjU3U7Ja/J6JTU5QscCto=";
+    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-  '';
 
   propagatedBuildInputs = [
     aiohttp
-    audio-metadata
     bitarray
     cryptography
     mediafile
@@ -57,6 +50,18 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+    # Remove all version pinning
+    sed -i -e "s/==[0-9.]*//" requirements/requirements.txt
+  '';
+
+  disabledTestPaths = [
+    # Test doesn't work in the sandbox
+    "tests/protocols/companion/test_companion_auth.py"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -12,6 +12,8 @@
 , pkg-config
 , makeWrapper
 , symlinkJoin
+, bison
+, nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
   # commmon dependency. The transitive dependency closure of systemd also
@@ -82,7 +84,7 @@ stdenv.mkDerivation rec {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = if withDNSTAP then "${protobufc}/bin/protoc-c" else null;
+  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure = let
@@ -90,6 +92,10 @@ stdenv.mkDerivation rec {
   in ''
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
+
+  checkInputs = [ bison ];
+
+  doCheck = true;
 
   installFlags = [ "configfile=\${out}/etc/unbound/unbound.conf" ];
 
@@ -107,6 +113,9 @@ stdenv.mkDerivation rec {
       configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
       configurePhase
       buildPhase
+      if [ -n "$doCheck" ]; then
+          checkPhase
+      fi
       installPhase
     ''
   # get rid of runtime dependencies on $dev outputs
@@ -114,6 +123,8 @@ stdenv.mkDerivation rec {
   + lib.concatMapStrings
     (pkg: lib.optionalString (pkg ? dev) " --replace '-L${pkg.dev}/lib' '-L${pkg.out}/lib' --replace '-R${pkg.dev}/lib' '-R${pkg.out}/lib'")
     (builtins.filter (p: p != null) buildInputs);
+
+  passthru.tests = nixosTests.unbound;
 
   meta = with lib; {
     description = "Validating, recursive, and caching DNS resolver";

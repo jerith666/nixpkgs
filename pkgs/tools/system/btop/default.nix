@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "btop";
-  version = "1.0.18";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TUrCSpwbUP28COHAAFIdR5Kw18I35nBkiKU62IHCN4o=";
+    sha256 = "sha256-+z6bWX2mgvH6nW7SamDzAexeCn/i3+RaPF8RfoikR2k=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];

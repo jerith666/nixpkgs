@@ -5,6 +5,7 @@
 , gtk3
 , withWayland ? false
 , gtk-layer-shell
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +25,10 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk3 ] ++ lib.optional withWayland gtk-layer-shell;
 
-  cargoBuildFlags = [ "--bin" "eww" ] ++ lib.optionals withWayland [
-    "--no-default-features"
-    "--features=wayland"
-  ];
+  buildNoDefaultFeatures = withWayland;
+  buildFeatures = lib.optional withWayland "wayland";
+
+  cargoBuildFlags = [ "--bin" "eww" ];
 
   cargoTestFlags = cargoBuildFlags;
 
@@ -39,5 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda legendofmiracles ];
+    broken = stdenv.isDarwin;
   };
 }

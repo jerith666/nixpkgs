@@ -79,7 +79,7 @@ def _call_nix_update(pkg, version):
 def _nix_eval(expr: str):
     nixpkgs_path = Path(__file__).parent / '../../../../'
     try:
-        output = subprocess.check_output(['nix', 'eval', '--json', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True)
+        output = subprocess.check_output(['nix-instantiate', '--strict', '--json', '--eval', '-E', f'(with import {nixpkgs_path} {{}}; {expr})'], text=True)
     except subprocess.CalledProcessError:
         return None
     return json.loads(output)
@@ -201,16 +201,24 @@ def update_plugins():
 
     """
     plugins = [
+        {'name': 'discourse-assign'},
         {'name': 'discourse-calendar'},
         {'name': 'discourse-canned-replies'},
+        {'name': 'discourse-chat-integration'},
         {'name': 'discourse-checklist'},
         {'name': 'discourse-data-explorer'},
+        {'name': 'discourse-docs'},
         {'name': 'discourse-github'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
         {'name': 'discourse-math'},
         {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
+        # We can't update this automatically at the moment because the plugin.rb
+        # tries to load a version number which breaks bundler called by this script.
+        # {'name': 'discourse-prometheus'},
+        {'name': 'discourse-saved-searches'},
         {'name': 'discourse-solved'},
         {'name': 'discourse-spoiler-alert'},
+        {'name': 'discourse-voting'},
         {'name': 'discourse-yearly-review'},
     ]
 

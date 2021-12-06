@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , meson
 , ninja
-, pantheon
 , pkg-config
 , python3
 , vala
@@ -65,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "io.elementary.settings-daemon";
   };
 }
