@@ -437,6 +437,12 @@ in {
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
 
+  allure-python-commons = callPackage ../development/python-modules/allure-python-commons { };
+
+  allure-python-commons-test = callPackage ../development/python-modules/allure-python-commons-test { };
+
+  allure-pytest = callPackage ../development/python-modules/allure-pytest { };
+
   alot = callPackage ../development/python-modules/alot { };
 
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
@@ -2464,6 +2470,8 @@ in {
 
   emoji = callPackage ../development/python-modules/emoji { };
 
+  empy = callPackage ../development/python-modules/empy { };
+
   emulated-roku = callPackage ../development/python-modules/emulated-roku { };
 
   enaml = callPackage ../development/python-modules/enaml { };
@@ -3518,6 +3526,8 @@ in {
 
   heapdict = callPackage ../development/python-modules/heapdict { };
 
+  heatzypy = callPackage ../development/python-modules/heatzypy { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };
@@ -3947,6 +3957,8 @@ in {
 
   j2cli = callPackage ../development/python-modules/j2cli { };
 
+  jaconv = callPackage ../development/python-modules/jaconv { };
+
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
   janus = callPackage ../development/python-modules/janus { };
@@ -4198,6 +4210,8 @@ in {
   keras-preprocessing = callPackage ../development/python-modules/keras-preprocessing { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
+
+  keyboard = callPackage ../development/python-modules/keyboard { };
 
   keyring = callPackage ../development/python-modules/keyring { };
 
@@ -4749,6 +4763,8 @@ in {
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
+  mdurl = callPackage ../development/python-modules/mdurl { };
+
   MDP = callPackage ../development/python-modules/mdp { };
 
   measurement = callPackage ../development/python-modules/measurement { };
@@ -4929,6 +4945,8 @@ in {
   moto = callPackage ../development/python-modules/moto { };
 
   motor = callPackage ../development/python-modules/motor { };
+
+  mouseinfo = callPackage ../development/python-modules/mouseinfo { };
 
   moviepy = callPackage ../development/python-modules/moviepy { };
 
@@ -6245,6 +6263,8 @@ in {
 
   pyaudio = callPackage ../development/python-modules/pyaudio { };
 
+  pyautogui = callPackage ../development/python-modules/pyautogui { };
+
   pyavm = callPackage ../development/python-modules/pyavm { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
@@ -6552,6 +6572,8 @@ in {
 
   pygeoip = callPackage ../development/python-modules/pygeoip { };
 
+  pygetwindow = callPackage ../development/python-modules/pygetwindow { };
+
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   PyGithub = callPackage ../development/python-modules/pyGithub { };
@@ -6647,6 +6669,8 @@ in {
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
+
+  pykakasi = callPackage ../development/python-modules/pykakasi { };
 
   pykdl = callPackage ../development/python-modules/pykdl { };
 
@@ -7059,6 +7083,8 @@ in {
     pythonPackages = self;
   });
 
+  pyrect = callPackage ../development/python-modules/pyrect { };
+
   pyregion = callPackage ../development/python-modules/pyregion { };
 
   pyres = callPackage ../development/python-modules/pyres { };
@@ -7128,6 +7154,8 @@ in {
   pyschedule = callPackage ../development/python-modules/pyschedule { };
 
   pyscreenshot = callPackage ../development/python-modules/pyscreenshot { };
+
+  pyscreeze = callPackage ../development/python-modules/pyscreeze { };
 
   py_scrypt = callPackage ../development/python-modules/py_scrypt { };
 
@@ -7860,9 +7888,13 @@ in {
 
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
 
+  pytweening = callPackage ../development/python-modules/pytweening { };
+
   pytwitchapi = callPackage ../development/python-modules/pytwitchapi { };
 
   pytz = callPackage ../development/python-modules/pytz { };
+
+  pytz-deprecation-shim = callPackage ../development/python-modules/pytz-deprecation-shim { };
 
   pytzdata = callPackage ../development/python-modules/pytzdata { };
 
@@ -9297,6 +9329,8 @@ in {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
+
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
 
   tess = callPackage ../development/python-modules/tess { };
@@ -10125,7 +10159,9 @@ in {
 
   xdis = callPackage ../development/python-modules/xdis { };
 
-  xdot = callPackage ../development/python-modules/xdot { };
+  xdot = callPackage ../development/python-modules/xdot {
+    inherit (pkgs) graphviz;
+  };
 
   xenomapper = callPackage ../applications/science/biology/xenomapper { };
 
@@ -10310,6 +10346,8 @@ in {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zetup = callPackage ../development/python-modules/zetup { };
+
+  zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
 

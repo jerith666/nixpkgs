@@ -33,6 +33,7 @@ in
   ### Deprecated aliases - for backward compatibility
 
 mapAliases ({
+  _0x0 = throw "0x0 upstream is abandoned and no longer exists: https://gitlab.com/somasis/scripts/";
   PPSSPP = ppsspp; # added 2017-10-01
   QmidiNet = qmidinet;  # added 2016-05-22
   accounts-qt = libsForQt5.accounts-qt; # added 2015-12-19
@@ -131,6 +132,7 @@ mapAliases ({
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   claws-mail-gtk3 = claws-mail; # added 2021-07-10
   clawsMail = claws-mail; # added 2016-04-29
+  claws-mail-gtk2 = throw "claws-mail-gtk2 was removed to get rid of Python 2, please use claws-mail"; # added 2021-12-05
   clutter_gtk = clutter-gtk; # added 2018-02-25
   cmakeWithQt4Gui = throw "cmakeWithQt4Gui has been removed in favor of cmakeWithGui (Qt 5)"; # added 2021-05
   codimd = hedgedoc; # added 2020-11-29
@@ -279,6 +281,7 @@ mapAliases ({
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fwupdate = throw "fwupdate was merged into fwupd"; # added 2020-05-19
   g4py = python3Packages.geant4; # added 2020-06-06
+  gaia = throw "gaia has been removed because it seems abandoned upstream and uses no longer supported dependencies"; # added 2020-06-06
   gdal_1_11 = throw "gdal_1_11 was removed. Use gdal instead."; # added 2021-04-03
   gdb-multitarget = gdb; # added 2017-11-13
   gdk_pixbuf = gdk-pixbuf; # added 2019-05-22
@@ -1216,6 +1219,8 @@ mapAliases ({
     qqc2-breeze-style
     sddm-kcm systemsettings
     xdg-desktop-portal-kde
+    plasma-phone-components
+    plasma-nano
   ;
   inherit (plasma5Packages.thirdParty)
     plasma-applet-caffeine-plus
