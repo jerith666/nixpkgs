@@ -302,9 +302,11 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
-  dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
-    inherit dhall-nix;
-  };
+  dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
+
+  dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
+
+  dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
   deadcode = callPackage ../development/tools/deadcode { };
 
@@ -2365,7 +2367,7 @@ with pkgs;
     '';
   };
 
-  stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (drv: {
+  stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (_: {
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/stack2nix \
@@ -2476,6 +2478,8 @@ with pkgs;
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
 
   clickclack = callPackage ../tools/misc/clickclack { };
+
+  clickgen = with python3Packages; toPythonApplication clickgen;
 
   clog-cli = callPackage ../development/tools/clog-cli { };
 
@@ -2679,6 +2683,8 @@ with pkgs;
   datasette = with python3Packages; toPythonApplication datasette;
 
   howard-hinnant-date = callPackage ../development/libraries/howard-hinnant-date { };
+
+  datefmt = callPackage ../tools/misc/datefmt { };
 
   datefudge = callPackage ../tools/system/datefudge { };
 
@@ -3597,6 +3603,8 @@ with pkgs;
 
   spacevim = callPackage ../applications/editors/spacevim { };
 
+  space-cadet-pinball = callPackage ../games/space-cadet-pinball { };
+
   ssmsh = callPackage ../tools/admin/ssmsh { };
 
   stacs = callPackage ../tools/security/stacs { };
@@ -3865,6 +3873,8 @@ with pkgs;
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { stdenv = gccStdenv; };
 
   blastem = callPackage ../misc/emulators/blastem { };
+
+  blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
   blueberry = callPackage ../tools/bluetooth/blueberry { };
 
@@ -4203,7 +4213,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_8.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -5141,7 +5151,7 @@ with pkgs;
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = pkgs.protobuf3_8.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf3_8.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     table-extra = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-extra { };
@@ -6065,7 +6075,7 @@ with pkgs;
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
       version = "20200223";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -6465,7 +6475,7 @@ with pkgs;
 
     jupyter = python3.withPackages (ps: [ ps.jupyter ps.notebook ]);
 
-    packages = config.ihaskell.packages or (self: []);
+    packages = config.ihaskell.packages or (_: []);
   };
 
   ijq = callPackage ../development/tools/ijq { };
@@ -6716,6 +6726,10 @@ with pkgs;
   jsduck = callPackage ../development/tools/jsduck { };
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
+
+  jsonwatch = callPackage ../tools/misc/jsonwatch {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   jtc = callPackage ../development/tools/jtc { };
 
@@ -10895,7 +10909,7 @@ with pkgs;
 
   wget2 = callPackage ../tools/networking/wget2 {
     # update breaks grub2
-    gnulib = pkgs.gnulib.overrideAttrs (oldAttrs: rec {
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
       version = "20210208";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
@@ -12508,31 +12522,31 @@ with pkgs;
   llvmPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/llvm/5 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_5.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_5.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_5.libraries or llvmPackages_5.libraries;
   });
 
   llvmPackages_6 = recurseIntoAttrs (callPackage ../development/compilers/llvm/6 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_6.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_6.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_6.libraries or llvmPackages_6.libraries;
   });
 
   llvmPackages_7 = recurseIntoAttrs (callPackage ../development/compilers/llvm/7 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_7.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_7.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_7.libraries or llvmPackages_7.libraries;
   });
 
   llvmPackages_8 = recurseIntoAttrs (callPackage ../development/compilers/llvm/8 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_8.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_8.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_8.libraries or llvmPackages_8.libraries;
   });
 
   llvmPackages_9 = recurseIntoAttrs (callPackage ../development/compilers/llvm/9 {
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_9.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_9.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_9.libraries or llvmPackages_9.libraries;
   });
 
   llvmPackages_10 = recurseIntoAttrs (callPackage ../development/compilers/llvm/10 {
@@ -12544,7 +12558,7 @@ with pkgs;
   llvmPackages_11 = recurseIntoAttrs (callPackage ../development/compilers/llvm/11 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_11.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_11.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_11.libraries or llvmPackages_11.libraries;
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
@@ -12552,7 +12566,7 @@ with pkgs;
   llvmPackages_12 = recurseIntoAttrs (callPackage ../development/compilers/llvm/12 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_12.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_12.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_12.libraries or llvmPackages_12.libraries;
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
@@ -12560,7 +12574,7 @@ with pkgs;
   llvmPackages_13 = recurseIntoAttrs (callPackage ../development/compilers/llvm/13 ({
     inherit (stdenvAdapters) overrideCC;
     buildLlvmTools = buildPackages.llvmPackages_13.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_13.libraries;
+    targetLlvmLibraries = targetPackages.llvmPackages_13.libraries or llvmPackages_13.libraries;
   } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && buildPackages.stdenv.cc.isGNU) {
     stdenv = gcc7Stdenv;
   }));
@@ -13285,6 +13299,8 @@ with pkgs;
   dhall-json = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-json;
 
   dhall-nix = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nix;
+
+  dhall-nixpkgs = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nixpkgs;
 
   dhall-text = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-text;
 
@@ -14884,7 +14900,7 @@ with pkgs;
   lttv = callPackage ../development/tools/misc/lttv { };
 
   luaformatter = callPackage ../development/tools/luaformatter
-    (lib.optionalAttrs stdenv.isDarwin {
+    (lib.optionalAttrs (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "9") {
       stdenv = overrideCC stdenv llvmPackages_9.clang;
     });
 
@@ -16420,7 +16436,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  libgit2_0_27 = libgit2.overrideAttrs (oldAttrs: rec {
+  libgit2_0_27 = libgit2.overrideAttrs (_: rec {
     version = "0.27.10";
     src = fetchFromGitHub {
       owner = "libgit2";
@@ -16434,7 +16450,7 @@ with pkgs;
     ];
   });
 
-  libgit2_1_1 = libgit2.overrideAttrs (oldAttrs: rec {
+  libgit2_1_1 = libgit2.overrideAttrs (_: rec {
     version = "1.1.1";
     src = fetchFromGitHub {
       owner = "libgit2";
@@ -19135,7 +19151,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
 
-  portaudio2014 = portaudio.overrideAttrs (oldAttrs: {
+  portaudio2014 = portaudio.overrideAttrs (_: {
     src = fetchurl {
       url = "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz";
       sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
@@ -19435,7 +19451,7 @@ with pkgs;
 
   rocksdb_lite = rocksdb.override { enableLite = true; };
 
-  rocksdb_6_23 = rocksdb.overrideAttrs (old: rec {
+  rocksdb_6_23 = rocksdb.overrideAttrs (_: rec {
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
@@ -20520,11 +20536,11 @@ with pkgs;
 
   sqitchMysql = (callPackage ../development/tools/misc/sqitch {
     mysqlSupport = true;
-  }).overrideAttrs (oldAttrs: { pname = "sqitch-mysql"; });
+  }).overrideAttrs (_: { pname = "sqitch-mysql"; });
 
   sqitchPg = (callPackage ../development/tools/misc/sqitch {
     postgresqlSupport = true;
-  }).overrideAttrs (oldAttrs: { pname = "sqitch-pg"; });
+  }).overrideAttrs (_: { pname = "sqitch-pg"; });
 
   ### DEVELOPMENT / R MODULES
 
@@ -20558,7 +20574,7 @@ with pkgs;
   };
 
   rPackages = dontRecurseIntoAttrs (callPackage ../development/r-modules {
-    overrides = (config.rPackageOverrides or (p: {})) pkgs;
+    overrides = (config.rPackageOverrides or (_: {})) pkgs;
   });
 
   ### SERVERS
@@ -20939,6 +20955,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
+  matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
+
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
   matterbridge = callPackage ../servers/matterbridge { };
@@ -21123,6 +21141,8 @@ with pkgs;
   pshs = callPackage ../servers/http/pshs { };
 
   quark = callPackage ../servers/http/quark { };
+
+  soft-serve = callPackage ../servers/soft-serve { };
 
   sympa = callPackage ../servers/mail/sympa { };
 
@@ -21355,14 +21375,13 @@ with pkgs;
     asciidoc = asciidoc-full;
   };
 
-  promscale = callPackage ../servers/monitoring/prometheus/promscale.nix { };
+  promscale = callPackage ../servers/monitoring/prometheus/promscale { };
 
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_9_6
     postgresql_10
     postgresql_11
     postgresql_12
@@ -22237,8 +22256,6 @@ with pkgs;
   linux_5_4_hardened = linuxKernel.kernels.linux_5_4_hardened;
   linuxPackages_5_10_hardened = linuxKernel.packages.linux_5_10_hardened;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
-  linuxPackages_5_14_hardened = linuxKernel.packages.linux_5_14_hardened;
-  linux_5_14_hardened = linuxKernel.kernels.linux_5_14_hardened;
   linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
 
@@ -22258,6 +22275,7 @@ with pkgs;
 
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
+  linux_xanmod = linuxKernel.kernels.linux_xanmod;
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
@@ -22300,6 +22318,8 @@ with pkgs;
   lockdep = callPackage ../os-specific/linux/lockdep { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
+
+  kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
@@ -24942,6 +24962,8 @@ with pkgs;
 
   exrtools = callPackage ../applications/graphics/exrtools { };
 
+  f1viewer = callPackage ../applications/video/f1viewer {};
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };
@@ -25890,6 +25912,8 @@ with pkgs;
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
+
+  skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
@@ -28907,7 +28931,7 @@ with pkgs;
         darwin = true;
       };
     };
-  }).overrideAttrs (oldAttrs: rec {
+  }).overrideAttrs (_: rec {
     pname = "vim-darwin";
     meta = {
       platforms = lib.platforms.darwin;
@@ -29460,7 +29484,7 @@ with pkgs;
 
   xmonad-with-packages = callPackage ../applications/window-managers/xmonad/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
-    packages = self: [ haskellPackages.xmonad-contrib ];
+    packages = _: [ haskellPackages.xmonad-contrib ];
   };
 
   xmonad_log_applet = callPackage ../applications/window-managers/xmonad/log-applet {
@@ -31641,7 +31665,7 @@ with pkgs;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {
-    gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
+    gmp = lib.overrideDerivation gmp (_: { dontDisableStatic = true; });
     stdenv = gccStdenv;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {
@@ -31685,7 +31709,7 @@ with pkgs;
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
-    polyml = lib.overrideDerivation polyml (attrs: {
+    polyml = lib.overrideDerivation polyml (_: {
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
     });
 
