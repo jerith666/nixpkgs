@@ -374,6 +374,8 @@ with pkgs;
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
+  oletools = with python3.pkgs; toPythonApplication oletools;
+
   creddump = callPackage ../tools/security/creddump {};
 
   credential-detector = callPackage ../tools/security/credential-detector { };
@@ -5796,8 +5798,6 @@ with pkgs;
 
   github-runner = callPackage ../development/tools/continuous-integration/github-runner { };
 
-  gitin = callPackage ../applications/version-management/git-and-tools/gitin { };
-
   gitinspector = callPackage ../applications/version-management/gitinspector { };
 
   gitkraken = callPackage ../applications/version-management/gitkraken { };
@@ -9896,6 +9896,8 @@ with pkgs;
   subsonic = callPackage ../servers/misc/subsonic { };
 
   subfinder = callPackage ../tools/networking/subfinder { };
+
+  subzerod = with python3Packages; toPythonApplication subzerod;
 
   suckit = callPackage ../tools/networking/suckit {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -15695,6 +15697,8 @@ with pkgs;
     stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
   });
 
+  arsenal = callPackage ../tools/security/arsenal { };
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio_1_10 = callPackage ../development/libraries/asio/1.10.nix { };
@@ -18766,6 +18770,8 @@ with pkgs;
   mqtt-bench = callPackage ../applications/misc/mqtt-bench {};
 
   msgpack = callPackage ../development/libraries/msgpack { };
+
+  msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   msilbc = callPackage ../development/libraries/msilbc { };
 
@@ -22732,7 +22738,9 @@ with pkgs;
 
   seturgent = callPackage ../os-specific/linux/seturgent { };
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx-sdk { };
+  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk { };
+
+  sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
@@ -29168,6 +29176,8 @@ with pkgs;
 
   wafw00f = python3Packages.callPackage ../tools/security/wafw00f { };
 
+  whispers = callPackage ../tools/security/whispers { };
+
   waon = callPackage ../applications/audio/waon { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
@@ -33188,11 +33198,11 @@ with pkgs;
     terraform_0_13
     terraform_0_14
     terraform_0_15
-    terraform_1_0
+    terraform_1
     terraform_plugins_test
     ;
 
-  terraform = terraform_1_0;
+  terraform = terraform_1;
   # deprecated
   terraform-full = terraform.full;
 
