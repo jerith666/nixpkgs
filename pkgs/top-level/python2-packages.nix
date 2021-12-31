@@ -396,6 +396,8 @@ with self; with super; {
 
   pip = callPackage ../development/python-modules/pip/20.nix { };
 
+  platformdirs = callPackage ../development/python-modules/platformdirs/2.nix { };
+
   pluggy = callPackage ../development/python-modules/pluggy/0.nix { };
 
   postorius = disabled super.postorius;
@@ -435,8 +437,6 @@ with self; with super; {
 
   pydns = callPackage ../development/python-modules/pydns { };
 
-  pydocstyle = callPackage ../development/python-modules/pydocstyle/2.nix { };
-
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
@@ -458,6 +458,8 @@ with self; with super; {
   };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest/1.nix { };
+
+  pyjwt = callPackage ../development/python-modules/pyjwt/1.nix { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
 

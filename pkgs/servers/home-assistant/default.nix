@@ -219,6 +219,19 @@ let
       });
     })
 
+    # Remove with 2021.12.6 as the requirement will be 1.1.16 (at least)
+    (self: super: {
+      yalexs = super.yalexs.overridePythonAttrs (oldAttrs: rec {
+        version = "1.1.13";
+        src = fetchFromGitHub {
+          owner = "bdraco";
+          repo = "yalexs";
+          rev = "v${version}";
+          sha256 = "sha256-lnx8+VyDyO7Wg+QW+CC0FUg77Ndfjar6PLsDYwEpaCQ=";
+        };
+      });
+    })
+
     # home-assistant-frontend does not exist in python3.pkgs
     (self: super: {
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -252,7 +265,7 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2021.12.2";
+  hassVersion = "2021.12.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
@@ -269,7 +282,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256:0rb6kwvrjq258qv8xh4qbpw3n91bb263dcqp3f1dg45n8mbcdr60";
+    hash = "sha256:0n01cjbbyb1i63z8zxkjlwssqpv6y41jzs7b7jk78w3qnbg15bk3";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -307,6 +320,7 @@ in with py.pkgs; buildPythonApplication rec {
     ciso8601
     cryptography
     httpx
+    ifaddr
     jinja2
     pip
     pyjwt
@@ -646,7 +660,8 @@ in with py.pkgs; buildPythonApplication rec {
     "namecheapdns"
     "neato"
     "ness_alarm"
-    "nest"
+    # python-nest has an unfree license, this prevents builds through ofborg
+    # "nest"
     "netatmo"
     "nexia"
     "nightscout"
