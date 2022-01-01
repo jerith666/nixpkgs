@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python, zlib, pkg-config, glib
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, autoPatchelfHook, runtimeShell
+, makeWrapper, runtimeShell
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, Hypervisor, rez, setfile
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper python python.pkgs.sphinx python.pkgs.sphinx_rtd_theme pkg-config flex bison meson ninja ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
-    ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
   buildInputs = [ zlib glib perl pixman
@@ -85,6 +84,8 @@ stdenv.mkDerivation rec {
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
   outputs = [ "out" "ga" ];
+  # On aarch64-linux we would shoot over the Hydra's 2G output limit.
+  separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
@@ -118,6 +119,12 @@ stdenv.mkDerivation rec {
       name = "qxl-fix-pre-save-logic.patch";
       url = "https://gitlab.com/qemu-project/qemu/-/commit/eb94846280df3f1e2a91b6179fc05f9890b7e384.patch";
       sha256 = "sha256-p31fd47RTSw928DOMrubQQybnzDAGm23z4Yhe+hGJQ8=";
+    })
+    # Fixes socket_sockaddr_to_address_unix assertion errors in some setups. Remove with next release.
+    (fetchpatch {
+      name = "fix-unix-socket-path-copy-again.patch";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/118d527f2e4baec5fe8060b22a6212468b8e4d3f.patch";
+      sha256 = "sha256-ox+JSpc0pqd3bMi5Ot7ljQyk70SX8g+BLufR06mZPps=";
     })
   ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ lib.optionals stdenv.hostPlatform.isMusl [
@@ -174,6 +181,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--audio-drv-list=${audio}"
+    "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
     "--enable-guest-agent"
@@ -228,8 +236,7 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
-    cp -- $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
-    chmod a+x -- $out/libexec/emit-kvm-warnings
+    install -m755 -D $emitKvmWarningsPath $out/libexec/emit-kvm-warnings
     if [ -x $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} ]; then
       makeWrapper $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} \
                   $out/bin/qemu-kvm \

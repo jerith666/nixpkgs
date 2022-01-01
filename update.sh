@@ -45,7 +45,10 @@ popd;
 mv -iv $wt/update-$d.txt .;
 
 #prevent gc while changes are reviewed
-nix-store --add-root result-$d --indirect -r $(readlink -e $wt/system-result);
+mkdir result-$d;
+for f in $wt/*-result; do
+    nix-store --add-root result-$d/$(basename $f) --indirect -r $(readlink -e $f);
+done
 
 rm -rf $wt;
 git worktree prune;

@@ -17,15 +17,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.16.3";
+  version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9qfBreviTcWgkvZCD7bSvCaC40G+u1v4geGissJ4jE4=";
+    sha256 = "sha256-fkgsMPSmJVp62sVKuuHOsOUczFfBoooKNEY3w5f9zbE=";
   };
-  cargoSha256 = "sha256-20o3JgpL4tHVDoH/l3yM7kCZyXu/vciA8ACubzRvPKA=";
+  cargoSha256 = "sha256-wzQf5Wb0kxAg5sNxom9qltdkpJbNatA7IK4oVstQXME=";
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];
@@ -42,6 +42,10 @@ rustPlatform.buildRustPackage rec {
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
   doCheck = false;
+
+  preInstall = ''
+    find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
+  '';
 
   postInstall = ''
     installShellCompletion --cmd deno \

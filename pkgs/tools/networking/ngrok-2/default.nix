@@ -16,8 +16,8 @@ let versions = lib.importJSON ./versions.json;
 
 in
 stdenv.mkDerivation {
-  name = "ngrok-${version}";
-  version = version;
+  pname = "ngrok";
+  inherit version;
 
   # run ./update
   src = fetchurl { inherit sha256 url; };
@@ -33,6 +33,9 @@ stdenv.mkDerivation {
   '';
 
   passthru.updateScript = ./update.sh;
+
+  # Stripping causes SEGFAULT on x86_64-darwin
+  dontStrip = true;
 
   meta = {
     description = "Allows you to expose a web server running on your local machine to the internet";

@@ -43,6 +43,7 @@ for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
         nix build $todo --keep-going;
     fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
+    nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result
 done
 
 echo;
