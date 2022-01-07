@@ -179,6 +179,13 @@ in rec {
     in
       eclipse.overrideAttrs (oldAttrs: {
         buildCommand = oldAttrs.buildCommand + ''
+          echo
+          echo installing installable units: ${installIU}
+          echo
+          echo from repository: ${repository}
+          echo
+          echo for plugins: ${join plugins}
+          echo
           ${p2Director} \
             -destination $out/eclipse \
             -repository "${repository}" \
