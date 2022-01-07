@@ -190,10 +190,10 @@ in rec {
             -destination $out/eclipse \
             -repository "${repository}" \
             -installIU "${installIU}" \
-            -tag AddIUs || {
+            -tag AddIUs || (
               cat /build/configuration/*.log
               exit 1
-            }
+            )
           cat << EOF >> $out/eclipse/eclipse.ini
           ${jvmArgsText}
           EOF
