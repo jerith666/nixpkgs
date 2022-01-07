@@ -165,7 +165,7 @@ in rec {
         join (["file:${plugin.out}"] ++ (map pluginRepository plugin.dependencies));
       pluginInstallIU = plugin:
         # collect all installable units if none are provided
-        if plugin ? installableUnits
+        if (plugin ? installableUnits && plugin.installableUnits != [])
         then join plugin.installableUnits
         else ''$(
           ${p2Director} \
