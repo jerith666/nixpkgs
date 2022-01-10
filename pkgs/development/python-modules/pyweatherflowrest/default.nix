@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
-  version = "1.0.0";
+  version = "1.0.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-LS7vwQQBCVwi098aJd8ZSkEEwZKL1bikvAvjH+XHaok=";
+    sha256 = "17zas565jqvp0qrs8l589rm4f9xpyynhqk8lrqcx089w3rv0hh2p";
   };
 
   propagatedBuildInputs = [
