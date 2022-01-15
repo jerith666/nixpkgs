@@ -3435,6 +3435,12 @@
     githubId = 4742;
     name = "Aaron Bull Schaefer";
   };
+  elatov = {
+    email = "elatov@gmail.com";
+    github = "elatov";
+    githubId = 7494394;
+    name = "Karim Elatov";
+  };
   eleanor = {
     email = "dejan@proteansec.com";
     github = "proteansec";
@@ -4115,12 +4121,6 @@
     github = "fredeeb";
     githubId = 7551358;
     name = "Frede Emil";
-  };
-  freepotion = {
-    email = "42352817+freepotion@users.noreply.github.com";
-    github = "freepotion";
-    githubId = 42352817;
-    name = "Free Potion";
   };
   freezeboy = {
     email = "freezeboy@users.noreply.github.com";
@@ -6374,7 +6374,7 @@
   };
 
   kmein = {
-    email = "kieran.meinhardt@gmail.com";
+    email = "kmein@posteo.de";
     name = "Kierán Meinhardt";
     github = "kmein";
     githubId = 10352507;
@@ -10051,6 +10051,13 @@
     githubId = 16779;
     name = "Rickard Nilsson";
   };
+  ricochet = {
+    email = "behayes2@gmail.com";
+    github = "ricochet";
+    githubId = 974323;
+    matrix = "@ricochetcode:matrix.org";
+    name = "Bailey Hayes";
+  };
   riey = {
     email = "creeper844@gmail.com";
     github = "Riey";
@@ -10811,6 +10818,16 @@
     github = "shanemikel";
     githubId = 6720672;
     name = "Shane Pearlman";
+  };
+  shanesveller = {
+    email = "shane@sveller.dev";
+    github = "shanesveller";
+    githubId = 831;
+    keys = [{
+      longkeyid = "rsa4096/0x9210C218023C15CD";
+      fingerprint = "F83C 407C ADC4 5A0F 1F2F  44E8 9210 C218 023C 15CD";
+    }];
+    name = "Shane Sveller";
   };
   shawndellysse = {
     email = "sdellysse@gmail.com";
@@ -13600,6 +13617,12 @@
     email = "contact@jeremypage.me";
     github = "jpagex";
     githubId = 635768;
+  };
+  portothree = {
+    name = "Gustavo Porto";
+    email = "gustavoporto@ya.ru";
+    github = "portothree";
+    githubId = 3718120;
   };
   pwoelfel = {
     name = "Philipp Woelfel";
