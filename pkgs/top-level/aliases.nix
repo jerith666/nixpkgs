@@ -230,7 +230,6 @@ mapAliases ({
   double_conversion = double-conversion; # 2017-11-22
   docker_compose = docker-compose; # 2018-11-10
   draftsight = throw "draftsight has been removed, no longer available as freeware"; # added 2020-08-14
-  dtrx = throw "dtrx has been removed from nixpkgs as the upstream has abandoned the project."; # added 2022-01-01
   dvb_apps = throw "dvb_apps has been removed."; # added 2020-11-03
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwm-git = throw "dwm-git has been removed from nixpkgs, as it had no updates for 2 years not serving it's purpose."; # added 2021-02-07
@@ -989,6 +988,7 @@ mapAliases ({
   swfdec = throw "swfdec has been removed as broken and unmaintained."; # added 2020-08-23
   swtpm-tpm2 = swtpm; # added 2021-02-26
   syncthing-cli = syncthing; # added 2021-04-06
+  synology-drive = throw "synology-drive has been superseded by synology-drive-client"; # added 2021-11-26
   system_config_printer = system-config-printer;  # added 2016-01-03
   systemd-cryptsetup-generator = throw "systemd-cryptsetup-generator is now included in the systemd package"; # added 2020-07-12
   systemd_with_lvm2 = throw "systemd_with_lvm2 is obsolete, enabled by default via the lvm module"; # added 2020-07-12

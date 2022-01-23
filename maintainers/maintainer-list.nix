@@ -2291,6 +2291,12 @@
     githubId = 34317;
     name = "Corey O'Connor";
   };
+  CodeLongAndProsper90 = {
+    github = "CodeLongAndProsper90";
+    githubId = 50145141;
+    email = "jupiter@m.rdis.dev";
+    name = "Scott Little";
+  };
   codsl = {
     email = "codsl@riseup.net";
     github = "codsl";
@@ -6604,7 +6610,7 @@
   };
   kylesferrazza = {
     name = "Kyle Sferrazza";
-    email = "kyle.sferrazza@gmail.com";
+    email = "nixpkgs@kylesferrazza.com";
 
     github = "kylesferrazza";
     githubId = 6677292;
@@ -6981,6 +6987,12 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+  lunarequest = {
+    email = "nullarequest@vivlaid.net";
+    github = "Lunarequest";
+    githubId = 30698906;
+    name = "Advaith Madhukar"; #this is my legal name, I prefer Luna; please keep that in mind!
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
@@ -7226,6 +7238,12 @@
   lyt = {
     email = "wheatdoge@gmail.com";
     name = "Tim Liou";
+  };
+  m00wl = {
+    name = "Moritz Lumme";
+    email = "moritz.lumme@gmail.com";
+    github = "m00wl";
+    githubId = 46034439;
   };
   m1cr0man = {
     email = "lucas+nix@m1cr0man.com";
@@ -12708,6 +12726,16 @@
     githubId = 3889405;
     name = "vyp";
   };
+  wackbyte = {
+    name = "wackbyte";
+    email = "wackbyte@pm.me";
+    github = "wackbyte";
+    githubId = 29505620;
+    keys = [{
+      longkeyid = "rsa4096/0x937F2AE5CCEFBF59";
+      fingerprint = "E595 7FE4 FEF6 714B 1AD3  1483 937F 2AE5 CCEF BF59";
+    }];
+  };
   wakira = {
     name = "Sheng Wang";
     email = "sheng@a64.work";
@@ -12739,6 +12767,12 @@
   wedens = {
     email = "kirill.wedens@gmail.com";
     name = "wedens";
+  };
+  wegank = {
+    name = "Weijia Wang";
+    email = "contact@weijia.wang";
+    github = "wegank";
+    githubId = 9713184;
   };
   weihua = {
     email = "luwh364@gmail.com";
