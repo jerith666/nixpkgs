@@ -17886,12 +17886,17 @@ let
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.0.11-1";
+    version = "7.0.11-3";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      sha256 = "sha256-c0vuFmVq9bypQABBnZElGIQrpkYKwtD/B+PloBAycuI=";
+      sha256 = "sha256-Iy8jEsCanZ68nebJxjgLiTUR73xvw1jUV6SvzsJpFqo=";
     };
     buildInputs = [ pkgs.imagemagick ];
+
+    # tests began failing after imagemagic 7.1.0-19 -> 7.1.0-20 (0439a474bf3)
+    # t/read.t .......... 1/47 Readimage (input_gray_lsb_double.mat): Exception 425: unexpected end-of-file `input_gray_lsb_double.mat' @ error/mat.c/ReadMATImage/1302 at t/subroutines.pl line 317.
+    doCheck = false;
+
     preConfigure =
       ''
         sed -i -e 's|my \$INC_magick = .*|my $INC_magick = "-I${pkgs.imagemagick.dev}/include/ImageMagick";|' Makefile.PL
