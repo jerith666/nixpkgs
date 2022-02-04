@@ -568,6 +568,8 @@ in {
 
   apptools = callPackage ../development/python-modules/apptools { };
 
+  appthreat-vulnerability-db = callPackage ../development/python-modules/appthreat-vulnerability-db { };
+
   aprslib = callPackage ../development/python-modules/aprslib { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
@@ -1515,6 +1517,8 @@ in {
 
   cffi = callPackage ../development/python-modules/cffi { };
 
+  cffsubr = callPackage ../development/python-modules/cffsubr { };
+
   cfgv = callPackage ../development/python-modules/cfgv { };
 
   cfn-flip = callPackage ../development/python-modules/cfn-flip { };
@@ -1768,6 +1772,8 @@ in {
   CommonMark = callPackage ../development/python-modules/commonmark { };
 
   compiledb = callPackage ../development/python-modules/compiledb { };
+
+  compreffor = callPackage ../development/python-modules/compreffor { };
 
   concurrent-log-handler = callPackage ../development/python-modules/concurrent-log-handler { };
 
@@ -3925,6 +3931,8 @@ in {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  importlab = callPackage ../development/python-modules/importlab { };
+
   importlib-metadata = callPackage ../development/python-modules/importlib-metadata { };
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources { };
@@ -4124,6 +4132,14 @@ in {
   };
 
   jaxlib = self.jaxlib-build;
+
+  jaxlibWithCuda = self.jaxlib-build.override {
+    cudaSupport = true;
+  };
+
+  jaxlibWithoutCuda = self.jaxlib-build.override {
+    cudaSupport = false;
+  };
 
   JayDeBeApi = callPackage ../development/python-modules/JayDeBeApi { };
 
@@ -5405,6 +5421,8 @@ in {
 
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
+  nkdfu = callPackage ../development/python-modules/nkdfu { };
+
   nltk = callPackage ../development/python-modules/nltk { };
 
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
@@ -6307,6 +6325,8 @@ in {
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
+  primecountpy = callPackage ../development/python-modules/primecountpy { };
+
   primer3 = callPackage ../development/python-modules/primer3 { };
 
   priority = callPackage ../development/python-modules/priority { };
@@ -6575,6 +6595,8 @@ in {
   pycflow2dot = callPackage ../development/python-modules/pycflow2dot {
     inherit (pkgs) graphviz;
   };
+
+  pycfmodel = callPackage ../development/python-modules/pycfmodel { };
 
   pychannels = callPackage ../development/python-modules/pychannels { };
 
@@ -7919,7 +7941,7 @@ in {
   python-http-client = callPackage ../development/python-modules/python-http-client { };
 
   pythonix = callPackage ../development/python-modules/pythonix {
-    nix = pkgs.nix_2_3;
+    nix = pkgs.nixVersions.nix_2_3;
     meson = pkgs.meson.override { python3 = self.python; };
   };
 
@@ -8361,6 +8383,8 @@ in {
   };
 
   qscintilla = self.qscintilla-qt5;
+
+  qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
@@ -9390,6 +9414,8 @@ in {
 
   statistics = callPackage ../development/python-modules/statistics { };
 
+  statmake = callPackage ../development/python-modules/statmake { };
+
   statsd = callPackage ../development/python-modules/statsd { };
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
@@ -10041,6 +10067,10 @@ in {
     inherit (pkgs.xorg) libX11 libXext;
   };
 
+  ufo2ft = callPackage ../development/python-modules/ufo2ft { };
+
+  ufoLib2 = callPackage ../development/python-modules/ufoLib2 { };
+
   ufonormalizer = callPackage ../development/python-modules/ufonormalizer { };
 
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
@@ -10305,6 +10335,8 @@ in {
   Wand = callPackage ../development/python-modules/Wand { };
 
   wandb = callPackage ../development/python-modules/wandb { };
+
+  warcio = callPackage ../development/python-modules/warcio { };
 
   warlock = callPackage ../development/python-modules/warlock { };
 
@@ -10580,6 +10612,8 @@ in {
   xvfbwrapper = callPackage ../development/python-modules/xvfbwrapper {
     inherit (pkgs.xorg) xorgserver;
   };
+
+  xxh = callPackage ../tools/networking/xxh { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 

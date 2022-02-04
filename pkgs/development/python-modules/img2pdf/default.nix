@@ -52,6 +52,9 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_tiff_rgb"
+    "test_gif_animation"
+    "animation.gif-internal"
+    "animation.gif-pikepdf"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];
