@@ -205,6 +205,8 @@ mapAliases ({
   debugedit-unstable = debugedit; # added 2021-11-22
   deepin = throw "deepin was a work in progress and it has been canceled and removed https://github.com/NixOS/nixpkgs/issues/94870"; # added 2020-08-31
   deepspeech = throw "deepspeech was removed in favor of stt. https://github.com/NixOS/nixpkgs/issues/119496"; # added 2021-05-05
+  deis = throw "deis was removed ; the service does not exist anymore"; # added 2022-02-06
+  deisctl = throw "deisctl was removed ; the service does not exist anymore"; # added 2022-02-06
   deltachat-electron = deltachat-desktop; # added 2021-07-18
   deluge-1_x = throw ''
     Deluge 1.x (deluge-1_x) is no longer supported.
@@ -233,6 +235,7 @@ mapAliases ({
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwm-git = throw "dwm-git has been removed from nixpkgs, as it had no updates for 2 years not serving it's purpose."; # added 2021-02-07
   dylibbundler = macdylibbundler; # added 2021-04-24
+  ec2-utils = amazon-ec2-utils; # added 2022-02-01
   ec2_ami_tools = ec2-ami-tools; # added 2021-10-08
   ec2_api_tools = ec2-api-tools; # added 2021-10-08
   elasticmq = throw "elasticmq has been removed in favour of elasticmq-server-bin"; # added 2021-01-17
@@ -251,6 +254,7 @@ mapAliases ({
   emacsWithPackages = emacs.pkgs.withPackages; # added 2020-12-18
   emacsPackages = emacs.pkgs; # added 2020-12-18
   enblendenfuse = enblend-enfuse; # 2015-09-30
+  encryptr = throw "encryptr was removed because it reached end of life"; # added 2022-02-06
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained."; # added 2021-08-05
   epoxy = libepoxy; # 2021-11-11
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # added 2021-04-12
@@ -332,6 +336,7 @@ mapAliases ({
   gmailieer = lieer; # added 2020-04-19
   gmvault = throw "gmvault has been removed because it is unmaintained, mostly broken, and insecure"; # added 2021-03-08
   gnome-mpv = celluloid; # added 2019-08-22
+  gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome15 = throw "gnome15 has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries."; # added 2019-12-10
   gmic_krita_qt = gmic-qt-krita; # added 2019-09-07
   gnome-sharp = throw "gnome-sharp has been removed from nixpkgs"; # added 2022-01-15
@@ -362,9 +367,11 @@ mapAliases ({
   gnupg20 = throw "gnupg20 has been removed from nixpkgs as upstream dropped support on 2017-12-31";# added 2020-07-12
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # added 2020-01-14
   gmock = gtest; # moved from top-level 2021-03-14
+  go_1_12 = throw "go_1_12 has been removed"; # added 2020-04-26
   go-pup = pup; # added 2017-12-19
   gobby5 = gobby; # added 2021-02-01
   gobjectIntrospection = gobject-introspection; # added 2018-12-02
+  gogoclient = throw "gogoclient has been removed, because it was unmaintained"; # added 2021-12-15
   goimports = gotools; # added 2018-09-16
   gometalinter = throw "gometalinter was abandoned by upstream. Consider switching to golangci-lint instead"; # added 2020-04-23
   google-gflags = gflags; # added 2019-07-25
@@ -372,6 +379,7 @@ mapAliases ({
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # added 2021-03-07
   googleAuthenticator = google-authenticator; # added 2016-10-16
   googleearth = throw "the non-pro version of Google Earth was removed because it was discontinued and downloading it isn't possible anymore"; # added 2022-01-22
+  gpgstats = throw "gpgstats has been removed: upstream is gone"; # added 2022-02-06
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   graalvm8 = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
   graalvm8-ce = throw "graalvm8-ce has been removed by upstream."; # added 2021-10-19
@@ -392,9 +400,12 @@ mapAliases ({
   gupnp_igd = gupnp-igd; # added 2018-02-25
   gupnptools = gupnp-tools;  # added 2015-12-19
   gutenberg = zola;  # added 2018-11-17
+  gwtdragdrop = throw "gwtdragdrop was removed: abandoned by upstream"; # added 2022-02-06
+  gwtwidgets = throw "gwtwidgets was removed: unmaintained"; # added 2022-02-06
   hawkthorne = throw "hawkthorne has been removed because it depended on a broken version of love"; # added 2022-01-15
   hal-flash = throw "hal-flash has been removed as Adobe Flash Player is now deprecated."; # added 2021-02-07
   heimdalFull = heimdal; # added 2018-05-01
+  heme = throw "heme has been removed: upstream is gone"; # added 2022-02-06
   hepmc = hepmc2; # added 2019-08-05
   hexen = throw "hexen (SDL port) has been removed: abandoned by upstream."; # added 2019-12-11
   hicolor_icon_theme = hicolor-icon-theme; # added 2018-02-25
@@ -415,6 +426,7 @@ mapAliases ({
   infiniband-diags = rdma-core; # added 2019-08-09
   inotifyTools = inotify-tools;
   inter-ui = inter; # added 2021-03-27
+  iops = throw "iops was removed: upstream is gone"; # added 2022-02-06
   iproute = iproute2; # moved from top-level 2021-03-14
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # added 2021-12-15
   i-score = throw "i-score has been removed: abandoned upstream."; # added 2020-11-21
@@ -941,6 +953,7 @@ mapAliases ({
   seg3d = throw "seg3d has been removed from nixpkgs (2019-11-10)";
   sepolgen = throw "sepolgen was merged into selinux-python"; # added 2021-11-11
   shared_mime_info = shared-mime-info; # added 2018-02-25
+  shellinabox = throw "shellinabox has been removed from nixpkgs, as it was unmaintained upstream"; # added 2021-12-15
   sickbeard = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
   sickrage = throw "sickbeard has been removed from nixpkgs, as it was unmaintained."; # added 2022-01-01
   sigurlx = throw "sigurlx has been removed (upstream is gone)"; # added 2022-01-24
@@ -1267,7 +1280,7 @@ mapAliases ({
     Its new location is obs-studio-plugins.wlrobs.
   '';
 
-  multimc = throw "multimc was removed from nixpkgs; use polymc instead"; # Added 2022-01-08
+  multimc = throw "multimc was removed from nixpkgs; use polymc instead (see https://github.com/NixOS/nixpkgs/pull/154051 for more information)"; # Added 2022-01-08
 
   /* If these are in the scope of all-packages.nix, they cause collisions
   between mixed versions of qt. See:
