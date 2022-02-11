@@ -694,6 +694,18 @@ let
         };
       };
 
+      eg2.vscode-npm-script = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-npm-script";
+          publisher = "eg2";
+          version = "0.3.24";
+          sha256 = "sha256-XgdMLecyZQXsgQAUh8V4eFLKaUF4WVlgy9iIGNDnR/I=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       elmtooling.elm-ls-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elm-ls-vscode";
@@ -1384,6 +1396,18 @@ let
           publisher = "ms-toolsai";
           version = "1.0.4";
           sha256 = "sha256-aKWu0Gp0f28DCv2akF/G8UDaGfTN410CcH8CAmW7mgU=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
+      ms-vscode.anycode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "anycode";
+          publisher = "ms-vscode";
+          version = "0.0.57";
+          sha256 = "sha256-XwL7I+vwZJ6zx5IDZdfOUbq6M9IH/gi7MBe92cG1kDs=";
         };
         meta = {
           license = lib.licenses.mit;
