@@ -438,11 +438,7 @@ with pkgs;
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
-  dotnetenv = callPackage ../build-support/dotnetenv {
-    dotnetfx = dotnetfx40;
-  };
-
-  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
+  # Dotnet
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
@@ -454,6 +450,17 @@ with pkgs;
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+
+  buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
+  nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
+
+  dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
+    dotnetfx = dotnetfx40;
+  };
+
+  buildDotnetPackage = callPackage ../build-support/dotnet/build-dotnet-package { };
+  fetchNuGet = callPackage ../build-support/dotnet/fetchnuget { };
+  dotnetbuildhelpers = callPackage ../build-support/dotnet/dotnetbuildhelpers { };
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
@@ -656,11 +663,6 @@ with pkgs;
 
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz {};
 
-  fetchNuGet = callPackage ../build-support/fetchnuget { };
-  buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
-  buildDotnetModule = callPackage ../build-support/build-dotnet-module { };
-  nuget-to-nix = callPackage ../build-support/nuget-to-nix { };
-
   fetchgx = callPackage ../build-support/fetchgx { };
 
   resolveMirrorURLs = {url}: fetchurl {
@@ -699,6 +701,8 @@ with pkgs;
   copyDesktopItems = makeSetupHook { } ../build-support/setup-hooks/copy-desktop-items.sh;
 
   makeDesktopItem = callPackage ../build-support/make-desktopitem { };
+
+  makeDarwinBundle = callPackage ../build-support/make-darwin-bundle { };
 
   makeAutostartItem = callPackage ../build-support/make-startupitem { };
 
@@ -807,6 +811,11 @@ with pkgs;
   fixDarwinDylibNames = makeSetupHook {
     substitutions = { inherit (binutils) targetPrefix; };
   } ../build-support/setup-hooks/fix-darwin-dylib-names.sh;
+
+  writeDarwinBundle = callPackage ../build-support/make-darwin-bundle/write-darwin-bundle.nix { };
+
+  desktopToDarwinBundle = makeSetupHook { deps = [ writeDarwinBundle imagemagick ]; }
+    ../build-support/setup-hooks/desktop-to-darwin-bundle.sh;
 
   keepBuildTree = makeSetupHook { } ../build-support/setup-hooks/keep-build-tree.sh;
 
@@ -1044,7 +1053,7 @@ with pkgs;
 
   pferd = callPackage ../tools/misc/pferd {};
 
-  qflipper = callPackage ../tools/misc/qflipper { };
+  qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
 
@@ -1905,6 +1914,10 @@ with pkgs;
   imgcrypt = callPackage ../applications/virtualization/imgcrypt { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
+
+  itch = callPackage ../games/itch {};
+
+  itch-setup = callPackage ../games/itch-setup {};
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
@@ -3185,6 +3198,8 @@ with pkgs;
   };
 
   goa = callPackage ../development/tools/goa { };
+
+  goawk = callPackage ../tools/text/goawk { };
 
   gohai = callPackage ../tools/system/gohai { };
 
@@ -6754,6 +6769,8 @@ with pkgs;
   jekyll = callPackage ../applications/misc/jekyll { };
 
   jet = callPackage ../development/tools/jet { };
+
+  jfmt = callPackage ../development/tools/jfmt { };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
 
@@ -10736,6 +10753,8 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+  witness = callPackage ../tools/security/witness { };
+
   openconnect = openconnect_gnutls;
 
   openconnect_openssl = callPackage ../tools/networking/openconnect {
@@ -13578,6 +13597,8 @@ with pkgs;
 
   janet = callPackage ../development/interpreters/janet {};
 
+  jpm = callPackage ../development/interpreters/janet/jpm.nix {};
+
   jelly = callPackage ../development/interpreters/jelly {};
 
   jimtcl = callPackage ../development/interpreters/jimtcl {};
@@ -15541,9 +15562,7 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
 
-  spruce = callPackage ../development/tools/misc/spruce {
-    buildGoModule = buildGo116Module;
-  };
+  spruce = callPackage ../development/tools/misc/spruce {};
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
@@ -26631,7 +26650,7 @@ with pkgs;
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
 
-  k3s = callPackage ../applications/networking/cluster/k3s {};
+  k3s = callPackage ../applications/networking/cluster/k3s { };
 
   kconf = callPackage ../applications/networking/cluster/kconf { };
 
@@ -27519,6 +27538,8 @@ with pkgs;
 
   nootka = qt5.callPackage ../applications/audio/nootka { };
   nootka-unstable = qt5.callPackage ../applications/audio/nootka/unstable.nix { };
+
+  novnc = callPackage ../applications/networking/novnc { };
 
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
@@ -28457,7 +28478,10 @@ with pkgs;
 
   ries = callPackage ../applications/science/math/ries { };
 
-  ripcord = qt5.callPackage ../applications/networking/instant-messengers/ripcord { };
+  ripcord = if stdenv.isLinux then
+    qt5.callPackage ../applications/networking/instant-messengers/ripcord { }
+  else
+    callPackage ../applications/networking/instant-messengers/ripcord/darwin.nix { };
 
   ripser = callPackage ../applications/science/math/ripser { };
 
@@ -33558,6 +33582,8 @@ with pkgs;
   rpl = callPackage ../tools/text/rpl { };
 
   ricty = callPackage ../data/fonts/ricty { };
+
+  rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse {};
 

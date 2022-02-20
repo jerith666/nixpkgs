@@ -413,7 +413,6 @@ mapAliases ({
   gnuradio-rds = gnuradio3_7.pkgs.rds; # Added 2019-05-27, changed 2020-10-16
   gnustep-make = gnustep.make; # Added 2016-7-6
   gnuvd = throw "gnuvd was removed because the backend service is missing"; # Added 2020-01-14
-  go_1_12 = throw "go_1_12 has been removed"; # Added 2020-04-26
   gobby5 = gobby; # Added 2021-02-01
   gobjectIntrospection = gobject-introspection; # Added 2018-12-02
   gogoclient = throw "gogoclient has been removed, because it was unmaintained"; # Added 2021-12-15
@@ -983,6 +982,7 @@ mapAliases ({
   QmidiNet = qmidinet; # Added 2016-05-22
   qca-qt5 = libsForQt5.qca-qt5; # Added 2015-12-19
   qcsxcad = libsForQt5.qcsxcad; # Added 2020-11-05
+  qflipper = qFlipper; # Added 2022-02-11
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # Added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # Added 2020-12-02
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # Added 2021-02-15

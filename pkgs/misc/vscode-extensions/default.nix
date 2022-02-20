@@ -795,7 +795,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=faustinoaq.lex-flex-yacc-bison";
           homepage = "https://github.com/faustinoaq/vscode-lex-flex-yacc-bison";
           license = licenses.mit;
-          maintainers = with maintainers; [ angustrau ];
+          maintainers = with maintainers; [ emilytrau ];
         };
       };
 
@@ -1371,6 +1371,22 @@ let
       ms-vscode.cpptools = callPackage ./cpptools { };
 
       ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
+
+      ms-vscode.theme-tomorrowkit = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "Theme-TomorrowKit";
+          publisher = "ms-vscode";
+          version = "0.1.4";
+          sha256 = "sha256-qakwJWak+IrIeeVcMDWV/fLPx5M8LQGCyhVt4TS/Lmc=";
+        };
+        meta = with lib; {
+          description = "Additional Tomorrow and Tomorrow Night themes for VS Code. Based on the TextMate themes.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.Theme-TomorrowKit";
+          homepage = "https://github.com/microsoft/vscode-themes";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
 
       ms-python.python = callPackage ./python {
         extractNuGet = callPackage ./python/extract-nuget.nix { };
