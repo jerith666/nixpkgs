@@ -14,6 +14,7 @@
 , moreutils
 , racket-minimal
 , clojure-lsp
+, alejandra
 }:
 
 let
@@ -1231,6 +1232,34 @@ let
         };
       };
 
+      kamadorueda.alejandra = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "alejandra";
+          publisher = "kamadorueda";
+          version = "1.0.0";
+          sha256 = "sha256-COlEjKhm8tK5XfOjrpVUDQ7x3JaOLiYoZ4MdwTL8ktk=";
+        };
+        nativeBuildInputs = [ jq moreutils ];
+        postInstall = ''
+          cd "$out/$installPrefix"
+
+          jq -e '
+            .contributes.configuration.properties."alejandra.program".default =
+              "${alejandra}/bin/alejandra" |
+            .contributes.configurationDefaults."alejandra.program" =
+              "${alejandra}/bin/alejandra"
+          ' \
+          < package.json \
+          | sponge package.json
+        '';
+        meta = with lib; {
+          description = "The Uncompromising Nix Code Formatter";
+          homepage = "https://github.com/kamadorueda/alejandra";
+          license = licenses.unlicense;
+          maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
       kubukoz.nickel-syntax = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "nickel-syntax";
@@ -1383,6 +1412,23 @@ let
           description = "Additional Tomorrow and Tomorrow Night themes for VS Code. Based on the TextMate themes.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.Theme-TomorrowKit";
           homepage = "https://github.com/microsoft/vscode-themes";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ratsclub ];
+        };
+      };
+
+      ms-pyright.pyright = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "pyright";
+          publisher = "ms-pyright";
+          version = "1.1.222";
+          sha256 = "sha256-QMX/SawDEnG1xVrug8mvN7EvRrRDkJffcXBUFpQi1XE=";
+        };
+        meta = with lib; {
+          description = "VS Code static type checking for Python";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-pyright.pyright";
+          homepage = "https://github.com/Microsoft/pyright#readme";
+          changelog = "https://marketplace.visualstudio.com/items/ms-pyright.pyright/changelog";
           license = licenses.mit;
           maintainers = with maintainers; [ ratsclub ];
         };

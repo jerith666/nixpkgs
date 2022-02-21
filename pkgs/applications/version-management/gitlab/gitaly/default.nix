@@ -14,6 +14,8 @@ let
       rev = "109b4c887ffb63962c7017a66fc4a1f48becb48e";
       sha256 = "sha256-w029FHpOv5K49wE1OJMOlkTe+2cv+ORYqEHxs59GDBI=";
     };
+
+    patches = [];
   });
 
   rubyEnv = bundlerEnv rec {
@@ -23,7 +25,7 @@ let
     gemdir = ./.;
   };
 
-  version = "14.7.1";
+  version = "14.7.2";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 in
 
@@ -35,7 +37,7 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-MGcqYbHHeYwjfnvrJG/ZtOnyxsj+w1kPHOkVHf2AeMQ=";
+    sha256 = "sha256-gtQmRryTYwT2e4lamWYJ7Ri7dEGI7vg/Ir1gnuGmHQg=";
   };
 
   vendorSha256 = "sha256-eapqtSstc7d3R7A/5krKV0uVr9GhGkHHMrmsBOpWAbo=";

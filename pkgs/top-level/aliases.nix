@@ -273,10 +273,12 @@ mapAliases ({
   elasticsearch7-oss = throw "elasticsearch7-oss has been removed, as the distribution is no longer provided by upstream. https://github.com/NixOS/nixpkgs/pull/114456"; # Added 2021-06-09
 
   # Electron
-  electron_3 = throw "electron_3 has been removed in favor of newer versions"; # Added 2021-01-06
-  electron_4 = throw "electron_4 has been removed in favor of newer versions"; # Added 2021-01-06
-  electron_5 = throw "electron_5 has been removed in favor of newer versions"; # Added 2021-01-06
-  electron_6 = throw "electron_6 has been removed in favor of newer versions"; # Added 2021-01-06
+  electron_3 = throw "electron_3 has been removed in favor of newer versions"; # added 2022-01-06
+  electron_4 = throw "electron_4 has been removed in favor of newer versions"; # added 2022-01-06
+  electron_5 = throw "electron_5 has been removed in favor of newer versions"; # added 2022-01-06
+  electron_6 = throw "electron_6 has been removed in favor of newer versions"; # added 2022-01-06
+  electron_7 = throw "electron_7 has been removed in favor of newer versions"; # added 2022-02-08
+  electron_8 = throw "electron_8 has been removed in favor of newer versions"; # added 2022-02-08
 
   electrum-dash = throw "electrum-dash has been removed from nixpkgs as the project is abandoned."; # Added 2022-01-01
 
@@ -473,6 +475,7 @@ mapAliases ({
 
   iana_etc = iana-etc; # Added 2017-03-08
   iasl = throw "iasl has been removed, use acpica-tools instead"; # Added 2021-08-08
+  icecat-bin = throw "icecat-bin has been removed, the binary builds are not maintained upstream."; # Added 2022-02-15
   icedtea8_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   icedtea_web = adoptopenjdk-icedtea-web; # Added 2019-08-21
   idea = jetbrains; # Added 2017-04-03
@@ -1186,6 +1189,7 @@ mapAliases ({
   torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # Added 2020-03-28
   trang = jing-trang; # Added 2018-04-25
+  transfig = fig2dev; # Added 2022-02-15
   transmission-remote-cli = "transmission-remote-cli has been removed, as the upstream project has been abandoned. Please use tremc instead"; # Added 2020-10-14
   transmission_gtk = transmission-gtk; # Added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # Added 2018-01-06
@@ -1249,6 +1253,7 @@ mapAliases ({
   webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # Added 2019-12-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # Added 2019-12-05
   weechat-matrix-bridge = weechatScripts.weechat-matrix-bridge; # Added 2018-09-06
+  whirlpool-gui = throw "whirlpool-gui has been removed as it depended on an insecure version of Electron."; # added 2022-02-08
   wicd = throw "wicd has been removed as it is abandoned."; # Added 2021-09-11
   wineFull = winePackages.full; # Added 2017-05-27
   wineMinimal = winePackages.minimal; # Added 2017-05-27
