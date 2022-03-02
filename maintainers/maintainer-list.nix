@@ -2993,6 +2993,12 @@
     githubId = 8404455;
     name = "Diego Lelis";
   };
+  DieracDelta = {
+    email = "justin@restivo.me";
+    github = "DieracDelta";
+    githubId = 13730968;
+    name = "Justin Restivo";
+  };
   diffumist = {
     email = "git@diffumist.me";
     github = "diffumist";
@@ -6524,7 +6530,7 @@
     githubId = 18447310;
   };
   kloenk = {
-    email = "me@kloenk.de";
+    email = "me@kloenk.dev";
     matrix = "@kloenk:petabyte.dev";
     name = "Finn Behrens";
     github = "kloenk";
@@ -7898,12 +7904,6 @@
     github = "kira-bruneau";
     githubId = 382041;
   };
-  meutraa = {
-    email = "paul+nixpkgs@lost.host";
-    name = "Paul Meredith";
-    github = "meutraa";
-    githubId = 68550871;
-  };
   mephistophiles = {
     email = "mussitantesmortem@gmail.com";
     name = "Maxim Zhukov";
@@ -8539,6 +8539,12 @@
     github = "myrl";
     githubId = 9636071;
     name = "Myrl Hex";
+  };
+  n0emis = {
+    email = "nixpkgs@n0emis.network";
+    github = "n0emis";
+    githubId = 22817873;
+    name = "Ember Keske";
   };
   nadrieril = {
     email = "nadrieril@gmail.com";
@@ -9252,6 +9258,12 @@
     github = "oyren";
     githubId = 15930073;
     name = "Moritz Scheuren";
+  };
+  ozkutuk = {
+    email = "ozkutuk@protonmail.com";
+    github = "ozkutuk";
+    githubId = 5948762;
+    name = "Berk Özkütük";
   };
   pablovsky = {
     email = "dealberapablo07@gmail.com";
@@ -11547,6 +11559,12 @@
     githubId = 1699155;
     name = "Steve Elliott";
   };
+  stehessel = {
+      email = "stephan@stehessel.de";
+      github = "stehessel";
+      githubId = 55607356;
+      name = "Stephan Heßelmann";
+  };
   stelcodes = {
     email = "stel@stel.codes";
     github = "stelcodes";
@@ -12792,9 +12810,9 @@
     githubId = 5837359;
     name = "Adrian Pistol";
   };
-  vika_nezrimaya = {
+  vikanezrimaya = {
     email = "vika@fireburn.ru";
-    github = "kisik21";
+    github = "vikanezrimaya";
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
@@ -13164,7 +13182,7 @@
     name = "Wayne Scott";
   };
   wucke13 = {
-    email = "info@wucke13.de";
+    email = "wucke13@gmail.com";
     github = "wucke13";
     githubId = 20400405;
     name = "Wucke";

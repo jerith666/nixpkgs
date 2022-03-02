@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "22.2.2";
+  version = "22.2.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RmMI3h8ouFZYD+xeK4bVx0k529UP+Y2KH7r161zst7Y=";
+    sha256 = "sha256-2RYpeyX88+eEilK/wLDJ6Ock1JBgIUPWbm/ZBJSQ2pg=";
   };
 
   propagatedBuildInputs = [
