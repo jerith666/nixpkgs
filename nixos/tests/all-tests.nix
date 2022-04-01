@@ -132,6 +132,7 @@ in
   domination = handleTest ./domination.nix {};
   dovecot = handleTest ./dovecot.nix {};
   drbd = handleTest ./drbd.nix {};
+  earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   ec2-config = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-config or {};
   ec2-nixops = (handleTestOn ["x86_64-linux"] ./ec2.nix {}).boot-ec2-nixops or {};
   ecryptfs = handleTest ./ecryptfs.nix {};
@@ -286,6 +287,7 @@ in
   mailhog = handleTest ./mailhog.nix {};
   man = handleTest ./man.nix {};
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
+  mastodon = handleTestOn ["x86_64-linux" "i686-linux" "aarch64-linux"] ./web-apps/mastodon.nix {};
   matomo = handleTest ./matomo.nix {};
   matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
   matrix-conduit = handleTest ./matrix-conduit.nix {};
@@ -307,6 +309,7 @@ in
   molly-brown = handleTest ./molly-brown.nix {};
   mongodb = handleTest ./mongodb.nix {};
   moodle = handleTest ./moodle.nix {};
+  moonraker = handleTest ./moonraker.nix {};
   morty = handleTest ./morty.nix {};
   mosquitto = handleTest ./mosquitto.nix {};
   moosefs = handleTest ./moosefs.nix {};
@@ -355,6 +358,7 @@ in
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
   nitter = handleTest ./nitter.nix {};
+  nix-ld = handleTest ./nix-ld {};
   nix-serve = handleTest ./nix-serve.nix {};
   nix-serve-ssh = handleTest ./nix-serve-ssh.nix {};
   nixops = handleTest ./nixops/default.nix {};
@@ -468,6 +472,7 @@ in
   seafile = handleTest ./seafile.nix {};
   searx = handleTest ./searx.nix {};
   service-runner = handleTest ./service-runner.nix {};
+  sfxr-qt = handleTest ./sfxr-qt.nix {};
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
@@ -515,7 +520,7 @@ in
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
-  systemd-unit-path = handleTest ./systemd-unit-path.nix {};
+  systemd-misc = handleTest ./systemd-misc.nix {};
   taskserver = handleTest ./taskserver.nix {};
   teeworlds = handleTest ./teeworlds.nix {};
   telegraf = handleTest ./telegraf.nix {};

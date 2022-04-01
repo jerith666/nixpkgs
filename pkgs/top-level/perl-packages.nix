@@ -1042,6 +1042,19 @@ let
     };
   };
 
+  AudioFLACHeader = buildPerlPackage {
+    pname = "Audio-FLAC-Header";
+    version = "2.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANIEL/Audio-FLAC-Header-2.4.tar.gz";
+      sha256 = "fba5911d6c22d81506565cd9a1438e8605420ff7986cf03d1a12d006a4070543";
+    };
+    meta = {
+      description = "Interface to FLAC header metadata";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   AudioScan = buildPerlPackage {
     pname = "Audio-Scan";
     version = "1.01";
@@ -5996,10 +6009,10 @@ let
 
   DevelPatchPerl = buildPerlPackage {
     pname = "Devel-PatchPerl";
-    version = "2.04";
+    version = "2.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.04.tar.gz";
-      sha256 = "1q8xhz2sdlz2266pjl8j9vcixbhcaxsprmvsx56ra998miayc42p";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-2.08.tar.gz";
+      sha256 = "06bl2qqf5mv53l7k81xgynfx99in5fa8yi3ykn7403r62rqfkik9";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
@@ -18192,6 +18205,10 @@ let
       sha256 = "0278anidj7bgassj32g20cbki2kkqakkr3axyq4k90nj4snw7p6x";
     };
     propagatedBuildInputs = [ Future IOAsync PPI PPR PathTiny PerlCritic PerlTidy PodMarkdown URI ];
+    nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/pls
+    '';
     meta = {
       homepage = "https://github.com/FractalBoy/perl-language-server";
       description = "Perl Language Server";

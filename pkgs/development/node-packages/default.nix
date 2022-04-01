@@ -432,12 +432,28 @@ let
       '';
     };
 
+    thelounge-plugin-closepms = super.thelounge-plugin-closepms.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-blue = super.thelounge-theme-flat-blue.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
+    thelounge-theme-flat-dark = super.thelounge-theme-flat-dark.override {
+      nativeBuildInputs = [ self.node-pre-gyp ];
+    };
+
     tsun = super.tsun.overrideAttrs (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/tsun" \
         --prefix NODE_PATH : ${self.typescript}/lib/node_modules
       '';
+    });
+
+    typescript = super.typescript.overrideAttrs (oldAttrs: {
+      meta = oldAttrs.meta // { mainProgram = "tsc"; };
     });
 
     typescript-language-server = super.typescript-language-server.override {

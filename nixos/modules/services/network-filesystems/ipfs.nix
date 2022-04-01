@@ -1,16 +1,17 @@
-{ config, lib, pkgs, options, ... }:
+{ config, lib, pkgs, options, utils, ... }:
 with lib;
 let
   cfg = config.services.ipfs;
   opt = options.services.ipfs;
 
-  ipfsFlags = toString ([
-    (optionalString cfg.autoMount "--mount")
-    (optionalString cfg.enableGC "--enable-gc")
-    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=false")
-    (optionalString (cfg.defaultMode == "offline") "--offline")
-    (optionalString (cfg.defaultMode == "norouting") "--routing=none")
-  ] ++ cfg.extraFlags);
+  ipfsFlags = utils.escapeSystemdExecArgs (
+    optional cfg.autoMount "--mount" ++
+    optional cfg.enableGC "--enable-gc" ++
+    optional (cfg.serviceFdlimit != null) "--manage-fdlimit=false" ++
+    optional (cfg.defaultMode == "offline") "--offline" ++
+    optional (cfg.defaultMode == "norouting") "--routing=none" ++
+    cfg.extraFlags
+  );
 
   profile =
     if cfg.localDiscovery
@@ -239,7 +240,10 @@ in
       "d '${cfg.ipnsMountDir}' - ${cfg.user} ${cfg.group} - -"
     ];
 
-    systemd.packages = [ cfg.package ];
+    # The hardened systemd unit breaks the fuse-mount function according to documentation in the unit file itself
+    systemd.packages = if cfg.autoMount
+      then [ cfg.package.systemd_unit ]
+      else [ cfg.package.systemd_unit_hardened ];
 
     systemd.services.ipfs = {
       path = [ "/run/wrappers" cfg.package ];
@@ -275,6 +279,8 @@ in
         ExecStart = [ "" "${cfg.package}/bin/ipfs daemon ${ipfsFlags}" ];
         User = cfg.user;
         Group = cfg.group;
+        StateDirectory = "";
+        ReadWritePaths = [ "" cfg.dataDir ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];
