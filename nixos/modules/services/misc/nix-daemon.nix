@@ -726,7 +726,7 @@ in
             CPUSchedulingPolicy = cfg.daemonCPUSchedPolicy;
             IOSchedulingClass = cfg.daemonIOSchedClass;
             IOSchedulingPriority = cfg.daemonIOSchedPriority;
-            LimitNOFILE = 4096;
+            LimitNOFILE = 40960;
           };
 
         restartTriggers = [ nixConf ];
