@@ -3563,11 +3563,11 @@ let
 
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
-    version = "2.101";
+    version = "2.103";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.101.tar.gz";
-      sha256 = "1cmb39dw928jssa3fzk4pxb7sw8q1zyx3yikgq01nz17x0ara6wx";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.103.tar.gz";
+      sha256 = "sha256-1p0mIMoCTcG0JPf0Io/hFpsrd0FrswMQ6JDTvn2kff8=";
     };
 
     preConfigure = ''
@@ -4722,7 +4722,7 @@ let
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = with lib; {
       description = "Perl wrapper around OpenSSL's AES library";
       license = with licenses; [ artistic1 gpl1Plus ];
@@ -4737,7 +4737,7 @@ let
       sha256 = "1p22znbajq91lbk2k3yg12ig7hy5b4vy8igxwqkmbm4nhgxp4ki3";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
   };
 
   CryptOpenSSLGuess = buildPerlPackage {
@@ -4762,8 +4762,12 @@ let
       sha256 = "1x6ffps8q7mnawmcfq740llzy7i10g3319vap0wiw4d33fm6z1zh";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
+    meta = {
+      # errors with: 74366 Abort trap: 6
+      broken = stdenv.isDarwin && stdenv.isAarch64;
+    };
   };
 
   CryptOpenSSLRSA = buildPerlPackage {
@@ -4775,7 +4779,7 @@ let
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
@@ -4787,7 +4791,7 @@ let
       sha256 = "684bd888d2ed4c748f8f6dd8e87c14afa2974b12ee01faa082ad9cfa1e321e62";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
       homepage = "https://github.com/dsully/perl-crypt-openssl-x509";
       description = "Perl extension to OpenSSL's X509 API";
@@ -4856,7 +4860,7 @@ let
       sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
 
-    makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = "--libpath=${lib.getLib pkgs.openssl}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
     propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
   };
@@ -6891,6 +6895,20 @@ let
       description = "Perl extension for SHA-3";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  DigestSRI = buildPerlPackage {
+    pname = "Digest-SRI";
+    version = "0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/H/HA/HAUKEX/Digest-SRI-0.02.tar.gz";
+      sha256 = "sha256-VITN/m68OYwkZfeBx3w++1OKOULNSyDWiBjG//kHT8c=";
+    };
+    meta = {
+      homepage = "https://github.com/haukex/Digest-SRI";
+      description = "Calculate and verify Subresource Integrity hashes (SRI)";
+      license = lib.licenses.gpl3Plus;
     };
   };
 
@@ -11837,6 +11855,19 @@ let
     };
   };
 
+  LexicalSealRequireHints = buildPerlModule {
+    pname = "Lexical-SealRequireHints";
+    version = "0.0011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.011.tar.gz";
+      sha256 = "sha256-npGO0RjvaF1uCdqxzW5m7gox13b+JLumPlJDkG9WATo=";
+    };
+    meta = {
+      description = "Prevent leakage of lexical hints";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   libapreq2 = buildPerlPackage {
     pname = "libapreq2";
     version = "2.16";
@@ -16752,7 +16783,7 @@ let
     doCheck = false; # Test performs network access.
     preConfigure = ''
       mkdir openssl
-      ln -s ${pkgs.openssl.out}/lib openssl
+      ln -s ${lib.getLib pkgs.openssl}/lib openssl
       ln -s ${pkgs.openssl.bin}/bin openssl
       ln -s ${pkgs.openssl.dev}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)
@@ -17119,7 +17150,6 @@ let
       sha256 = "0xl8lcv9gfv0nn8vrrxa4az359whqdhmzw4r51nn3add8pn3s9ip";
     };
     buildInputs = [ pkgs.zookeeper_mt ];
-    nativeBuildInputs = [ pkgs.gnused ];
     # fix "error: format not a string literal and no format arguments [-Werror=format-security]"
     hardeningDisable = [ "format" ];
     # Make the async API accessible
@@ -18968,6 +18998,20 @@ let
     };
   };
 
+  POSIXAtFork = buildPerlPackage {
+    pname = "POSIX-AtFork";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors//id/N/NI/NIKOLAS/POSIX-AtFork-0.04.tar.gz";
+      sha256 = "sha256-wuIpOobUhxRLyPe6COfEt2sRsOTf3EGAmEXTDvoH5g4=";
+    };
+    buildInputs = [ TestSharedFork ];
+    meta = {
+      description = "Hook registrations at fork(2)";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   POSIXstrftimeCompiler = buildPerlModule {
     pname = "POSIX-strftime-Compiler";
     version = "0.44";
@@ -19031,6 +19075,21 @@ let
       homepage = "https://github.com/sanko/readonly";
       description = "Facility for creating read-only scalars, arrays, hashes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ReadonlyX = buildPerlModule {
+    pname = "ReadonlyX";
+    version = "1.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SANKO/ReadonlyX-1.04.tar.gz";
+      sha256 = "81bb97dba93ac6b5ccbce04a42c3590eb04557d75018773ee18d5a30fcf48188";
+    };
+    buildInputs = [ ModuleBuildTiny TestFatal ];
+    meta = {
+      homepage = "https://github.com/sanko/readonly";
+      description = "Faster facility for creating read-only scalars, arrays, hashes";
+      license = lib.licenses.artistic2;
     };
   };
 
@@ -20546,6 +20605,21 @@ let
     buildInputs = [ TestFatal ];
     meta = {
       description = "Efficient generation of subroutines via string eval";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  SubStrictDecl = buildPerlModule {
+    pname = "Sub-StrictDecl";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Sub-StrictDecl-0.005.tar.gz";
+      sha256 = "sha256-oSfa52RcGpVwzZopcMbcST1SL/BzGKNKOeQJCY9pESU=";
+    };
+    propagatedBuildInputs = [ LexicalSealRequireHints ];
+    perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
+    meta = {
+      description = "Detect undeclared subroutines in compilation";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -23214,7 +23288,11 @@ let
       url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-Markdown-1.000031.tar.gz";
       sha256 = "06y79lla8adkqhrs41xdddqjs81dcrh266b50mfbg37bxkawd4f1";
     };
-    buildInputs = [ ListMoreUtils TestDifferences TestException ];
+    nativeBuildInputs = [ shortenPerlShebang ];
+    checkInputs = [ ListMoreUtils TestDifferences TestException ];
+    postInstall = ''
+      shortenPerlShebang $out/bin/Markdown.pl
+    '';
   };
 
   TextMarkdownHoedown = buildPerlModule {
@@ -24421,6 +24499,25 @@ let
     };
   };
 
+  UUID4Tiny = buildPerlPackage {
+    pname = "UUID4-Tiny";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.002.tar.gz";
+      sha256 = "e7535b31e386d432dec7adde214348389e1d5cf753e7ed07f1ae04c4360840cf";
+    };
+    postPatch = lib.optionalString (stdenv.isAarch64) ''
+      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
+      # printf SYS_getrandom | gcc -include sys/syscall.h -E -
+      substituteInPlace lib/UUID4/Tiny.pm \
+        --replace "syscall( 318" "syscall( 278"
+    '';
+    meta = {
+      description = "Cryptographically secure v4 UUIDs for Linux x64";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   UUIDTiny = buildPerlPackage {
     pname = "UUID-Tiny";
     version = "1.04";
@@ -25397,7 +25494,7 @@ let
     };
   };
 
-} // lib.optionalAttrs (config.allowAliases or true) {
+} // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
   constant = null; # part of Perl 5.22

@@ -108,7 +108,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gala = callPackage ./desktop/gala { };
 
   gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
-    inherit (gnome) gnome-bluetooth;
+    inherit (gnome) gnome-bluetooth_1_0;
   };
 
   wingpanel = callPackage ./desktop/wingpanel { };
@@ -120,6 +120,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   #### LIBRARIES
 
   granite = callPackage ./granite { };
+
+  granite7 = callPackage ./granite/7 { };
 
   #### SERVICES
 
@@ -226,7 +228,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # Please call these packages in pkgs/top-level/all-packages.nix instead of this file.
   # https://github.com/NixOS/nixpkgs/issues/115222#issuecomment-906868654
 
-}) // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs config.allowAliases {
 
   ### ALIASES
 

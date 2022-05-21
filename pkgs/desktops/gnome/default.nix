@@ -3,21 +3,6 @@
 lib.makeScope pkgs.newScope (self: with self; {
   updateScript = callPackage ./update.nix { };
 
-  /* Remove packages of packagesToRemove from packages, based on their names
-
-     Type:
-       removePackagesByName :: [package] -> [package] -> [package]
-
-     Example:
-       removePackagesByName [ nautilus file-roller ] [ file-roller totem ]
-       => [ nautilus ]
-  */
-  removePackagesByName = packages: packagesToRemove:
-    let
-      namesToRemove = map lib.getName packagesToRemove;
-    in
-      lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
-
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
 
@@ -47,6 +32,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-backgrounds = callPackage ./core/gnome-backgrounds { };
 
   gnome-bluetooth = callPackage ./core/gnome-bluetooth { };
+
+  gnome-bluetooth_1_0 = callPackage ./core/gnome-bluetooth/1.0 { };
 
   gnome-color-manager = callPackage ./core/gnome-color-manager { };
 
@@ -276,7 +263,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-}) // lib.optionalAttrs (config.allowAliases or true) {
+}) // lib.optionalAttrs config.allowAliases {
 #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
 
   gnome-desktop = pkgs.gnome-desktop; # added 2022-03-16

@@ -3,31 +3,24 @@
 , pythonOlder
 , fetchPypi
 , importlib-metadata
-, locale
 , pytestCheckHook
 
-# large-rebuild downstream dependencies
+# large-rebuild downstream dependencies and applications
 , flask
 , black
-
-# applications
 , magic-wormhole
 , mitmproxy
 }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.0.3";
+  version = "8.1.3";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QQ6TKwUPXu13PEzalN51lxyJzbMVWnKggxE5p55ey1s=";
+    sha256 = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
   };
-
-  postPatch = ''
-    substituteInPlace src/click/_unicodefun.py \
-      --replace '"locale"' "'${locale}/bin/locale'"
-  '';
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata

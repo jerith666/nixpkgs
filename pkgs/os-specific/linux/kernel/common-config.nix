@@ -448,6 +448,9 @@ let
       NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
+      # Needed to use the installation iso image. Not included in all defconfigs (e.g. arm64)
+      ISO9660_FS = module;
+
       DEVTMPFS = yes;
 
       UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
@@ -880,6 +883,8 @@ let
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
+      FW_LOADER_COMPRESS = option yes;
+
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
@@ -906,6 +911,11 @@ let
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};
+
+      TASKSTATS = yes;
+      TASK_DELAY_ACCT = yes;
+      TASK_XACCT = yes;
+      TASK_IO_ACCOUNTING = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

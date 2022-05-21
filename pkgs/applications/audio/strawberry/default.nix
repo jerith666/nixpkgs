@@ -19,6 +19,7 @@
 , protobuf
 , sqlite
 , taglib
+, libgpod
 , libpulseaudio
 , libselinux
 , libsepol
@@ -63,6 +64,7 @@ mkDerivation rec {
     qtbase
     qtx11extras
   ] ++ lib.optionals stdenv.isLinux [
+    libgpod
     libpulseaudio
     libselinux
     libsepol
@@ -70,6 +72,7 @@ mkDerivation rec {
   ] ++ lib.optionals withGstreamer (with gst_all_1; [
     glib-networking
     gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad

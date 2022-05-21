@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.8";
+  version = "2.0.13";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-oPlm9uxyN3hyf4gFv37YWEn/HOkg0QQ1Ya3tjLd53rQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9xVFvXCHjgF+7asO1ialGIofJwsRRRiydo/Ui2C+Wig=";
   };
 
   nativeBuildInputs = [

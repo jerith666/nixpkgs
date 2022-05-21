@@ -217,6 +217,12 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
+          # Temporary work around for:
+          #   - https://github.com/vedang/pdf-tools/issues/102
+          #   - https://github.com/vedang/pdf-tools/issues/103
+          #   - https://github.com/vedang/pdf-tools/issues/109
+          CXXFLAGS = "-std=c++17";
+
           nativeBuildInputs = [
             pkgs.autoconf
             pkgs.automake
@@ -546,6 +552,13 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
         });
       };
 
