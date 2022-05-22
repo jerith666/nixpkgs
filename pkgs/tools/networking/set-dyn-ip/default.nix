@@ -1,2 +1,2 @@
 { pkgs }:
-pkgs.haskellPackages.callPackage ./set-dyn-ip.nix { }
+pkgs.haskell.packages.ghc8107.callPackage ./set-dyn-ip.nix { }
