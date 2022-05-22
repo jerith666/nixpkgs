@@ -1243,6 +1243,8 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
+  amazonka-core = doJailbreak super.amazonka-core;
+
   # base <4.13, regex-base ==0.93.*, regex-posix >=0.95.1 && <0.96
   regex-compat = doJailbreak super.regex-compat;
 
