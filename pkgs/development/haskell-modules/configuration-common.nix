@@ -1243,8 +1243,6 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  amazonka-core = doJailbreak super.amazonka-core;
-
   # base <4.13, regex-base ==0.93.*, regex-posix >=0.95.1 && <0.96
   regex-compat = doJailbreak super.regex-compat;
 
@@ -1899,6 +1897,14 @@ self: super: {
       "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
     '';
   }) super.cabal-install;
+
+  amazonka-core = appendPatches [
+    (fetchpatch {
+      relative = "core";
+      url = "https://github.com/brendanhay/amazonka/commit/c2a58330d586b3c1f1d093374dad4a4a157b7662.patch";
+      hash = "sha256-VJnr7+tR0+Kqhg/JGPKZyRJl3saljqf42bgqhtZigMA=";
+    })
+  ] (doJailbreak super.amazonka-core);
 
   # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
   amazonka = appendPatches [
