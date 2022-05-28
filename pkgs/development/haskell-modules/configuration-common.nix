@@ -2633,6 +2633,8 @@ self: super: {
       })
      ] super.elm2nix;
 
+  elm-bridge = doJailbreak super.elm-bridge;
+
   # https://github.com/Synthetica9/nix-linter/issues/65
   nix-linter = super.nix-linter.overrideScope (self: super: {
     aeson = self.aeson_1_5_6_0;
