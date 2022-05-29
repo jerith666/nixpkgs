@@ -1960,7 +1960,9 @@ self: super: {
 
   # Test suite has a too strict bound on base
   # https://github.com/jswebtools/language-ecmascript/pull/88
-  language-ecmascript = doJailbreak super.language-ecmascript;
+  language-ecmascript =
+    appendPatch ./patches/language-ecmascript-ghc-9-templatehaskell.patch
+    (doJailbreak super.language-ecmascript);
 
   # Too strict bounds on containers
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1

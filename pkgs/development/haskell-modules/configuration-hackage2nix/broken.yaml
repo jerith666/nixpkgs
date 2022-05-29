@@ -2875,7 +2875,6 @@ broken-packages:
   - language-csharp
   - language-dart
   - language-dockerfile
-  - language-ecmascript
   - language-elm
   - language-gcl
   - language-gemini
