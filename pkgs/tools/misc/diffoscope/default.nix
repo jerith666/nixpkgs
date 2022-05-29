@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "212";
+  version = "213";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-Kr8OHArnLR9AwN/s5QUSzX/puINkK1eu869OaFz3nlw=";
+    sha256 = "sha256-l2kdV1QUGsS3D6Y/b485iDmQcBNIzaBywxhqfRDINX8=";
   };
 
   outputs = [ "out" "man" ];
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
@@ -56,8 +56,8 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 

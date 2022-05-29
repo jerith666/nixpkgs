@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1143";
+  version = "2.0.1161";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-Kl9/wbjiQ46ysmnE24iQveTEzSTsVF5FHRqG3WWz3DQ=";
+    hash = "sha256-EJpmJ6/Q5j8olY0hD2wX2zeF0cTwFQuaMsno2zXRfvI=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -94,10 +94,10 @@ buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bc-python-hcl2==0.3.39" "bc-python-hcl2>=0.3.39" \
+      --replace "bc-python-hcl2==" "bc-python-hcl2>=" \
       --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
       --replace "prettytable>=3.0.0" "prettytable" \
-      --replace "pycep-parser==0.3.4" "pycep-parser"
+      --replace "pycep-parser==0.3.6" "pycep-parser"
   '';
 
   preCheck = ''

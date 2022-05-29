@@ -137,6 +137,7 @@
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
+  ./programs/cfs-zen-tweaks.nix
   ./programs/chromium.nix
   ./programs/clickshare.nix
   ./programs/cnping.nix
@@ -735,6 +736,7 @@
   ./services/networking/bitcoind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
+  ./services/networking/bird-lg.nix
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
@@ -879,6 +881,7 @@
   ./services/networking/quassel.nix
   ./services/networking/quorum.nix
   ./services/networking/quicktun.nix
+  ./services/networking/r53-ddns.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
@@ -1235,6 +1238,7 @@
   ./tasks/powertop.nix
   ./testing/service-runner.nix
   ./virtualisation/anbox.nix
+  ./virtualisation/appvm.nix
   ./virtualisation/build-vm.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containerd.nix

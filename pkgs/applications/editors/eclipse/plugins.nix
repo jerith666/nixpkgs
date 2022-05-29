@@ -347,7 +347,7 @@ rec {
     src = fetchzip {
       url = srcUrl;
       sha512 = "1s9vnbap7mxfmjya0p7xsa2rjcpm5n15yfiqwv540jdyjf08fmy1pxj7q7g5z1z55a4yzcy7akgdc959j24k727709acafs6y0zy308";
-      extraPostFetch = ''
+      postFetch = ''
         # update site is a couple levels deep, alongside some other irrelevant stuff
         cd $out;
         find . -type f -not -path ./binaries/org.drools.updatesite/\* -exec rm {} \;
@@ -548,7 +548,7 @@ rec {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
-      extraPostFetch =
+      postFetch =
         ''
           mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
         '';
