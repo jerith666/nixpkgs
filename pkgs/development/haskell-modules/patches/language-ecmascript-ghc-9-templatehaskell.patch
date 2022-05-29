@@ -1,0 +1,43 @@
+diff --git a/src/Language/ECMAScript3/Syntax/Arbitrary.hs b/src/Language/ECMAScript3/Syntax/Arbitrary.hs
+index 87a5a8e..f89cb31 100644
+--- a/src/Language/ECMAScript3/Syntax/Arbitrary.hs
++++ b/src/Language/ECMAScript3/Syntax/Arbitrary.hs
+@@ -24,21 +24,22 @@ import Test.Feat.Enumerate
+ import Test.Feat.Modifiers
+ import Control.Arrow
+ 
+-deriveEnumerable ''AssignOp
+-deriveEnumerable ''InfixOp
+-deriveEnumerable ''UnaryAssignOp
+-deriveEnumerable ''PrefixOp
+-deriveEnumerable ''Id
+-deriveEnumerable ''CaseClause
+-deriveEnumerable ''CatchClause
+-deriveEnumerable ''Prop
+-deriveEnumerable ''LValue
+-deriveEnumerable ''ForInit
+-deriveEnumerable ''ForInInit
+-deriveEnumerable ''VarDecl
+-deriveEnumerable ''Expression
+-deriveEnumerable ''Statement
+-deriveEnumerable ''JavaScript
++mconcat $ map deriveEnumerable
++  [''AssignOp,
++   ''InfixOp,
++   ''UnaryAssignOp,
++   ''PrefixOp,
++   ''Id,
++   ''CaseClause,
++   ''CatchClause,
++   ''Prop,
++   ''LValue,
++   ''ForInit,
++   ''ForInInit,
++   ''VarDecl,
++   ''Expression,
++   ''Statement,
++   ''JavaScript]
+ 
+ 
+ instance Arbitrary (AssignOp) where
+

@@ -9,14 +9,12 @@
 , python-dateutil
 , requests
 , rich
+, typing-extensions
 , pytestCheckHook
 , mock
 , nose
 , pythonOlder
 }:
-
-# TODO: Define this package in "all-packages.nix" using "toPythonApplication".
-# This currently errors out, complaining about not being able to find "etree" from "lxml" even though "lxml" is defined in "propagatedBuildInputs".
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
@@ -39,6 +37,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     rich
+    typing-extensions
   ];
 
   checkInputs = [
