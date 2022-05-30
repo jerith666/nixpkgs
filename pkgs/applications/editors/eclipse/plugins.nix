@@ -364,7 +364,7 @@ rec {
     runtime = fetchzip {
       url = srcUrl;
       sha512 = "34fq2yxlcrmgxdcclz4nmk8kkwkr7az61bh00avayxaiqny1fzcya1cbw0vn5wrbkxrz2j50ykp1ihfmwqgyg13057ia8fcrj19n6wi";
-      extraPostFetch = ''
+      postFetch = ''
         chmod go-w $out;
 
         #runtime is comingled with update site, separate it out as above
@@ -587,7 +587,7 @@ rec {
       stripRoot = false;
       url = "https://binaries.sonarsource.com/SonarLint-for-Eclipse/releases/org.sonarlint.eclipse.site-${version}.zip";
       sha256 = "sha256:193k30452200ps85wplgpc1x61fknh6xh165ryq7chl48g6f1ajz";
-      extraPostFetch = ''
+      postFetch = ''
         #update site includes source, which we don't care about
         cd $out
         find . -name \*source_\* -exec rm -v {} \;
