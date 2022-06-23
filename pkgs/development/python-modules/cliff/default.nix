@@ -7,17 +7,20 @@
 , six
 , stevedore
 , pyyaml
-, unicodecsv
 , cmd2
+, pytestCheckHook
+, testtools
+, fixtures
+, which
 }:
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "2.15.0";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe044273539250a99a5b9915843902e40e4e9b32ac5698c1fae89e31200d649f";
+    sha256 = "389c81960de13f05daf1cbd546f33199e86c518ba4266c79ec7a153a280980ea";
   };
 
   propagatedBuildInputs = [
@@ -28,17 +31,25 @@ buildPythonPackage rec {
     stevedore
     pyyaml
     cmd2
-    unicodecsv
   ];
 
-  # test dependencies are complex
-  # and would require about 20 packages
-  # to be added
-  doCheck = false;
+  postPatch = ''
+    sed -i -e '/cmd2/c\cmd2' -e '/PrettyTable/c\PrettyTable' requirements.txt
+  '';
+
+  checkInputs = [ fixtures pytestCheckHook testtools which ];
+  # add some tests
+  pytestFlagsArray = [
+    "cliff/tests/test_utils.py"
+    "cliff/tests/test_app.py"
+    "cliff/tests/test_command.py"
+    "cliff/tests/test_help.py"
+    "cliff/tests/test_lister.py"
+  ];
 
   meta = with lib; {
     description = "Command Line Interface Formulation Framework";
-    homepage = https://docs.openstack.org/cliff/latest/;
+    homepage = "https://docs.openstack.org/cliff/latest/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

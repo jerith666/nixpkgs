@@ -3,32 +3,35 @@
 , fetchPypi
 , msrest
 , azure-common
+, azure-core
 , msrestazure
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
-  version = "1.2.0";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7ebbe1c4266ba176aa4969d9755c08f10b89848ad50fb0bfd16fa82e29234f95";
+    sha256 = "77af2c20abde7d8342da7993781605b440aeac0f95c4af13bb87465c3bd5fe35";
   };
 
   propagatedBuildInputs = [
+    azure-common
+    azure-core
     msrest
     msrestazure
-    azure-common
   ];
 
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.eventgrid" ];
 
   meta = with lib; {
     description = "A fully-managed intelligent event routing service that allows for uniform event consumption using a publish-subscribe model";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/event-grid?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

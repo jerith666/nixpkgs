@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "python-jenkins";
-  version = "1.4.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h14hfcwichmppbgxf1k8njw29hchpav1kj574b4lly3j0n2vnag";
+    sha256 = "01jid5s09lr3kayr2h1z9n8h9nhyw3jxv9c4b5hrlxijknkqzvfy";
   };
 
   buildInputs = [ mock ];
@@ -32,9 +32,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for the remote Jenkins API";
-    homepage = https://pypi.python.org/pypi/python-jenkins;
+    homepage = "https://pypi.python.org/pypi/python-jenkins";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 
 }

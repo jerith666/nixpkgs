@@ -1,33 +1,46 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, Security, CoreServices }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, nixosTests
+, pkg-config, openssl
+, libiconv, Security, CoreServices
+, dbBackend ? "sqlite", libmysqlclient, postgresql }:
 
-rustPlatform.buildRustPackage rec {
+let
+  featuresFlag = "--features ${dbBackend}";
+
+in rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
-  version = "1.9.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = pname;
     rev = version;
-    sha256 = "0jfb4b2lp2v01aw615lx0qj1qh73hyrbjn9kva7zqp74wcfw12gp";
+    sha256 = "1ncy4iwmdzdp8rv1gc5i4s1rp97d94n4l4bh08v6w4zdpx0zn8b9";
   };
 
-  cargoPatches = [
-    # type annotations required: cannot resolve `std::string::String: std::convert::AsRef<_>`
-    ./cargo-lock-lettre.patch
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = with lib; [ openssl ]
+    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices ]
+    ++ optional (dbBackend == "mysql") libmysqlclient
+    ++ optional (dbBackend == "postgresql") postgresql;
 
   RUSTC_BOOTSTRAP = 1;
 
-  cargoSha256 = "0p39gqrqdmgqhngp1qyh6jl0sp0ifj5n3bxfqafjbspb4zph3ls4";
+  cargoSha256 = "0vdi792bzqxj8g215r9r5anzs4qhqsm6sjzwpj1l9861bn7j4xsz";
+  cargoBuildFlags = [ featuresFlag ];
 
-  meta = with stdenv.lib; {
-    description = "An unofficial lightweight implementation of the Bitwarden server API using Rust and SQLite";
-    homepage = https://github.com/dani-garcia/bitwarden_rs;
-    license = licenses.gpl3;
+  checkPhase = ''
+    runHook preCheck
+    echo "Running cargo cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${featuresFlag} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    runHook postCheck
+  '';
+
+  passthru.tests = nixosTests.bitwarden;
+
+  meta = with lib; {
+    description = "Unofficial Bitwarden compatible server written in Rust";
+    homepage = "https://github.com/dani-garcia/bitwarden_rs";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ msteen ];
-    platforms = platforms.all;
   };
 }

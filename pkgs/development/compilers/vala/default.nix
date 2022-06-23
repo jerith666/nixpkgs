@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, flex, bison, libxslt, autoconf, autoreconfHook
+{ stdenv, lib, fetchurl, fetchpatch, pkg-config, flex, bison, libxslt, autoconf, autoreconfHook
 , graphviz, glib, libiconv, libintl, libtool, expat, substituteAll
 }:
 
@@ -36,6 +36,12 @@ let
 
         "0.46" = ./disable-graphviz-0.46.1.patch;
 
+        "0.48" = ./disable-graphviz-0.46.1.patch;
+
+        "0.50" = ./disable-graphviz-0.46.1.patch;
+
+        "0.52" = ./disable-graphviz-0.46.1.patch;
+
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
     disableGraphviz = lib.versionAtLeast version "0.38" && !withGraphviz;
@@ -68,7 +74,7 @@ let
     outputs = [ "out" "devdoc" ];
 
     nativeBuildInputs = [
-      pkgconfig flex bison libxslt
+      pkg-config flex bison libxslt
     ] ++ lib.optional (stdenv.isDarwin && (lib.versionAtLeast version "0.38")) expat
       ++ lib.optional disableGraphviz autoreconfHook # if we changed our ./configure script, need to reconfigure
       ++ extraNativeBuildInputs;
@@ -83,19 +89,19 @@ let
     doCheck = false; # fails, requires dbus daemon
 
     # Wait for PR #59372
-    #passthru = {
-    #  updateScript = gnome3.updateScript {
+    # passthru = {
+    #  updateScript = gnome.updateScript {
     #    attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
     #    packageName = pname;
     #  };
-    #};
+    # };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "Compiler for GObject type system";
-      homepage = https://wiki.gnome.org/Projects/Vala;
+      homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ antono jtojnar lethalman peterhoeg worldofpeace ];
+      maintainers = with maintainers; [ antono jtojnar peterhoeg ];
     };
   });
 
@@ -106,19 +112,34 @@ in rec {
   };
 
   vala_0_40 = generic {
-    version = "0.40.16";
-    sha256 = "0vv25fmr9jqiqf080vak1x4raa4w3cz3n5ysjglqsq9qfx304i7b";
+    version = "0.40.25";
+    sha256 = "1pxpack8rrmywlf47v440hc6rv3vi8q9c6niwqnwikxvb2pwf3w7";
   };
 
   vala_0_44 = generic {
-    version = "0.44.7";
-    sha256 = "0z5xy4qc95rm2gj7s2k14xm1xp3mrf0yz64fx4kddqjxkpsz87xz";
+    version = "0.44.11";
+    sha256 = "06spdvm9q9k4riq1d2fxkyc8d88bcv460v360465iy1lnj3z9x2s";
   };
 
   vala_0_46 = generic {
-    version = "0.46.1";
-    sha256 = "10czkhclnisdz6k5qfiicmvx47m9177l5dkhjn29g43khnmpkr8l";
+    version = "0.46.13";
+    sha256 = "0d7l4vh2xra3q75kw3sy2d9bn5p6s3g3r7j37bdn6ir8l3wp2ivs";
   };
 
-  vala = vala_0_46;
+  vala_0_48 = generic {
+    version = "0.48.17";
+    sha256 = "1wlb4vd7k6hg10s09npglbhfcgjzxkywd4v0l96qhn19m9b8cszj";
+  };
+
+  vala_0_50 = generic {
+    version = "0.50.4";
+    sha256 = "1353j852h04d1x6b4n6lbg3ay40ph0adb9yi25dh74pligx33z2q";
+  };
+
+  vala_0_52 = generic {
+    version = "0.52.2";
+    sha256 = "sha256-OjxGCAO6Zh5RO+PQmEtYPgVHP2AsdfqY6RdVUDcUqXs=";
+  };
+
+  vala = vala_0_52;
 }

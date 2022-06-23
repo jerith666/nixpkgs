@@ -1,27 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , coverage
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "0.9.18";
+  version = "1.1.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05648f9b22aeeda9d32e61b46fa78c9ff28f217d69005b3b19ffb75d5992187e";
+    sha256 = "sha256-+IpT0o+Jg2UJcy6d7mEdZsYfW4IXIBu4IqBFbywyPRk=";
   };
-
-  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [ coverage ];
 
   checkInputs = [ pytest ];
 
+  # avoid tests which try to import unittest_mixins
+  # unittest_mixins doesn't seem to be very active
   checkPhase = ''
-    pytest --deselect=test/test_testmon.py::TestmonDeselect::test_dependent_testmodule
+    cd test
+    pytest test_{core,process_code,pytest_assumptions}.py
   '';
 
   meta = with lib; {

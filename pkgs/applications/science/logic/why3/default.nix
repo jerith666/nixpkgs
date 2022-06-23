@@ -1,13 +1,13 @@
-{ callPackage, fetchurl, stdenv
+{ callPackage, fetchurl, fetchpatch, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation {
   pname = "why3";
-  version = "1.2.0";
+  version = "1.3.3";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/37903/why3-1.2.0.tar.gz;
-    sha256 = "0xz001jhi71ja8vqrjz27v63bidrzj4qvg1yqarq6p4dmpxhk348";
+    url = "https://gforge.inria.fr/frs/download.php/file/38367/why3-1.3.3.tar.gz";
+    sha256 = "1n0a2nn1gnk0zg339lh698g4wpk7m8m1vyi2yvifd5adqvk4milw";
   };
 
   buildInputs = with ocamlPackages; [
@@ -29,8 +29,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  # Remove unnecessary call to which
-  patches = [ ./configure.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.in --replace js_of_ocaml.ppx js_of_ocaml-ppx
+  '';
 
   configureFlags = [ "--enable-verbose-make" ];
 
@@ -38,7 +39,7 @@ stdenv.mkDerivation {
 
   passthru.withProvers = callPackage ./with-provers.nix {};
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A platform for deductive program verification";
     homepage    = "http://why3.lri.fr/";
     license     = licenses.lgpl21;

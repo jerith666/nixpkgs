@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
-, futures
-, isPy3k
+, futures ? null
+, isPy27
 , isPyPy
 , jinja2
 , lib
@@ -10,6 +10,7 @@
 , nodejs
 , packaging
 , pillow
+#, pytestCheckHook#
 , pytest
 , python
 , python-dateutil
@@ -18,15 +19,26 @@
 , six
 , substituteAll
 , tornado
+, typing-extensions
+, pytz
+, flaky
+, networkx
+, beautifulsoup4
+, requests
+, nbconvert
+, icalendar
+, pandas
+, pythonImportsCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "1.3.4";
+  # update together with panel which is not straightforward
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0m27j29jpi977y95k272xc24qkl5bkniy046cil116hrbgnppng2";
+    sha256 = "dd417708f90702190222b1068a645acae99e66d4b58d7a336d545aeaa04e9b40";
   };
 
   patches = [
@@ -37,9 +49,30 @@ buildPythonPackage rec {
     })
   ];
 
-  disabled = isPyPy;
+  disabled = isPyPy || isPy27;
 
-  checkInputs = [ mock pytest pillow selenium ];
+  nativeBuildInputs = [
+    pythonImportsCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "bokeh"
+  ];
+
+  checkInputs = [
+    mock
+    pytest
+    pillow
+    selenium
+    pytz
+    flaky
+    networkx
+    beautifulsoup4
+    requests
+    nbconvert
+    icalendar
+    pandas
+  ];
 
   propagatedBuildInputs = [
     pillow
@@ -50,16 +83,18 @@ buildPythonPackage rec {
     tornado
     numpy
     packaging
+    typing-extensions
   ]
-  ++ lib.optionals ( !isPy3k ) [ futures ];
+  ++ lib.optionals ( isPy27 ) [
+    futures
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover -s bokeh/tests
-  '';
+  # This test suite is a complete pain. Somehow it can't find its fixtures.
+  doCheck = false;
 
   meta = {
     description = "Statistical and novel interactive HTML plots for Python";
-    homepage = https://github.com/bokeh/bokeh;
+    homepage = "https://github.com/bokeh/bokeh";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ orivej ];
   };

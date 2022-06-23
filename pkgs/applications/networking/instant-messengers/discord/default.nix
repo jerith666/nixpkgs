@@ -1,36 +1,35 @@
 { branch ? "stable", pkgs }:
-
 let
   inherit (pkgs) callPackage fetchurl;
 in {
-  stable = callPackage ./base.nix {
+  stable = callPackage ./base.nix rec {
     pname = "discord";
     binaryName = "Discord";
     desktopName = "Discord";
-    version = "0.0.9";
+    version = "0.0.16";
     src = fetchurl {
-      url = "https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.tar.gz";
-      sha256 = "1i0f8id10rh2fx381hx151qckvvh8hbznfsfav8w0dfbd1bransf";
+      url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+      sha256 = "UTVKjs/i7C/m8141bXBsakQRFd/c//EmqqhKhkr1OOk=";
     };
   };
-  ptb = callPackage ./base.nix {
+  ptb = callPackage ./base.nix rec {
     pname = "discord-ptb";
     binaryName = "DiscordPTB";
     desktopName = "Discord PTB";
-    version = "0.0.16";
+    version = "0.0.25";
     src = fetchurl {
-      url = "https://dl-ptb.discordapp.net/apps/linux/0.0.16/discord-ptb-0.0.16.tar.gz";
-      sha256 = "1ia94xvzygim9rx1sjnnss518ggw0i20mhp9pby33q70ha35n0aq";
+      url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
+      sha256 = "082ygmsycicddpkv5s03vw3rjkrk4lgprq29z8b1hdjifvw93b21";
     };
   };
-  canary = callPackage ./base.nix {
+  canary = callPackage ./base.nix rec {
     pname = "discord-canary";
     binaryName = "DiscordCanary";
     desktopName = "Discord Canary";
-    version = "0.0.96";
+    version = "0.0.126";
     src = fetchurl {
-      url = "https://dl-canary.discordapp.net/apps/linux/0.0.96/discord-canary-0.0.96.tar.gz";
-      sha256 = "1fxyh9v5xglwbgr5sidn0cv70qpzcd2q240wsv87k3nawhvfcwsp";
+      url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+      sha256 = "EraTDRKd6t0c9U68tSRdGkeB1hfqNS4KUewEXwkL8io=";
     };
   };
 }.${branch}

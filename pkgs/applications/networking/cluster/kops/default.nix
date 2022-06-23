@@ -1,25 +1,25 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
-
+{ lib, buildGoPackage, fetchFromGitHub, go-bindata, installShellFiles }:
 let
   goPackagePath = "k8s.io/kops";
 
-  generic = { version, sha256, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
-      buildGoPackage {
+  generic = { version, sha256, rev ? version, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
+    buildGoPackage
+      {
         pname = "kops";
         inherit version;
 
         inherit goPackagePath;
 
         src = fetchFromGitHub {
-          rev = version;
+          rev = rev;
           owner = "kubernetes";
           repo = "kops";
           inherit sha256;
         };
 
-        buildInputs = [go-bindata];
-        subPackages = ["cmd/kops"];
+        nativeBuildInputs = [ go-bindata installShellFiles ];
+        subPackages = [ "cmd/kops" ];
 
         buildFlagsArray = ''
           -ldflags=
@@ -33,36 +33,44 @@ let
         '';
 
         postInstall = ''
-          mkdir -p $bin/share/bash-completion/completions
-          mkdir -p $bin/share/zsh/site-functions
-          $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
-          $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+          for shell in bash zsh; do
+            $out/bin/kops completion $shell > kops.$shell
+            installShellCompletion kops.$shell
+          done
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
-          homepage = https://github.com/kubernetes/kops;
+          homepage = "https://github.com/kubernetes/kops";
+          changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm kampka];
+          maintainers = with maintainers; [ offline zimbatm diegolelis ];
           platforms = platforms.unix;
         };
       } // attrs';
-in rec {
+in
+rec {
 
   mkKops = generic;
 
-  kops_1_12 = mkKops {
-    version = "1.12.3";
-    sha256 = "0rpbaz54l5v1z7ab5kpxcb4jyakkl5ysgz1sxajqmw2d6dvf7xly";
+  kops_1_16 = mkKops {
+    version = "1.16.4";
+    sha256 = "0qi80hzd5wc8vn3y0wsckd7pq09xcshpzvcr7rl5zd4akxb0wl3f";
   };
 
-  kops_1_13 = mkKops {
-    version = "1.13.2";
-    sha256 = "0lkkg34vn020r62ga8vg5d3a8jwvq00xlv3p1s01nkz33f6salng";
+  kops_1_17 = mkKops {
+    version = "1.17.2";
+    sha256 = "0fmrzjz163hda6sl1jkl7cmg8fw6mmqb9953048jnhmd3w428xlz";
   };
-  
-  kops_1_14 = mkKops {
-    version = "1.14.0";
-    sha256 = "0zd2plsdn45wf73qspv9yaxa0crwfy5h6ws3lvw96vxvrkhl96l2";
+
+  kops_1_18 = mkKops {
+    version = "1.18.2";
+    sha256 = "17na83j6sfhk69w9ssvicc0xd1904z952ad3zzbpha50lcy6nlhp";
+  };
+
+  kops_1_19 = mkKops rec {
+    version = "1.19.2";
+    sha256 = "15csxih1xy8myky37n5dyzp5mc31pc4bq9asaw6zz51mgw8ad5r9";
+    rev = "v${version}";
   };
 }

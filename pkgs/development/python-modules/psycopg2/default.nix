@@ -2,13 +2,15 @@
 
 buildPythonPackage rec {
   pname = "psycopg2";
-  version = "2.8.3";
+  version = "2.8.6";
 
+  # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
+  # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ms4kx0p5n281l89awccix4d05ybmdngnjjpi9jbzd0rhf1nwyl9";
+    sha256 = "fb23f6c71107c37fd667cb4ea363ddeb936b348bbd6449278eb92c189699f543";
   };
 
   buildInputs = lib.optional stdenv.isDarwin openssl;

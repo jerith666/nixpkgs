@@ -1,7 +1,7 @@
 { mkDerivation, lib, stdenv, makeWrapper, fetchurl, cmake, extra-cmake-modules
 , karchive, kconfig, kwidgetsaddons, kcompletion, kcoreaddons
 , kguiaddons, ki18n, kitemmodels, kitemviews, kwindowsystem
-, kio, kcrash
+, kio, kcrash, breeze-icons
 , boost, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib
 , openjpeg, opencolorio, vc, poppler, curl, ilmbase
 , qtmultimedia, qtx11extras, quazip
@@ -10,25 +10,26 @@
 
 mkDerivation rec {
   pname = "krita";
-  version = "4.2.6";
+  version = "4.4.3";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0qdaw8xx3h91v8iw6nw2h276ka8hflaq4r4qwz5mqfd3h254jzym";
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0rwghzci2wn2jmisvnzs23yxc2z3d4dcx2qbbhcvjyi3q8ij61nl";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip makeWrapper ];
+  nativeBuildInputs = [ cmake extra-cmake-modules python3Packages.sip_4 makeWrapper ];
 
   buildInputs = [
     karchive kconfig kwidgetsaddons kcompletion kcoreaddons kguiaddons
-    ki18n kitemmodels kitemviews kwindowsystem kio kcrash
+    ki18n kitemmodels kitemviews kwindowsystem kio kcrash breeze-icons
     boost libraw fftw eigen exiv2 lcms2 gsl openexr libheif giflib
     openjpeg opencolorio poppler curl ilmbase
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
   ] ++ lib.optional (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64) vc;
 
-  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];
+  NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ]
+    ++ lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy";
 
   cmakeFlags = [
     "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
@@ -44,9 +45,9 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source painting application";
-    homepage = https://krita.org/;
+    homepage = "https://krita.org/";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl3Only;
   };
 }

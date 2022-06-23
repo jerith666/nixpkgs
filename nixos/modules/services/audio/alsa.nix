@@ -12,6 +12,9 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "sound" "enableMediaKeys" ] [ "sound" "mediaKeys" "enable" ])
+  ];
 
   ###### interface
 
@@ -29,7 +32,7 @@ in
 
       enableOSSEmulation = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
         '';
@@ -88,11 +91,7 @@ in
     environment.systemPackages = [ alsaUtils ];
 
     environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
-      [
-        { source = pkgs.writeText "asound.conf" config.sound.extraConfig;
-          target = "asound.conf";
-        }
-      ];
+      { "asound.conf".text = config.sound.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];

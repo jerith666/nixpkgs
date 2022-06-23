@@ -33,7 +33,7 @@ const { execFileSync } = require('child_process')
 
 function prefetchgit(url, rev) {
   return JSON.parse(
-    execFileSync("nix-prefetch-git", ["--rev", rev, url], {
+    execFileSync("nix-prefetch-git", ["--rev", rev, url, "--fetch-submodules"], {
       stdio: [ "ignore", "pipe", "ignore" ],
       timeout: 60000,
     })
@@ -80,7 +80,7 @@ function fetchLockedDep(builtinFetchGit) {
 
     const fileName = urlToName(url)
 
-    if (url.startsWith('git+')) {
+    if (url.startsWith('git+') || url.startsWith("git:")) {
       const rev = sha1OrRev
 
       const [_, branch] = nameWithVersion.split('#')

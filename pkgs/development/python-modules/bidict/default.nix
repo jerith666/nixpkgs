@@ -3,7 +3,7 @@
 , sphinx
 , hypothesis
 , py
-, pytest
+, pytestCheckHook
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.18.2";
+  version = "0.21.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0br3ljvd56nqifr1mbwksvl5jjk40pihrrjlyn7hmc40yq6m5bvh";
+    sha256 = "4fa46f7ff96dc244abfc437383d987404ae861df797e2fd5b190e233c302be09";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -26,17 +26,14 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     py
-    pytest
+    pytestCheckHook
     pytest-benchmark
     sortedcollections
     sortedcontainers
   ];
-  checkPhase = ''
-    pytest tests
-  '';
 
   meta = with lib; {
-    homepage = https://github.com/jab/bidict;
+    homepage = "https://github.com/jab/bidict";
     description = "Efficient, Pythonic bidirectional map data structures and related functionality";
     license = licenses.mpl20;
     maintainers = with maintainers; [ jakewaksbaum ];

@@ -11,6 +11,7 @@ with lib;
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
+    inherit (pkgs) curl;
     targetRoot = "$targetRoot/";
     wgetExtraOptions = "-q";
   };
@@ -32,23 +33,29 @@ in
 
     boot.growPartition = cfg.hvm;
 
-    fileSystems."/" = {
+    fileSystems."/" = mkIf (!cfg.zfs.enable) {
       device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf cfg.efi {
+    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+      # The ZFS image uses a partition labeled ESP whether or not we're
+      # booting with EFI.
       device = "/dev/disk/by-label/ESP";
       fsType = "vfat";
     };
+
+    services.zfs.expandOnBoot = mkIf cfg.zfs.enable "all";
+
+    boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
     boot.extraModulePackages = [
       config.boot.kernelPackages.ena
     ];
     boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
     boot.initrd.availableKernelModules = [ "ixgbevf" "ena" "nvme" ];
-    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
+    boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" "random.trust_cpu=on" ];
 
     # Prevent the nouveau kernel module from being loaded, as it
     # interferes with the nvidia/nvidia-uvm modules needed for CUDA.
@@ -123,7 +130,7 @@ in
     boot.initrd.extraUtilsCommands =
       ''
         # We need swapon in the initrd.
-        copy_bin_and_libs ${pkgs.utillinux}/sbin/swapon
+        copy_bin_and_libs ${pkgs.util-linux}/sbin/swapon
       '';
 
     # Don't put old configurations in the GRUB menu.  The user has no
@@ -134,6 +141,9 @@ in
     # at instance creation time.
     services.openssh.enable = true;
     services.openssh.permitRootLogin = "prohibit-password";
+
+    # Creates symlinks for block device names.
+    services.udev.packages = [ pkgs.ec2-utils ];
 
     # Force getting the hostname from EC2.
     networking.hostName = mkDefault "";

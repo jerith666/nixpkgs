@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 , webob
 , six
@@ -15,6 +16,7 @@
 buildPythonPackage rec {
   version = "2.0.32";
   pname = "webtest";
+  disabled = isPy27; # paste.deploy is not longer a valid import
 
   src = fetchPypi {
     pname = "WebTest";
@@ -33,9 +35,9 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helper to test WSGI applications";
-    homepage = https://webtest.readthedocs.org/en/latest/;
+    homepage = "https://webtest.readthedocs.org/en/latest/";
     license = licenses.mit;
   };
 

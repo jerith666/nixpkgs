@@ -1,44 +1,53 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio }:
 
 stdenv.mkDerivation rec {
   pname = "1password";
-  version = "0.6.2";
+  version = "1.9.1";
   src =
-    if stdenv.hostPlatform.system == "i686-linux" then
-      fetchzip {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
-        sha256 = "08ha4qr064jyivsp8z3q2cwmmm6klqyicc1i9vpf7zd9xmmx72rd";
-        stripRoot = false;
-      }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchzip {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
-        sha256 = "1fjhn1k9h6rlrgin5czvpig8h70dh14i5k20g77jvxq24bf0sn9m";
-        stripRoot = false;
-      }
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      fetchzip {
-        url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.zip";
-        sha256 = "1x7pj41a4wra3ws09cyc063ai5isf12qbkm2hxiiiq5glnacpvpl";
-        stripRoot = false;
-      }
-    else throw "Architecture not supported";
+    if stdenv.isLinux then fetchzip {
+      url = {
+        "i686-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_386_v${version}.zip";
+        "x86_64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_amd64_v${version}.zip";
+        "aarch64-linux" = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_linux_arm_v${version}.zip";
+      }.${stdenv.hostPlatform.system};
+      sha256 = {
+        "i686-linux" = "1x5khnp6yqrjf513x3y6l38rb121nib7d4aiz4cz7fh029kxjhd1";
+        "x86_64-linux" = "1ar8lzkndl7xzcinv93rzg8q25vb23fggbjkhgchgc5x9wkwk8hw";
+        "aarch64-linux" = "1q81pk6qmp96p1dbhx1ijln8f54rac8r81d4ghqx9v756s9szrr1";
+      }.${stdenv.hostPlatform.system};
+      stripRoot = false;
+    } else fetchurl {
+      url = "https://cache.agilebits.com/dist/1P/op/pkg/v${version}/op_darwin_amd64_v${version}.pkg";
+      sha256 = "0904wwy3wdhfvbkvpdap8141a9gqmn0dw45ikrzsqpg7pv1r2zch";
+    };
+
+  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+
+  unpackPhase = lib.optionalString stdenv.isDarwin ''
+    xar -xf $src
+    zcat op.pkg/Payload | cpio -i
+  '';
 
   installPhase = ''
     install -D op $out/bin/op
   '';
-  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/bin/op
+
+  dontStrip = stdenv.isDarwin;
+
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/op --version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description  = "1Password command-line tool";
-    homepage     = https://support.1password.com/command-line/;
-    downloadPage = https://app-updates.agilebits.com/product_history/CLI;
+    homepage     = "https://support.1password.com/command-line/";
+    downloadPage = "https://app-updates.agilebits.com/product_history/CLI";
     maintainers  = with maintainers; [ joelburget marsam ];
     license      = licenses.unfree;
-    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms    = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
   };
 }

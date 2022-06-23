@@ -1,14 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, isPy27
 # python dependencies
 , click
-, configparser ? null
 , dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
-, futures
 , mock
 , networkx
 , nibabel
@@ -21,20 +21,24 @@
 , pytest
 , pytest_xdist
 , pytest-forked
+, rdflib
 , scipy
 , simplejson
 , traits
 , xvfbwrapper
 , pytestcov
 , codecov
+, sphinx
 # other dependencies
 , which
 , bash
 , glibcLocales
 , callPackage
+# causes Python packaging conflict with any package requiring rdflib,
+# so use the unpatched rdflib by default (disables Nipype provenance tracking);
+# see https://github.com/nipy/nipype/issues/2888:
+, useNeurdflib ? false
 }:
-
-assert !isPy3k -> configparser != null;
 
 let
 
@@ -45,11 +49,12 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.2.0";
+  version = "1.6.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09azgfmb0992c3xqmi7n93pz95i4v37vc9kqmjh8c9jjxjzszdd5";
+    sha256 = "bc56ce63f74c9a9a23c6edeaf77631377e8ad2bea928c898cc89527a47f101cf";
   };
 
   postPatch = ''
@@ -57,13 +62,18 @@ buildPythonPackage rec {
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
 
+  nativeBuildInputs = [
+    sphinx
+  ];
+
   propagatedBuildInputs = [
     click
     dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
-    neurdflib
     nibabel
     numpy
     packaging
@@ -74,10 +84,7 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
-    configparser
-    futures
-  ];
+  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
 
   checkInputs = [
     pybids
@@ -91,13 +98,16 @@ buildPythonPackage rec {
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
   '';
+  pythonImportsCheck = [ "nipype" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://nipy.org/nipype/;
+  meta = with lib; {
+    homepage = "https://nipy.org/nipype/";
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];

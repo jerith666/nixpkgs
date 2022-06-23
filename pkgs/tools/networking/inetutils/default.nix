@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man }:
+{ stdenv, lib, fetchurl, fetchpatch, ncurses, perl, help2man
+, apparmorRulesFromClosure
+}:
 
 stdenv.mkDerivation rec {
   name = "inetutils-1.9.4";
@@ -8,7 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "05n65k4ixl85dc6rxc51b1b732gnmm8xnqi424dy9f1nz7ppb3xy";
   };
 
+  outputs = ["out" "apparmor"];
+
   patches = [
+    (fetchpatch {
+      name = "CVE-2021-40491.patch";
+      url = "https://git.savannah.gnu.org/cgit/inetutils.git/patch/?id=58cb043b190fd04effdaea7c9403416b436e50dd";
+      excludes = [ "NEWS" ];
+      sha256 = "0001ij7493x14f05zfjk11x1x0363sbbxh08nnfv226pmbaxzbkn";
+    })
     ./whois-Update-Canadian-TLD-server.patch
     ./service-name.patch
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
@@ -41,6 +51,23 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "SUIDMODE=" ];
 
+  postInstall = ''
+    mkdir $apparmor
+    cat >$apparmor/bin.ping <<EOF
+    $out/bin/ping {
+      include <abstractions/base>
+      include <abstractions/consoles>
+      include <abstractions/nameservice>
+      include "${apparmorRulesFromClosure { name = "ping"; } [stdenv.cc.libc]}"
+      include <local/bin.ping>
+      capability net_raw,
+      network inet raw,
+      network inet6 raw,
+      mr $out/bin/ping,
+    }
+    EOF
+  '';
+
   meta = with lib; {
     description = "Collection of common network programs";
 
@@ -51,7 +78,7 @@ stdenv.mkDerivation rec {
          traceroute, uucpd, and whois.
       '';
 
-    homepage = https://www.gnu.org/software/inetutils/;
+    homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;
 
     maintainers = with maintainers; [ matthewbauer ];

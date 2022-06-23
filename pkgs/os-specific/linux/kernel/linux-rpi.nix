@@ -1,8 +1,9 @@
 { stdenv, lib, buildPackages, fetchFromGitHub, perl, buildLinux, rpiVersion, ... } @ args:
 
 let
-  modDirVersion = "4.19.71";
-  tag = "1.20190906";
+  # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
+  modDirVersion = "5.10.17";
+  tag = "1.20210303";
 in
 lib.overrideDerivation (buildLinux (args // {
   version = "${modDirVersion}-${tag}";
@@ -11,20 +12,28 @@ lib.overrideDerivation (buildLinux (args // {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "linux";
-    rev = "9532eb3c84d8d952ef28da3d135683ac01adc9b8";
-    sha256 = "0168wz8kkdzbyha41iqlgn1z1kcy4smg89rgxkgadzq78y7fglpl";
+    rev = "raspberrypi-kernel_${tag}-1";
+    sha256 = "0ffsllayl18ka4mgp4rdy9h0da5gy1n6g0kfvinvzdzabb5wzvrx";
   };
 
   defconfig = {
     "1" = "bcmrpi_defconfig";
     "2" = "bcm2709_defconfig";
-    "3" = "bcmrpi3_defconfig";
+    "3" = if stdenv.hostPlatform.isAarch64 then "bcmrpi3_defconfig" else "bcm2709_defconfig";
     "4" = "bcm2711_defconfig";
   }.${toString rpiVersion};
 
   features = {
     efiBootStub = false;
   } // (args.features or {});
+
+  extraConfig = ''
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: error: initialization of 'void (*)(struct drm_crtc *, struct drm_atomic_state *)' from incompatible pointer type 'void (*)(struct drm_crtc *, struct drm_crtc_state *)' [-Werror=incompatible-pointer-types]
+    #   851 |  .atomic_flush = ast_crtc_helper_atomic_flush,
+    #       |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ../drivers/gpu/drm/ast/ast_mode.c:851:18: note: (near initialization for 'ast_crtc_helper_funcs.atomic_flush')
+    DRM_AST n
+  '';
 
   extraMeta = if (rpiVersion < 3) then {
     platforms = with lib.platforms; [ arm ];
@@ -33,7 +42,7 @@ lib.overrideDerivation (buildLinux (args // {
     platforms = with lib.platforms; [ arm aarch64 ];
     hydraPlatforms = [ "aarch64-linux" ];
   };
-})) (oldAttrs: {
+} // (args.argsOverride or {}))) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'

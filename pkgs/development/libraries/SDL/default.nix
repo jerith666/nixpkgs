@@ -1,5 +1,5 @@
-{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL, libGLU
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
@@ -11,7 +11,17 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with stdenv.lib;
+with lib;
+
+let
+  extraPropagatedBuildInputs = [ ]
+    ++ optionals x11Support [ libXext libICE libXrandr ]
+    ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional stdenv.isDarwin Cocoa;
+  rpath = makeLibraryPath extraPropagatedBuildInputs;
+in
 
 stdenv.mkDerivation rec {
   pname = "SDL";
@@ -28,15 +38,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optional stdenv.isLinux libcap;
 
-  propagatedBuildInputs = [ libiconv ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional stdenv.isDarwin Cocoa;
+  propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
   buildInputs = [ ]
     ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
@@ -108,7 +113,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
       fi
     done
   '';
@@ -119,7 +124,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];

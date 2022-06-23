@@ -1,49 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, scikitlearn
-, numpy
-, matplotlib
-, scipy
+, deprecated
 , hopcroftkarp
-, pytest
+, joblib
+, matplotlib
+, numpy
+, scikit-learn
+, scipy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "persim";
-  version = "0.0.9";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52ce59856de25eec74c6f20951301b13e7d98c434e712d2225653e2087d54fbc";
+    sha256 = "5db2f7f65b1ad7b2cbfa254afb692ca0a91aeb686e82d6905838c41f516e6a13";
   };
 
   propagatedBuildInputs = [
-    scikitlearn
-    numpy
-    matplotlib
-    scipy
+    deprecated
     hopcroftkarp
+    joblib
+    matplotlib
+    numpy
+    scikit-learn
+    scipy
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
+  preCheck = ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-
-    # ignore tests due to python 2.7 fail
-    pytest --ignore test/test_plots.py \
-           --ignore test/test_visuals.py
   '';
 
   meta = with lib; {
     description = "Distances and representations of persistence diagrams";
-    homepage = https://persim.scikit-tda.org;
+    homepage = "https://persim.scikit-tda.org";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

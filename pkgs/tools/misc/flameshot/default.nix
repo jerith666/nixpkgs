@@ -1,44 +1,50 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, qtbase
+, cmake
+, qttools
+, qtsvg
+}:
 
-# To use `flameshot gui`, you will also need to put flameshot in `services.dbus.packages`
-# in configuration.nix so that the daemon gets launched properly:
-#
-#   services.dbus.packages = [ pkgs.flameshot ];
-#   environment.systemPackages = [ pkgs.flameshot ];
 mkDerivation rec {
   pname = "flameshot";
-  version = "0.6.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
-    owner = "lupoDharkael";
+    owner = "flameshot-org";
     repo = "flameshot";
     rev = "v${version}";
-    sha256 = "193szslh55v44jzxzx5g9kxhl8p8di7vbcnxlid4acfidhnvgazm";
+    sha256 = "1ncknjayl6am740f49g0lc28z1zsifbicxz1j1kwps3ksj15nl7a";
   };
 
-  nativeBuildInputs = [ qmake qttools qtsvg ];
+  patches = [
+    # Support for USE_LAUNCHER_ABSOLUTE_PATH.
+    # Should be removed when the next release comes out.
+    (fetchpatch {
+      url = "https://github.com/flameshot-org/flameshot/commit/1031980ed1e62d24d7f719998b7951d48801e3fa.patch";
+      sha256 = "sha256-o8Zz/bBvitXMDFt5rAfubiUPOx+EQ+ITgrfnFM3dFjE=";
+    })
+    # Fix autostart write path.
+    # Should be removed when the next release comes out.
+    (fetchpatch {
+      url = "https://github.com/flameshot-org/flameshot/commit/7977cbb52c2d785abd0d85d9df5991e8f7cae441.patch";
+      sha256 = "sha256-wWa9Y+4flBiggOMuX7KQyL+q3f2cALGeQBGusX2x6sk=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake qttools qtsvg ];
   buildInputs = [ qtbase ];
 
-  qmakeFlags = [ "PREFIX=${placeholder "out"}" ];
-
-  preConfigure = ''
-    # flameshot.pro assumes qmake is being run in a git checkout.
-    git() { echo ${version}; }
-    export -f git
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/dbus-1/services/org.dharkael.Flameshot.service \
-      --replace "/usr/local" "$out"
-  '';
-
-  enableParallelBuilding = true;
+  # Use relative path for the .desktop file.
+  cmakeFlags = [ "-DUSE_LAUNCHER_ABSOLUTE_PATH=OFF" ];
 
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
-    homepage = https://github.com/lupoDharkael/flameshot;
-    maintainers = [ maintainers.scode ];
-    license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
+    homepage = "https://github.com/flameshot-org/flameshot";
+    maintainers = with maintainers; [ scode oxalica ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

@@ -1,30 +1,32 @@
-{ stdenv, fetchurl, perl, libunwind, buildPackages }:
+{ lib, stdenv, fetchurl, perl, libunwind, buildPackages }:
+
+# libunwind does not have the supportsHost attribute on darwin, thus
+# when this package is evaluated it causes an evaluation error
+assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.3";
+  version = "5.14";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ix06z4vnc49mv76f22kixz8dsh7daqv9mpgwcgl0mlnfjc124vc";
+    sha256 = "sha256-kBvubbXhfeutRTDdn/tNyalsSmVu2+HDFBt8swexHnM=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl ];
 
-  buildInputs = stdenv.lib.optional libunwind.supportsHost libunwind; # support -k
+  buildInputs = [ perl.out ] ++ lib.optional libunwind.supportsHost libunwind; # support -k
 
-  configureFlags = stdenv.lib.optional (!stdenv.hostPlatform.isx86) "--enable-mpers=check";
+  postPatch = "patchShebangs --host strace-graph";
 
-  # fails 1 out of 523 tests with
-  # "strace-k.test: failed test: ../../strace -e getpid -k ../stack-fcall output mismatch"
-  doCheck = false;
+  configureFlags = [ "--enable-mpers=check" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://strace.io/;
+  meta = with lib; {
+    homepage = "https://strace.io/";
     description = "A system call tracer for Linux";
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+    maintainers = with maintainers; [ globin ma27 qyliss ];
   };
 }
