@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python3
+, python39
 }:
 
 let
-  python3' = python3.override {
+  python3' = python39.override {
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
@@ -19,7 +19,7 @@ let
       });
       flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
-        src = python3.pkgs.fetchPypi {
+        src = self.fetchPypi {
           pname = "Flask-Migrate";
           inherit version;
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
@@ -94,13 +94,13 @@ let
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c5pWbBaOFQd7z3BvtYgrnZBiknLBDCE6So76Q68AptA=";
+    sha256 = "sha256-bjMw69nKecv87nwsLfb4+h677WjZlkVcIpVe53AI9WU=";
     fetchSubmodules = true;
   };
 

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , buildGo118Module
 , fetchFromGitHub
@@ -58,12 +59,12 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      # Packages that don't fit the default model
-
       brightbox = automated-providers.brightbox.override { mkProviderGoModule = buildGo118Module; };
       # mkisofs needed to create ISOs holding cloud-init data,
       # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
+      linode = automated-providers.linode.override { mkProviderGoModule = buildGo118Module; };
+      utils = automated-providers.utils.override { mkProviderGoModule = buildGo118Module; };
     };
 
   # Put all the providers we not longer support in this list.
@@ -73,6 +74,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
+      b2 = removed "b2" "2022/06";
       opc = archived "opc" "2022/05";
       oraclepaas = archived "oraclepaas" "2022/05";
       template = archived "template" "2022/05";

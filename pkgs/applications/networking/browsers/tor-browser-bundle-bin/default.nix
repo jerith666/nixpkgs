@@ -87,7 +87,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.0.13";
+  version = "11.0.15";
 
   lang = "en-US";
 
@@ -98,7 +98,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "03pzwzgikc43pm0lga61jdzg46fanmvd1wsnb2xkq0y1ny8gsqfz";
+      sha256 = "1gv44bi3gfg5z46fvs9wy46fgvfshad5kbxl43x3x4r70ps1nc3l";
     };
 
     i686-linux = fetchurl {
@@ -107,7 +107,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "0j8h2g404sagzjxnwf55n8hpvmwk52qhml98nyliajf1xg8v8k19";
+      sha256 = "109291wwcy63k8hs23kx8vffpj4zvywdpy8srwaq367l0ffvfqn2";
     };
   };
 in
@@ -434,5 +434,6 @@ stdenv.mkDerivation rec {
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
     license = licenses.free;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

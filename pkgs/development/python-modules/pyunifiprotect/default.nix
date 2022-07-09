@@ -1,9 +1,11 @@
 { lib
+, aiofiles
 , aiohttp
 , aioshutil
 , buildPythonPackage
 , fetchFromGitHub
 , ipython
+, orjson
 , packaging
 , pillow
 , poetry-core
@@ -24,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "3.8.0";
+  version = "4.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -33,12 +35,14 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFdGWGm+DUi/0l9YBliQH1VgpYEVcHVgLirJTrNmNP4=";
+    hash = "sha256-1jKZWF+xNQVNzgOTNwEG/rloPXZYYwoVMYmQ+jep1/0=";
   };
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     aioshutil
+    orjson
     packaging
     pillow
     pydantic

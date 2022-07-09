@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-core";
-  version = "0.6.11";
+  version = "0.6.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyroute2.core";
     inherit version;
-    hash = "sha256-9Odxls1lje7pUCu0UkhfQIgbL2dOZQkiV1J/kgfgxGw=";
+    hash = "sha256-In39nxmIjd0TQZZoIv/ViA2548iTdQlkGMZg/00aEdA=";
   };
 
   # pyroute2 sub-modules have no tests

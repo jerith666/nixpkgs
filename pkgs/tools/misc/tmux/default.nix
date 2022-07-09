@@ -6,7 +6,7 @@
 , libevent
 , ncurses
 , pkg-config
-, systemd
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 , utf8proc
 }:
 
@@ -23,7 +23,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.3";
+  version = "3.3a";
 
   outputs = [ "out" "man" ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "sha256-Sxj2vXkbbPNRrqJKeIYwI7xdBtwRbl6a6a3yZr7UWW0=";
+    sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
 
   nativeBuildInputs = [
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]
+  ] ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ lib.optionals stdenv.isLinux [ "--enable-systemd" ]
+  ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
   ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;

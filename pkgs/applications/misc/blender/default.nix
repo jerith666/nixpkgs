@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1d0476bzcz86lwdnyjn7hyzkmhfiqh47ls5h09jlbm7v7k9x69hw";
+    hash = "sha256-k78LL1urcQWxnF1lSoSi3CH3Ylhzo2Bk2Yvq5zbTYEo=";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -76,9 +76,7 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
+                  '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
@@ -159,8 +157,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # darwin.patch doesn't apply anymore, needs update
-    broken = stdenv.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they

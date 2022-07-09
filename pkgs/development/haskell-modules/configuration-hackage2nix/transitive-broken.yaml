@@ -338,17 +338,10 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
- - Shpadoinkle
- - Shpadoinkle-backend-pardiff
- - Shpadoinkle-backend-snabbdom
- - Shpadoinkle-backend-static
  - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
- - Shpadoinkle-html
- - Shpadoinkle-lens
  - Shpadoinkle-router
- - Shpadoinkle-streaming
  - Shpadoinkle-template
  - Shpadoinkle-widgets
  - SimpleGL
@@ -650,7 +643,6 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
- - appendful-persistent
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-tar-bytestring
@@ -692,10 +684,6 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
- - autodocodec-openapi3
- - autodocodec-schema
- - autodocodec-swagger2
- - autodocodec-yaml
  - automata
  - autonix-deps-kf5
  - avers
@@ -878,7 +866,6 @@ dont-distribute-packages:
  - cabal-query
  - cabal-test
  - cabal2arch
- - cabal2json
  - cabalmdvrpm
  - cabalrpmdeps
  - cabocha
@@ -923,7 +910,6 @@ dont-distribute-packages:
  - categorical-algebra
  - category
  - category-extras
- - cautious-gen
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
@@ -1140,7 +1126,6 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
- - cuckoo
  - curryer-rpc
  - cursedcsv
  - cv-combinators
@@ -1291,6 +1276,9 @@ dont-distribute-packages:
  - dobutokO4
  - doc-review
  - dom-parser
+ - domain
+ - domain-aeson
+ - domain-cereal
  - dormouse-client
  - dotparse
  - doublezip
@@ -1387,7 +1375,6 @@ dont-distribute-packages:
  - eventsource-stub-store
  - every-bit-counts
  - exception-monads-fd
- - exchangerates
  - exference
  - exinst-aeson
  - exinst-bytes
@@ -1474,7 +1461,6 @@ dont-distribute-packages:
  - fixed-point-vector
  - fixed-point-vector-space
  - fixed-precision
- - fixer
  - fixhs
  - flac-picture
  - flashblast
@@ -1573,17 +1559,12 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
- - genvalidity-aeson
- - genvalidity-appendful
- - genvalidity-hspec-aeson
  - genvalidity-mergeful
- - genvalidity-mergeless
  - genvalidity-sydtest
  - genvalidity-sydtest-aeson
  - genvalidity-sydtest-hashable
  - genvalidity-sydtest-lens
  - genvalidity-sydtest-persistent
- - genvalidity-typed-uuid
  - geodetic
  - geolite-csv
  - getemx
@@ -1598,7 +1579,6 @@ dont-distribute-packages:
  - ghc-session
  - ghc-tags-plugin
  - ghci-pretty
- - ghcjs-dom-hello
  - ghcjs-dom-webkit
  - ghcjs-fetch
  - ghcjs-hplay
@@ -1970,6 +1950,8 @@ dont-distribute-packages:
  - haskades
  - haskdeep
  - haskeem
+ - haskell-admin
+ - haskell-admin-managed-functions
  - haskell-aliyun
  - haskell-bitmex-client
  - haskell-docs
@@ -2200,6 +2182,7 @@ dont-distribute-packages:
  - hranker
  - hreq-client
  - hreq-conduit
+ - hriemann
  - hs
  - hs-blake2
  - hs-ffmpeg
@@ -2207,6 +2190,7 @@ dont-distribute-packages:
  - hs-ix
  - hs-opentelemetry-exporter-in-memory
  - hs-opentelemetry-exporter-otlp
+ - hs-opentelemetry-instrumentation-cloudflare
  - hs-opentelemetry-instrumentation-conduit
  - hs-opentelemetry-instrumentation-http-client
  - hs-opentelemetry-instrumentation-persistent
@@ -2272,6 +2256,7 @@ dont-distribute-packages:
  - hts
  - htsn-import
  - http-client-auth
+ - http-client-rustls
  - http-enumerator
  - http-pony
  - http2-client-exe
@@ -2433,7 +2418,6 @@ dont-distribute-packages:
  - jobqueue
  - join
  - jordan-openapi
- - jsaddle-hello
  - jsc
  - jsmw
  - json-ast-json-encoder
@@ -2521,7 +2505,6 @@ dont-distribute-packages:
  - labyrinth
  - labyrinth-server
  - laika
- - lambda-calculator
  - lambda-devs
  - lambda-options
  - lambdaFeed
@@ -2703,6 +2686,8 @@ dont-distribute-packages:
  - majordomo
  - majority
  - make-package
+ - managed-functions-http-connector
+ - managed-functions-json
  - manatee
  - manatee-all
  - manatee-anything
@@ -2751,7 +2736,6 @@ dont-distribute-packages:
  - memis
  - memory-hexstring
  - mergeful-persistent
- - mergeless-persistent
  - merkle-patricia-db
  - meta-par-accelerate
  - metaplug
@@ -2987,7 +2971,6 @@ dont-distribute-packages:
  - opc-xml-da-client
  - open-adt-tutorial
  - openai-hs
- - openapi3-code-generator
  - opencv-extra
  - openpgp-Crypto
  - openpgp-crypto-api
@@ -3200,8 +3183,6 @@ dont-distribute-packages:
  - proto3-wire
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - proton
- - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3214,7 +3195,6 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3348,6 +3328,7 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
+ - registry-aeson
  - registry-hedgehog
  - registry-hedgehog-aeson
  - registry-messagepack
@@ -3578,6 +3559,7 @@ dont-distribute-packages:
  - shady-graphics
  - shake-ats
  - shake-bindist
+ - shake-futhark
  - shake-minify-css
  - shake-plus-extended
  - shakebook
@@ -3762,7 +3744,6 @@ dont-distribute-packages:
  - sump
  - sunroof-examples
  - sunroof-server
- - super-user-spark
  - supercollider-ht
  - supercollider-midi
  - superconstraints
@@ -3779,21 +3760,16 @@ dont-distribute-packages:
  - sydtest-aeson
  - sydtest-amqp
  - sydtest-hedgehog
- - sydtest-hedis
  - sydtest-hspec
- - sydtest-mongo
  - sydtest-persistent
- - sydtest-persistent-postgresql
  - sydtest-persistent-sqlite
  - sydtest-process
- - sydtest-rabbitmq
  - sydtest-servant
  - sydtest-typed-process
  - sydtest-wai
  - sydtest-webdriver
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
- - sydtest-yesod
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3855,6 +3831,7 @@ dont-distribute-packages:
  - test-simple
  - testbench
  - text-all
+ - text-builder-dev_0_3_3
  - text-generic-pretty
  - text-json-qq
  - text-locale-encoding
@@ -3977,7 +3954,6 @@ dont-distribute-packages:
  - typed-admin
  - typed-encoding-encoding
  - typed-streams
- - typed-uuid
  - typelevel
  - typelevel-rewrite-rules
  - typesafe-precure
@@ -4248,7 +4224,6 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell
