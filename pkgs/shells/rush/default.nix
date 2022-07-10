@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Restricted User Shell";
 
     longDescription =
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/rush/";
     license = lib.licenses.gpl3Plus;
 
-    maintainers = [ lib.maintainers.bjg ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 

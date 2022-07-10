@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "boundary";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src =
     let
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       sha256 = selectSystem {
-        x86_64-linux = "sha256-JvWzDdslO1S/nVsIwvFAEhLo/kkHIE1AVwoI980LV4Y=";
-        aarch64-linux = "sha256-IwD7iazbh94c9CZfFsg5t39D8oVWgpfXP1H0/GsTe3Y=";
-        x86_64-darwin = "sha256-SkNSZVdbR6KW/vChDdvHMP+fGQp+mPVxKpEHb7BR4+4=";
-        aarch64-darwin = "sha256-Mx9YhMk5eBgtDiYWPq7jfhrM3TjH0VCUE1QXycz5Cfc=";
+        x86_64-linux = "sha256-58CcM1bKjH3uEzJ27SBHrZQEUTEFj3U4BS5udd9IL4w=";
+        aarch64-linux = "sha256-/orLwUCco+iSgvGhJ0s0N4BjA4FYsEi9HgeKHHqKw74=";
+        x86_64-darwin = "sha256-twsrQkRWfhFZzc+CTetIUx1hGczrAH91C/0jKPe6kPg=";
+        aarch64-darwin = "sha256-g7pALQ4y4LymAggyHuJSJn0Owhs2BzoNQb1rb9+ZJmw=";
       };
     in
     fetchzip {
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ jk techknowlogick ];
   };

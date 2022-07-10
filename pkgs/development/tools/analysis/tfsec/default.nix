@@ -5,23 +5,24 @@
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.21.2";
+  version = "1.26.2";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oKHGowW/LetNGtMA/sTWhmc98Tt6X475CbpqI88g4Jc=";
+    hash = "sha256-ogUFAKik8Ksf+3CncfL086GPiY+x3Kx7/4bCYQjGTXg=";
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/aquasecurity/tfsec/version.Version=${version}"
     ## not sure if this is needed (https://github.com/aquasecurity/tfsec/blob/master/.goreleaser.yml#L6)
     # "-extldflags '-fno-PIC -static'"
   ];
 
-  vendorSha256 = "sha256-l39wXMgJLWIf0TcM6VQpcV4ckHqW/SjMy07e9w7dbgs=";
+  vendorSha256 = "sha256-uuQZIrAuF+E0Sd+PSjZszQU1pqVDdBUtEsk9w7dzTAE=";
 
   subPackages = [
     "cmd/tfsec"

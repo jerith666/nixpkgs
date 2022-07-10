@@ -50,6 +50,10 @@ let
       feature = "set <literal>enableParallelBuilding</literal> to true by default";
     };
 
+    configurePlatformsByDefault = mkMassRebuild {
+      feature = "set <literal>configurePlatforms</literal> to <literal>[\"build\" \"host\"]</literal> by default";
+    };
+
     contentAddressedByDefault = mkMassRebuild {
       feature = "set <literal>__contentAddressed</literal> to true by default";
     };
@@ -128,7 +132,7 @@ let
 in {
 
   freeformType =
-    let t = lib.types.attrsOf lib.types.raw;
+    let t = lib.types.lazyAttrsOf lib.types.raw;
     in t // {
       merge = loc: defs:
         let r = t.merge loc defs;
@@ -139,7 +143,7 @@ in {
 
   config = {
     warnings = lib.optionals config.warnUndeclaredOptions (
-      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared
+      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
     );
   };
 

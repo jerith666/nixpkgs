@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.5";
+  version = "2022.7.0";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -61,8 +61,7 @@
       aioairzone
     ];
     "aladdin_connect" = ps: with ps; [
-      aladdin-connect
-    ];
+    ]; # missing inputs: AIOAladdinConnect
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -139,6 +138,9 @@
       ifaddr
       pyatv
       zeroconf
+    ];
+    "application_credentials" = ps: with ps; [
+      aiohttp-cors
     ];
     "apprise" = ps: with ps; [
       apprise
@@ -236,6 +238,8 @@
       aiohttp-cors
       securetar
     ];
+    "baf" = ps: with ps; [
+    ]; # missing inputs: aiobafi6
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -288,7 +292,7 @@
       bimmer-connected
     ];
     "bond" = ps: with ps; [
-      bond-api
+      bond-async
     ];
     "bosch_shc" = ps: with ps; [
       aiohttp-cors
@@ -796,6 +800,7 @@
       pyfido
     ];
     "file" = ps: with ps; [
+      file-read-backwards
     ];
     "filesize" = ps: with ps; [
     ];
@@ -952,6 +957,10 @@
     "geo_rss_events" = ps: with ps; [
       georss-generic-client
     ];
+    "geocaching" = ps: with ps; [
+      aiohttp-cors
+      geocachingapi
+    ];
     "geofency" = ps: with ps; [
       aiohttp-cors
     ];
@@ -1049,6 +1058,16 @@
     "hangouts" = ps: with ps; [
       hangups
     ];
+    "hardkernel" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "hardware" = ps: with ps; [
+    ];
     "harman_kardon_avr" = ps: with ps; [
       hkavr
     ];
@@ -1115,6 +1134,14 @@
     ];
     "homeassistant" = ps: with ps; [
     ];
+    "homeassistant_yellow" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
     "homekit" = ps: with ps; [
       hap-python
       pyqrcode
@@ -1139,7 +1166,7 @@
       homematicip
     ];
     "homewizard" = ps: with ps; [
-      aiohwenergy
+      python-homewizard-energy
     ];
     "homeworks" = ps: with ps; [
       pyhomeworks
@@ -1364,7 +1391,8 @@
       pykulersky
     ];
     "kwb" = ps: with ps; [
-    ]; # missing inputs: pykwb
+      pykwb
+    ];
     "lacrosse" = ps: with ps; [
       pylacrosse
     ];
@@ -1378,6 +1406,9 @@
     ];
     "launch_library" = ps: with ps; [
       pylaunches
+    ];
+    "laundrify" = ps: with ps; [
+      laundrify-aio
     ];
     "lcn" = ps: with ps; [
       pypck
@@ -1489,7 +1520,8 @@
     ];
     "mailgun" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pymailgunner
+      pymailgunner
+    ];
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
@@ -1543,7 +1575,8 @@
       aiohttp-cors
     ];
     "message_bird" = ps: with ps; [
-    ]; # missing inputs: messagebird
+      messagebird
+    ];
     "met" = ps: with ps; [
       pymetno
     ];
@@ -1863,7 +1896,6 @@
       ondilo
     ];
     "onewire" = ps: with ps; [
-      pi1wire
       pyownet
     ];
     "onkyo" = ps: with ps; [
@@ -2026,7 +2058,8 @@
     "plum_lightpad" = ps: with ps; [
     ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [
-    ]; # missing inputs: pycketcasts
+      pycketcasts
+    ];
     "point" = ps: with ps; [
       aiohttp-cors
       pypoint
@@ -2138,12 +2171,20 @@
     ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
-      ueagle
+      eagle100
     ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
     "random" = ps: with ps; [
+    ];
+    "raspberry_pi" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
     ];
     "raspyrfm" = ps: with ps; [
     ]; # missing inputs: raspyrfm-client
@@ -2227,8 +2268,6 @@
     ];
     "rpi_camera" = ps: with ps; [
     ];
-    "rpi_gpio" = ps: with ps; [
-    ]; # missing inputs: RPi.GPIO
     "rpi_power" = ps: with ps; [
       rpi-bad-power
     ];
@@ -2287,6 +2326,7 @@
     "scrape" = ps: with ps; [
       beautifulsoup4
       jsonpath
+      lxml
       xmltodict
     ];
     "screenlogic" = ps: with ps; [
@@ -2392,7 +2432,8 @@
     ]
     ++ pygatt.optional-dependencies.GATTTOOL;
     "skybell" = ps: with ps; [
-      skybellpy
+      aioskybell
+      ha-ffmpeg
     ];
     "slack" = ps: with ps; [
       slackclient
@@ -2444,7 +2485,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmp
+      pysnmplib
     ];
     "solaredge" = ps: with ps; [
       solaredge
@@ -2460,10 +2501,6 @@
     ];
     "soma" = ps: with ps; [
       pysoma
-    ];
-    "somfy" = ps: with ps; [
-      aiohttp-cors
-      pymfy
     ];
     "somfy_mylink" = ps: with ps; [
       somfy-mylink-synergy
@@ -2622,9 +2659,8 @@
     "system_bridge" = ps: with ps; [
       aiohttp-cors
       ifaddr
-      systembridge
       zeroconf
-    ];
+    ]; # missing inputs: systembridgeconnector
     "system_health" = ps: with ps; [
       aiohttp-cors
     ];
@@ -2845,7 +2881,9 @@
     ];
     "unifiprotect" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pyunifiprotect unifi-discovery
+      pyunifiprotect
+      unifi-discovery
+    ];
     "universal" = ps: with ps; [
     ];
     "upb" = ps: with ps; [
@@ -2879,8 +2917,7 @@
     "uscis" = ps: with ps; [
     ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [
-      geojson-client
-    ];
+    ]; # missing inputs: aio_geojson_usgs_earthquakes
     "utility_meter" = ps: with ps; [
       croniter
     ];
@@ -3035,6 +3072,9 @@
     ];
     "worxlandroid" = ps: with ps; [
     ];
+    "ws66i" = ps: with ps; [
+      pyws66i
+    ];
     "wsdot" = ps: with ps; [
     ];
     "x10" = ps: with ps; [
@@ -3103,6 +3143,10 @@
       aioftp
       ha-ffmpeg
     ];
+    "yolink" = ps: with ps; [
+      aiohttp-cors
+      yolink-api
+    ];
     "youless" = ps: with ps; [
       youless-api
     ];
@@ -3128,10 +3172,15 @@
     "zha" = ps: with ps; [
       aiohttp-cors
       bellows
+      fnvhash
+      home-assistant-frontend
       ifaddr
+      lru-dict
+      pillow
       pyserial-asyncio
       pyserial
       pyudev
+      sqlalchemy
       zeroconf
       zha-quirks
       zigpy-deconz
@@ -3196,6 +3245,7 @@
     "apache_kafka"
     "api"
     "apple_tv"
+    "application_credentials"
     "apprise"
     "aprs"
     "arcam_fmj"
@@ -3292,6 +3342,7 @@
     "ecobee"
     "econet"
     "efergy"
+    "eight_sleep"
     "elgato"
     "elkm1"
     "elmax"
@@ -3353,6 +3404,7 @@
     "geo_json_events"
     "geo_location"
     "geo_rss_events"
+    "geocaching"
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
@@ -3378,6 +3430,8 @@
     "guardian"
     "habitica"
     "hangouts"
+    "hardkernel"
+    "hardware"
     "harmony"
     "hassio"
     "hddtemp"
@@ -3391,6 +3445,7 @@
     "home_connect"
     "home_plus_control"
     "homeassistant"
+    "homeassistant_yellow"
     "homekit"
     "homekit_controller"
     "homematic"
@@ -3447,7 +3502,10 @@
     "kulersky"
     "lastfm"
     "launch_library"
+    "laundrify"
     "lcn"
+    "lg_soundbar"
+    "life360"
     "light"
     "litterrobot"
     "local_file"
@@ -3465,6 +3523,7 @@
     "lutron_caseta"
     "lyric"
     "mailbox"
+    "mailgun"
     "manual"
     "manual_mqtt"
     "maxcube"
@@ -3583,9 +3642,11 @@
     "rachio"
     "radarr"
     "radio_browser"
+    "radiotherm"
     "rainforest_eagle"
     "rainmachine"
     "random"
+    "raspberry_pi"
     "rdw"
     "recollect_waste"
     "recorder"
@@ -3636,6 +3697,7 @@
     "simplisafe"
     "simulated"
     "siren"
+    "skybell"
     "slack"
     "sleepiq"
     "slimproto"
@@ -3647,11 +3709,11 @@
     "smhi"
     "smtp"
     "snips"
+    "snmp"
     "solaredge"
     "solarlog"
     "solax"
     "soma"
-    "somfy"
     "somfy_mylink"
     "sonarr"
     "songpal"
@@ -3685,7 +3747,6 @@
     "syncthing"
     "syncthru"
     "synology_dsm"
-    "system_bridge"
     "system_health"
     "system_log"
     "tado"
@@ -3733,6 +3794,7 @@
     "ukraine_alarm"
     "unifi"
     "unifi_direct"
+    "unifiprotect"
     "universal"
     "upb"
     "upcloud"
@@ -3741,7 +3803,6 @@
     "uptime"
     "uptimerobot"
     "usb"
-    "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
     "vacuum"
@@ -3778,6 +3839,7 @@
     "wled"
     "workday"
     "worldclock"
+    "ws66i"
     "wsdot"
     "xbox"
     "xiaomi"
@@ -3789,6 +3851,7 @@
     "yandex_transport"
     "yandextts"
     "yeelight"
+    "yolink"
     "youless"
     "zeroconf"
     "zerproc"

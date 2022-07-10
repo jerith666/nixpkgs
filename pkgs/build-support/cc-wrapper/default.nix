@@ -162,6 +162,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   dontConfigure = true;
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -294,14 +295,6 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
-    ''
-
-    ##
-    ## General Clang support
-    ##
-    + optionalString isClang ''
-
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
     ''
 
     ##
@@ -491,6 +484,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     '' + optionalString cc.langD or false ''
       hardening_unsupported_flags+=" format"
+    '' + optionalString cc.langFortran or false ''
+      hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
@@ -519,6 +514,15 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+    ''
+
+    ##
+    ## General Clang support
+    ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
+    ##
+    + optionalString isClang ''
+      export defaultTarget=${targetPlatform.config}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
 
     ##
