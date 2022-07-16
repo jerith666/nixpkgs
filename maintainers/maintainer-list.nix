@@ -85,6 +85,12 @@
     githubId = 56617252;
     matrix = "@oxc45:matrix.org";
   };
+  _0xd61 = {
+    email = "dgl@degit.co";
+    name = "Daniel Glinka";
+    github = "0xd61";
+    githubId = 8351869;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -2767,6 +2773,15 @@
     github = "dalpd";
     githubId = 16895361;
     name = "Deniz Alp Durmaz";
+  };
+  DAlperin = {
+    email = "git@dov.dev";
+    github = "DAlperin";
+    githubId = 16063713;
+    name = "Dov Alperin";
+    keys = [{
+      fingerprint = "4EED 5096 B925 86FA 1101  6673 7F2C 07B9 1B52 BB61";
+    }];
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -6707,7 +6722,7 @@
   };
   kilimnik = {
     email = "mail@kilimnik.de";
-    github = "killercup";
+    github = "kilimnik";
     githubId = 5883283;
     name = "Daniel Kilimnik";
   };
@@ -9769,6 +9784,12 @@
     github = "pblkt";
     githubId = 6498458;
     name = "pebble kite";
+  };
+  pbsds = {
+    name = "Peder Bergebakken Sundt";
+    email = "pbsds@hotmail.com";
+    github = "pbsds";
+    githubId = 140964;
   };
   pcarrier = {
     email = "pc@rrier.ca";
@@ -14593,6 +14614,15 @@
     name = "Philippe Schaaf";
     github = "snpschaaf";
     githubId = 105843013;
+  };
+  SohamG = {
+    email = "sohamg2@gmail.com";
+    name = "Soham S Gumaste";
+    github = "SohamG";
+    githubId = 7116239;
+    keys = [{
+      fingerprint = "E067 520F 5EF2 C175 3F60  50C0 BA46 725F 6A26 7442";
+    }];
   };
   jali-clarke = {
     email = "jinnah.ali-clarke@outlook.com";

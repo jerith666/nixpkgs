@@ -10,6 +10,7 @@
   ./config/xdg/mime.nix
   ./config/xdg/portal.nix
   ./config/xdg/portals/wlr.nix
+  ./config/xdg/portals/lxqt.nix
   ./config/appstream.nix
   ./config/console.nix
   ./config/xdg/sounds.nix
@@ -617,6 +618,7 @@
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
+  ./services/misc/polaris.nix
   ./services/misc/prowlarr.nix
   ./services/misc/tautulli.nix
   ./services/misc/pinnwand.nix
@@ -1034,6 +1036,7 @@
   ./services/torrent/peerflix.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/transmission.nix
+  ./services/tracing/tempo.nix
   ./services/ttys/getty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix

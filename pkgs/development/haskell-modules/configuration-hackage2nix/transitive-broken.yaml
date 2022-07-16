@@ -346,7 +346,6 @@ dont-distribute-packages:
  - Shpadoinkle-widgets
  - SimpleGL
  - SimpleLog
- - SimpleServer
  - Smooth
  - Snusmumrik
  - SoccerFun
@@ -2026,7 +2025,6 @@ dont-distribute-packages:
  - hasloGUI
  - hasparql-client
  - hasql-cursor-query
- - hasql-dynamic-statements
  - hasql-postgres
  - hasql-postgres-options
  - hasqlator-mysql
@@ -2078,7 +2076,6 @@ dont-distribute-packages:
  - helics
  - helics-wai
  - helium
- - helix
  - hellage
  - hellnet
  - hemokit
@@ -2418,6 +2415,10 @@ dont-distribute-packages:
  - jobqueue
  - join
  - jordan-openapi
+ - jordan-servant
+ - jordan-servant-client
+ - jordan-servant-openapi
+ - jordan-servant-server
  - jsc
  - jsmw
  - json-ast-json-encoder
@@ -3134,7 +3135,6 @@ dont-distribute-packages:
  - postgresql-simple-typed
  - postgresql-tx-query
  - postgresql-tx-squeal-compat-simple
- - postgrest
  - postmark
  - potoki
  - potoki-cereal
@@ -3344,7 +3344,6 @@ dont-distribute-packages:
  - relational-record-examples
  - relational-schemas
  - relative-date
- - reload
  - remote-json
  - remote-json-client
  - remote-json-server
@@ -3559,7 +3558,6 @@ dont-distribute-packages:
  - shady-graphics
  - shake-ats
  - shake-bindist
- - shake-futhark
  - shake-minify-css
  - shake-plus-extended
  - shakebook
@@ -3658,7 +3656,6 @@ dont-distribute-packages:
  - sock2stream
  - socket-io
  - sockets
- - solga
  - solga-swagger
  - solr
  - souffle-dsl
@@ -4054,7 +4051,6 @@ dont-distribute-packages:
  - vty-ui-extras
  - waargonaut
  - wahsp
- - wai-control
  - wai-devel
  - wai-dispatch
  - wai-handler-snap
@@ -4068,7 +4064,6 @@ dont-distribute-packages:
  - wai-middleware-rollbar
  - wai-middleware-route
  - wai-middleware-throttle
- - wai-routes
  - wai-routing
  - wai-session-tokyocabinet
  - wai-thrift
