@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-objects";
-  version = "0.0.19";
+  version = "0.0.24";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-nuGsFNWJBsdL0QdnhYYz6rR6a9aNxCFnun7Xb2eZO3U=";
+    hash = "sha256-Hy/KLmu5mEIUazRi+XesTbKe+or/fzFL8e0zdV2WtC0=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

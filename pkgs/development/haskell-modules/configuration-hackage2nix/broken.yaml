@@ -421,6 +421,7 @@ broken-packages:
   - bizzlelude-js
   - bkr
   - blakesum
+  - Blammo
   - blas
   - blaze-html-contrib
   - blaze-html-hexpat
@@ -821,7 +822,6 @@ broken-packages:
   - config-parser
   - Configurable
   - configuration
-  - configurator-pg
   - config-value-getopt
   - confsolve
   - congruence-relation
@@ -1269,6 +1269,7 @@ broken-packages:
   - effin
   - egison-pattern-src
   - ehaskell
+  - ehlo
   - ehs
   - eibd-client-simple
   - eigen
@@ -1381,6 +1382,7 @@ broken-packages:
   - exinst
   - exists
   - exitcode
+  - exon
   - exp-cache
   - explain
   - explicit-constraint-lens
@@ -2073,7 +2075,6 @@ broken-packages:
   - hasql-cursor-transaction
   - hasql-explain-tests
   - hasql-generic
-  - hasql-implicits
   - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
@@ -2152,6 +2153,7 @@ broken-packages:
   - heist-emanote
   - helic
   - helisp
+  - helix
   - hell
   - helm
   - help-esb
@@ -2182,6 +2184,7 @@ broken-packages:
   - hext
   - hextra
   - heyefi
+  - heystone
   - hF2
   - hfann
   - HFitUI
@@ -2458,7 +2461,6 @@ broken-packages:
   - hspec-snap
   - hspec-structured-formatter
   - hspec-tables
-  - hspec-wai-json
   - HsPerl5
   - hs-pgms
   - hspkcs11
@@ -2677,6 +2679,7 @@ broken-packages:
   - interval
   - interval-algebra
   - interval-patterns
+  - interval-tree-clock
   - IntFormats
   - int-multimap
   - intricacy
@@ -4011,6 +4014,7 @@ broken-packages:
   - postgresql-tx-simple
   - postgresql-tx-squeal
   - postgresql-typed-lifted
+  - postgrest
   - postgres-tmp
   - postgrest-ws
   - postgres-websockets
@@ -4141,10 +4145,12 @@ broken-packages:
   - push-notifications
   - putlenses
   - puzzle-draw
+  - pvector
   - pyffi
   - pyfi
   - python-pickle
   - q4c12-twofinger
+  - qbe
   - qc-oi-testgenerator
   - qd
   - qed
@@ -4322,6 +4328,7 @@ broken-packages:
   - relacion
   - relapse
   - relevant-time
+  - reload
   - remark
   - remarks
   - remote
@@ -4654,6 +4661,7 @@ broken-packages:
   - simple-form
   - simple-genetic-algorithm
   - SimpleH
+  - SimpleServer
   - simple-index
   - simpleirc
   - simple-log
@@ -4784,6 +4792,7 @@ broken-packages:
   - sodium
   - soegtk
   - softfloat-hs
+  - solga
   - sonic-visualiser
   - Sonnex
   - SoOSiM
@@ -5058,6 +5067,7 @@ broken-packages:
   - tapioca
   - TaskMonad
   - tasty-auto
+  - tasty-autocollect
   - tasty-fail-fast
   - tasty-grading-system
   - tasty-hedgehog-coverage
@@ -5572,6 +5582,7 @@ broken-packages:
   - wai-request-spec
   - wai-responsible
   - wai-router
+  - wai-routes
   - wai-secure-cookies
   - wai-session-alt
   - wai-session-mysql
