@@ -356,9 +356,6 @@ in
       #   stage5.gcc -> stage4.coreutils -> stage3.glibc -> bootstrap
       gmp = lib.makeOverridable (super.gmp.override { stdenv = self.stdenv; }).overrideAttrs (a: { pname = "${a.pname}-stage4"; });
 
-      # coreutils gets rebuilt both here and also in the final stage; we rename this one to avoid confusion
-      coreutils = super.coreutils.overrideAttrs (a: { pname = "${a.pname}-stage4"; });
-
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
@@ -400,7 +397,7 @@ in
       preHook = commonPreHook;
 
       initialPath =
-        ((import ../common-path.nix) {pkgs = prevStage;});
+        ((import ../generic/common-path.nix) {pkgs = prevStage;});
 
       extraNativeBuildInputs = [ prevStage.patchelf ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
@@ -423,6 +420,8 @@ in
         inherit bootstrapTools;
         shellPackage = prevStage.bash;
       };
+
+      disallowedRequisites = [ bootstrapTools.out ];
 
       # Mainly avoid reference to bootstrap tools
       allowedRequisites = with prevStage; with lib;

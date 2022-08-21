@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "codec2";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
     rev = "v${version}";
-    hash = "sha256-2/Ef5cEe7Kr3a/D8u4BgvTQM6M6vglXsF+ccstFHDUw=";
+    hash = "sha256-Q5p6NicwmHBR7drX8Tdgf6Mruqssg9qzMC9sG9DlMbQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
   postFixup = ''
     sed -r -i 's/(\<_Complex)(\s+)(float|double)/\3\2\1/' $out/include/$pname/freedv_api.h
   '';
+
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/freedv_rx contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
 
   meta = with lib; {
     description = "Speech codec designed for communications quality speech at low data rates";

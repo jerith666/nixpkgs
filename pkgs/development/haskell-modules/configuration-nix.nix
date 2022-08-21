@@ -315,6 +315,9 @@ self: super: builtins.intersectAttrs super {
   greenclip = addExtraLibrary pkgs.xorg.libXdmcp super.greenclip;
 
   # The cabal files for these libraries do not list the required system dependencies.
+  libjwt-typed = overrideCabal (drv: {
+    librarySystemDepends = [ pkgs.libjwt ];
+  }) super.libjwt-typed;
   miniball = overrideCabal (drv: {
     librarySystemDepends = [ pkgs.miniball ];
   }) super.miniball;
@@ -535,9 +538,7 @@ self: super: builtins.intersectAttrs super {
       })
       (addBuildTools (with pkgs.buildPackages; [makeWrapper python3Packages.sphinx]) super.futhark);
 
-  git-annex = let
-    pathForDarwin = pkgs.lib.makeBinPath [ pkgs.coreutils ];
-  in overrideCabal (drv: pkgs.lib.optionalAttrs (!pkgs.stdenv.isLinux) {
+  git-annex = overrideCabal (drv: {
     # This is an instance of https://github.com/NixOS/nix/pull/1085
     # Fails with:
     #   gpg: can't connect to the agent: File name too long
@@ -545,11 +546,12 @@ self: super: builtins.intersectAttrs super {
       substituteInPlace Test.hs \
         --replace ', testCase "crypto" test_crypto' ""
     '' + (drv.postPatch or "");
-    # On Darwin, git-annex mis-detects options to `cp`, so we wrap the
-    # binary to ensure it uses Nixpkgs' coreutils.
+    # Ensure git-annex uses the exact same coreutils it saw at build-time.
+    # This is especially important on Darwin but also in Linux environments
+    # where non-GNU coreutils are used by default.
     postFixup = ''
       wrapProgram $out/bin/git-annex \
-        --prefix PATH : "${pathForDarwin}"
+        --prefix PATH : "${pkgs.lib.makeBinPath (with pkgs; [ coreutils lsof ])}"
     '' + (drv.postFixup or "");
     buildTools = [
       pkgs.buildPackages.makeWrapper
@@ -859,6 +861,16 @@ self: super: builtins.intersectAttrs super {
     );
   hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
 
+  # the testsuite fails because of not finding tsc without some help
+  aeson-typescript = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+    # the testsuite assumes that tsc is in the PATH if it thinks it's in
+    # CI, otherwise trying to install it.
+    #
+    # https://github.com/codedownio/aeson-typescript/blob/ee1a87fcab8a548c69e46685ce91465a7462be89/test/Util.hs#L27-L33
+    preCheck = "export CI=true";
+  }) super.aeson-typescript;
+
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
   # Flag added in Agda 2.6.2
@@ -939,6 +951,10 @@ self: super: builtins.intersectAttrs super {
     ] ++ (drv.patches or []);
   }) super.graphviz;
 
+  # Test suite requires AWS access which requires both a network
+  # connection and payment.
+  aws = dontCheck super.aws;
+
   # Test case tries to contact the network
   http-api-data-qq = overrideCabal (drv: {
     testFlags = [
@@ -964,6 +980,16 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.jacinda;
 
+  # Tests assume dist-newstyle build directory is present
+  cabal-hoogle = dontCheck super.cabal-hoogle;
+
+  nfc = overrideCabal (drv: {
+    isExecutable = true;
+    executableHaskellDepends = with self; drv.executableHaskellDepends or [] ++ [ base base16-bytestring bytestring ];
+    configureFlags = drv.configureFlags or [] ++ [ "-fbuild-examples" ];
+    enableSeparateBinOutput = true;
+  }) super.nfc;
+
 # haskell-language-server plugins all use the same test harness so we give them what we want in this loop.
 } // pkgs.lib.mapAttrs
   (_: overrideCabal (drv: {
@@ -979,7 +1005,6 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
-    hls-ormolu-plugin
     hls-pragmas-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
@@ -995,6 +1020,7 @@ self: super: builtins.intersectAttrs super {
   hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
   hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
 
   # Wants to execute cabal-install to (re-)build itself
   hint = dontCheck super.hint;

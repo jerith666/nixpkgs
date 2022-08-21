@@ -45,10 +45,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1i1ci3jibkqizr2ms31grj0j9ymhfq8rx7dn6nr10x6arv0db31z";
+      sha256 = "01fd3g1iic8agjbnynrqdvh95csvy1qf2x6v8zla5m2sx5xq3k88";
       type = "gem";
     };
-    version = "1.603.0";
+    version = "1.617.0";
   };
   aws-sdk-core = {
     dependencies = ["aws-eventstream" "aws-partitions" "aws-sigv4" "jmespath"];
@@ -56,10 +56,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "164abp3cvmvfa2qsgzbxvkafbhwbgn3qwknp0amwmxw5nwvz8p3s";
+      sha256 = "0lal5x2qkz6ip36ladynb29j65brq8bbdcgx6cwbybsyadwcf693";
       type = "gem";
     };
-    version = "3.131.2";
+    version = "3.132.0";
   };
   aws-sdk-kms = {
     dependencies = ["aws-sdk-core" "aws-sigv4"];
@@ -67,10 +67,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1m8vwm4cakfv3i4f723a6id07myx18fpdbq8ypa2j7r5njwxpmzz";
+      sha256 = "1p2dbmb1vl8vk2xchrrsp2sxa95ya5w7ll1jlw89yyhls3l2l1ag";
       type = "gem";
     };
-    version = "1.57.0";
+    version = "1.58.0";
   };
   aws-sdk-s3 = {
     dependencies = ["aws-sdk-core" "aws-sdk-kms" "aws-sigv4"];
@@ -89,10 +89,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xp7diwq7nv4vvxrl9x3lis2l4x6bissrfzbfyy6rv5bmj5w109z";
+      sha256 = "1d4bifmll4hrf4gihr5hdvn59wjpz4qpyg5jj95kp17fykzqg36n";
       type = "gem";
     };
-    version = "1.5.0";
+    version = "1.5.1";
   };
   babosa = {
     groups = ["default"];
@@ -193,10 +193,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0iym172c5337sm1x2ykc2i3f961vj3wdclbyg1x6sxs3irgfsl94";
+      sha256 = "1n0pi8x8ql5h1mijvm8lgn6bhq4xjb5a500p5r1krq4s6j9lg565";
       type = "gem";
     };
-    version = "2.7.6";
+    version = "2.8.1";
   };
   emoji_regex = {
     groups = ["default"];
@@ -213,10 +213,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1rv2hq29lx2337214a1p2qy70fi77ch6p0p77nw9h6x84q028qr0";
+      sha256 = "0cdc76kgr4f1mq4jwbmq1qvr9c15hb4r1cx4dvrdra13vy9sckb5";
       type = "gem";
     };
-    version = "0.92.3";
+    version = "0.92.4";
   };
   faraday = {
     dependencies = ["faraday-em_http" "faraday-em_synchrony" "faraday-excon" "faraday-httpclient" "faraday-multipart" "faraday-net_http" "faraday-net_http_persistent" "faraday-patron" "faraday-rack" "faraday-retry" "ruby2_keywords"];
@@ -224,10 +224,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "00palwawk897p5gypw5wjrh93d4p0xz2yl9w93yicb4kq7amh8d4";
+      sha256 = "037w5kg3y9jrwgg7izfn1pmzngy0hdhcr7slmxwqa3mdb4rx9r9q";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.10.1";
   };
   faraday-cookie_jar = {
     dependencies = ["faraday" "http-cookie"];
@@ -368,10 +368,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0qfjqscldva6njrggs3cyvsdnbcz4rvdi69lp7h5rl74y0mr07ak";
+      sha256 = "1119ahlcc26s6ii12sjv26fnrcdnw6srl17wa82ynqsgya5gyxrd";
       type = "gem";
     };
-    version = "2.207.0";
+    version = "2.209.0";
   };
   gh_inspector = {
     groups = ["default"];
@@ -389,10 +389,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0vswj47jc5k3x8frywsq295wfngfm8rgmb5i8z7bksxlcc4iysag";
+      sha256 = "0psz3w8c95ashk5hlfvn5l32mg111z7fv07ngvvgm5mkw6wksh4d";
       type = "gem";
     };
-    version = "0.24.0";
+    version = "0.25.0";
   };
   google-apis-core = {
     dependencies = ["addressable" "googleauth" "httpclient" "mini_mime" "representable" "retriable" "rexml" "webrick"];
@@ -433,10 +433,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "19ccrdgb34w49l62p28yy5qrgwgb4wxs9q3mnb2d334q4q3wsk9f";
+      sha256 = "00jq03n0ff20rv4smjgx7ggv70crh2whpj5p6jmlb41nim267fvz";
       type = "gem";
     };
-    version = "0.17.0";
+    version = "0.18.0";
   };
   google-cloud-core = {
     dependencies = ["google-cloud-env" "google-cloud-errors"];

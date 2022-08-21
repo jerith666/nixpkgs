@@ -44,12 +44,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.8.0-165.BETA";
+  version = "8.9.0-1.BETA";
 
-  src = fetchurl {
-    url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-ZpKAkuIMeHEFdz/od/sKDh8VXoWOZYO8GjvMiho3D4A=";
-  };
+  src =
+    if stdenv.hostPlatform.isAarch64 then
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/beta/aarch64/1password-${version}.arm64.tar.gz";
+        sha256 = "0wxf1l6wh5m80f6s4f32j9i7f233lg162fw40770xxgwv8bl1f6a";
+      }
+    else
+      fetchurl {
+        url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
+        sha256 = "0vqrcwn5y350g91w3kh8n43gw21kck1cwim92dw9i0xxxch91hrg";
+      };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -132,6 +139,6 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
