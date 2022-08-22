@@ -3744,6 +3744,12 @@
     githubId = 537775;
     name = "Emery Hemingway";
   };
+  eigengrau = {
+    email = "seb@schattenkopie.de";
+    name = "Sebastian Reuße";
+    github = "eigengrau";
+    githubId = 4939947;
+  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
@@ -13886,6 +13892,12 @@
     email = "github-dev@mail2013.wamser.eu";
     github = "wamserma";
     githubId = 60148;
+  };
+  water-sucks = {
+    email = "varun@cvte.org";
+    name = "Varun Narravula";
+    github = "water-sucks";
+    githubId = 68445574;
   };
   waynr = {
     name = "Wayne Warren";
