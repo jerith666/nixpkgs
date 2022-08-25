@@ -145,6 +145,12 @@ let
       ]
         ++ concatAttrVals features_ nativeFeatureDependencies;
 
+      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
+        substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
+          --replace kAudioObjectPropertyElement{Main,Master} \
+          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+      '';
+
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
@@ -179,7 +185,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2Only;
-        maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
+        maintainers = with maintainers; [ astsmtl ehmry tobim ];
         platforms   = platforms.unix;
 
         longDescription = ''

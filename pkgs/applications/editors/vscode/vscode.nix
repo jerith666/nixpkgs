@@ -2,6 +2,7 @@
 
 let
   inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
 
   plat = {
     x86_64-linux = "linux-x64";
@@ -9,22 +10,22 @@ let
     aarch64-linux = "linux-arm64";
     aarch64-darwin = "darwin-arm64";
     armv7l-linux = "linux-armhf";
-  }.${system};
+  }.${system} or throwSystem;
 
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "0rq0bc99hsji4ni5mqw1rhzn2rng9rldm4xbdxlkrjyprc6qvffz";
-    x86_64-darwin = "1yjcb65w0anxyjc1nd9kbwr4hwnrlk9c6kp1a2ncy1g181klzarl";
-    aarch64-linux = "1fk7887clz9sd7fmz7lkxql7bnsvnbjd9fjixym2746x9if5ds42";
-    aarch64-darwin = "1bfgsjnm5r1wpss69ncx310j23mbwhixdxmg07m3kpcfqrmznvgc";
-    armv7l-linux = "0131i5cx2737wmngybvlw7d9c4gnilmla33nlrhf74ihic98jwlc";
-  }.${system};
+    x86_64-linux = "08p4l47zr4dm7mw65wwdsf6q1wkzkzg3l2y5zrs3ng3nafql96zs";
+    x86_64-darwin = "1pf8xpg2sb0iwfaixvzhmglqrrky2625b66fjwlc5zkj0dlff106";
+    aarch64-linux = "1c35s7zykcrqf3va1cv7hqf1dp3cl70kdvqv3vgflqldc1wcza9h";
+    aarch64-darwin = "1jpsf54x7yy53d6766gpw90ngdi6kicpqm1qbzbmmsasndl7rklp";
+    armv7l-linux = "10vj751bjdkzsdcrdpq6xb430pdhdbz8ysk835ir64i3mv6ygi7k";
+  }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.68.1";
+    version = "1.70.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";

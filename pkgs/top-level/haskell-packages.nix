@@ -15,13 +15,15 @@ let
     "integer-simple"
     "native-bignum"
     "ghc902"
-    "ghc923"
+    "ghc924"
+    "ghc941"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
     "ghc902"
-    "ghc923"
+    "ghc924"
+    "ghc941"
     "ghcHEAD"
   ];
 
@@ -106,7 +108,7 @@ in {
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # the oldest ghc with aarch64-darwin support is 8.10.5
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
@@ -125,7 +127,7 @@ in {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         # the oldest ghc with aarch64-darwin support is 8.10.5
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc8107
@@ -136,10 +138,10 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc923 = callPackage ../development/compilers/ghc/9.2.3.nix {
+    ghc924 = callPackage ../development/compilers/ghc/9.2.4.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.isAarch64 || stdenv.isAarch32 then
+        if stdenv.hostPlatform.isAarch then
           packages.ghc8107BinaryMinimal
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc8107
@@ -150,6 +152,30 @@ in {
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc941 = callPackage ../development/compilers/ghc/9.4.1.nix {
+      bootPkgs =
+        # Building with 9.2 is broken due to
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
+        if stdenv.hostPlatform.isAarch then
+          # TODO(@sternenseemann): package bindist
+          packages.ghc902
+        # No suitable bindists for powerpc64le
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc902
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 10 && < 14
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
@@ -260,10 +286,15 @@ in {
       ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
-    ghc923 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc923;
-      ghc = bh.compiler.ghc923;
+    ghc924 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc924;
+      ghc = bh.compiler.ghc924;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+    };
+    ghc941 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc941;
+      ghc = bh.compiler.ghc941;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghcHEAD;

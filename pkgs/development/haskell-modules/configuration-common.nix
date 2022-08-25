@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0pr2fnaq3fa6lcly39xssl89v65h0wa26ikv5g30fm8y6z5rkqqd";
+      sha256 = "0p9qd7yasdji5kwxn4d0hrv9hnxbzfsczknldh8jav3ynhg8k6c9";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -237,6 +237,11 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
+  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_70_1;
+  }));
+
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
   # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
   hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
@@ -350,24 +355,6 @@ self: super: {
   lensref = dontCheck super.lensref;
   lvmrun = disableHardening ["format"] (dontCheck super.lvmrun);
   matplotlib = dontCheck super.matplotlib;
-
-  brick_0_73 = doDistribute (super.brick_0_73.overrideScope (self: super: {
-    vty = self.vty_5_36;
-    text-zipper = self.text-zipper_0_12;
-  }));
-
-  # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak (appendPatches [
-    # Fix build with brick 0.73
-    (fetchpatch {
-      name = "matterhorn-brick-0.72.patch";
-      url = "https://github.com/matterhorn-chat/matterhorn/commit/d52df3342b8420e219095aad477205e47fbef11b.patch";
-      sha256 = "1ifvv926g9m8niyc9nl1hy9bkx4kf12ciyv2v8vnrzz3njp4fsrz";
-    })
-  ] (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_73;
-  })));
-
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
   milena = dontCheck super.milena;
@@ -832,9 +819,9 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_10_0;
+    hspec = self.hspec_2_10_0_1;
     hspec-wai = super.hspec-wai.override {
-      hspec = self.hspec_2_10_0;
+      hspec = self.hspec_2_10_0_1;
     };
   });
 
@@ -1404,22 +1391,15 @@ self: super: {
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
   haskeline_0_8_2 = dontCheck super.haskeline_0_8_2;
 
-  # Tests for list-t, superbuffer, and stm-containers
-  # depend on HTF and it is broken, 2020-08-23
-  list-t = dontCheck super.list-t;
-  superbuffer = dontCheck super.superbuffer;
-  stm-containers = dontCheck super.stm-containers;
+  # Too strict upper bound on HTF
+  # https://github.com/nikita-volkov/stm-containers/issues/29
+  stm-containers = doJailbreak super.stm-containers;
 
-  # Fails with "supports custom headers"
-  # Patch for GHC 9.0 support
-  Spock-core = dontCheck (appendPatches [
-    (fetchpatch {
-      name = "Spock-core-GHC-9.0.patch";
-      url = "https://github.com/agrafix/Spock/commit/25c75961c4aaaa2e81c9e2afd3d758f2b643f9df.patch";
-      sha256 = "sha256-JlliIpVYh2CYjJF2I119ab4/1oh6uvxMbRoxlUkKiGw=";
-      relative = "Spock-core";
-    })
-  ] super.Spock-core);
+  # https://github.com/agrafix/Spock/issues/180
+  # Ignore Stackage LTS bound so we can compile Spock-core again. All other
+  # reverse dependencies of reroute are marked as broken in nixpkgs, so
+  # upgrading reroute is probably unproblematic.
+  reroute = doDistribute self.reroute_0_7_0_0;
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -1659,16 +1639,22 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_10_0 = doDistribute (super.hspec_2_10_0.override {
-    hspec-discover = self.hspec-discover_2_10_0;
-    hspec-core = self.hspec-core_2_10_0;
+  hspec_2_10_0_1 = doDistribute (super.hspec_2_10_0_1.override {
+    hspec-discover = self.hspec-discover_2_10_0_1;
+    hspec-core = self.hspec-core_2_10_0_1;
   });
-  hspec-discover_2_10_0 = super.hspec-discover_2_10_0.override {
+  hspec-discover_2_10_0_1 = super.hspec-discover_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
-  hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
+  hspec-core_2_10_0_1 = super.hspec-core_2_10_0_1.override {
     hspec-meta = self.hspec-meta_2_9_3;
   };
+
+  # Point hspec 2.7.10 to correct dependencies
+  hspec_2_7_10 = doDistribute (super.hspec_2_7_10.override {
+    hspec-discover = self.hspec-discover_2_7_10;
+    hspec-core = self.hspec-core_2_7_10;
+  });
 
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
@@ -2163,16 +2149,16 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_1;
   });
 
-  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+  ghc-lib-parser-ex_9_2_1_1 = super.ghc-lib-parser-ex_9_2_1_1.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220709;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_4_20220729;
   };
 
   hlint_3_4_1 = doDistribute (super.hlint_3_4_1.override {
@@ -2375,6 +2361,10 @@ self: super: {
   # https://github.com/tree-sitter/haskell-tree-sitter/issues/298
   tree-sitter = doJailbreak super.tree-sitter;
 
+  # 2022-08-07: Bounds are too restrictive: https://github.com/marcin-rzeznicki/libjwt-typed/issues/2
+  # Also, the tests fail.
+  libjwt-typed = dontCheck (doJailbreak super.libjwt-typed);
+
   # Test suite fails to compile
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
@@ -2411,32 +2401,26 @@ self: super: {
   # https://hub.darcs.net/shelarcy/regex-compat-tdfa/issue/3
   regex-compat-tdfa = appendPatches [
     ./patches/regex-compat-tdfa-ghc-9.0.patch
-  ] super.regex-compat-tdfa;
+  ] (overrideCabal {
+    # Revision introduces bound base < 4.15
+    revision = null;
+    editedCabalFile = null;
+  } super.regex-compat-tdfa);
 
   # https://github.com/kowainik/validation-selective/issues/64
   validation-selective = doJailbreak super.validation-selective;
   # https://github.com/system-f/validation/issues/57
   validation = doJailbreak super.validation;
 
-  # aws upstream seems to lack the necessary maintenance at the moment, luckily
-  # Joey Hess seems to have already looked into building git-annex with aeson 2.0
-  # https://github.com/aristidb/aws/issues/275
-  aws = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        name = "aws-aeson-2.0-compat.patch";
-        url = "https://github.com/aristidb/aws/pull/277/commits/7af7586c5d244d07f77d49e5fdc739e6e8e54816.patch";
-        sha256 = "1bsiyk1k671rwlyflka2whq972h72cwscrxkr9n2wzhxp70ap3g3";
-        excludes = [ "aws.cabal" ];
-      })
-    ];
-    # needs aws credentials, jailbreak for base16-bytestring
-    doCheck = false;
-    jailbreak = true;
-  }) super.aws;
-
   # 2022-03-16: strict upper bounds https://github.com/monadfix/shower/issues/18
   shower = doJailbreak (dontCheck super.shower);
+
+  # Test suite isn't supposed to succeed yet, apparently…
+  # https://github.com/andrewufrank/uniform-error/blob/f40629ad119e90f8dae85e65e93d7eb149bddd53/test/Uniform/Error_test.hs#L124
+  # https://github.com/andrewufrank/uniform-error/issues/2
+  uniform-error = dontCheck super.uniform-error;
+  # https://github.com/andrewufrank/uniform-fileio/issues/2
+  uniform-fileio = dontCheck super.uniform-fileio;
 
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
@@ -2532,13 +2516,6 @@ self: super: {
   servant-cassava = assert super.servant-cassava.version == "0.10.1";
     doJailbreak super.servant-cassava;
 
-  # Fix tests failure for ghc 9 (https://github.com/clinty/debian-haskell/pull/3)
-  debian = appendPatch (fetchpatch {
-    name = "debian-haskell.3.patch";
-    url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
-    sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
-  }) super.debian;
-
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
@@ -2562,15 +2539,6 @@ self: super: {
   })
   super.polynomial);
 
-  fast-tags = appendPatches [
-    (fetchpatch {
-      name = "fast-tags-ghc-9.0-fix-test-nondeterminism.patch";
-      url = "https://github.com/elaforge/fast-tags/commit/af861acc2dd239fedd8b169ddc5e3fa694e7af57.patch";
-      sha256 = "0ml678q1n29daqnxsb5p94s5lf7a6dk4lqbbgmiayxrbyxnlbi4f";
-      excludes = [ ".github/**" ];
-    })
-  ] super.fast-tags;
-
   # lucid-htmx has restrictive upper bounds on lucid and servant:
   #
   #   Setup: Encountered missing or private dependencies:
@@ -2590,6 +2558,31 @@ self: super: {
   futhark = super.futhark.override {
     lsp = self.lsp_1_5_0_0;
   };
+
+  # Too strict bounds on hspec
+  # https://github.com/klapaucius/vector-hashtables/issues/11
+  vector-hashtables = doJailbreak super.vector-hashtables;
+
+  # doctest-parallel is broken with v1-style cabal-install / Setup.hs
+  # https://github.com/martijnbastiaan/doctest-parallel/issues/22
+  doctest-parallel = dontCheck super.doctest-parallel;
+  clash-prelude = dontCheck super.clash-prelude;
+
+  # Ships a broken Setup.hs
+  # https://github.com/lehins/conduit-aeson/issues/1
+  conduit-aeson = overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      rm Setup.hs
+    '';
+    # doctest suite uses doctest-parallel which still doesn't work in nixpkgs
+    testTarget = "tests";
+  }) super.conduit-aeson;
+
+  # Disabling doctests.
+  regex-tdfa = overrideCabal {
+    testTarget = "regex-tdfa-unittest";
+  } super.regex-tdfa;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
@@ -2639,4 +2632,11 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
+
+  # Needs update for ghc-9:
+  # https://github.com/haskell/text-format/issues/27
+  text-format = appendPatch (fetchpatch {
+    url = "https://github.com/hackage-trustees/text-format/pull/4/commits/949383aa053497b8c251219c10506136c29b4d32.patch";
+    sha256 = "QzpZ7lDedsz1mZcq6DL4x7LBnn58rx70+ZVvPh9shRo=";
+  }) super.text-format;
 })

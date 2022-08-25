@@ -41,6 +41,7 @@ in {
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
+  auth-mysql = handleTest ./auth-mysql.nix {};
   avahi = handleTest ./avahi.nix {};
   avahi-with-resolved = handleTest ./avahi.nix { networkd = true; };
   babeld = handleTest ./babeld.nix {};
@@ -127,6 +128,7 @@ in {
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
   docker-tools-overlay = handleTestOn ["x86_64-linux"] ./docker-tools-overlay.nix {};
   documize = handleTest ./documize.nix {};
+  documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   doh-proxy-rust = handleTest ./doh-proxy-rust.nix {};
   dokuwiki = handleTest ./dokuwiki.nix {};
   domination = handleTest ./domination.nix {};
@@ -254,7 +256,7 @@ in {
   jibri = handleTest ./jibri.nix {};
   jirafeau = handleTest ./jirafeau.nix {};
   jitsi-meet = handleTest ./jitsi-meet.nix {};
-  k3s-single-node = handleTest ./k3s-single-node.nix {};
+  k3s = handleTest ./k3s {};
   kafka = handleTest ./kafka.nix {};
   kanidm = handleTest ./kanidm.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
@@ -265,10 +267,12 @@ in {
   kerberos = handleTest ./kerberos/default.nix {};
   kernel-generic = handleTest ./kernel-generic.nix {};
   kernel-latest-ath-user-regd = handleTest ./kernel-latest-ath-user-regd.nix {};
+  keter = handleTest ./keter.nix {};
   kexec = handleTest ./kexec.nix {};
   keycloak = discoverTests (import ./keycloak.nix);
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5 {});
   ksm = handleTest ./ksm.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
@@ -279,8 +283,10 @@ in {
   libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
+  libuiohook = handleTest ./libuiohook.nix {};
   lidarr = handleTest ./lidarr.nix {};
   lightdm = handleTest ./lightdm.nix {};
+  lighttpd = handleTest ./lighttpd.nix {};
   limesurvey = handleTest ./limesurvey.nix {};
   litestream = handleTest ./litestream.nix {};
   locate = handleTest ./locate.nix {};
@@ -414,6 +420,7 @@ in {
   pam-u2f = handleTest ./pam/pam-u2f.nix {};
   pam-ussh = handleTest ./pam/pam-ussh.nix {};
   pass-secret-service = handleTest ./pass-secret-service.nix {};
+  patroni = handleTest ./patroni.nix {};
   pantalaimon = handleTest ./matrix/pantalaimon.nix {};
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
@@ -521,6 +528,7 @@ in {
   starship = handleTest ./starship.nix {};
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
+  stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   sway = handleTest ./sway.nix {};
@@ -534,6 +542,7 @@ in {
   systemd-binfmt = handleTestOn ["x86_64-linux"] ./systemd-binfmt.nix {};
   systemd-boot = handleTest ./systemd-boot.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
+  systemd-coredump = handleTest ./systemd-coredump.nix {};
   systemd-cryptenroll = handleTest ./systemd-cryptenroll.nix {};
   systemd-escaping = handleTest ./systemd-escaping.nix {};
   systemd-initrd-btrfs-raid = handleTest ./systemd-initrd-btrfs-raid.nix {};

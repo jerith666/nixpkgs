@@ -35,7 +35,7 @@ let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
   # 22.1 on darwin won't build: https://gitlab.freedesktop.org/mesa/mesa/-/issues/6519
-  version = if stdenv.isDarwin then "22.0.4" else "22.1.1";
+  version = if stdenv.isDarwin then "22.0.4" else "22.1.4";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -50,7 +50,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
     sha256 = {
-      "22.1.1" = "1w8fpki67238l4yc92hsnsh4402py9zspirbmirxp577zxjhi526";
+      "22.1.4" = "0xhbcjqy3g5dfxhr4flmqncmsjnwljfqm9idx92jm43jifz8q3b7";
       "22.0.4" = "1m0y8wgy48hmcidsr7sbk5hcw3v0qr8359fd2x34fvl2z9c1z5y7";
     }.${version};
   };
@@ -81,19 +81,11 @@ self = stdenv.mkDerivation {
   postPatch = ''
     patchShebangs .
 
-    substituteInPlace meson.build --replace \
-      "find_program('pkg-config')" \
-      "find_program('${buildPackages.pkg-config.targetPrefix}pkg-config')"
-
     # The drirc.d directory cannot be installed to $drivers as that would cause a cyclic dependency:
     substituteInPlace src/util/xmlconfig.c --replace \
       'DATADIR "/drirc.d"' '"${placeholder "out"}/share/drirc.d"'
     substituteInPlace src/util/meson.build --replace \
       "get_option('datadir')" "'${placeholder "out"}/share'"
-  '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    substituteInPlace meson.build --replace \
-      "find_program('nm')" \
-      "find_program('${stdenv.cc.targetPrefix}nm')"
   '';
 
   outputs = [ "out" "dev" "drivers" ]

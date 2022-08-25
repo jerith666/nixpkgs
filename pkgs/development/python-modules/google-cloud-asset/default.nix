@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.9.1";
+  version = "3.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rGN3P4EfSs7bLLca4Y2J1jF1/wPR5Oc1d6iZFjeQHTM=";
+    hash = "sha256-d/eDAp8QuXr2Zh/zk9ONeKd+SdmqXlugdpx9t1hkMIM=";
   };
 
   propagatedBuildInputs = [

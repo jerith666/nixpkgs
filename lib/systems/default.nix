@@ -16,9 +16,6 @@ rec {
   */
   flakeExposed = import ./flake-systems.nix { };
 
-  # TODO(@sternenseemann): remove before 21.11
-  supported = throw "2022-05-23: Use lib.systems.flakeExposed instead of lib.systems.supported.hydra, as lib.systems.supported has been removed";
-
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
   #
@@ -36,6 +33,7 @@ rec {
       config = parse.tripleFromSystem final.parsed;
       # Determine whether we can execute binaries built for the provided platform.
       canExecute = platform:
+        final.isAndroid == platform.isAndroid &&
         parse.isCompatible final.parsed.cpu platform.parsed.cpu
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
