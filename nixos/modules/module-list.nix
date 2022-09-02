@@ -204,6 +204,7 @@
   ./programs/plotinus.nix
   ./programs/proxychains.nix
   ./programs/qt5ct.nix
+  ./programs/rust-motd.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
   ./programs/seahorse.nix
@@ -694,6 +695,7 @@
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/prometheus/pushgateway.nix
+  ./services/monitoring/prometheus/sachet.nix
   ./services/monitoring/prometheus/xmpp-alerts.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
@@ -863,6 +865,7 @@
   ./services/networking/nbd.nix
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
+  ./services/networking/netbird.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
@@ -1106,6 +1109,7 @@
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/openwebrx.nix
+  ./services/web-apps/outline.nix
   ./services/web-apps/restya-board.nix
   ./services/web-apps/sogo.nix
   ./services/web-apps/rss-bridge.nix
@@ -1118,6 +1122,7 @@
   ./services/web-apps/wiki-js.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/wordpress.nix
+  ./services/web-apps/writefreely.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
   ./services/web-servers/agate.nix
