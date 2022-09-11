@@ -5057,6 +5057,8 @@ in {
 
   leb128 = callPackage ../development/python-modules/leb128 { };
 
+  led-ble = callPackage ../development/python-modules/led-ble { };
+
   ledger = (toPythonModule (pkgs.ledger.override {
     usePython = true;
     python3 = python;
@@ -6480,6 +6482,8 @@ in {
 
   ovh = callPackage ../development/python-modules/ovh { };
 
+  ovmfvartool = callPackage ../development/python-modules/ovmfvartool { };
+
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
   owslib = callPackage ../development/python-modules/owslib { };
@@ -7240,6 +7244,8 @@ in {
   psutil = callPackage ../development/python-modules/psutil {
     inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
   };
+
+  psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
 
   psycopg = callPackage ../development/python-modules/psycopg { };
 
@@ -10962,6 +10968,8 @@ in {
   tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };
+
+  toml-adapt = callPackage ../development/python-modules/toml-adapt { };
 
   tomli = callPackage ../development/python-modules/tomli { };
 
