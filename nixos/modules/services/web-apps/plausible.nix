@@ -7,7 +7,7 @@ let
 
 in {
   options.services.plausible = {
-    enable = mkEnableOption "plausible";
+    enable = mkEnableOption (lib.mdDoc "plausible");
 
     releaseCookiePath = mkOption {
       type = with types; either str path;
@@ -40,12 +40,12 @@ in {
         '';
       };
 
-      activate = mkEnableOption "activating the freshly created admin-user";
+      activate = mkEnableOption (lib.mdDoc "activating the freshly created admin-user");
     };
 
     database = {
       clickhouse = {
-        setup = mkEnableOption "creating a clickhouse instance" // { default = true; };
+        setup = mkEnableOption (lib.mdDoc "creating a clickhouse instance") // { default = true; };
         url = mkOption {
           default = "http://localhost:8123/default";
           type = types.str;
@@ -55,7 +55,7 @@ in {
         };
       };
       postgres = {
-        setup = mkEnableOption "creating a postgresql instance" // { default = true; };
+        setup = mkEnableOption (lib.mdDoc "creating a postgresql instance") // { default = true; };
         dbname = mkOption {
           default = "plausible";
           type = types.str;
@@ -148,7 +148,7 @@ in {
             The path to the file with the password in case SMTP auth is enabled.
           '';
         };
-        enableSSL = mkEnableOption "SSL when connecting to the SMTP server";
+        enableSSL = mkEnableOption (lib.mdDoc "SSL when connecting to the SMTP server");
         retries = mkOption {
           type = types.ints.unsigned;
           default = 2;
@@ -188,7 +188,11 @@ in {
           inherit (pkgs.plausible.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optionals cfg.database.postgres.setup [ "postgresql.service" "plausible-postgres.service" ];
+          after = optional cfg.database.clickhouse.setup "clickhouse.service"
+          ++ optionals cfg.database.postgres.setup [
+              "postgresql.service"
+              "plausible-postgres.service"
+            ];
           requires = optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"

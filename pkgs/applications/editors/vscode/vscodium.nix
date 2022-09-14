@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, fetchurl, nixosTests }:
+{ lib, stdenv, callPackage, fetchurl, nixosTests, commandLineArgs ? "" }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -15,21 +15,21 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "04jmp9z9b8gqq1nxfw186fnyd0glcp0s8iiy5g2zy2y7jsllm5qi";
-    x86_64-darwin = "119k1q1dnnhzdyv3wx13ghpwvsrmb1s8ira50ldlac3dr54rhjc9";
-    aarch64-linux = "0sr9q4rm63p6lgg3qq86hmkcyg4i6znijw1k5h0sv1qc9hrlq6gv";
-    aarch64-darwin = "0n742ka8ap35klx5yiba08fyqfq5077l8f8b8r5if91rcdwmkwm1";
-    armv7l-linux = "0a5wd91ksdgabalgmk9pwjjl2haxdidyxz3bnrmrvr1hnlylq1mh";
+    x86_64-linux = "03lbfl3azrjhxzkadrz632dpwnv6hyyls10mc8wzspwraz77v1m5";
+    x86_64-darwin = "1fd66fbs414lja7ca38sdgx02nw9w1qfrlxhcb52ijls5xbmbgm4";
+    aarch64-linux = "0hwzx0lvrxrzrpggpsymjzy53dq4msg0j3vrxq82308ydc5ssnzd";
+    aarch64-darwin = "0dqhi6br29bq8a97wgfxgz4d236cg0ydgaqv8j5nqjgvjwp13p9l";
+    armv7l-linux = "07qq0ic9nckl9fkk5rl9dy4gksw3l248jsy7v8ws8f3mq4l8gi49";
   }.${system} or throwSystem;
 
   sourceRoot = if stdenv.isDarwin then "" else ".";
 in
   callPackage ./generic.nix rec {
-    inherit sourceRoot;
+    inherit sourceRoot commandLineArgs;
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.70.1.22228";
+    version = "1.71.0.22245";
     pname = "vscodium";
 
     executableName = "codium";

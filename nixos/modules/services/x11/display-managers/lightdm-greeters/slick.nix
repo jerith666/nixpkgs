@@ -25,13 +25,7 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.slick = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Whether to enable lightdm-slick-greeter as the lightdm greeter.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "lightdm-slick-greeter as the lightdm greeter");
 
       theme = {
         package = mkOption {
@@ -90,7 +84,7 @@ in
         };
       };
 
-      draw-user-backgrounds = mkEnableOption "draw user backgrounds";
+      draw-user-backgrounds = mkEnableOption (lib.mdDoc "draw user backgrounds");
 
       extraConfig = mkOption {
         type = types.lines;

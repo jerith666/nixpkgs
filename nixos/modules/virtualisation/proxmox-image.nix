@@ -127,23 +127,38 @@ with lib;
       name = "proxmox-${cfg.filenameSuffix}";
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
-        vma = pkgs.qemu_kvm.overrideAttrs ( super: rec {
+        vma = (pkgs.qemu_kvm.override {
+          alsaSupport = false;
+          pulseSupport = false;
+          sdlSupport = false;
+          jackSupport = false;
+          gtkSupport = false;
+          vncSupport = false;
+          smartcardSupport = false;
+          spiceSupport = false;
+          ncursesSupport = false;
+          libiscsiSupport = false;
+          tpmSupport = false;
+          numaSupport = false;
+          seccompSupport = false;
+          guestAgentSupport = false;
+        }).overrideAttrs ( super: rec {
 
-          # proxmox's VMA patch doesn't work with qemu 7.0 yet
-          version = "6.2.0";
+          version = "7.0.0";
           src = pkgs.fetchurl {
             url= "https://download.qemu.org/qemu-${version}.tar.xz";
-            hash = "sha256-aOFdjkWsVjJuC5pK+otJo9/oq6NIgiHQmMhGmLymW0U=";
+            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
           };
-
-          patches = let
-            rev = "b37b17c286da3d32945fbee8ee4fd97a418a50db";
-            path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
-            vma-patch = pkgs.fetchpatch {
-              url = "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;h=${rev};f=${path}";
-              hash = "sha256-siuDWDUnM9Zq0/L2Faww3ELAOUHhVIHu5RAQn6L4Atc=";
-            };
-          in [ vma-patch ];
+          patches = [
+            (pkgs.fetchpatch {
+              url =
+                let
+                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
+                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
+              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+            })
+          ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
 
@@ -155,6 +170,9 @@ with lib;
         rm $diskImage
         ${pkgs.zstd}/bin/zstd "vzdump-qemu-${cfg.filenameSuffix}.vma"
         mv "vzdump-qemu-${cfg.filenameSuffix}.vma.zst" $out/
+
+        mkdir -p $out/nix-support
+        echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
       format = "raw";
       inherit config lib pkgs;

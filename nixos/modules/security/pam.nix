@@ -146,8 +146,8 @@ let
         default = config.users.mysql.enable;
         defaultText = literalExpression "config.users.mysql.enable";
         type = types.bool;
-        description = ''
-          If set, the <literal>pam_mysql</literal> module will be used to
+        description = lib.mdDoc ''
+          If set, the `pam_mysql` module will be used to
           authenticate users against a MySQL/MariaDB database.
         '';
       };
@@ -521,7 +521,7 @@ let
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
-          # prompts the user for password so we run it once with 'required' at an
+          # prompts the user for password so we run it once with 'optional' at an
           # earlier point and it will run again with 'sufficient' further down.
           # We use try_first_pass the second time to avoid prompting password twice
           (optionalString (cfg.unixAuth &&
@@ -534,7 +534,7 @@ let
               || cfg.duoSecurity.enable))
             (
               ''
-                auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
+                auth optional pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               '' +
               optionalString config.security.pam.enableEcryptfs ''
                 auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap
@@ -773,16 +773,16 @@ in
           }
        ];
 
-     description = ''
+     description = lib.mdDoc ''
        Define resource limits that should apply to users or groups.
        Each item in the list should be an attribute set with a
-       <varname>domain</varname>, <varname>type</varname>,
-       <varname>item</varname>, and <varname>value</varname>
+       {var}`domain`, {var}`type`,
+       {var}`item`, and {var}`value`
        attribute.  The syntax and semantics of these attributes
-       must be that described in <citerefentry><refentrytitle>limits.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+       must be that described in {manpage}`limits.conf(5)`.
 
        Note that these limits do not apply to systemd services,
-       whose limits can be changed via <option>systemd.extraConfig</option>
+       whose limits can be changed via {option}`systemd.extraConfig`
        instead.
      '';
     };
@@ -822,7 +822,7 @@ in
         '';
     };
 
-    security.pam.enableOTPW = mkEnableOption "the OTPW (one-time password) PAM module";
+    security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
 
     security.pam.krb5 = {
       enable = mkOption {
@@ -1145,7 +1145,7 @@ in
       };
     };
 
-    security.pam.enableEcryptfs = mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
+    security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
 
     users.motd = mkOption {
       default = null;
