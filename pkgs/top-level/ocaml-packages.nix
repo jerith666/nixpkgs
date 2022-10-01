@@ -78,6 +78,8 @@ let
 
     bigstring = callPackage ../development/ocaml-modules/bigstring { };
 
+    bindlib = callPackage ../development/ocaml-modules/bindlib { };
+
     biocaml = callPackage ../development/ocaml-modules/biocaml { };
 
     bistro = callPackage ../development/ocaml-modules/bistro { };
@@ -191,7 +193,10 @@ let
 
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
-    cmdliner = cmdliner_1_0;
+    cmdliner =
+      if lib.versionAtLeast ocaml.version "4.08"
+      then cmdliner_1_1
+      else cmdliner_1_0;
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
@@ -286,6 +291,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    dedukti =  callPackage ../development/ocaml-modules/dedukti { };
+
     diet =  callPackage ../development/ocaml-modules/diet { };
 
     digestif =  callPackage ../development/ocaml-modules/digestif { };
@@ -311,6 +318,8 @@ let
     dns-stub = callPackage ../development/ocaml-modules/dns/stub.nix { };
 
     dns-tsig = callPackage ../development/ocaml-modules/dns/tsig.nix { };
+
+    dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
 
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
@@ -513,6 +522,10 @@ let
 
     happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
 
+    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
+
+    happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
+
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
@@ -527,9 +540,7 @@ let
 
     hpack = callPackage ../development/ocaml-modules/hpack { };
 
-    hxd = callPackage ../development/ocaml-modules/hxd {
-      cmdliner = cmdliner_1_1;
-    };
+    hxd = callPackage ../development/ocaml-modules/hxd { };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
@@ -698,6 +709,8 @@ let
 
     ladspa = callPackage ../development/ocaml-modules/ladspa { };
 
+    lambdapi = callPackage ../development/ocaml-modules/lambdapi { };
+
     lambdasoup = callPackage ../development/ocaml-modules/lambdasoup { };
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
@@ -825,6 +838,8 @@ let
 
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
+    mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
+
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
     mirage = callPackage ../development/ocaml-modules/mirage { };
@@ -900,10 +915,6 @@ let
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
-
-    mirage-types = callPackage ../development/ocaml-modules/mirage/types.nix { };
-
-    mirage-types-lwt = callPackage ../development/ocaml-modules/mirage/types-lwt.nix { };
 
     mirage-unix = callPackage ../development/ocaml-modules/mirage-unix { };
 
@@ -1177,6 +1188,8 @@ let
 
     ppxlib = callPackage ../development/ocaml-modules/ppxlib { };
 
+    pratter = callPackage ../development/ocaml-modules/pratter { };
+
     psmt2-frontend = callPackage ../development/ocaml-modules/psmt2-frontend { };
 
     psq = callPackage ../development/ocaml-modules/psq { };
@@ -1226,6 +1239,8 @@ let
     tar = callPackage ../development/ocaml-modules/tar { };
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
+
+    timed = callPackage ../development/ocaml-modules/timed { };
 
     tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
 
