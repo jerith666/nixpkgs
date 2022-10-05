@@ -505,14 +505,6 @@
       </listitem>
       <listitem>
         <para>
-          The (previously undocumented) Nixpkgs configuration option
-          <literal>checkMeta</literal> now defaults to
-          <literal>true</literal>. This may cause evaluation failures
-          for packages with incorrect <literal>meta</literal> attribute.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           xow package removed along with the
           <literal>hardware.xow</literal> module, due to the project
           being deprecated in favor of <literal>xone</literal>, which is
@@ -765,6 +757,13 @@
         <para>
           There is a new module for AMD SEV CPU functionality, which
           grants access to the hardware.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The Wordpress module got support for installing language packs
+          through
+          <literal>services.wordpress.sites.&lt;site&gt;.languages</literal>.
         </para>
       </listitem>
       <listitem>

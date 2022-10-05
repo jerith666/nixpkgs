@@ -317,6 +317,7 @@ in {
   ksm = handleTest ./ksm.nix {};
   kthxbye = handleTest ./kthxbye.nix {};
   kubernetes = handleTestOn ["x86_64-linux"] ./kubernetes {};
+  ladybird = handleTest ./ladybird.nix {};
   languagetool = handleTest ./languagetool.nix {};
   latestKernel.login = handleTest ./login.nix { latestKernel = true; };
   leaps = handleTest ./leaps.nix {};
@@ -677,6 +678,7 @@ in {
   xfce = handleTest ./xfce.nix {};
   xmonad = handleTest ./xmonad.nix {};
   xmonad-xdg-autostart = handleTest ./xmonad-xdg-autostart.nix {};
+  xpadneo = handleTest ./xpadneo.nix {};
   xrdp = handleTest ./xrdp.nix {};
   xss-lock = handleTest ./xss-lock.nix {};
   xterm = handleTest ./xterm.nix {};
