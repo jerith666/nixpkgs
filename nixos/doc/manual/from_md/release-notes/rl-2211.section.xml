@@ -196,6 +196,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://tandoor.dev">Tandoor Recipes</link>,
+          a self-hosted multi-tenant recipe collection. Available as
+          <link xlink:href="options.html#opt-services.tandoor-recipes.enable">services.tandoor-recipes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://hbase.apache.org/">HBase
           cluster</link>, a distributed, scalable, big data store.
           Available as
@@ -311,6 +318,15 @@
           <link xlink:href="https://github.com/L11R/go-autoconfig">go-autoconfig</link>,
           IMAP/SMTP autodiscover server. Available as
           <link linkend="opt-services.go-autoconfig.enable">services.go-autoconfig</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/tmate-io/tmate-ssh-server">tmate-ssh-server</link>,
+          server side part of
+          <link xlink:href="https://tmate.io/">tmate</link>. Available
+          as
+          <link linkend="opt-services.tmate-ssh-server.enable">services.tmate-ssh-server</link>.
         </para>
       </listitem>
       <listitem>
