@@ -8,7 +8,6 @@ let
     concatLists
     concatMap
     concatMapStringsSep
-    elemAt
     filter
     foldl'
     head
@@ -284,7 +283,10 @@ rec {
   */
   literalDocBook = text:
     if ! isString text then throw "literalDocBook expects a string."
-    else { _type = "literalDocBook"; inherit text; };
+    else
+      lib.warnIf (lib.isInOldestRelease 2211)
+        "literalDocBook is deprecated, use literalMD instead"
+        { _type = "literalDocBook"; inherit text; };
 
   /* Transition marker for documentation that's already migrated to markdown
      syntax.
