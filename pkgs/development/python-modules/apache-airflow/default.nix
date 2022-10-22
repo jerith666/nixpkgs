@@ -20,7 +20,7 @@
 , deprecated
 , dill
 , flask
-, flask_login
+, flask-login
 , flask-appbuilder
 , flask-caching
 , flask-session
@@ -159,7 +159,7 @@ buildPythonPackage rec {
     flask-caching
     flask-session
     flask-wtf
-    flask_login
+    flask-login
     GitPython
     graphviz
     gunicorn
@@ -225,6 +225,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "colorlog>=4.0.2, <5.0" "colorlog" \
+      --replace "flask-login>=0.6.2" "flask-login" \
       --replace "pathspec~=0.9.0" "pathspec"
   '' + lib.optionalString stdenv.isDarwin ''
     # Fix failing test on Hydra
