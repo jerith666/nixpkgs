@@ -750,6 +750,8 @@ with pkgs;
 
   owl = callPackage ../tools/networking/owl { };
 
+  mutmut = callPackage ../development/tools/mutmut { };
+
   packcc = callPackage ../development/tools/packcc { };
 
   packer = callPackage ../development/tools/packer { };
@@ -2447,7 +2449,7 @@ with pkgs;
 
   cod = callPackage ../tools/misc/cod { };
 
-  codespell = with python3Packages; toPythonApplication codespell;
+  codespell = callPackage ../development/tools/codespell { };
 
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader {};
 
@@ -3134,6 +3136,8 @@ with pkgs;
 
   tezos-rust-libs = callPackage ../development/libraries/tezos-rust-libs { };
 
+  behave = with python3Packages; toPythonApplication behave;
+
   behdad-fonts = callPackage ../data/fonts/behdad-fonts { };
 
   bfetch = callPackage ../tools/misc/bfetch { };
@@ -3692,6 +3696,8 @@ with pkgs;
 
   dedup = callPackage ../tools/backup/dedup { };
 
+  deheader = callPackage ../development/tools/misc/deheader { };
+
   dehydrated = callPackage ../tools/admin/dehydrated { };
 
   deja-dup = callPackage ../applications/backup/deja-dup { };
@@ -4211,6 +4217,8 @@ with pkgs;
 
   hid-listen = callPackage ../tools/misc/hid-listen { };
 
+  hid-tools = callPackage ../tools/misc/hid-tools { };
+
   hidrd = callPackage ../tools/misc/hidrd { };
 
   hiksink = callPackage ../tools/misc/hiksink {
@@ -4579,6 +4587,8 @@ with pkgs;
   };
 
   notify = callPackage ../tools/misc/notify { };
+
+  notifymuch = callPackage ../applications/misc/notifymuch { };
 
   npins = callPackage ../tools/nix/npins { };
 
@@ -4969,7 +4979,13 @@ with pkgs;
     enableExtraPlugins = true;
   };
 
-  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor {
+    bundlerApp = bundlerApp.override {
+      # asciidoc supports both ruby 2 and 3,
+      # but we don't want to be stuck on it:
+      ruby = ruby_3_1;
+    };
+  };
 
   asciidoctor-with-extensions = callPackage ../tools/typesetting/asciidoctor-with-extensions { };
 
@@ -7351,6 +7367,8 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
+  gprof2dot = with python3Packages; toPythonApplication gprof2dot;
+
   gprojector = callPackage ../applications/science/astronomy/gprojector { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
@@ -7813,9 +7831,7 @@ with pkgs;
 
   jamulus = libsForQt5.callPackage ../applications/audio/jamulus { };
 
-  ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 {
-    openssl = openssl_1_1;
-  };
+  ibm-sw-tpm2 = callPackage ../tools/security/ibm-sw-tpm2 { };
 
   ibniz = callPackage ../tools/graphics/ibniz { };
 
@@ -8140,6 +8156,8 @@ with pkgs;
   jrnl = callPackage ../applications/misc/jrnl { };
 
   jsawk = callPackage ../tools/text/jsawk { };
+
+  jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
@@ -10037,6 +10055,10 @@ with pkgs;
 
   pagmo2 = callPackage ../development/libraries/pagmo2 { };
 
+  paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
+
+  paho-mqtt-cpp = callPackage ../development/libraries/paho-mqtt-cpp { };
+
   pakcs = callPackage ../development/compilers/pakcs {
     # Doesn't compile with GHC 9.0 due to whitespace syntax changes
     # see also https://github.com/NixOS/nixpkgs/issues/166108
@@ -10544,6 +10566,8 @@ with pkgs;
 
   pyocd = python3Packages.callPackage ../development/embedded/pyocd { };
 
+  pypass = with python3Packages; toPythonApplication pypass;
+
   pyspread = libsForQt5.callPackage ../applications/office/pyspread { };
 
   teapot = callPackage ../applications/office/teapot { };
@@ -10747,7 +10771,9 @@ with pkgs;
 
   read-edid = callPackage ../os-specific/linux/read-edid { };
 
-  readstat = callPackage ../applications/science/math/readstat { };
+  readstat = callPackage ../applications/science/math/readstat {
+    inherit (pkgs.darwin) libiconv;
+  };
 
   redir = callPackage ../tools/networking/redir { };
 
@@ -13524,6 +13550,8 @@ with pkgs;
 
   copper = callPackage ../development/compilers/copper {};
 
+  cotton = callPackage ../development/tools/cotton { };
+
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = if stdenv.system == "aarch64-darwin" then llvmPackages_11 else llvmPackages_10;
   })
@@ -13569,6 +13597,8 @@ with pkgs;
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
   fasmg = callPackage ../development/compilers/fasmg { };
+
+  filecheck = with python3Packages; toPythonApplication filecheck;
 
   firrtl = callPackage ../development/compilers/firrtl { };
 
@@ -15042,16 +15072,17 @@ with pkgs;
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl_2_0_8 = callPackage ../development/compilers/sbcl/2.0.8.nix {};
-  sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.0.9.nix {};
-  sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.1.1.nix {};
-  sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.1.2.nix {};
-  sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.1.9.nix {};
-  sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.1.10.nix {};
-  sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.1.11.nix {};
-  sbcl_2_2_4 = callPackage ../development/compilers/sbcl/2.2.4.nix {};
-  sbcl_2_2_6 = callPackage ../development/compilers/sbcl/2.2.6.nix {};
-  sbcl = sbcl_2_2_6;
+  sbcl_2_0_8 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.8"; };
+  sbcl_2_0_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.0.9"; };
+  sbcl_2_1_1 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.1"; };
+  sbcl_2_1_2 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.2"; };
+  sbcl_2_1_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.9"; };
+  sbcl_2_1_10 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.10"; };
+  sbcl_2_1_11 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.1.11"; };
+  sbcl_2_2_4 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.4"; };
+  sbcl_2_2_6 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.6"; };
+  sbcl_2_2_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
+  sbcl = sbcl_2_2_9;
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -15708,7 +15739,7 @@ with pkgs;
     inherit pkgs lib;
   };
 
-  poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
+  poetry2conda = callPackage ../tools/package-management/poetry2conda { };
 
   pip-audit = callPackage ../development/tools/pip-audit {};
 
@@ -16902,6 +16933,8 @@ with pkgs;
 
   graphene = callPackage ../development/libraries/graphene { };
 
+  griffe = with python3Packages; toPythonApplication griffe;
+
   gtk-doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
@@ -17843,6 +17876,8 @@ with pkgs;
 
   mypy = with python3Packages; toPythonApplication mypy;
 
+  mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
+
   nsis = callPackage ../development/tools/nsis { };
 
   tockloader = callPackage ../development/tools/misc/tockloader { };
@@ -18086,7 +18121,13 @@ with pkgs;
 
   bzrtp = callPackage ../development/libraries/bzrtp { };
 
-  c-ares = callPackage ../development/libraries/c-ares { };
+  c-ares = callPackage ../development/libraries/c-ares {
+    inherit (buildPackages) cmake;
+  };
+
+  c-aresMinimal = callPackage ../development/libraries/c-ares {
+    withCMake = false;
+  };
 
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
@@ -19520,8 +19561,6 @@ with pkgs;
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (buildPackages.darwin) bootstrap_cmds;
-    # TODO: can be removed once we have 1.20
-    openssl = openssl_1_1;
   };
   krb5Full = krb5;
   libkrb5 = krb5.override { type = "lib"; };
@@ -20168,6 +20207,8 @@ with pkgs;
   liblastfmSF = callPackage ../development/libraries/liblastfmSF { };
 
   liblcf = callPackage ../development/libraries/liblcf { };
+
+  liblc3 = callPackage ../development/libraries/liblc3 { };
 
   libliftoff = callPackage ../development/libraries/libliftoff { };
 
@@ -20837,7 +20878,13 @@ with pkgs;
 
   libx86 = callPackage ../development/libraries/libx86 {};
 
-  libxcrypt = callPackage ../development/libraries/libxcrypt { };
+  libxcrypt = callPackage ../development/libraries/libxcrypt {
+    fetchurl = stdenv.fetchurlBoot;
+    perl = buildPackages.perl.override {
+      enableCrypt = false;
+      fetchurl = stdenv.fetchurlBoot;
+    };
+  };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
@@ -21297,6 +21344,8 @@ with pkgs;
 
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
+  nvitop = callPackage ../tools/system/nvitop { };
+
   nvtop = callPackage ../tools/system/nvtop { };
   nvtop-nvidia = callPackage ../tools/system/nvtop { amd = false; };
   nvtop-amd = callPackage ../tools/system/nvtop { nvidia = false; };
@@ -21426,6 +21475,10 @@ with pkgs;
   openslp = callPackage ../development/libraries/openslp {};
 
   openstackclient = with python3Packages; toPythonApplication python-openstackclient;
+  glanceclient = with python3Packages; toPythonApplication python-glanceclient;
+  heatclient = with python3Packages; toPythonApplication python-heatclient;
+  ironicclient = with python3Packages; toPythonApplication python-ironicclient;
+  manilaclient = with python3Packages; toPythonApplication python-manilaclient;
 
   openvdb = callPackage ../development/libraries/openvdb {};
 
@@ -22197,7 +22250,7 @@ with pkgs;
 
   sope = callPackage ../development/libraries/sope { };
 
-  sord = callPackage ../development/libraries/sord {};
+  sord = callPackage ../development/libraries/sord { };
 
   soundtouch = callPackage ../development/libraries/soundtouch {};
 
@@ -22956,9 +23009,9 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_18;
-  buildGoModule = buildGo118Module;
-  buildGoPackage = buildGo118Package;
+  go = go_1_19;
+  buildGoModule = buildGo119Module;
+  buildGoPackage = buildGo119Package;
 
   go_1_17 = callPackage ../development/compilers/go/1.17.nix ({
     inherit (darwin.apple_sdk.frameworks) Foundation Security;
@@ -24021,7 +24074,6 @@ with pkgs;
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
 
   inherit (import ../servers/sql/postgresql pkgs)
-    postgresql_10
     postgresql_11
     postgresql_12
     postgresql_13
@@ -24932,6 +24984,14 @@ with pkgs;
   inherit (callPackages ../os-specific/linux/kernel-headers { })
     linuxHeaders makeLinuxHeaders;
 
+  linuxHeaders_5_19 = linuxHeaders.overrideAttrs (_: rec {
+    version = "5.19.16";
+    src = fetchurl {
+      url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
+      sha256 = "13g0c6ljxk3sd0ja39ndih5vrzp2ssj78qxaf8nswn8hgrkazsx1";
+    };
+  });
+
   klibc = callPackage ../os-specific/linux/klibc { };
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
@@ -25571,6 +25631,7 @@ with pkgs;
     withOomd = false;
     withPCRE2 = false;
     withPolkit = false;
+    withPortabled = false;
     withRemote = false;
     withResolved = false;
     withShellCompletions = false;
@@ -27978,7 +28039,7 @@ with pkgs;
 
   gg-scm = callPackage ../applications/version-management/git-and-tools/gg { };
 
-  gigalixir = with python3Packages; toPythonApplication gigalixir;
+  gigalixir = callPackage ../tools/misc/gigalixir { };
 
   go-libp2p-daemon = callPackage ../servers/go-libp2p-daemon { };
 
@@ -32398,7 +32459,7 @@ with pkgs;
   };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
-    inherit (lua51Packages) buildLuarocksPackage;
+    lua = lua5_1;
   };
   neovim = wrapNeovim neovim-unwrapped { };
 
@@ -33477,6 +33538,8 @@ with pkgs;
   fava = callPackage ../applications/office/fava {};
 
   nux = callPackage ../tools/misc/nux { };
+
+  phonemizer = with python3Packages; toPythonApplication phonemizer;
 
   tts = callPackage ../tools/audio/tts { };
 
@@ -36815,7 +36878,7 @@ with pkgs;
 
   rfc = callPackage ../tools/misc/rfc { };
 
-  rfc-bibtex = python3Packages.callPackage ../development/python-modules/rfc-bibtex { };
+  rfc-bibtex = callPackage ../tools/typesetting/rfc-bibtex { };
 
   pick-colour-picker = python3Packages.callPackage ../applications/graphics/pick-colour-picker {
     inherit glib gtk3 gobject-introspection wrapGAppsHook;
