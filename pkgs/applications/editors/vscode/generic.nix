@@ -2,7 +2,6 @@
 , unzip, libsecret, libXScrnSaver, libxshmfence, wrapGAppsHook, makeWrapper
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSUserEnvBubblewrap
-, writeShellScriptBin
 
 # Populate passthru.tests
 , tests
@@ -66,7 +65,7 @@ let
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
       ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
 
-    runtimeDependencies = lib.optional stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
+    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu ];
 
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
