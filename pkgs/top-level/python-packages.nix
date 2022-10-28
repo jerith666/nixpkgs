@@ -1749,6 +1749,8 @@ in {
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils { };
 
+  chacha20poly1305 = callPackage ../development/python-modules/chacha20poly1305 { };
+
   chacha20poly1305-reuseable = callPackage ../development/python-modules/chacha20poly1305-reuseable { };
 
   chai = callPackage ../development/python-modules/chai { };
@@ -1880,6 +1882,8 @@ in {
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
+
+  click-shell = callPackage ../development/python-modules/click-shell { };
 
   click-spinner = callPackage ../development/python-modules/click-spinner { };
 
@@ -3522,6 +3526,8 @@ in {
   flit = callPackage ../development/python-modules/flit { };
 
   flit-core = callPackage ../development/python-modules/flit-core { };
+
+  flit-scm = callPackage ../development/python-modules/flit-scm { };
 
   flow-record = callPackage ../development/python-modules/flow-record { };
 
@@ -7692,6 +7698,8 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
+  pycotap = callPackage ../development/python-modules/pycotap { };
+
   pycountry = callPackage ../development/python-modules/pycountry { };
 
   pycparser = callPackage ../development/python-modules/pycparser { };
@@ -8685,6 +8693,8 @@ in {
 
   pysocks = callPackage ../development/python-modules/pysocks { };
 
+  pysol-cards = callPackage ../development/python-modules/pysol-cards { };
+
   pysolr = callPackage ../development/python-modules/pysolr { };
 
   pysoma = callPackage ../development/python-modules/pysoma { };
@@ -9005,6 +9015,8 @@ in {
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-box = callPackage ../development/python-modules/python-box { };
+
+  python-bsblan = callPackage ../development/python-modules/python-bsblan { };
 
   python-cinderclient = callPackage ../development/python-modules/python-cinderclient { };
 
@@ -12037,6 +12049,13 @@ in {
       withWebKit = true;
     };
   };
+
+  wxPython_4_2 = callPackage ../development/python-modules/wxPython/4.2.nix {
+    wxGTK = pkgs.wxGTK32.override {
+      withWebKit = true;
+    };
+  };
+
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
 

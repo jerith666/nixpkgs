@@ -5698,6 +5698,12 @@
     githubId = 3661115;
     name = "Ingo Blechschmidt";
   };
+  icewind1991 = {
+    name = "Robin Appelman";
+    email = "robin@icewind.nl";
+    github = "icewind1991";
+    githubId = 1283854;
+  };
   icy-thought = {
     name = "Icy-Thought";
     email = "gilganyx@pm.me";
@@ -8797,7 +8803,7 @@
     email = "megoettlinger@gmail.com";
     github = "mgttlinger";
     githubId = 5120487;
-    name = "Merlin Göttlinger";
+    name = "Merlin Humml";
   };
   mguentner = {
     email = "code@klandest.in";
@@ -9438,6 +9444,12 @@
     github = "illdefined";
     githubId = 772914;
     name = "Mikael Voss";
+  };
+  mwolfe = {
+    email = "corp@m0rg.dev";
+    github = "m0rg-dev";
+    githubId = 38578268;
+    name = "Morgan Wolfe";
   };
   maxwilson = {
     email = "nixpkgs@maxwilson.dev";
@@ -10741,6 +10753,15 @@
     githubId = 4303706;
     keys = [{
       fingerprint = "B00F E582 FD3F 0732 EA48  3937 F558 14E4 D687 4375";
+    }];
+  };
+  PlayerNameHere = {
+    name = "Dixon Sean Low Yan Feng";
+    email = "dixonseanlow@protonmail.com";
+    github = "PlayerNameHere";
+    githubId = 56017218;
+    keys = [{
+      fingerprint = "E6F4 BFB4 8DE3 893F 68FC  A15F FF5F 4B30 A41B BAC8";
     }];
   };
   plchldr = {
@@ -13723,12 +13744,6 @@
     github = "tobiasBora";
     githubId = 2164118;
     name = "Tobias Bora";
-  };
-  tohl = {
-    email = "tom@logand.com";
-    github = "tohl";
-    githubId = 12159013;
-    name = "Tomas Hlavaty";
   };
   tokudan = {
     email = "git@danielfrank.net";
