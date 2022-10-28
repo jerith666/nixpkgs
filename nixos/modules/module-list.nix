@@ -981,6 +981,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
+  ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
@@ -1148,6 +1149,7 @@
   ./services/web-servers/caddy/default.nix
   ./services/web-servers/darkhttpd.nix
   ./services/web-servers/fcgiwrap.nix
+  ./services/web-servers/garage.nix
   ./services/web-servers/hitch/default.nix
   ./services/web-servers/hydron.nix
   ./services/web-servers/jboss/default.nix

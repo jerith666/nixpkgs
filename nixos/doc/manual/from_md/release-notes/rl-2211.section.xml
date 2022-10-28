@@ -314,6 +314,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://garagehq.deuxfleurs.fr/">Garage</link>,
+          a simple object storage server for geodistributed deployments,
+          alternative to MinIO. Available as
+          <link linkend="opt-services.garage.enable">services.garage</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://netbird.io">netbird</link>, a zero
           configuration VPN. Available as
           <link xlink:href="options.html#opt-services.netbird.enable">services.netbird</link>.
@@ -759,6 +767,14 @@
         <para>
           Neovim can not be configured with plug anymore (still works
           for vim).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>adguardhome</literal> module no longer uses
+          <literal>host</literal> and <literal>port</literal> options,
+          use <literal>settings.bind_host</literal> and
+          <literal>settings.bind_port</literal> instead.
         </para>
       </listitem>
       <listitem>
