@@ -6227,6 +6227,12 @@
     githubId = 117874;
     name = "Jeroen de Haas";
   };
+  jdelStrother = {
+    email = "me@delstrother.com";
+    github = "jdelStrother";
+    githubId = 2377;
+    name = "Jonathan del Strother";
+  };
   jdreaver = {
     email = "johndreaver@gmail.com";
     github = "jdreaver";
@@ -7522,6 +7528,8 @@
   };
   laalsaas = {
     email = "laalsaas@systemli.org";
+    github = "laalsaas";
+    githubId = 43275254;
     name = "laalsaas";
   };
   lach = {
@@ -15693,5 +15701,11 @@
     github = "Waelwindows";
     githubId = 5228243;
     name = "waelwindows";
+  };
+  wuyoli = {
+    name = "wuyoli";
+    email = "wuyoli@tilde.team";
+    github = "wuyoli";
+    githubId = 104238274;
   };
 }
