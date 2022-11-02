@@ -993,6 +993,7 @@
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
   ./services/networking/x2goserver.nix
+  ./services/networking/xray.nix
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
   ./services/networking/zerobin.nix
@@ -1157,6 +1158,7 @@
   ./services/web-servers/lighttpd/collectd.nix
   ./services/web-servers/lighttpd/default.nix
   ./services/web-servers/lighttpd/gitweb.nix
+  ./services/web-servers/merecat.nix
   ./services/web-servers/mighttpd2.nix
   ./services/web-servers/minio.nix
   ./services/web-servers/molly-brown.nix
