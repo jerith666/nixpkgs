@@ -13380,16 +13380,23 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
+  temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
+
+  temurin-bin-18 = javaPackages.compiler.temurin-bin.jdk-18;
+  temurin-jre-bin-18 = javaPackages.compiler.temurin-bin.jre-18;
+
   temurin-bin-17 = javaPackages.compiler.temurin-bin.jdk-17;
   temurin-jre-bin-17 = javaPackages.compiler.temurin-bin.jre-17;
+
   temurin-bin-16 = javaPackages.compiler.temurin-bin.jdk-16;
   temurin-bin-11 = javaPackages.compiler.temurin-bin.jdk-11;
   temurin-jre-bin-11 = javaPackages.compiler.temurin-bin.jre-11;
   temurin-bin-8 = javaPackages.compiler.temurin-bin.jdk-8;
   temurin-jre-bin-8 = javaPackages.compiler.temurin-bin.jre-8;
 
-  temurin-bin = temurin-bin-17;
-  temurin-jre-bin = temurin-jre-bin-17;
+  temurin-bin = temurin-bin-19;
+  temurin-jre-bin = temurin-jre-bin-19;
 
   semeru-bin-17 = javaPackages.compiler.semeru-bin.jdk-17;
   semeru-jre-bin-17 = javaPackages.compiler.semeru-bin.jre-17;
@@ -14406,14 +14413,14 @@ with pkgs;
 
   openjdk16-bootstrap = javaPackages.compiler.openjdk16-bootstrap;
 
-  openjdk18-bootstrap = javaPackages.compiler.openjdk18-bootstrap;
-  openjdk18 = javaPackages.compiler.openjdk18;
-  openjdk18_headless = javaPackages.compiler.openjdk18.headless;
-  jdk18 = openjdk18;
-  jdk18_headless = openjdk18_headless;
+  openjdk19 = javaPackages.compiler.openjdk19;
+  openjdk19_headless = javaPackages.compiler.openjdk19.headless;
+  jdk19 = openjdk19;
+  jdk19_headless = openjdk19_headless;
 
   /* default JDK */
-  jdk = jdk17;
+  jdk = jdk19;
+  jdk_headless = jdk19_headless;
 
   # Since the introduction of the Java Platform Module System in Java 9, Java
   # no longer ships a separate JRE package.
@@ -14422,13 +14429,13 @@ with pkgs;
   # 'jre_minimal' to build a bespoke JRE containing only the modules you need.
   #
   # For a general-purpose system, 'jre' defaults to the full JDK:
-  jre = jdk17;
-  jre_headless = jdk17_headless;
+  jre = jdk;
+  jre_headless = jdk_headless;
 
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
-  openjdk = openjdk17;
-  openjdk_headless = openjdk17_headless;
+  openjdk = jdk;
+  openjdk_headless = jdk_headless;
 
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition {
@@ -29644,7 +29651,7 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
-    jdk = jdk18;
+    jdk = javaPackages.compiler.openjdk18;
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
