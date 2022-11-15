@@ -14432,6 +14432,9 @@ with pkgs;
   jre = jdk;
   jre_headless = jdk_headless;
 
+  jre17_minimal = callPackage ../development/compilers/openjdk/jre.nix {
+    jdk = jdk17;
+  };
   jre_minimal = callPackage ../development/compilers/openjdk/jre.nix { };
 
   openjdk = jdk;
