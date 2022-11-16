@@ -157,6 +157,7 @@
   ./programs/extra-container.nix
   ./programs/feedbackd.nix
   ./programs/file-roller.nix
+  ./programs/firefox.nix
   ./programs/firejail.nix
   ./programs/fish.nix
   ./programs/flashrom.nix
@@ -775,6 +776,7 @@
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
   ./services/networking/charybdis.nix
+  ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/cloudflare-dyndns.nix
   ./services/networking/cntlm.nix

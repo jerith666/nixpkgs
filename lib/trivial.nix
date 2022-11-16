@@ -522,6 +522,8 @@ rec {
           in
             [r] ++ go q;
     in
+      assert (isInt base);
+      assert (isInt i);
       assert (base >= 2);
       assert (i >= 0);
       lib.reverseList (go i);
