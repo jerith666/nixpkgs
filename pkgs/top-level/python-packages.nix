@@ -1430,7 +1430,7 @@ self: super: with self; {
 
   btrfs = callPackage ../development/python-modules/btrfs { };
 
-  btrfsutil = toPythonModule (pkgs.btrfs-progs.override { python3 = self.python; });
+  btrfsutil = callPackage ../development/python-modules/btrfsutil { };
 
   btsocket = callPackage ../development/python-modules/btsocket { };
 
@@ -9963,6 +9963,8 @@ self: super: with self; {
 
   runway-python = callPackage ../development/python-modules/runway-python { };
 
+  ruuvitag-ble = callPackage ../development/python-modules/ruuvitag-ble { };
+
   ruyaml = callPackage ../development/python-modules/ruyaml { };
 
   rx = callPackage ../development/python-modules/rx { };
@@ -12046,7 +12048,7 @@ self: super: with self; {
 
   wxPython_4_0 = callPackage ../development/python-modules/wxPython/4.0.nix {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL;
-    wxGTK = pkgs.wxGTK30-gtk3.override {
+    wxGTK = pkgs.wxGTK30.override {
       withWebKit = true;
     };
   };
