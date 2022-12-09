@@ -6636,9 +6636,7 @@ with pkgs;
 
   teamocil = callPackage ../tools/misc/teamocil { };
 
-  the-way = callPackage ../development/tools/the-way {
-    inherit (darwin.apple_sdk.frameworks) AppKit Security;
-  };
+  the-way = callPackage ../development/tools/the-way { };
 
   timeline = callPackage ../applications/office/timeline { };
 
@@ -13312,6 +13310,7 @@ with pkgs;
   zbackup = callPackage ../tools/backup/zbackup {};
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
@@ -15170,11 +15169,11 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_64 = callPackage ../development/compilers/rust/1_64.nix {
+  rust_1_65 = callPackage ../development/compilers/rust/1_65.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_64;
+  rust = rust_1_65;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -15183,8 +15182,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_64 = rust_1_64.packages.stable;
-  rustPackages = rustPackages_1_64;
+  rustPackages_1_65 = rust_1_65.packages.stable;
+  rustPackages = rustPackages_1_65;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -15451,7 +15450,8 @@ with pkgs;
   sbcl_2_2_4 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.4"; };
   sbcl_2_2_6 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.6"; };
   sbcl_2_2_9 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.9"; };
-  sbcl = sbcl_2_2_9;
+  sbcl_2_2_10 = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.2.10"; };
+  sbcl = sbcl_2_2_10;
 
   roswell = callPackage ../development/tools/roswell { };
 
@@ -16134,12 +16134,10 @@ with pkgs;
 
   pipewire = callPackage ../development/libraries/pipewire {
     # ffmpeg depends on SDL2 which depends on pipewire by default.
-    # Break the cycle by disabling pipewire support in our ffmpeg.
-    ffmpeg = ffmpeg.override {
-      SDL2 = SDL2.override {
-        pipewireSupport = false;
-      };
-    };
+    # Break the cycle by depending on ffmpeg-headless.
+    # Pipewire only uses libavcodec (via an SPA plugin), which isn't
+    # affected by the *-headless changes.
+    ffmpeg = ffmpeg-headless;
   };
 
   pipewire-media-session = callPackage ../development/libraries/pipewire/media-session.nix {};
@@ -16467,6 +16465,8 @@ with pkgs;
   }));
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
+
+  ansible-language-server = callPackage ../development/tools/ansible-language-server { };
 
   ansible-later = with python3.pkgs; toPythonApplication ansible-later;
 
@@ -18946,6 +18946,8 @@ with pkgs;
   factor-lang-scope = callPackage ../development/compilers/factor-lang/scope.nix { };
   factor-lang = factor-lang-scope.interpreter;
 
+  fancypp = callPackage ../development/libraries/fancypp { };
+
   far2l = callPackage ../applications/misc/far2l {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL;
@@ -19220,8 +19222,6 @@ with pkgs;
 
   gd = callPackage ../development/libraries/gd {
     automake = automake115x;
-    libtiff = null;
-    libXpm = null;
   };
 
   gdal = callPackage ../development/libraries/gdal { };
@@ -19249,6 +19249,8 @@ with pkgs;
   graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
   graphinder = callPackage ../tools/security/graphinder { };
+
+  httplib = callPackage ../development/libraries/httplib { };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
@@ -19480,7 +19482,7 @@ with pkgs;
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
-    callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg; });
+    callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg-headless; });
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
   });
 
@@ -21882,7 +21884,9 @@ with pkgs;
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
-  openldap = callPackage ../development/libraries/openldap { };
+  openldap = callPackage ../development/libraries/openldap {
+    openssl = openssl_legacy;
+  };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -21937,6 +21941,10 @@ with pkgs;
   };
 
   openssl = openssl_3;
+
+  openssl_legacy = openssl.override {
+    conf = ../development/libraries/openssl/3.0/legacy.cnf;
+  };
 
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
@@ -22471,6 +22479,8 @@ with pkgs;
   sealcurses = callPackage ../development/libraries/sealcurses { };
 
   seasocks = callPackage ../development/libraries/seasocks { };
+
+  semver-cpp = callPackage ../development/libraries/semver-cpp { };
 
   serd = callPackage ../development/libraries/serd {};
 
@@ -23608,6 +23618,11 @@ with pkgs;
   cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+  cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
+    # Effective Cassandra 4.0.2 there is full Java 11 support
+    #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
+    jre = pkgs.jdk11_headless;
+  };
   cassandra = cassandra_3_11;
 
   cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
@@ -24216,6 +24231,10 @@ with pkgs;
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
     boost = boost172;
+  };
+
+  soundux = callPackage ../applications/audio/soundux {
+    yt-dlp = yt-dlp.override { withAlias = true; };
   };
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
@@ -27000,6 +27019,8 @@ with pkgs;
   shades-of-gray-theme = callPackage ../data/themes/shades-of-gray { };
 
   sierra-breeze-enhanced = libsForQt5.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
+
+  simp1e-cursors = callPackage ../data/icons/simp1e-cursors { };
 
   sjasmplus = callPackage ../development/compilers/sjasmplus { };
 
@@ -31955,6 +31976,8 @@ with pkgs;
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sniffnet = callPackage ../applications/networking/sniffnet { };
+
   sniproxy = callPackage ../applications/networking/sniproxy { };
 
   snixembed = callPackage ../applications/misc/snixembed { };
@@ -32674,9 +32697,7 @@ with pkgs;
     enableX11 = config.unison.enableX11 or true;
   };
 
-  unpaper = callPackage ../tools/graphics/unpaper {
-    ffmpeg_5 = ffmpeg_5-headless;
-  };
+  unpaper = callPackage ../tools/graphics/unpaper { };
 
   unison-ucm = callPackage ../development/compilers/unison { };
 
@@ -32793,9 +32814,7 @@ with pkgs;
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
 
-  neovide = callPackage ../applications/editors/neovim/neovide {
-    inherit (darwin.apple_sdk.frameworks) Security ApplicationServices Carbon AppKit;
-  };
+  neovide = callPackage ../applications/editors/neovim/neovide { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
@@ -36489,7 +36508,7 @@ with pkgs;
 
   cups-kyocera-ecosys-m552x-p502x = callPackage ../misc/cups/drivers/kyocera-ecosys-m552x-p502x {};
 
-  cups-kyodialog3 = callPackage ../misc/cups/drivers/kyodialog3 {};
+  cups-kyodialog = callPackage ../misc/cups/drivers/kyodialog {};
 
   cups-dymo = callPackage ../misc/cups/drivers/dymo {};
 
@@ -38090,9 +38109,7 @@ with pkgs;
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
-  navidrome = callPackage ../servers/misc/navidrome {
-    ffmpeg = ffmpeg-headless;
-  };
+  navidrome = callPackage ../servers/misc/navidrome { };
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
