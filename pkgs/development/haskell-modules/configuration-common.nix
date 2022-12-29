@@ -1610,7 +1610,19 @@ self: super: {
       url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
       sha256 = "sha256-9Ed3qrLGRaNCdvqWMyg8ydAnqDkFqWKLLoObv/5jG54=";
     })
-  ] (doJailbreak super.amazonka);
+  ] (overrideCabal (old:{
+    postPatch = ''
+      substituteInPlace amazonka.cabal --replace \
+        "http-client         >= 0.4 && < 0.7" \
+        "http-client         >= 0.4 && < 0.8"
+      substituteInPlace amazonka.cabal --replace \
+        "unliftio-core       >= 0.1 && <0.2" \
+        "unliftio-core       >= 0.1 && <0.3"
+      substituteInPlace src/Network/AWS/Internal/Logger.hs --replace \
+        "Data.ByteString.Lazy.Builder as Build" \
+        "Data.ByteString.Builder as Build"
+    '';
+  }) super.amazonka);
 
   # Test suite does not compile.
   feed = dontCheck super.feed;
