@@ -2445,7 +2445,7 @@ with pkgs;
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq {
-    electron = electron_19;
+    electron = electron_20;
   };
 
   natls = callPackage ../tools/misc/natls { };
@@ -3425,6 +3425,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  aoc-cli = callPackage ../tools/misc/aoc-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   apprise = with python3Packages; toPythonApplication apprise;
 
   aptdec = callPackage ../development/libraries/aptdec {};
@@ -4390,8 +4394,10 @@ with pkgs;
     NIXOS_OZONE_WL=1 exec ${element-desktop}/bin/element-desktop "$@"
   '';
 
-  element-web = callPackage ../applications/networking/instant-messengers/element/element-web.nix {
-    conf = config.element-web.conf or {};
+  element-web-unwrapped = callPackage ../applications/networking/instant-messengers/element/element-web.nix { };
+
+  element-web = callPackage ../applications/networking/instant-messengers/element/element-web-wrapper.nix {
+    conf = config.element-web.conf or { };
   };
 
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
@@ -7732,6 +7738,10 @@ with pkgs;
     withXorg = false;
     libdevil = libdevil-nox;
   };
+
+  gridtracker = callPackage ../applications/radio/gridtracker { };
+
+  grig = callPackage ../applications/radio/grig { };
 
   grin = callPackage ../tools/text/grin { };
 
@@ -14511,11 +14521,22 @@ with pkgs;
          && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnatboot12
       else buildPackages.gnat12;
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gnatboot12
+      else stdenv;
   });
 
   gnatboot = gnatboot12;
   gnatboot11 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "11"; });
-  gnatboot12 = wrapCC (callPackage ../development/compilers/gnatboot { majorVersion = "12"; });
+  gnatboot12 = wrapCCWith ({
+    cc = callPackage ../development/compilers/gnatboot { majorVersion = "12"; };
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    bintools = bintoolsDualAs;
+  });
 
   gnu-smalltalk = callPackage ../development/compilers/gnu-smalltalk { };
 
@@ -14871,6 +14892,7 @@ with pkgs;
   julia_18-bin = callPackage ../development/compilers/julia/1.8-bin.nix { };
 
   julia_18 = callPackage ../development/compilers/julia/1.8.nix { };
+  julia_19 = callPackage ../development/compilers/julia/1.9.nix { };
 
   julia-lts-bin = julia_16-bin;
   julia-stable-bin = julia_18-bin;
@@ -15647,6 +15669,8 @@ with pkgs;
   serpent = callPackage ../development/compilers/serpent { };
 
   shmig = callPackage ../development/tools/database/shmig { };
+
+  smlfmt = callPackage ../development/tools/smlfmt { };
 
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
@@ -16946,6 +16970,11 @@ with pkgs;
   };
   bintools = wrapBintoolsWith {
     bintools = bintools-unwrapped;
+  };
+
+  bintoolsDualAs = wrapBintoolsWith {
+    bintools = darwin.binutilsDualAs-unwrapped;
+    wrapGas = true;
   };
 
   bison = callPackage ../development/tools/parsing/bison { };
@@ -18877,6 +18906,8 @@ with pkgs;
   cgal = cgal_4;
 
   cgui = callPackage ../development/libraries/cgui {};
+
+  charls = callPackage ../development/libraries/charls { };
 
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -24060,6 +24091,8 @@ with pkgs;
 
   go-camo = callPackage ../servers/http/go-camo { };
 
+  go-cqhttp = callPackage ../servers/go-cqhttp { };
+
   gofish = callPackage ../servers/gopher/gofish { };
 
   grafana = callPackage ../servers/monitoring/grafana { };
@@ -26552,6 +26585,8 @@ with pkgs;
   cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
   capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
+
+  capitaine-cursors-themed = callPackage ../data/icons/capitaine-cursors-themed { };
 
   carlito = callPackage ../data/fonts/carlito {};
 
@@ -30202,6 +30237,8 @@ with pkgs;
 
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
+  kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
+
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
   klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
@@ -30421,6 +30458,8 @@ with pkgs;
   lens = callPackage ../applications/networking/cluster/lens { };
 
   leo-editor = libsForQt5.callPackage ../applications/editors/leo-editor { };
+
+  libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
 
   libowfat = callPackage ../development/libraries/libowfat { };
 
@@ -36365,13 +36404,8 @@ with pkgs;
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
     z3_4_11
-    z3_4_8
-    z3_4_7;
+    z3_4_8;
   z3 = z3_4_8;
-  z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
-    python = python2;
-    stdenv = if stdenv.isDarwin then stdenv else gcc49Stdenv;
-  };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
   zchaff = callPackage ../applications/science/logic/zchaff { };
@@ -37748,6 +37782,8 @@ with pkgs;
   terragrunt = callPackage ../applications/networking/cluster/terragrunt {};
 
   terranix = callPackage ../applications/networking/cluster/terranix {};
+
+  terraspace = callPackage ../applications/networking/cluster/terraspace {};
 
   tfswitch = callPackage ../applications/networking/cluster/tfswitch {};
 
