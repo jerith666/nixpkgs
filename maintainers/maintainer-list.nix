@@ -3291,6 +3291,12 @@
     githubId = 798427;
     name = "Davor Babic";
   };
+  davsanchez = {
+    email = "davidslt+nixpkgs@pm.me";
+    github = "davsanchez";
+    githubId = 11422515;
+    name = "David Sánchez";
+  };
   dawidsowa = {
     email = "dawid_sowa@posteo.net";
     github = "dawidsowa";
@@ -11824,6 +11830,12 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  realsnick = {
+    name = "Ido Samuelson";
+    email = "ido.samuelson@gmail.com";
+    github = "realsnick";
+    githubId = 1440852;
+  };
   redbaron = {
     email = "ivanov.maxim@gmail.com";
     github = "redbaron";
@@ -13884,6 +13896,14 @@
     email = "tejasagarwalbly@gmail.com";
     github = "tejasag";
     githubId = 67542663;
+  };
+  tejing = {
+    name = "Jeff Huffman";
+    email = "tejing@tejing.com";
+    matrix = "@tejing:matrix.org";
+    github = "tejing1";
+    githubId = 5663576;
+    keys = [{ fingerprint = "6F0F D43B 80E5 583E 60FC  51DC 4936 D067 EB12 AB32"; }];
   };
   telotortium = {
     email = "rirelan@gmail.com";
@@ -16286,5 +16306,11 @@
     email = "detegr@rbx.email";
     github = "Detegr";
     githubId = 724433;
+  };
+  RossComputerGuy = {
+    name = "Tristan Ross";
+    email = "tristan.ross@midstall.com";
+    github = "RossComputerGuy";
+    githubId = 19699320;
   };
 }
