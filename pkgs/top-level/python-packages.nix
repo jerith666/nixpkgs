@@ -1212,6 +1212,8 @@ self: super: with self; {
 
   bellows = callPackage ../development/python-modules/bellows { };
 
+  bencoder = callPackage ../development/python-modules/bencoder { };
+
   beniget = callPackage ../development/python-modules/beniget { };
 
   bespon = callPackage ../development/python-modules/bespon { };
@@ -1570,6 +1572,8 @@ self: super: with self; {
   catalogue = callPackage ../development/python-modules/catalogue { };
 
   catboost = callPackage ../development/python-modules/catboost { };
+
+  catppuccin = callPackage ../development/python-modules/catppuccin { };
 
   cattrs = callPackage ../development/python-modules/cattrs { };
 
@@ -2124,6 +2128,12 @@ self: super: with self; {
 
   cwcwidth = callPackage ../development/python-modules/cwcwidth { };
 
+  cwl-upgrader = callPackage ../development/python-modules/cwl-upgrader { };
+
+  cwl-utils = callPackage ../development/python-modules/cwl-utils { };
+
+  cwlformat = callPackage ../development/python-modules/cwlformat { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
@@ -2571,6 +2581,8 @@ self: super: with self; {
   django-js-reverse = callPackage ../development/python-modules/django-js-reverse { };
 
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
+
+  django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
@@ -3644,6 +3656,8 @@ self: super: with self; {
 
   garminconnect = callPackage ../development/python-modules/garminconnect { };
 
+  gassist-text = callPackage ../development/python-modules/gassist-text { };
+
   gast = callPackage ../development/python-modules/gast { };
 
   gatt = callPackage ../development/python-modules/gatt { };
@@ -4181,6 +4195,8 @@ self: super: with self; {
 
   hdate = callPackage ../development/python-modules/hdate { };
 
+  hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
+
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
@@ -4525,6 +4541,8 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagehash = callPackage ../development/python-modules/imagehash { };
+
   imageio = callPackage ../development/python-modules/imageio { };
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
@@ -4785,9 +4803,6 @@ self: super: with self; {
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
     inherit (pkgs.darwin) cctools;
-    buildBazelPackage = pkgs.buildBazelPackage.override {
-      stdenv = if stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else stdenv;
-    };
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
     cudaSupport = pkgs.config.cudaSupport or false;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
@@ -5600,6 +5615,8 @@ self: super: with self; {
 
   mailsuite = callPackage ../development/python-modules/mailsuite { };
 
+  maison = callPackage ../development/python-modules/maison { };
+
   Mako = callPackage ../development/python-modules/Mako { };
 
   malduck= callPackage ../development/python-modules/malduck { };
@@ -5776,6 +5793,8 @@ self: super: with self; {
   meross-iot = callPackage ../development/python-modules/meross-iot { };
 
   mesa = callPackage ../development/python-modules/mesa { };
+
+  meshcat = callPackage ../development/python-modules/meshcat { };
 
   meshio = callPackage ../development/python-modules/meshio { };
 
@@ -7162,6 +7181,8 @@ self: super: with self; {
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };
 
+  pyngrok = callPackage ../development/python-modules/pyngrok { };
+
   pynndescent = callPackage ../development/python-modules/pynndescent { };
 
   pynobo = callPackage ../development/python-modules/pynobo { };
@@ -7339,8 +7360,6 @@ self: super: with self; {
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
   podcats = callPackage ../development/python-modules/podcats { };
-
-  poetry = callPackage ../development/python-modules/poetry { };
 
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
@@ -8186,6 +8205,8 @@ self: super: with self; {
   pylibftdi = callPackage ../development/python-modules/pylibftdi {
     inherit (pkgs) libusb1;
   };
+
+  pylibjpeg-libjpeg = callPackage ../development/python-modules/pylibjpeg-libjpeg { };
 
   pyliblo = callPackage ../development/python-modules/pyliblo { };
 
@@ -10876,6 +10897,8 @@ self: super: with self; {
 
   sqlsoup = callPackage ../development/python-modules/sqlsoup { };
 
+  sqltrie = callPackage ../development/python-modules/sqltrie { };
+
   srp = callPackage ../development/python-modules/srp { };
 
   srpenergy = callPackage ../development/python-modules/srpenergy { };
@@ -11325,6 +11348,8 @@ self: super: with self; {
     py = python.override { x11Support=true; };
   };
 
+  tidalapi = callPackage ../development/python-modules/tidalapi { };
+
   tidyexc = callPackage ../development/python-modules/tidyexc { };
 
   tidylib = callPackage ../development/python-modules/pytidylib { };
@@ -11423,16 +11448,27 @@ self: super: with self; {
     cudaSupport = pkgs.config.cudaSupport or false;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
     inherit (pkgs.darwin) libobjc;
+    inherit (pkgs.llvmPackages_rocm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix { };
 
   torchWithCuda = self.torch.override {
+    magma = pkgs.magma-cuda;
     cudaSupport = true;
   };
 
   torchWithoutCuda = self.torch.override {
     cudaSupport = false;
+  };
+
+  torchWithRocm = self.torch.override {
+    magma = pkgs.magma-hip;
+    rocmSupport = true;
+  };
+
+  torchWithoutRocm = self.torch.override {
+    rocmSupport = false;
   };
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
@@ -12027,6 +12063,8 @@ self: super: with self; {
 
   warcio = callPackage ../development/python-modules/warcio { };
 
+  ward = callPackage ../development/python-modules/ward { };
+
   warlock = callPackage ../development/python-modules/warlock { };
 
   warrant = callPackage ../development/python-modules/warrant { };
@@ -12385,6 +12423,8 @@ self: super: with self; {
   yara-python = callPackage ../development/python-modules/yara-python { };
 
   yarg = callPackage ../development/python-modules/yarg { };
+
+  yark = callPackage ../development/python-modules/yark { };
 
   yarl = callPackage ../development/python-modules/yarl { };
 
