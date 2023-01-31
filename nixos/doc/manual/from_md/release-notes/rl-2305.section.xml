@@ -296,6 +296,22 @@
       </listitem>
       <listitem>
         <para>
+          <literal>tut</literal> has been updated from 1.0.34 to 2.0.0,
+          and now uses the TOML format for the configuration file
+          instead of INI. Additional information can be found
+          <link xlink:href="https://github.com/RasmusLindroth/tut/releases/tag/2.0.0">here</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>wordpress</literal> derivation no longer contains
+          any builtin plugins or themes. If you need them you have to
+          add them back to prevent your site from breaking. You can find
+          them in <literal>wordpressPackages.{plugins,themes}</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>llvmPackages_rocm.llvm</literal> will not contain
           <literal>clang</literal> or <literal>compiler-rt</literal>.
           <literal>llvmPackages_rocm.clang</literal> will not contain
@@ -342,6 +358,17 @@
           under 10 packages in nixpkgs, largely unmaintained upstream as
           well, however, out-of-tree package expressions may need to be
           updated manually.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The
+          <link linkend="opt-services.wordpress.sites._name_.plugins">services.wordpress.sites.&lt;name&gt;.plugins</link>
+          and
+          <link linkend="opt-services.wordpress.sites._name_.themes">services.wordpress.sites.&lt;name&gt;.themes</link>
+          options have been converted from sets to attribute sets to
+          allow for consumers to specify explicit install paths via
+          attribute name.
         </para>
       </listitem>
       <listitem>
@@ -513,6 +540,17 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>ghcWithPackages</literal> and
+          <literal>ghcWithHoogle</literal> wrappers will now also
+          symlink GHC’s and all included libraries’ documentation to
+          <literal>$out/share/doc</literal> for convenience. If
+          undesired, the old behavior can be restored by overriding the
+          builders with
+          <literal>{ installDocumentation = false; }</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>mastodon</literal> now supports connection to a
           remote <literal>PostgreSQL</literal> database.
         </para>
@@ -662,6 +700,13 @@
           <literal>hip</literal> has been separated into
           <literal>hip</literal>, <literal>hip-common</literal> and
           <literal>hipcc</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>services.nginx.recommendedProxySettings</literal> now
+          removes the <literal>Connection</literal> header preventing
+          clients from closing backend connections.
         </para>
       </listitem>
       <listitem>

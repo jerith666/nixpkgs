@@ -1307,8 +1307,8 @@ let
           mktplcRef = {
             publisher = "github";
             name = "copilot";
-            version = "1.56.7152";
-            sha256 = "sha256-9WEvTcVY/yMF00GJVj4h57aWhfBYTSatbw10DjjAaAM=";
+            version = "1.70.8099";
+            sha256 = "sha256-+jlLM9UC1DZFBrtiiri4jvpuc/Rf9PcSVP8D8pmQC2s=";
           };
           meta = with lib; {
             description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
@@ -2580,8 +2580,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.14.0";
-          sha256 = "sha256-DvcQ0wNmWqmMen7jYVP0tCDz/wdzBb56An+OaD3d4xA=";
+          version = "2.15.0";
+          sha256 = "sha256-YfcO/01nO+92xZEJgYyLYAkqXMqfV/QDkcN9Dnjp5ZA=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";
@@ -2918,6 +2918,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      vscode-icons-team.vscode-icons = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-icons";
+          publisher = "vscode-icons-team";
+          version = "12.2.0";
+          sha256 = "12s5br0s9n99vjn6chivzdsjb71p0lai6vnif7lv13x497dkw4rz";
+        };
+        meta = with lib; {
+          description = "Bring real icons to your Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=vscode-icons-team.vscode-icons";
+          homepage = "https://github.com/vscode-icons/vscode-icons";
+          license = licenses.mit;
+          maintainers = with maintainers; [ ggwpaiushtha ];
         };
       };
 
