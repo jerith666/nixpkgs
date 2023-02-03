@@ -113,11 +113,11 @@ in {
             };
           in types.attrsOf minecraftUUID;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Level 4 operators. Only has an effect when
-          <option>services.minecraft-server.declarative</option> is
-          <literal>true</literal>. This is a mapping from Minecraft usernames
-          to UUIDs. You can use <link xlink:href="https://mcuuid.net/"/> to
+          {option}`services.minecraft-server.declarative` is
+          `true`. This is a mapping from Minecraft usernames
+          to UUIDs. You can use https://mcuuid.net/ to
           get a Minecraft UUID for a username.
         '';
         example = literalExpression ''
