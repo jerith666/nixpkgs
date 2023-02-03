@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.0.8";
+  version = "2.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-4zhwMCEIVYHrf9gT6Eoiw9huR5D2njDo62L0MvXqrgE=";
+    hash = "sha256-p3ELXfTe0bHrsinEz+iXZIifJykdnW5i7FFLsAhtyoc=";
   };
 
   propagatedBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytap2
     pytestCheckHook
   ];

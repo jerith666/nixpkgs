@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "1.7.0";
+  version = "1.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n66Yl3xSGJNxyn2LJVGO8fuXtCKFHLRcCeoWhvxCCok=";
+    hash = "sha256-npTv+f533JK/J2ceJ6Na7mS90HfKaHORmGnFz1LBzLQ=";
   };
 
   propagatedBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];

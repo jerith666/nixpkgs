@@ -36,8 +36,12 @@
             stdenv
           ];
           providesSetupHook = lib.attrByPath [ "provides" "setupHook"] false;
-          valid = value: !((lib.isDerivation value) && !((pythonPackages.hasPythonModule value) || (providesSetupHook value))) || (lib.elem value exceptions);
-          func = name: value: if (valid value) then value else throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.";
+          valid = value: pythonPackages.hasPythonModule value || providesSetupHook value || lib.elem value exceptions;
+          func = name: value:
+            if lib.isDerivation value then
+              lib.extendDerivation (valid value || throw "${name} should use `buildPythonPackage` or `toPythonModule` if it is to be part of the Python packages set.") {} value
+            else
+              value;
         in lib.mapAttrs func items;
       in ensurePythonModules (callPackage
         # Function that when called
@@ -144,19 +148,6 @@ in {
       suffix = ".6"; # ActiveState's Python 2 extended support
     };
     sha256 = "sha256-+I0QOBkuTHMIQz71lgNn1X1vjPsjJMtFbgC0xcGTwWY=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
-  python37 = callPackage ./cpython {
-    self = __splicedPackages.python37;
-    sourceVersion = {
-      major = "3";
-      minor = "7";
-      patch = "16";
-      suffix = "";
-    };
-    sha256 = "sha256-gzjwwiIthH6QTJVTaRVdwb7u7YBujV7wSwDvR4cji/0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };

@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
+, stdenv
+, darwin
 , gitMinimal
 , mercurial
 , nix
@@ -10,20 +12,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nurl";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
     rev = "v${version}";
-    hash = "sha256-bZJlhGbRjhrLk8J0WJq3NCY71MZYsxy8f1ippguOsIM=";
+    hash = "sha256-AJHmHTkKHd99GCBlVv2t8Q9kUlCtOcK+ukYzEs5U3S4=";
   };
 
-  cargoSha256 = "sha256-904IOaovvSOuMyXIxZjaG2iqUoz5qq3hftLGaiA8h0U=";
+  cargoSha256 = "sha256-0QUuYNzKN8dbGiJq2JxElR39zIlqvHXjPzT1dGc6cRM=";
 
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # tests require internet access

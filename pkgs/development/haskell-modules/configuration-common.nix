@@ -200,9 +200,10 @@ self: super: {
   # base bound
   digit = doJailbreak super.digit;
 
-  # matterhorn-50200.17.0 won't work with brick >= 0.71
+  # matterhorn-50200.17.0 won't work with brick >= 0.71, brick-skylighting >= 1.0
   matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
     brick = self.brick_0_70_1;
+    brick-skylighting = self.brick-skylighting_0_3;
   }));
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
@@ -448,7 +449,7 @@ self: super: {
   #
   # # Depends on itself for testing
   # doctest-discover = addBuildTool super.doctest-discover
-  #   (if pkgs.buildPlatform != pkgs.hostPlatform
+  #   (if pkgs.stdenv.buildPlatform != pkgs.stdenv.hostPlatform
   #    then self.buildHaskellPackages.doctest-discover
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
@@ -473,6 +474,15 @@ self: super: {
 
   # https://github.com/kkardzis/curlhs/issues/6
   curlhs = dontCheck super.curlhs;
+
+  # curl 7.87.0 introduces a preprocessor typechecker of sorts which fails on
+  # incorrect usages of curl_easy_getopt and similar functions. Presumably
+  # because the wrappers in curlc.c don't use static values for the different
+  # arguments to curl_easy_getinfo, it complains and needs to be disabled.
+  # https://github.com/GaloisInc/curl/issues/28
+  curl = appendConfigureFlags [
+    "--ghc-option=-DCURL_DISABLE_TYPECHECK"
+  ] super.curl;
 
   # https://github.com/hvr/token-bucket/issues/3
   token-bucket = dontCheck super.token-bucket;
@@ -2145,10 +2155,6 @@ self: super: {
   # https://github.com/zellige/hs-geojson/issues/29
   geojson = dontCheck super.geojson;
 
-  # Test suite doesn't compile
-  # https://github.com/erebe/wstunnel/issues/145
-  wstunnel = dontCheck super.wstunnel;
-
   # Test data missing from sdist
   # https://github.com/ngless-toolkit/ngless/issues/152
   NGLess = dontCheck super.NGLess;
@@ -2369,4 +2375,12 @@ self: super: {
     revision = null;
     editedCabalFile = null;
   }) super.true-name);
+
+  # posix-api has had broken tests since 2020 (until at least 2023-01-11)
+  # raehik has a fix pending: https://github.com/andrewthad/posix-api/pull/14
+  posix-api = dontCheck super.posix-api;
+
+  # bytestring <0.11.0, optparse-applicative <0.13.0
+  # https://github.com/kseo/sfnt2woff/issues/1
+  sfnt2woff = doJailbreak super.sfnt2woff;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

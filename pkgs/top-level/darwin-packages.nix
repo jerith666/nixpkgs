@@ -81,12 +81,30 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
+  binutilsDualAs-unwrapped = callPackage ../os-specific/darwin/binutils {
+    inherit (pkgs) binutils-unwrapped;
+    inherit (pkgs.llvmPackages) llvm clang-unwrapped;
+    dualAs = true;
+  };
+
+  binutilsDualAs = pkgs.wrapBintoolsWith {
+    libc =
+      if stdenv.targetPlatform != stdenv.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = self.binutilsDualAs-unwrapped;
+  };
+
   binutilsNoLibc = pkgs.wrapBintoolsWith {
     libc = preLibcCrossHeaders;
     bintools = self.binutils-unwrapped;
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
@@ -102,6 +120,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   rewrite-tbd = callPackage ../os-specific/darwin/rewrite-tbd { };
 
   checkReexportsHook = pkgs.makeSetupHook {
+    name = "darwin-check-reexports-hook";
     deps = [ pkgs.darwin.print-reexports ];
   } ../os-specific/darwin/print-reexports/setup-hook.sh;
 
@@ -122,6 +141,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
+    name = "auto-sign-darwin-binaries-hook";
     deps = [ self.signingUtils ];
   } ../os-specific/darwin/signing-utils/auto-sign-hook.sh;
 

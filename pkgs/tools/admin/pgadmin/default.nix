@@ -83,12 +83,21 @@ let
         sha256 = "sha256-FZcuUBffBXXD1sCQuhaLbbkCWeYgrI1+qBOjlrrVtss=";
       };
     });
+    # flask 2.1.3 is incompatible with flask-sqlalchemy > 3
+    flask-sqlalchemy = prev.flask-sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+      version = "2.5.1";
+      format = "setuptools";
+      src = oldAttrs.src.override {
+        inherit version;
+        hash = "sha256-K9pEtD58rLFdTgX/PMH4vJeTbMRkYjQkECv8LDXpWRI=";
+      };
+    });
     # pgadmin 6.18 is incompatible with the major flask-security-too update to 5.0.x
     flask-security-too = prev.flask-security-too.overridePythonAttrs (oldAttrs: rec {
       version = "4.1.5";
       src = oldAttrs.src.override {
         inherit version;
-        sha256 = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
+        hash = "sha256-98jKcHDv/+mls7QVWeGvGcmoYOGCspxM7w5/2RjJxoM=";
       };
       propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
         final.pythonPackages.flask_mail
