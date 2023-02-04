@@ -284,6 +284,8 @@ with pkgs;
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
+  ansi = callPackage ../development/tools/ansi { };
+
   arti = callPackage ../tools/security/arti {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -717,6 +719,8 @@ with pkgs;
   dwarf2json = callPackage ../tools/misc/dwarf2json { };
 
   ebook2cw = callPackage ../applications/radio/ebook2cw { };
+
+  qdmr = libsForQt5.callPackage ../applications/radio/qdmr { };
 
   edwin = callPackage ../data/fonts/edwin { };
 
@@ -2199,6 +2203,8 @@ with pkgs;
   retrofe = callPackage ../applications/emulators/retrofe { };
 
   ripes = libsForQt5.callPackage ../applications/emulators/ripes { };
+
+  rpcemu = callPackage ../applications/emulators/rpcemu { };
 
   rpcs3 = libsForQt5.callPackage ../applications/emulators/rpcs3 { };
 
@@ -4789,12 +4795,6 @@ with pkgs;
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
-  # NOTE: If overriding qt version, krita needs to use the same qt version as
-  # well.
-  gmic-qt-krita = gmic-qt.override {
-    variant = "krita";
-  };
-
   gpg-tui = callPackage ../tools/security/gpg-tui {
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
     inherit (darwin) libobjc libresolv;
@@ -5407,9 +5407,7 @@ with pkgs;
 
   rex = callPackage ../tools/system/rex { };
 
-  river = callPackage ../applications/window-managers/river {
-    zig = zig_0_9;
-  };
+  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro {
     zig = zig_0_9;
@@ -5792,6 +5790,8 @@ with pkgs;
   bukut = callPackage ../applications/misc/bukut { };
 
   byzanz = callPackage ../applications/video/byzanz {};
+
+  algolia-cli = callPackage ../development/tools/algolia-cli { };
 
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
@@ -9022,6 +9022,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  mdbook-epub = callPackage ../tools/text/mdbook-epub {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
@@ -9808,7 +9812,7 @@ with pkgs;
   mole = callPackage ../tools/networking/mole { };
 
   morgen = callPackage ../applications/office/morgen {
-    electron = electron_15;
+    electron = electron_22;
   };
 
   mosh = callPackage ../tools/networking/mosh { };
@@ -15825,7 +15829,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-watch = callPackage ../development/tools/rust/cargo-watch {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {
@@ -21948,9 +21952,9 @@ with pkgs;
 
   libyaml = callPackage ../development/libraries/libyaml { };
 
-  libyamlcpp = callPackage ../development/libraries/libyaml-cpp { };
+  yaml-cpp = callPackage ../development/libraries/yaml-cpp { };
 
-  libyamlcpp_0_3 = callPackage ../development/libraries/libyaml-cpp/0.3.0.nix { };
+  yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
   libyang = callPackage ../development/libraries/libyang { };
 
@@ -25097,6 +25101,7 @@ with pkgs;
   prometheus-rtl_433-exporter = callPackage ../servers/monitoring/prometheus/rtl_433-exporter.nix { };
   prometheus-sachet = callPackage ../servers/monitoring/prometheus/sachet.nix { };
   prometheus-script-exporter = callPackage ../servers/monitoring/prometheus/script-exporter.nix { };
+  prometheus-shelly-exporter = callPackage ../servers/monitoring/prometheus/shelly-exporter.nix { };
   prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
@@ -31781,9 +31786,8 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
-  ncdu = callPackage ../tools/misc/ncdu {
-    zig = zig_0_9;
-  };
+  ncdu = callPackage ../tools/misc/ncdu { };
+
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
   ncdc = callPackage ../applications/networking/p2p/ncdc { };
@@ -31946,9 +31950,7 @@ with pkgs;
 
   organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
 
-  osm2xmap = callPackage ../applications/misc/osm2xmap {
-    libyamlcpp = libyamlcpp_0_3;
-  };
+  osm2xmap = callPackage ../applications/misc/osm2xmap { };
 
   osmctools = callPackage ../applications/misc/osmctools { };
 
@@ -32098,6 +32100,8 @@ with pkgs;
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
   pianoteq = callPackage ../applications/audio/pianoteq { };
+
+  pianotrans = callPackage ../applications/audio/pianotrans { };
 
   picard = callPackage ../applications/audio/picard { };
 
@@ -37953,7 +37957,7 @@ with pkgs;
 
   pgadmin4 = callPackage ../tools/admin/pgadmin { };
 
-  pgmodeler = libsForQt5.callPackage ../applications/misc/pgmodeler { };
+  pgmodeler = qt6Packages.callPackage ../applications/misc/pgmodeler { };
 
   physlock = callPackage ../misc/screensavers/physlock { };
 
@@ -38963,6 +38967,8 @@ with pkgs;
   zk = callPackage ../applications/office/zk {};
 
   zktree = callPackage ../applications/misc/zktree {};
+
+  zram-generator = callPackage ../tools/system/zram-generator { };
 
   zrythm = callPackage ../applications/audio/zrythm {
     inherit (plasma5Packages) breeze-icons;
