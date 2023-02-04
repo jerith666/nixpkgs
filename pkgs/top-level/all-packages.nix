@@ -509,6 +509,8 @@ with pkgs;
 
   frece = callPackage ../development/tools/frece { };
 
+  frink = callPackage ../development/tools/frink { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
@@ -1472,7 +1474,7 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
-  httm = callPackage ../tools/filesystems/httm { };
+  httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
 
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
@@ -4491,7 +4493,7 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_20;
+    electron = electron_22;
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5093,8 +5095,9 @@ with pkgs;
 
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
-  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono-v5;
-  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).Mono-NF-v5;
+  maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
+  maple-mono-NF = (callPackage ../data/fonts/maple-font { }).NF;
+  maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
 
   marl = callPackage ../development/libraries/marl {};
 
@@ -5781,7 +5784,7 @@ with pkgs;
 
   bup = callPackage ../tools/backup/bup { };
 
-  bupstash = callPackage ../tools/backup/bupstash { };
+  bupstash = darwin.apple_sdk_11_0.callPackage ../tools/backup/bupstash { };
 
   burp = callPackage ../tools/backup/burp { };
 
@@ -6807,7 +6810,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_20;
+    electron = electron_22;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -6990,6 +6993,8 @@ with pkgs;
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
+
+  emblem = callPackage ../applications/graphics/emblem { };
 
   emem = callPackage ../applications/misc/emem { };
 
@@ -9028,6 +9033,8 @@ with pkgs;
 
   mdbook-cmdrun = callPackage ../tools/text/mdbook-cmdrun { };
 
+  mdbook-pagetoc = callPackage ../tools/text/mdbook-pagetoc { };
+
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -10289,9 +10296,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  oha = callPackage ../tools/networking/oha {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  oha = callPackage ../tools/networking/oha { };
 
   onetun = callPackage ../tools/networking/onetun {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -10401,7 +10406,9 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
-  openmvs = callPackage ../applications/science/misc/openmvs { };
+  openmvs = callPackage ../applications/science/misc/openmvs {
+    inherit (llvmPackages) openmp;
+  };
 
   openntpd = callPackage ../tools/networking/openntpd { };
 
@@ -12516,6 +12523,8 @@ with pkgs;
 
   time-decode = callPackage ../tools/misc/time-decode { };
 
+  timer = callPackage ../tools/misc/timer { };
+
   tio = callPackage ../tools/misc/tio { };
 
   tiv = callPackage ../applications/misc/tiv { };
@@ -13790,6 +13799,8 @@ with pkgs;
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
   runtimeShellPackage = bash;
+
+  agdsn-zsh-config = callPackage ../shells/zsh/agdsn-zsh-config { };
 
   any-nix-shell = callPackage ../shells/any-nix-shell { };
 
@@ -15789,6 +15800,9 @@ with pkgs;
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  cargo-ndk = callPackage ../development/tools/rust/cargo-ndk { };
+
   cargo-nextest = callPackage ../development/tools/rust/cargo-nextest {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -15828,8 +15842,8 @@ with pkgs;
   cargo-wasi = callPackage ../development/tools/rust/cargo-wasi {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-watch = callPackage ../development/tools/rust/cargo-watch {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices Foundation;
+  cargo-watch = darwin.apple_sdk_11_0.callPackage ../development/tools/rust/cargo-watch {
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {
@@ -17096,17 +17110,7 @@ with pkgs;
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = bazel_3;
-
-  bazel_3 = callPackage ../development/tools/build-managers/bazel/bazel_3 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk11_headless;
-    buildJdkName = "java11";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    bazel_self = bazel_3;
-  };
+  bazel = bazel_6;
 
   bazel_4 = callPackage ../development/tools/build-managers/bazel/bazel_4 {
     inherit (darwin) cctools;
@@ -19700,6 +19704,8 @@ with pkgs;
   fribidi = callPackage ../development/libraries/fribidi { };
 
   funambol = callPackage ../development/libraries/funambol { };
+
+  functionalplus = callPackage ../development/libraries/functionalplus { };
 
   galer = callPackage ../tools/security/galer { };
 
@@ -27395,6 +27401,8 @@ with pkgs;
 
   material-icons = callPackage ../data/fonts/material-icons { };
 
+  material-symbols = callPackage ../data/fonts/material-symbols { };
+
   material-kwin-decoration = libsForQt5.callPackage ../data/themes/material-kwin-decoration { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
@@ -32233,6 +32241,8 @@ with pkgs;
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  pop-launcher = callPackage ../applications/misc/pop-launcher { };
+
   popcorntime = callPackage ../applications/video/popcorntime {};
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
@@ -35761,6 +35771,10 @@ with pkgs;
 
   voxelands = callPackage ../games/voxelands {
     libpng = libpng12;
+  };
+
+  vvvvvv = callPackage ../games/vvvvvv {
+    inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
   };
 
   wargus = callPackage ../games/wargus { };
