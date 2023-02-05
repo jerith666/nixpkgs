@@ -64,6 +64,7 @@ buildPythonPackage rec {
     "test_gif_animation"
     "animation.gif-internal"
     "animation.gif-pikepdf"
+    "test_png_gray1"  # https://gitlab.mister-muffin.de/josch/img2pdf/issues/154
   ];
 
   pythonImportsCheck = [ "img2pdf" ];
