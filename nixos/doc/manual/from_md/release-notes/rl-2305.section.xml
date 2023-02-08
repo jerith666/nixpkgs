@@ -115,6 +115,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://dm3mat.darc.de/qdmr/">QDMR</link>, a
+          gui application and command line tool for programming cheap
+          DMR radios
+          <link linkend="opt-programs.qdmr.enable">programs.qdmr</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://v2raya.org">v2rayA</link>, a Linux
           web GUI client of Project V which supports V2Ray, Xray, SS,
           SSR, Trojan and Pingtunnel. Available as
@@ -181,7 +189,22 @@
           <literal>doInstallCheck</literal> is set. (Note that this
           change will not cause breakage to derivations with
           <literal>strictDeps</literal> unset, which are most packages
-          except python, rust and go packages).
+          except python, rust, ocaml and go packages).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>buildDunePackage</literal> now defaults to
+          <literal>strictDeps = true</literal> which means that any
+          library should go into <literal>buildInputs</literal> or
+          <literal>checkInputs</literal>. Any executable that is run on
+          the building machine should go into
+          <literal>nativeBuildInputs</literal> or
+          <literal>nativeCheckInputs</literal> respectively. Example of
+          executables are <literal>ocaml</literal>,
+          <literal>findlib</literal> and <literal>menhir</literal>. PPXs
+          are libraries which are built by dune and should therefore not
+          go into <literal>nativeBuildInputs</literal>.
         </para>
       </listitem>
       <listitem>
@@ -207,6 +230,18 @@
           version 0.8.0, which includes backwards incompatible changes.
           The <literal>git-bug-migration</literal> package can be used
           to upgrade existing repositories.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>services.kubo.settings</literal> option is now no
+          longer stateful. If you changed any of the options in
+          <literal>services.kubo.settings</literal> in the past and then
+          removed them from your NixOS configuration again, those
+          changes are still in your Kubo configuration file but will now
+          be reset to the default. If you’re unsure, you may want to
+          make a backup of your configuration file (probably
+          /var/lib/ipfs/config) and compare after the update.
         </para>
       </listitem>
       <listitem>
@@ -509,6 +544,16 @@
       </listitem>
       <listitem>
         <para>
+          NixOS now defaults to using nsncd (a non-caching
+          reimplementation in Rust) as NSS lookup dispatcher, instead of
+          the buggy and deprecated glibc-provided nscd. If you need to
+          switch back, set
+          <literal>services.nscd.enableNsncd = false</literal>, but
+          please open an issue in nixpkgs so your issue can be fixed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>dnsmasq</literal> service now takes configuration
           via the <literal>services.dnsmasq.settings</literal> attribute
           set. The option
@@ -647,6 +692,13 @@
       </listitem>
       <listitem>
         <para>
+          Grafana Tempo has been updated to version 2.0. See the
+          <link xlink:href="https://grafana.com/docs/tempo/latest/release-notes/v2-0/#upgrade-considerations">upstream
+          upgrade guide</link> for migration instructions.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new <literal>virtualisation.rosetta</literal> module was
           added to allow running <literal>x86_64</literal> binaries
           through
@@ -696,6 +748,36 @@
           about compression in Brotli format
           <link xlink:href="https://github.com/google/ngx_brotli/blob/master/README.md">here</link>.
         </para>
+      </listitem>
+      <listitem>
+        <para>
+          Updated recommended settings in
+          <literal>services.nginx.recommendedGzipSettings</literal>:
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              Enables gzip compression for only certain proxied
+              requests.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Allow checking and loading of precompressed files.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Updated gzip mime-types.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Increased the minimum length of a response that will be
+              gzipped.
+            </para>
+          </listitem>
+        </itemizedlist>
       </listitem>
       <listitem>
         <para>
@@ -774,6 +856,12 @@
           <link xlink:href="https://xastir.org/index.php/Main_Page">Xastir</link>
           can now access AX.25 interfaces via the
           <literal>libax25</literal> package.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>tvbrowser-bin</literal> was removed, and now
+          <literal>tvbrowser</literal> is built from source.
         </para>
       </listitem>
       <listitem>
