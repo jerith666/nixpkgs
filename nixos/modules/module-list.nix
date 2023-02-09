@@ -223,6 +223,7 @@
   ./programs/seahorse.nix
   ./programs/sedutil.nix
   ./programs/shadow.nix
+  ./programs/sharing.nix
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
@@ -699,6 +700,7 @@
   ./services/monitoring/arbtt.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
+  ./services/monitoring/cockpit.nix
   ./services/monitoring/collectd.nix
   ./services/monitoring/das_watchdog.nix
   ./services/monitoring/datadog-agent.nix
