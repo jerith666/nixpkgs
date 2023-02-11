@@ -454,6 +454,7 @@ in
             dolphin-plugins
             ffmpegthumbs
             kdegraphics-thumbnailers
+            pkgs.kio-admin
             kio-extras
           ];
           optionalPackages = [
