@@ -96,8 +96,8 @@ in
 
     phononBackend = mkOption {
       type = types.enum [ "gstreamer" "vlc" ];
-      default = "gstreamer";
-      example = "vlc";
+      default = "vlc";
+      example = "gstreamer";
       description = lib.mdDoc "Phonon audio backend to install.";
     };
 

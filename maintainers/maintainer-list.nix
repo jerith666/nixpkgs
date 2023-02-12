@@ -14428,6 +14428,12 @@
     githubId = 139251;
     name = "Tom Hunger";
   };
+  tehmatt = {
+    name = "tehmatt";
+    email = "nix@programsareproofs.com";
+    github = "tehmatt";
+    githubId = 3358866;
+  };
   tejasag = {
     name = "Tejas Agarwal";
     email = "tejasagarwalbly@gmail.com";
@@ -14864,7 +14870,7 @@
   };
   toastal = {
     email = "toastal+nix@posteo.net";
-    matrix = "@toastal:matrix.org";
+    matrix = "@toastal:chat.mozilla.org";
     github = "toastal";
     githubId = 561087;
     name = "toastal";
@@ -16107,6 +16113,12 @@
     github = "y0no";
     githubId = 2242427;
     name = "Yoann Ono";
+  };
+  yajo = {
+    email = "yajo.sk8@gmail.com";
+    github = "yajo";
+    githubId = 973709;
+    name = "Jairo Llopis";
   };
   yana = {
     email = "yana@riseup.net";

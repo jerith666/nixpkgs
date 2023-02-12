@@ -92,6 +92,7 @@ in {
   bcachefs = handleTestOn ["x86_64-linux" "aarch64-linux"] ./bcachefs.nix {};
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
+  binary-cache = handleTest ./binary-cache.nix {};
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   bitcoind = handleTest ./bitcoind.nix {};
@@ -665,6 +666,7 @@ in {
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   systemd-oomd = handleTest ./systemd-oomd.nix {};
   systemd-portabled = handleTest ./systemd-portabled.nix {};
+  systemd-repart = handleTest ./systemd-repart.nix {};
   systemd-shutdown = handleTest ./systemd-shutdown.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-user-tmpfiles-rules = handleTest ./systemd-user-tmpfiles-rules.nix {};

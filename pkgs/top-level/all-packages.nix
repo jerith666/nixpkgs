@@ -1034,6 +1034,8 @@ with pkgs;
       inherit kernel firmware rootModules allowMissing;
     };
 
+  mkBinaryCache = callPackage ../build-support/binary-cache { };
+
   mkShell = callPackage ../build-support/mkshell { };
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
@@ -2189,7 +2191,7 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp = libsForQt5.callPackage ../applications/emulators/ppsspp { };
+  ppsspp = callPackage ../applications/emulators/ppsspp { };
 
   ppsspp-sdl = ppsspp;
 
@@ -6270,6 +6272,8 @@ with pkgs;
 
   codebraid = callPackage ../tools/misc/codebraid { };
 
+  codevis = callPackage ../tools/misc/codevis { };
+
   compass = callPackage ../development/tools/compass { };
 
   cone = callPackage ../development/compilers/cone {
@@ -9511,6 +9515,8 @@ with pkgs;
 
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
+  lipl = callPackage ../tools/misc/lipl { };
+
   liquidctl = with python3Packages; toPythonApplication liquidctl;
 
   lmp = callPackage ../tools/security/lmp { };
@@ -9890,6 +9896,8 @@ with pkgs;
   mt-st = callPackage ../tools/backup/mt-st {};
 
   mubeng = callPackage ../tools/networking/mubeng { };
+
+  muffet = callPackage ../tools/networking/muffet { };
 
   multipass = libsForQt5.callPackage ../tools/virtualization/multipass { };
 
@@ -11196,6 +11204,8 @@ with pkgs;
     provider = "riseup";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+
+  rnm = callPackage ../tools/filesystems/rnm { };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
 
@@ -13085,8 +13095,7 @@ with pkgs;
   watchlog = callPackage ../tools/misc/watchlog { };
 
   watchman = callPackage ../development/tools/watchman {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-    autoconf = buildPackages.autoconf269;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
   };
 
   wavefunctioncollapse = callPackage ../tools/graphics/wavefunctioncollapse {};
@@ -13737,6 +13746,8 @@ with pkgs;
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
   zplug = callPackage ../shells/zsh/zplug { };
+
+  zps = callPackage ../tools/system/zps { };
 
   zi = callPackage ../shells/zsh/zi {};
 
@@ -15696,6 +15707,7 @@ with pkgs;
   cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-binstall = callPackage ../development/tools/rust/cargo-binstall { };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -19455,6 +19467,8 @@ with pkgs;
 
   editline = callPackage ../development/libraries/editline { };
 
+  edencommon = callPackage ../development/libraries/edencommon { };
+
   eigen = callPackage ../development/libraries/eigen {};
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
@@ -19528,6 +19542,10 @@ with pkgs;
       gst-libav;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  fbthrift = callPackage ../development/libraries/fbthrift { };
+
+  fb303 = callPackage ../development/libraries/fb303 { };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
@@ -19614,6 +19632,8 @@ with pkgs;
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
   filtron = callPackage ../servers/filtron { };
+
+  fizz = callPackage ../development/libraries/fizz { };
 
   flann = callPackage ../development/libraries/flann { };
 
@@ -20511,6 +20531,8 @@ with pkgs;
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
   jose = callPackage ../development/libraries/jose { };
+
+  jpcre2 = callPackage ../development/libraries/jpcre2 { };
 
   jshon = callPackage ../development/tools/parsing/jshon { };
 
@@ -22634,6 +22656,8 @@ with pkgs;
 
   pkgdiff = callPackage ../tools/misc/pkgdiff { };
 
+  pkgtop = callPackage ../tools/misc/pkgtop { };
+
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
   platform-folders = callPackage ../development/libraries/platform-folders { };
@@ -23669,6 +23693,8 @@ with pkgs;
 
   wally-cli = callPackage ../development/tools/wally-cli { };
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
+
+  wangle = callPackage ../development/libraries/wangle { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
@@ -25185,6 +25211,8 @@ with pkgs;
 
   reproxy = callPackage ../servers/reproxy { };
 
+  repro-get = callPackage ../tools/package-management/repro-get { };
+
   restic = callPackage ../tools/backup/restic { };
 
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
@@ -26206,8 +26234,8 @@ with pkgs;
 
   nsh = callPackage ../shells/nsh { };
 
-  nushell = callPackage ../shells/nushell {
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation Security;
+  nushell = darwin.apple_sdk_11_0.callPackage ../shells/nushell {
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
     inherit (darwin.apple_sdk) sdk;
   };
 
@@ -30878,7 +30906,7 @@ with pkgs;
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
     # https://github.com/NixOS/nixpkgs/issues/201254
-    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc11Stdenv;
+    stdenv = if stdenv.isDarwin then llvmPackages_14.stdenv else gcc12Stdenv;
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -38809,6 +38837,8 @@ with pkgs;
 
   undaemonize = callPackage ../tools/system/undaemonize {};
 
+  wtfis = callPackage ../tools/networking/wtfis { };
+
   houdini = callPackage ../applications/misc/houdini {};
 
   openfst = callPackage ../development/libraries/openfst {};
@@ -39103,6 +39133,8 @@ with pkgs;
   widevine-cdm = callPackage ../applications/networking/browsers/misc/widevine-cdm.nix { };
 
   alsa-scarlett-gui = callPackage ../applications/audio/alsa-scarlett-gui { };
+
+  flac2all = callPackage ../applications/audio/flac2all {};
 
   tuner = callPackage ../applications/audio/tuner { };
 
