@@ -862,6 +862,7 @@
   ./services/networking/i2pd.nix
   ./services/networking/icecream/daemon.nix
   ./services/networking/icecream/scheduler.nix
+  ./services/networking/imaginary.nix
   ./services/networking/inspircd.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
@@ -1049,6 +1050,7 @@
   ./services/search/hound.nix
   ./services/search/kibana.nix
   ./services/search/meilisearch.nix
+  ./services/search/opensearch.nix
   ./services/search/solr.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix
