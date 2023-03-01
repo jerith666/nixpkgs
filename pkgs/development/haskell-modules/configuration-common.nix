@@ -1102,6 +1102,8 @@ self: super: {
   # base <4.13, regex-base ==0.93.*, regex-posix >=0.95.1 && <0.96
   regex-compat = doJailbreak super.regex-compat;
 
+  regex-tdfa-quasiquoter = doJailbreak super.regex-tdfa-quasiquoter;
+
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 

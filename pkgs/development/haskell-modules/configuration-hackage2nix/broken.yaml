@@ -4432,7 +4432,6 @@ broken-packages:
   - regexpr-symbolic
   - regexqq
   - regex-tdfa-pipes
-  - regex-tdfa-quasiquoter
   - regex-tdfa-rc
   - regex-tdfa-text
   - regex-tdfa-unittest
