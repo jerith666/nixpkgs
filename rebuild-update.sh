@@ -36,7 +36,7 @@ nix-store --realise --add-root system-result --indirect result;
 nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 nix-store --realise --add-root client-ip-echo-result --indirect result;
 
-for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
+for sd in calendar-filter client-ip-echo elbum bills-automation haskell-rest-service; do
     echo; echo "confirming that nix-shell works for ${sd}";
     todo=$(nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --dry-run 2>&1 | grep '/nix/store/.*\.drv$' || true)
     if echo $todo | grep '/nix/store/.*\.drv$' > /dev/null; then
@@ -44,6 +44,9 @@ for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
     fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
     nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result
+    if [ -f ~/git/${sd}/default.nix ]; then
+        nix build -I nixpkgs=$wt ~/git/${sd}/default.nix -o ${sd}-result
+    fi
 done
 
 echo;
