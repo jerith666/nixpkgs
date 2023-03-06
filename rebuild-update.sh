@@ -45,7 +45,7 @@ for sd in calendar-filter client-ip-echo elbum bills-automation haskell-rest-ser
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
     nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result
     if [ -f ~/git/${sd}/default.nix ]; then
-        nix build -I nixpkgs=$wt ~/git/${sd}/default.nix -o ${sd}-result
+        nix build -I nixpkgs=$wt -f ~/git/${sd}/default.nix -o ${sd}-result
     fi
 done
 
