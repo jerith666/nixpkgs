@@ -57,9 +57,8 @@ current=$(nixos-version --revision);
 
 git log -p ${current}... -- nixos/doc/manual/release-notes > update-${d}.txt
 
-./system-result/sw/bin/nox-update --quiet /run/current-system system-result | \
-    grep -v '\.drv : $' | \
-    sed 's|^ */nix/store/[a-z0-9]*-||' | \
-    sort -u >> \
-         update-${d}.txt
-
+./system-result/sw/bin/nvd --color=always \
+                           diff \
+                           /run/current-system \
+                           system-result > \
+                           update-${d}.txt
