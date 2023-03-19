@@ -60,5 +60,5 @@ git log -p ${current}... -- nixos/doc/manual/release-notes > update-${d}.txt
 ./system-result/sw/bin/nvd --color=always \
                            diff \
                            /run/current-system \
-                           system-result > \
+                           system-result >> \
                            update-${d}.txt
