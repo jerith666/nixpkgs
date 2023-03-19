@@ -952,6 +952,7 @@
   ./services/networking/owamp.nix
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
+  ./services/networking/peroxide.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
@@ -1063,7 +1064,6 @@
   ./services/search/meilisearch.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
-  ./services/search/solr.nix
   ./services/security/aesmd.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix

@@ -4658,6 +4658,12 @@
     github = "ethindp";
     githubId = 8030501;
   };
+  ethinx = {
+    email = "eth2net@gmail.com";
+    github = "ethinx";
+    githubId = 965612;
+    name = "York Wong";
+  };
   Etjean = {
     email = "et.jean@outlook.fr";
     github = "Etjean";
@@ -7706,6 +7712,13 @@
     githubId = 87115;
     name = "Wael Nasreddine";
   };
+  kalebpace = {
+    email = "kaleb.pace@pm.me";
+    matrix = "@kalebpace:matrix.org";
+    github = "kalebpace";
+    githubId = 5586615;
+    name = "Kaleb Pace";
+  };
   kalekseev = {
     email = "mail@kalekseev.com";
     github = "kalekseev";
@@ -7791,7 +7804,6 @@
     name = "Claudius Holeksa";
   };
   ken-matsui = {
-    email = "nix@kmatsui.me";
     github = "ken-matsui";
     githubId = 26405363;
     name = "Ken Matsui";
@@ -9241,6 +9253,12 @@
     name = "Marius David";
     github = "marius851000";
     githubId = 22586596;
+  };
+  markbeep = {
+    email = "mrkswrn@gmail.com";
+    github = "markbeep";
+    githubId = 20665331;
+    name = "Mark";
   };
   markus1189 = {
     email = "markus1189@gmail.com";
@@ -16713,6 +16731,12 @@
     github = "zachcoyle";
     githubId = 908716;
     name = "Zach Coyle";
+  };
+  Zaechus = {
+    email = "zaechus@proton.me";
+    github = "Zaechus";
+    githubId = 19353212;
+    name = "Maxwell Anderson";
   };
   zagy = {
     email = "cz@flyingcircus.io";
