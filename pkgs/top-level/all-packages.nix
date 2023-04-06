@@ -28279,8 +28279,6 @@ with pkgs;
 
   arkade = callPackage ../applications/networking/cluster/arkade { };
 
-  around = callPackage ../applications/networking/instant-messengers/around { };
-
   artem = callPackage ../applications/graphics/artem { };
 
   asuka = callPackage ../applications/networking/browsers/asuka {
@@ -28288,6 +28286,8 @@ with pkgs;
   };
 
   ascii-image-converter = callPackage ../applications/graphics/ascii-image-converter { };
+
+  around = callPackage ../applications/networking/instant-messengers/around { };
 
   artha = callPackage ../applications/misc/artha { };
 
