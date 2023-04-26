@@ -83,12 +83,16 @@ let
     inherit (args) src;
     inherit (go) GOOS GOARCH;
 
+    # The following inheritence behavior is not trivial to expect, and some may
+    # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
+    # out in the wild. In anycase, it's documented in:
+    # doc/languages-frameworks/go.section.md
     prePatch = args.prePatch or "";
     patches = args.patches or [];
     patchFlags = args.patchFlags or [];
     postPatch = args.postPatch or "";
     preBuild = args.preBuild or "";
-    postBuild = args.postBuild or "";
+    postBuild = args.modPostBuild or "";
     sourceRoot = args.sourceRoot or "";
 
     GO111MODULE = "on";
@@ -105,7 +109,7 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = args.modBuildPhase or ''
+    buildPhase = args.modBuildPhase or (''
       runHook preBuild
     '' + lib.optionalString deleteVendor ''
       if [ ! -d vendor ]; then
@@ -133,7 +137,7 @@ let
       mkdir -p vendor
 
       runHook postBuild
-    '';
+    '');
 
     installPhase = args.modInstallPhase or ''
       runHook preInstall
@@ -176,7 +180,7 @@ let
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
     inherit CGO_ENABLED enableParallelBuilding;
 
-    configurePhase = args.configurePhase or ''
+    configurePhase = args.configurePhase or (''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
@@ -200,9 +204,9 @@ let
       fi
 
       runHook postConfigure
-    '';
+    '');
 
-    buildPhase = args.buildPhase or ''
+    buildPhase = args.buildPhase or (''
       runHook preBuild
 
       exclude='\(/_\|examples\|Godeps\|testdata'
@@ -282,7 +286,7 @@ let
       )
     '' + ''
       runHook postBuild
-    '';
+    '');
 
     doCheck = args.doCheck or true;
     checkPhase = args.checkPhase or ''

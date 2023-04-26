@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
-, fetchurl
 , callPackage
 , pkg-config
 , cmake
@@ -30,7 +29,7 @@
 , tl-expected
 , hunspell
 , glibmm_2_68
-, webkitgtk_4_1
+, webkitgtk_6_0
 , jemalloc
 , rnnoise
 , protobuf
@@ -71,17 +70,10 @@ let
       cxxStandard = "20";
     };
   };
-  glibmm = glibmm_2_68.overrideAttrs (_: {
-    version = "2.76.0";
-    src = fetchurl {
-      url = "mirror://gnome/sources/glibmm/2.76/glibmm-2.76.0.tar.xz";
-      sha256 = "sha256-hjfYDOq9lP3dbkiXCggqJkVY1KuCaE4V/8h+fvNGKrI=";
-    };
-  });
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "4.7.1";
+  version = "4.8.1";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   src = fetchFromGitHub {
@@ -89,7 +81,7 @@ stdenv.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1qv8029xzp2j1j58b1lkw3q53cwaaazvp2la80mfbjv348c29iyk";
+    sha256 = "0mxxfh70dffkrq76nky3pwrk10s1q4ahxx2ddb58dz8igq6pl4zi";
   };
 
   patches = [
@@ -109,8 +101,8 @@ stdenv.mkDerivation rec {
       --replace '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkit_gtk.cpp \
-      --replace '"libwebkit2gtk-4.1.so.0"' '"${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0"'
+    substituteInPlace Telegram/lib_webview/webview/platform/linux/webview_linux_webkitgtk_library.cpp \
+      --replace '"libwebkitgtk-6.0.so.4"' '"${webkitgtk_6_0}/lib/libwebkitgtk-6.0.so.4"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -147,8 +139,8 @@ stdenv.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm
-    webkitgtk_4_1
+    glibmm_2_68
+    webkitgtk_6_0
     jemalloc
     rnnoise
     protobuf
