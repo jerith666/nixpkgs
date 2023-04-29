@@ -114,7 +114,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1mbbh6bmydh0c9zm50bracgw44mzfv203qm5l57p3k2syvfsqlyn";
+      sha256 = "1xcg53yz44cqhcpb85w3ay80kvnniy0v441c9p08wb6zzia2mnq9";
       type = "gem";
     };
     version = "3.22.3";
@@ -136,7 +136,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0cdqmpn3sm9nl5ag7v53d2h240yzkbc2wa9l4ghsvcb0ygg6wv0k";
+      sha256 = "1jrm76d48k3qkrrhcdpvikbypddfd4q0nmjwwlwjwcvz735h4kli";
       type = "gem";
     };
     version = "1.54.0";
@@ -549,16 +549,6 @@
       type = "gem";
     };
     version = "0.3.2";
-  };
-  vagrant = {
-    dependencies = ["bcrypt_pbkdf" "childprocess" "ed25519" "erubi" "googleapis-common-protos-types" "grpc" "hashicorp-checkpoint" "i18n" "ipaddr" "listen" "log4r" "mime-types" "net-ftp" "net-scp" "net-sftp" "net-ssh" "rb-kqueue" "rexml" "rgl" "rubyzip" "vagrant_cloud" "wdm" "winrm" "winrm-elevated" "winrm-fs"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      path = ./.;
-      type = "path";
-    };
-    version = "2.3.4";
   };
   vagrant-spec = {
     dependencies = ["childprocess" "log4r" "rspec" "thor"];
