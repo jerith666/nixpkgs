@@ -5,13 +5,13 @@ rec {
 
   thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "102.7.2";
+    version = "102.10.0";
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "7371079d59cceb47fdd0e9661f79eae7510ab0f5bf8e80c21952dfb5fed3db72279a4ac9d3a3de3617194fb36a9420ae814a69ee19a93ba242d2aa2b921e3010";
+      sha512 = "08d7908cbef48cffac2fbab857f8aceb9a7abd7c72d5e9c9dae8d3a3871846b6f0cf562c5b646ad27a0d79ac04b8605b123c5e1929f92afee4501344d1fbc5cf";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.

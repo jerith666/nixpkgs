@@ -10,6 +10,7 @@
 , qtlocation ? null # qt5 only
 , qtpositioning ? null # qt6 only
 , qtpbfimageplugin
+, qtserialport
 , qtsvg
 , qt5compat ? null # qt6 only
 , wrapQtAppsHook
@@ -21,13 +22,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpxsee";
-  version = "11.12";
+  version = "12.4";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    hash = "sha256-W35KBPYvTKrSi7UnzcUz8MsUwoq8rY5g/+hL1/gVpbI=";
+    hash = "sha256-/a6c30jv/sI0QbCXYCq9JrMpmZRk33lQBwbd0yjnxsQ=";
   };
 
   patches = (substituteAll {
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     inherit qttranslations;
   });
 
-  buildInputs = [ qtpbfimageplugin ]
+  buildInputs = [ qtpbfimageplugin qtserialport ]
     ++ (if isQt6 then [
     qtbase
     qtpositioning
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXSee.app $out/Applications
+    mkdir -p $out/bin
+    ln -s $out/Applications/GPXSee.app/Contents/MacOS/GPXSee $out/bin/gpxsee
   '';
 
   passthru = {

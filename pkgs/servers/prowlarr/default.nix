@@ -1,33 +1,39 @@
 { lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
+  pname = "prowlarr";
+
+  unsupported = throw "Unsupported system ${stdenv.hostPlatform.system} for ${pname}";
+
   os =
     if stdenv.isDarwin then
       "osx"
     else if stdenv.isLinux then
       "linux"
     else
-      throw "Not supported on ${stdenv.hostPlatform.system}.";
+      unsupported;
 
   arch = {
-    x86_64-linux = "x64";
+    aarch64-darwin = "arm64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    x86_64-linux = "x64";
+  }.${stdenv.hostPlatform.system} or unsupported;
 
   hash = {
-    x64-linux_hash = "sha256-Xx2z5aiIKRNbBxBMXCTfm1VacQOLyruC6sXB/+C7knk=";
-    arm64-linux_hash = "sha256-r6WuQhydSRZmsH1hp51gGcQ/7ZruxbEMrbrFps2nmcw=";
-    x64-osx_hash = "sha256-F8bE4lXcqyBVZhgYcQKPrza9cphCuC5j7968jL6qgxM=";
-  }."${arch}-${os}_hash";
+    aarch64-darwin = "sha256-pBhAWR0+UKUKDkXsSIyR+VAV5Kl1vhuoDUVpUqXojg8=";
+    aarch64-linux = "sha256-gNq2Cial4oSVNlPnFu7U7LSMpAhK5skdbYazob7kQuI=";
+    x86_64-darwin = "sha256-6QTBJacl/1/NAmbu0kBLung2KPfR/cuICHeIVpTmu6Y=";
+    x86_64-linux = "sha256-T7WQmKuvKB9B61Ku7vZ/fV+DlzA5KVlOOPmZzRpUvgY=";
+  }.${stdenv.hostPlatform.system} or unsupported;
 
 in stdenv.mkDerivation rec {
-  pname = "prowlarr";
-  version = "1.2.0.2583";
+  inherit pname;
+  version = "1.3.2.3006";
 
   src = fetchurl {
-    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.develop.${version}.${os}-core-${arch}.tar.gz";
-    sha256 = hash;
+    url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,8 +60,14 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An indexer manager/proxy built on the popular arr .net/reactjs base stack";
     homepage = "https://wiki.servarr.com/prowlarr";
+    changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jdreaver ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
   };
 }

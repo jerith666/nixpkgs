@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, orjson
 , pydevccu
 , pytest-aiohttp
 , pytestCheckHook
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.2.8";
+  version = "2023.4.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-nlsmGIg4qBVDU7vjgl8aP9zkZgJCk3lAijFhQ+2pU80=";
+    hash = "sha256-5wUx0S3Wg30Kn6RAkybAOMQqRvVDt9HeIJyTPCVHqRc=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+    orjson
     python-slugify
     voluptuous
   ];

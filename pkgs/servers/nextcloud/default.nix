@@ -15,7 +15,8 @@ let
       inherit sha256;
     };
 
-    patches = [ (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch") ];
+    # This patch is only necessary for NC version <26.
+    patches = lib.optional (lib.versionOlder major "26") (./patches + "/v${major}/0001-Setup-remove-custom-dbuser-creation-behavior.patch");
 
     passthru.tests = nixosTests.nextcloud;
 
@@ -27,6 +28,7 @@ let
     '';
 
     meta = with lib; {
+      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
       maintainers = with maintainers; [ schneefux bachp globin ma27 ];
@@ -37,26 +39,26 @@ let
     };
   };
 in {
-  nextcloud23 = throw ''
-    Nextcloud v23 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2022-12. Please upgrade to at least Nextcloud v24 by declaring
+  nextcloud24 = throw ''
+    Nextcloud v24 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-04. Please upgrade to at least Nextcloud v25 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud24;
+        services.nextcloud.package = pkgs.nextcloud25;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 22 on NixOS 22.05 you have to upgrade to Nextcloud 23
-    first on 22.05 because Nextcloud doesn't support upgrades across multiple major versions!
+    WARNING: if you were on Nextcloud 23 you have to upgrade to Nextcloud 24
+    first on 22.11 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  nextcloud24 = generic {
-    version = "24.0.9";
-    sha256 = "580a3384c9c09aefb8e9b41553d21a6e20001799549dbd25b31dea211d97dd1e";
+  nextcloud25 = generic {
+    version = "25.0.6";
+    sha256 = "sha256-fYtO3CZ5oNpaIs+S+emMrxqYNlck0AC43fxdiomsjDg=";
   };
 
-  nextcloud25 = generic {
-    version = "25.0.3";
-    sha256 = "4b2b1423736ef92469096fe24f61c24cad87a34e07c1c7a81b385d3ea25c00ec";
+  nextcloud26 = generic {
+    version = "26.0.1";
+    sha256 = "sha256-b5xqEkjXyK9K1HPXOkJWX2rautRTHFz6V7w0l7K2T0g=";
   };
 
   # tip: get the sha with:

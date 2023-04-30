@@ -1,20 +1,30 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , zlib
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "TandemAligner";
-  version = "unstable-2022-09-17";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "seryrzu";
     repo = "tandem_aligner";
-    rev = "ac6004f108ad20477045f4d0b037d96051a9df70";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-iMDj1HZ8LzmZckuAM3lbG3eSJSd/5JGVA6SBs7+AgX8=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/seryrzu/tandem_aligner/pull/4
+      url = "https://github.com/seryrzu/tandem_aligner/commit/8b516c94f90aaa9cb84278aa811285d4204b03a9.patch";
+      hash = "sha256-kD46SykXklG/avK0+sc61YKFw9Bes8ZgFAjVXmcpN8k=";
+      stripLen = 1;
+    })
+  ];
 
   sourceRoot = "source/tandem_aligner";
 
@@ -48,9 +58,10 @@ stdenv.mkDerivation {
   meta = {
     description = "A parameter-free algorithm for sequence alignment";
     homepage = "https://github.com/seryrzu/tandem_aligner";
+    changelog = "https://github.com/seryrzu/tandem_aligner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ amesgen ];
     platforms = lib.platforms.linux;
     mainProgram = "tandem_aligner";
   };
-}
+})

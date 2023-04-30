@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.12.2";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1QufnRD2Nbc4twRZ4Yrf3ae1BRGves8tJ/M7coWnRPI=";
+    hash = "sha256-O1Miy0GV34YbE1UrLUWZsatpWyfzFLGvX6fQUJnwbuE=";
   };
 
   # Use specific package versions required by paperless-ngx
@@ -36,18 +36,6 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "0fi7jd5hlx8cnv1m97kv9hc4ih4l8v15wzkqwsp73is4n0qazy0m";
-        };
-      });
-
-      # downgrade redis due to https://github.com/paperless-ngx/paperless-ngx/pull/1802
-      # and https://github.com/django/channels_redis/issues/332
-      channels-redis = super.channels-redis.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "channels_redis";
-          rev = version;
-          hash = "sha256-ZQSsE3pkM+nfDhWutNuupcyC5MDikUu6zU4u7Im6bRQ=";
         };
       });
 
@@ -74,6 +62,7 @@ let
           hash = "sha256-KWkMV4L7bA2Eo/u4GGif6lmDNrZAzvYyDiyzyWt9LeI=";
         };
       });
+
     };
   };
 
@@ -93,7 +82,7 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-fp0Gy3018u2y6jaUM9bmXU0SVjyEJdsvkBqbmb8S10Y=";
+    npmDepsHash = "sha256-wUlybMxnXLNmeu2z+RFFOHVEhH12XD3ZfMo5K+HSBpY=";
 
     nativeBuildInputs = [
       python3
@@ -157,9 +146,13 @@ python.pkgs.buildPythonApplication rec {
     dateparser
     django-celery-results
     django-cors-headers
+    django-compression-middleware
     django-extensions
     django-filter
+    django-guardian
+    django-ipware
     django
+    djangorestframework-guardian2
     djangorestframework
     filelock
     gunicorn
@@ -236,6 +229,7 @@ python.pkgs.buildPythonApplication rec {
     whoosh
     zipp
     zope_interface
+    zxing_cpp
   ]
   ++ redis.optional-dependencies.hiredis
   ++ twisted.optional-dependencies.tls
@@ -244,13 +238,13 @@ python.pkgs.buildPythonApplication rec {
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
     # for files in `python.sitePackages`
-    ${python.interpreter} -OO -m compileall src
+    ${python.pythonForBuild.interpreter} -OO -m compileall src
 
     # Collect static files
-    ${python.interpreter} src/manage.py collectstatic --clear --no-input
+    ${python.pythonForBuild.interpreter} src/manage.py collectstatic --clear --no-input
 
     # Compile string translations using gettext
-    ${python.interpreter} src/manage.py compilemessages
+    ${python.pythonForBuild.interpreter} src/manage.py compilemessages
   '';
 
   installPhase = ''
@@ -295,7 +289,7 @@ python.pkgs.buildPythonApplication rec {
 
     # Disable unneeded code coverage test
     substituteInPlace src/setup.cfg \
-      --replace "--cov --cov-report=html" ""
+      --replace "--cov --cov-report=html --cov-report=xml" ""
     # OCR on NixOS recognizes the space in the picture, upstream CI doesn't.
     # See https://github.com/paperless-ngx/paperless-ngx/pull/2216
     substituteInPlace src/paperless_tesseract/tests/test_parser.py \
@@ -317,7 +311,7 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to scan, index, and archive all of your physical documents";
-    homepage = "https://paperless-ngx.readthedocs.io/";
+    homepage = "https://docs.paperless-ngx.com/";
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lukegb gador erikarvstedt ];

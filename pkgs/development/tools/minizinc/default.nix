@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
 stdenv.mkDerivation rec {
   pname = "minizinc";
-  version = "2.6.4";
+  version = "2.7.2";
 
   nativeBuildInputs = [ cmake flex bison ];
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "MiniZinc";
     repo = "libminizinc";
     rev = version;
-    sha256 = "sha256-rl+d21JcaUl4k4xuAw2zv8KHtaE96U+GENzDt2cgvH8=";
+    sha256 = "sha256-XiaLD6tJDn8DTQwknlVd1+xf+DNCiOZ12yn1zugCVxY=";
   };
 
   meta = with lib; {

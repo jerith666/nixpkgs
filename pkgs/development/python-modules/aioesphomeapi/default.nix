@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, async-timeout
 , mock
 , noiseprotocol
 , protobuf
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "13.3.1";
+  version = "13.7.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,15 +22,11 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pca+SMuUL3XyQpLAL6SOYPnztc95WF2o0v4+5Nc5Nxg=";
+    hash = "sha256-V4sOpgrDF+h+um/A7VwXKRE+aIUuus+eR1Z1tpt5C1g=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "protobuf>=3.12.2,<4.0" "protobuf>=3.12.2"
-  '';
-
   propagatedBuildInputs = [
+    async-timeout
     noiseprotocol
     protobuf
     zeroconf

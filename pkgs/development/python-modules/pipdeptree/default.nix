@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.4.0";
+  version = "2.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-agjerQTSkrpHCleqNUxg+NFiPnf9u9DQrs3vSR917oE=";
+    hash = "sha256-M9Vr7VZJ/nVd3xgfDBIjgQHhJB2QgJgB9ED7p7fRuA8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

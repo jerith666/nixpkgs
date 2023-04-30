@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "trove-classifiers";
-  version = "2023.2.8";
+  version = "2023.4.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O2lg+5bB1MyZiL3BuQvNZfz12YQ9iE38hr1nT/gaTeo=";
+    hash = "sha256-ZejLOSnjeIFB25Cgd2t2/K++tUik++au5L/ZZW6JmTk=";
   };
 
   nativeBuildInputs = [

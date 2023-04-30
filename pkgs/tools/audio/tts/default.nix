@@ -3,45 +3,37 @@
 , fetchFromGitHub
 , fetchpatch
 , espeak-ng
+, tts
 }:
-
-# USAGE:
-# $ tts-server --list_models
-# # pick your favorite vocoder/tts model
-# $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
-#
-# If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
-#
-# For now, for deployment check the systemd unit in the pull request:
-#   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      # API breakage with 0.9.0
-      # TypeError: mel() takes 0 positional arguments but 2 positional arguments (and 3 keyword-only arguments) were given
-      librosa = super.librosa.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.1";
-        src = super.fetchPypi {
-          pname = "librosa";
-          inherit version;
-          hash = "sha256-xT0F52iuSj5VOuIcLlAVKT5e+/1cEtSX8RBMtRnMprM=";
-        };
-      });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.11.1";
+  version = "0.13.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EVFFETiGbrouUsrIhMFZEex3UGCCWTI3CC4yFAcERyw=";
+    hash = "sha256-3t4JYEwQ+puGLhGl3nn93qsL8IeOwlYtHXTrnZ5Cf+w=";
   };
+
+  patches = [
+    (fetchpatch {
+      # upgrade librosa to 0.10.0
+      url = "https://github.com/coqui-ai/TTS/commit/4c829e74a1399ab083b566a70c1b7e879eda6e1e.patch";
+      hash = "sha256-QP9AnMbdEpGJywiZBreojHUjq29ihqy6HxvUtS5OKvQ=";
+      excludes = [
+        "requirements.txt"
+      ];
+    })
+  ];
 
   postPatch = let
     relaxedConstraints = [
@@ -53,6 +45,7 @@ python.pkgs.buildPythonApplication rec {
       "numba"
       "numpy"
       "unidic-lite"
+      "trainer"
     ];
   in ''
     sed -r -i \
@@ -105,9 +98,13 @@ python.pkgs.buildPythonApplication rec {
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/utils/monotonic_align
-      ${python.interpreter} setup.py install --prefix=$out
+      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
     )
   '';
+
+  # tests get stuck when run in nixpkgs-review, tested in passthru
+  doCheck = false;
+  passthru.tests.pytest = tts.overridePythonAttrs (_: { doCheck = true; });
 
   nativeCheckInputs = with python.pkgs; [
     espeak-ng
@@ -178,7 +175,13 @@ python.pkgs.buildPythonApplication rec {
     "tests/vocoder_tests/test_multiband_melgan_train.py"
     "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_wavernn_train.py"
+    # only a feed forward test, but still takes too long
+    "tests/tts_tests/test_overflow.py"
   ];
+
+  passthru = {
+    inherit python;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coqui-ai/TTS";

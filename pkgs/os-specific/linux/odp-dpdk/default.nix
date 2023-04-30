@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config
 , dpdk, libbpf, libconfig, libpcap, numactl, openssl, zlib, libbsd, libelf, jansson
+, libnl
 }: let
   dpdk_19_11 = dpdk.overrideAttrs (old: rec {
     version = "19.11.12";
@@ -37,9 +38,10 @@ in stdenv.mkDerivation rec {
     libelf
     jansson
     libbpf
+    libnl
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=maybe-uninitialized"
     "-Wno-error=uninitialized"

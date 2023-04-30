@@ -36,14 +36,17 @@ nix-store --realise --add-root system-result --indirect result;
 nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 nix-store --realise --add-root client-ip-echo-result --indirect result;
 
-for sd in client-ip-echo elbum bills-automation haskell-rest-service; do
+for sd in calendar-filter client-ip-echo elbum bills-automation haskell-rest-service; do
     echo; echo "confirming that nix-shell works for ${sd}";
     todo=$(nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --dry-run 2>&1 | grep '/nix/store/.*\.drv$' || true)
     if echo $todo | grep '/nix/store/.*\.drv$' > /dev/null; then
-        nix build $todo --keep-going;
+        nix build $todo --keep-going --max-jobs 4;
     fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
     nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result
+    if [ -f ~/git/${sd}/default.nix ]; then
+        nix build -I nixpkgs=$wt -f ~/git/${sd}/default.nix -o ${sd}-result
+    fi
 done
 
 echo;
@@ -54,9 +57,8 @@ current=$(nixos-version --revision);
 
 git log -p ${current}... -- nixos/doc/manual/release-notes > update-${d}.txt
 
-./system-result/sw/bin/nox-update --quiet /run/current-system system-result | \
-    grep -v '\.drv : $' | \
-    sed 's|^ */nix/store/[a-z0-9]*-||' | \
-    sort -u >> \
-         update-${d}.txt
-
+./system-result/sw/bin/nvd --color=always \
+                           diff \
+                           /run/current-system \
+                           system-result >> \
+                           update-${d}.txt

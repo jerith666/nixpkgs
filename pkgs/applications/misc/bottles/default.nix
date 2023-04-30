@@ -1,6 +1,6 @@
 { lib
 , fetchFromGitHub
-, fetchFromGitLab
+, fetchpatch
 , gitUpdater
 , python3Packages
 , blueprint-compiler
@@ -29,16 +29,24 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "50.2";
+  version = "51.5";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-+r/r3vExnvYQIicKAEmwZ+eRSep6kWte5k7gu9jC67w=";
+    sha256 = "sha256-8VF/CD0Wu2eV6wOpj/M6peKDthFWlcg+1NzzTSIH4S8=";
   };
 
-  patches = [ ./vulkan_icd.patch ];
+  patches = [
+    ./vulkan_icd.patch
+
+    # Remove next version
+    (fetchpatch {
+      url = "https://github.com/bottlesdevs/Bottles/commit/7cb284f9bac0b71bf632bfc70d94f7a53bc51267.patch";
+      hash = "sha256-mRF+BtQ0qM7Yvx7SONeH2wc04F87fEyNRlBuyQrzN8Y=";
+    })
+  ];
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -60,6 +68,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    pathvalidate
     pycurl
     pyyaml
     requests
@@ -72,7 +81,6 @@ python3Packages.buildPythonApplication rec {
     chardet
     certifi
     idna
-    pillow
     orjson
     icoextract
   ] ++ [

@@ -17,7 +17,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , version
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
-, sha256 ? null # when not specifying src
+, hash ? null # when not specifying src
 , configureFlags ? []
 , nativeBuildInputs ? []
 , buildInputs ? []
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ removeReferencesTo ]
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
     ++ configureFlags
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
     "-Wno-error=implicit-fallthrough"
   ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") [

@@ -17,7 +17,7 @@
 , cctools, libobjc, libpm, libunwind, sandbox, xnu
 , ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
 , ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
-, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML
+, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
 , cups, openbsm, runCommand, xcbuild, writeScriptBin
 , ffmpeg_4 ? null
 , lib, stdenv, fetchpatch
@@ -102,7 +102,7 @@ qtModule {
       --replace "-Wl,-fatal_warnings" ""
   '') + postPatch;
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
     # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
     "-Wno-class-memaccess"
   ] ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
@@ -111,7 +111,7 @@ qtModule {
     "-march=westmere"
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-elaborated-enum-base"
-  ];
+  ]);
 
   preConfigure = ''
     export NINJAFLAGS=-j$NIX_BUILD_CORES
@@ -186,6 +186,8 @@ qtModule {
     SecurityInterface
     Vision
     CoreML
+    OpenDirectory
+    Accelerate
 
     openbsm
     libunwind
@@ -221,6 +223,7 @@ qtModule {
     Prefix = ..
     EOF
 
+  '' + ''
     # Fix for out-of-sync QtWebEngine and Qt releases (since 5.15.3)
     sed 's/${lib.head (lib.splitString "-" version)} /${qtCompatVersion} /' -i "$out"/lib/cmake/*/*Config.cmake
   '';

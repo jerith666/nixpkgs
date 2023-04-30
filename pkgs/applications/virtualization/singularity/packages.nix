@@ -7,20 +7,20 @@ let
   apptainer = callPackage
     (import ./generic.nix rec {
       pname = "apptainer";
-      version = "1.1.5";
+      version = "1.1.7";
       projectName = "apptainer";
 
       src = fetchFromGitHub {
         owner = "apptainer";
         repo = "apptainer";
         rev = "v${version}";
-        hash = "sha256-onJkpHJNsO0cQO2m+TmdMuMkuvH178mDhOeX41bYFic=";
+        hash = "sha256-3F8qwP27IXcnnEYMnLzkCOxQDx7yej6QIZ40Wb5pk34=";
       };
 
       # Update by running
       # nix-prefetch -E "{ sha256 }: ((import ./. { }).apptainer.override { vendorHash = sha256; }).go-modules"
       # at the root directory of the Nixpkgs repository
-      vendorHash = "sha256-tAnh7A8Lw5KtY7hq+sqHMEUlgXvgeeCKKIfRZFoRtug=";
+      vendorHash = "sha256-PfFubgR/W1WBXIsRO+Kg7hA6ebeAcRiJlTlAZbnl19A=";
 
       extraDescription = " (previously known as Singularity)";
       extraMeta.homepage = "https://apptainer.org";
@@ -29,29 +29,29 @@ let
       # Apptainer doesn't depend on conmon
       conmon = null;
 
-      # defaultToSuid becomes false since Apptainer 1.1.0
-      # https://github.com/apptainer/apptainer/pull/495
-      # https://github.com/apptainer/apptainer/releases/tag/v1.1.0
-      defaultToSuid = false;
+      # Apptainer builders require explicit --with-suid / --without-suid flag
+      # when building on a system with disabled unprivileged namespace.
+      # See https://github.com/NixOS/nixpkgs/pull/215690#issuecomment-1426954601
+      defaultToSuid = null;
     };
 
   singularity = callPackage
     (import ./generic.nix rec {
       pname = "singularity-ce";
-      version = "3.10.4";
+      version = "3.11.1";
       projectName = "singularity";
 
       src = fetchFromGitHub {
         owner = "sylabs";
         repo = "singularity";
         rev = "v${version}";
-        hash = "sha256-bUnQXQVwaVA3Lkw3X9TBWqNBgiPxAVCHnkq0vc+CIsM=";
+        hash = "sha256-gdgg6VN3Ily+2Remz6dZBhhfWIxyaBa4bIlFcgrA/uY=";
       };
 
       # Update by running
       # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).go-modules"
       # at the root directory of the Nixpkgs repository
-      vendorHash = "sha256-K8helLcOuz3E4LzBE9y3pnZqwdwhO/iMPTN1o22ipVg=";
+      vendorHash = "sha256-mBhlH6LSmcJuc6HbU/3Q9ii7vJkW9jcikBWCl8oeMOk=";
 
       # Do not build conmon from the Git submodule source,
       # Use Nixpkgs provided version

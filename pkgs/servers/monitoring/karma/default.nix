@@ -5,7 +5,7 @@
 , callPackage
 , fetchFromGitHub
 , nixosTests
-, nodejs-18_x
+, nodejs_18
 }:
 
 let
@@ -13,25 +13,25 @@ let
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
     # pin nodejs version
-    nodejs = nodejs-18_x;
+    nodejs = nodejs_18;
    }).nodeDependencies;
 in
 
 buildGoModule rec {
   pname = "karma";
-  version = "0.111";
+  version = "0.114";
 
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "karma";
     rev = "v${version}";
-    hash = "sha256-jcJ8rdggM4kDCVTsEBDtZ9nNnutl+RwABx7zHY39tDs=";
+    hash = "sha256-ZstBumK2ywwdr1ksMN7P8mHdYUiMOpfpYnvt0v0Io4w=";
   };
 
-  vendorHash = "sha256-MYHgLKDSB/g/k4i+deBNeaeZ3BbHRnymwsNTTA7qNdU=";
+  vendorHash = "sha256-ZsXPA4KyKbc/bwkidyHNDg62mE8KlE+yIssOBZLmHVg=";
 
   nativeBuildInputs = [
-    nodejs-18_x
+    nodejs_18
   ];
 
   postPatch = ''

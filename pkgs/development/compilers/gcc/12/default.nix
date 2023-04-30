@@ -17,7 +17,7 @@
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
-, gnatboot ? null
+, gnat-bootstrap ? null
 , enableMultilib ? false
 , enablePlugin ? stdenv.hostPlatform == stdenv.buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
@@ -28,6 +28,9 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
 , libxcrypt
+, disableGdbPlugin ? !enablePlugin
+, nukeReferences
+, callPackage
 }:
 
 # Make sure we get GNU sed.
@@ -35,7 +38,7 @@ assert stdenv.buildPlatform.isDarwin -> gnused != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
-assert langAda -> gnatboot != null;
+assert langAda -> gnat-bootstrap != null;
 
 # TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
 #   error: GDC is required to build d
@@ -53,6 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
+    disableBootstrap = !stdenv.hostPlatform.isDarwin;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -64,7 +68,10 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
-      ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
+      ]
+      # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
+      # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
+      ++ optional (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) (fetchpatch {
         name = "gcc-12-darwin-aarch64-support.patch";
         url = "https://github.com/Homebrew/formula-patches/raw/1d184289/gcc/gcc-12.2.0-arm.diff";
         sha256 = "sha256-omclLslGi/2yCV4pNBMaIpPDMW3tcz/RXdupbNbeOHA=";
@@ -142,6 +149,8 @@ let majorVersion = "12";
         buildPackages
         cloog
         crossStageStatic
+        disableBootstrap
+        disableGdbPlugin
         enableLTO
         enableMultilib
         enablePlugin
@@ -150,7 +159,7 @@ let majorVersion = "12";
         fetchurl
         gettext
         gmp
-        gnatboot
+        gnat-bootstrap
         gnused
         isl
         langAda
@@ -165,10 +174,12 @@ let majorVersion = "12";
         lib
         libcCross
         libmpc
+        libucontext
         libxcrypt
         mpfr
         name
         noSysDirs
+        nukeReferences
         patchelf
         perl
         profiledCompiler
@@ -186,7 +197,7 @@ let majorVersion = "12";
 
 in
 
-stdenv.mkDerivation ({
+lib.pipe (stdenv.mkDerivation ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
@@ -276,9 +287,11 @@ stdenv.mkDerivation ({
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
-  buildFlags = optional
-    (targetPlatform == hostPlatform && hostPlatform == buildPlatform)
-    (if profiledCompiler then "profiledbootstrap" else "bootstrap");
+  buildFlags =
+    let target =
+          lib.optionalString (profiledCompiler) "profiled" +
+          lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";
+    in lib.optional (target != "") target;
 
   inherit (callFile ../common/strip-attributes.nix { })
     stripDebugList
@@ -334,4 +347,9 @@ stdenv.mkDerivation ({
 }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
-)
+))
+[
+  (callPackage ../common/libgcc.nix   { inherit langC langCC langJit; })
+  (callPackage ../common/checksum.nix { inherit langC langCC; })
+]
+

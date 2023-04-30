@@ -4,16 +4,16 @@ let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
-    version = "6.1.12"; #zen
+    version = "6.2.12"; #zen
     suffix = "zen1"; #zen
-    sha256 = "16g0rkgmxbj4425mbnadam7vbd8621ar13ddx26j298bc9m8yqic"; #zen
+    sha256 = "0y1gs7yyijgwhdcxznj6l1frlqsnpjr0r5xk43dqnckz0f1ml3by"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
-    version = "6.1.12"; #lqx
+    version = "6.2.12"; #lqx
     suffix = "lqx1"; #lqx
-    sha256 = "0a6slrydf47hk4b3xlxycjw9y2xgjgvzjic2psbcb1c5y75zq720"; #lqx
+    sha256 = "1gjg4ln42p6c5qk2067irjx4czwr8sl2klnzw68nk9cdppf3w4z5"; #lqx
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -32,7 +32,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version + "/master";
-      maintainers = with lib.maintainers; [ andresilva pedrohlc ];
+      maintainers = with lib.maintainers; [ pedrohlc ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen but less aggressive release schedule)";
     };

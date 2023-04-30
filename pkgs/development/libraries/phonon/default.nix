@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
     license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
+    broken = stdenv.isDarwin;
   };
 
   src = fetchurl {
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  NIX_CFLAGS_COMPILE = "-fPIC";
+  env.NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"

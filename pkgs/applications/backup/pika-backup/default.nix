@@ -4,6 +4,7 @@
 , rustPlatform
 , substituteAll
 , desktop-file-utils
+, git
 , itstool
 , meson
 , ninja
@@ -18,20 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.4.2";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    hash = "sha256-EiXu5xv42at4NBwpCbij0+YsxVlNvIYrnxmlB9ItqZc=";
+    hash = "sha256-eI2MRrW6MID4dMHR1OjDT83xd/9CgDuhAWpEHmhnMVw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2IDkVkzH5qQM+XiyxuST5p0y4N/Sz+4+Sj3Smotaf8M=";
+    hash = "sha256-hbh4kfQcym0n2cCp2ebljQpizolsxyfZk7ctKOlDybA=";
   };
 
   patches = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
+    git
     itstool
     meson
     ninja

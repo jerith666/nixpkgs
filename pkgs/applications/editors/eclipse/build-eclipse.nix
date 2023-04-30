@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst libsecret zlib
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
-    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
+    perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
   meta = {

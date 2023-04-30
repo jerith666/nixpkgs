@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck }:
+{ lib, stdenv, stdenvNoCC, lndir, runtimeShell, shellcheck, haskell }:
 
 let
   inherit (lib)
@@ -132,13 +132,12 @@ rec {
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
+    , allowSubstitutes ? false
+    , preferLocalBuild ? true
     }:
     runCommand name
-      { inherit text executable checkPhase meta;
+      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
-        # Pointless to do this on a remote machine.
-        preferLocalBuild = true;
-        allowSubstitutes = false;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -150,9 +149,11 @@ rec {
           echo -n "$text" > "$target"
         fi
 
-        eval "$checkPhase"
+        if [ -n "$executable" ]; then
+          chmod +x "$target"
+        fi
 
-        (test -n "$executable" && chmod +x "$target") || true
+        eval "$checkPhase"
       '';
 
   /*
@@ -324,6 +325,8 @@ rec {
       inherit name;
       executable = true;
       destination = "/bin/${name}";
+      allowSubstitutes = true;
+      preferLocalBuild = false;
       text = ''
         #!${runtimeShell}
         set -o errexit
@@ -341,7 +344,9 @@ rec {
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          ${shellcheck.unwrapped}/bin/shellcheck "$target"
+          # use shellcheck which does not include docs
+          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
+          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
           runHook postCheck
         ''
         else checkPhase;
@@ -409,7 +414,10 @@ rec {
         mkdir -p "$(dirname "$file")"
         cat $files > "$file"
 
-        (test -n "$executable" && chmod +x "$file") || true
+        if [ -n "$executable" ]; then
+          chmod +x "$file"
+        fi
+
         eval "$checkPhase"
       '';
 
@@ -509,8 +517,8 @@ rec {
       ''
         mkdir -p $out
         for i in $(cat $pathsPath); do
-          ${lndir}/bin/lndir $i $out
-        done 2>&1 | sed 's/^/symlinkJoin: warning: keeping existing file: /'
+          ${lndir}/bin/lndir -silent $i $out
+        done
         ${postBuild}
       '';
 
@@ -593,45 +601,28 @@ rec {
     in linkFarm name (map mkEntryFromDrv drvs);
 
 
-  /*
-    Make a package that just contains a setup hook with the given contents.
-    This setup hook will be invoked by any package that includes this package
-    as a buildInput. Optionally takes a list of substitutions that should be
-    applied to the resulting script.
-
-    Examples:
-    # setup hook that depends on the hello package and runs ./myscript.sh
-    myhellohook = makeSetupHook { deps = [ hello ]; } ./myscript.sh;
-
-    # writes a Linux-exclusive setup hook where @bash@ myscript.sh is substituted for the
-    # bash interpreter.
-    myhellohookSub = makeSetupHook {
-                   name = "myscript-hook";
-                   deps = [ hello ];
-                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-                   meta.platforms = lib.platforms.linux;
-                 } ./myscript.sh;
-
-    # setup hook with a package test
-    myhellohookTested = makeSetupHook {
-                   name = "myscript-hook";
-                   deps = [ hello ];
-                   substitutions = { bash = "${pkgs.bash}/bin/bash"; };
-                   meta.platforms = lib.platforms.linux;
-                   passthru.tests.greeting = callPackage ./test { };
-                 } ./myscript.sh;
-   */
+  # docs in doc/builders/special/makesetuphook.section.md
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
-    , deps ? []
-    , substitutions ? {}
-    , meta ? {}
-    , passthru ? {}
+    , deps ? [ ]
+      # hooks go in nativeBuildInput so these will be nativeBuildInput
+    , propagatedBuildInputs ? [ ]
+      # these will be buildInputs
+    , depsTargetTargetPropagated ? [ ]
+    , meta ? { }
+    , passthru ? { }
+    , substitutions ? { }
     }:
     script:
     runCommand name
       (substitutions // {
         inherit meta;
+        inherit depsTargetTargetPropagated;
+        propagatedBuildInputs =
+          # remove list conditionals before 23.11
+          lib.warnIf (!lib.isList deps) "'deps' argument to makeSetupHook must be a list. content of deps: ${toString deps}"
+            (lib.warnIf (deps != [ ]) "'deps' argument to makeSetupHook is deprecated and will be removed in release 23.11., Please use propagatedBuildInputs instead. content of deps: ${toString deps}"
+              propagatedBuildInputs ++ (if lib.isList deps then deps else [ deps ]));
         strictDeps = true;
         # TODO 2023-01, no backport: simplify to inherit passthru;
         passthru = passthru
@@ -642,8 +633,7 @@ rec {
       (''
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
-      '' + lib.optionalString (deps != []) ''
-        printWords ${toString deps} > $out/nix-support/propagated-build-inputs
+        recordPropagatedDependencies
       '' + lib.optionalString (substitutions != {}) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');
@@ -795,12 +785,13 @@ rec {
   requireFile = { name ? null
                 , sha256 ? null
                 , sha1 ? null
+                , hash ? null
                 , url ? null
                 , message ? null
                 , hashMode ? "flat"
                 } :
     assert (message != null) || (url != null);
-    assert (sha256 != null) || (sha1 != null);
+    assert (sha256 != null) || (sha1 != null) || (hash != null);
     assert (name != null) || (url != null);
     let msg =
       if message != null then message
@@ -812,15 +803,19 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
-      hashAlgo = if sha256 != null then "sha256" else "sha1";
-      hash = if sha256 != null then sha256 else sha1;
+      hashAlgo = if hash != null then ""
+            else if sha256 != null then "sha256"
+            else "sha1";
+      hash_ = if hash != null then hash
+         else if sha256 != null then sha256
+         else sha1;
       name_ = if name == null then baseNameOf (toString url) else name;
     in
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
       outputHashAlgo = hashAlgo;
-      outputHash = hash;
+      outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;
       builder = writeScript "restrict-message" ''

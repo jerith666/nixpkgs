@@ -2,7 +2,7 @@
 , lib
 , stdenv
 , fetchurl
-, fetchpatch
+, fetchpatch2
 , gettext
 , meson
 , ninja
@@ -56,11 +56,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.74.3";
+  version = "2.76.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    sha256 = "6bxB7NlpDZvGqXDMc4ARm4KOW2pLFsOTxjiz3CuHy8s=";
+    sha256 = "Q9wPahJpWPW0VBNsQ5jqtCAknBYXGnaXhEhuJfL9oZ8=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -68,27 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
-
-    # Fix error about missing sentinel in glib/tests/cxx.cpp
-    # These two commits are part of already merged glib MRs 3033 and 3031:
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3033
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/0ca5254c5d92aec675b76b4bfa72a6885cde6066.patch";
-      sha256 = "OfD5zO/7JIgOMLc0FAgHV9smWugFJuVPHCn9jTsMQJg=";
-    })
-    # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3031
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/7dc19632f3115e3f517c6bc80436fe72c1dcdeb4.patch";
-      sha256 = "v28Yk+R0kN9ssIcvJudRZ4vi30rzQEE8Lsd1kWp5hbM=";
-    })
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
 
-    # Add support for the GNOME’s default terminal emulator.
-    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
-    ./gnome-console-support.patch
-    # Do the same for Pantheon’s terminal emulator.
+    # Add support for Pantheon’s terminal emulator.
     ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
@@ -118,20 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable flaky test.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/820
     ./skip-timer-test.patch
-
-    # GVariant security fixes
-    # https://discourse.gnome.org/t/multiple-fixes-for-gvariant-normalisation-issues-in-glib/12835
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/merge_requests/3126.patch";
-      sha256 = "CNCxouYy8xNHt4eJtPZ2eOi9b0SxzI2DkklNfQMk3d8=";
-    })
-
-    # Menu model security fix
-    # https://discourse.gnome.org/t/fixes-for-gdbusmenumodel-crashes-in-glib/12846
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/4f4d770a1e40f719d5a310cffdac29cbb4e20c11.patch";
-      sha256 = "+S44AnC86HfbMwkRe1ll54IK9pLxaFD3LqiVhPelnXI=";
-    })
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -194,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dxattr=false"
   ];
 
-  NIX_CFLAGS_COMPILE = toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -209,6 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs glib/gen-unicode-tables.pl
     patchShebangs glib/tests/gen-casefold-txt.py
     patchShebangs glib/tests/gen-casemap-txt.py
+    patchShebangs tools/gen-visibility-macros.py
 
     # Needs machine-id, comment the test
     sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c

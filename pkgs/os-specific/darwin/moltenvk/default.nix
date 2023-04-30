@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.1";
+  version = "1.2.3";
 
   buildInputs = [
     AppKit
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JqHPKLSFq+8hyOjVZbjh4AsHM8zSF7ZVxlEePmnEC2w=";
+    hash = "sha256-GPOF2lyo1eDf1GrPjcj0y1OuUHI/c80L9gSQM+4wEp0=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-isystem ${lib.getDev libcxx}/include/c++/v1"
     "-I${lib.getDev spirv-cross}/include/spirv_cross"
     "-I${lib.getDev spirv-headers}/include/spirv/unified1/"

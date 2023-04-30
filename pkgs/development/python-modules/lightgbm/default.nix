@@ -8,12 +8,17 @@
 , scikit-learn
 , llvmPackages ? null
 , pythonOlder
+, python
+, ocl-icd
+, opencl-headers
+, boost
+, gpuSupport ? true
 }:
 
 buildPythonPackage rec {
   pname = "lightgbm";
   version = "3.3.5";
-  format = "other";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
@@ -28,15 +33,23 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
+  buildInputs = (lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
-  ];
+  ]) ++ (lib.optionals gpuSupport [
+    boost
+    ocl-icd
+    opencl-headers
+  ]);
 
   propagatedBuildInputs = [
     numpy
     scipy
     scikit-learn
   ];
+
+  buildPhase = ''
+    ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
+  '';
 
   postConfigure = ''
     export HOME=$(mktemp -d)
@@ -51,11 +64,11 @@ buildPythonPackage rec {
     "lightgbm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A fast, distributed, high performance gradient boosting (GBDT, GBRT, GBM or MART) framework";
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ teh costrouc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ teh costrouc ];
   };
 }

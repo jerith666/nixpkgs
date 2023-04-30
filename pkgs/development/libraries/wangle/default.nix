@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wangle";
-  version = "2023.01.30.00";
+  version = "2023.04.03.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wangle";
     rev = "v${version}";
-    sha256 = "sha256-pHBFX9zs1vHXveZw9HCieRuQldLrq5fwJXWzNyLx1Kg=";
+    sha256 = "sha256-ISf/ezcJKCNv5UEGSf+OmHjV+QkanbTNoAm2ci1qy0o=";
   };
 
   nativeBuildInputs = [ cmake ];

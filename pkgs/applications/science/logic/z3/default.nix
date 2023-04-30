@@ -18,14 +18,14 @@ assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
 with lib;
 
-let common = { version, sha256, patches ? [ ] }:
+let common = { version, sha256, patches ? [ ], tag ? "z3" }:
   stdenv.mkDerivation rec {
     pname = "z3";
     inherit version sha256 patches;
     src = fetchFromGitHub {
       owner = "Z3Prover";
       repo = pname;
-      rev = "z3-${version}";
+      rev = "${tag}-${version}";
       sha256 = sha256;
     };
 
@@ -47,7 +47,7 @@ let common = { version, sha256, patches ? [ ] }:
 
     configurePhase = concatStringsSep " "
       (
-        [ "${python.interpreter} scripts/mk_make.py --prefix=$out" ]
+        [ "${python.pythonForBuild.interpreter} scripts/mk_make.py --prefix=$out" ]
           ++ optional javaBindings "--java"
           ++ optional ocamlBindings "--ml"
           ++ optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
@@ -92,7 +92,12 @@ in
     sha256 = "sha256-ItmtZHDhCeLAVtN7K80dqyAh20o7TM4xk2sTb9QgHvk=";
   };
   z3_4_8 = common {
-    version = "4.8.15";
-    sha256 = "0xkwqz0y5d1lfb6kfqy8wn8n2dqalzf4c8ghmjsajc1bpdl70yc5";
+    version = "4.8.17";
+    sha256 = "sha256-BSwjgOU9EgCcm18Zx0P9mnoPc9ZeYsJwEu0ffnACa+8=";
+  };
+  z3_4_8_5 = common {
+    tag = "Z3";
+    version = "4.8.5";
+    sha256 = "sha256-ytG5O9HczbIVJAiIGZfUXC/MuYH7d7yLApaeTRlKXoc=";
   };
 }

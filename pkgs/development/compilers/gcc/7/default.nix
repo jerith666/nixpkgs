@@ -63,6 +63,8 @@ let majorVersion = "7";
           url = "https://gcc.gnu.org/git/?p=gcc.git;a=patch;h=de31f5445b12fd9ab9969dc536d821fe6f0edad0";
           sha256 = "0sd52c898msqg7m316zp0ryyj7l326cjcn2y19dcxqp15r74qj0g";
         })
+
+        ../9/fix-struct-redefinition-on-glibc-2.36.patch
       ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optionals targetPlatform.isNetBSD [
@@ -225,7 +227,7 @@ stdenv.mkDerivation ({
   inherit (callFile ../common/dependencies.nix { })
     depsBuildBuild nativeBuildInputs depsBuildTarget buildInputs depsTargetTarget;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && langFortran) "-Wno-unused-command-line-argument";
   NIX_LDFLAGS = lib.optionalString  hostPlatform.isSunOS "-lm";
 
   preConfigure = callFile ../common/pre-configure.nix { };
@@ -278,6 +280,7 @@ stdenv.mkDerivation ({
   passthru = {
     inherit langC langCC langObjC langObjCpp langFortran langGo version;
     isGNU = true;
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

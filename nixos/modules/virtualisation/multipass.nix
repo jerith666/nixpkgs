@@ -33,8 +33,8 @@ in
       description = "Multipass orchestrates virtual Ubuntu instances.";
 
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network.target" ];
-      after = [ "network.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
 
       environment = {
         "XDG_DATA_HOME" = "/var/lib/multipass/data";
@@ -44,7 +44,7 @@ in
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/multipassd --logger platform --verbosity ${cfg.logLevel}";
-        SyslogIdentifer = "multipassd";
+        SyslogIdentifier = "multipassd";
         Restart = "on-failure";
         TimeoutStopSec = 300;
         Type = "simple";

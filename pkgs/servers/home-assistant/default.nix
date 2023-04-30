@@ -2,6 +2,7 @@
 , lib
 , callPackage
 , fetchFromGitHub
+, fetchPypi
 , fetchpatch
 , python3
 , substituteAll
@@ -42,16 +43,6 @@ let
         };
       });
 
-      # https://github.com/postlund/pyatv/issues/1879
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        pname = "aiohttp";
-        version = "3.8.1";
-        src = self.fetchPypi {
-          inherit pname version;
-          hash = "sha256-/FRx4aVN4V73HBvG6+gNTcaB6mAOaL/Ry85AQn8LdXg=";
-        };
-      });
-
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -88,13 +79,22 @@ let
         };
       });
 
-      gridnet = super.gridnet.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.0";
+      geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
+        version = "2.5.0";
         src = fetchFromGitHub {
-          owner = "klaasnicolaas";
-          repo = "python-gridnet";
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-AcImffYki1gnIaZp/1eacNjdDgjn6qinPJXq9jYtoRg=";
+        };
+        doCheck = false;
+      });
+
+      jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
+        version = "3.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
           rev = "refs/tags/v${version}";
-          hash = "sha256-Ihs8qUx50tAUcRBsVArRhzoLcQUi1vbYh8sPyK75AEk=";
+          hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
         };
       });
 
@@ -107,6 +107,33 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
         };
+      });
+
+      # moto tests are a nuissance
+      moto = super.moto.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
+      notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.5";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "engrbm87";
+          repo = "notifications_android_tv";
+          rev = "refs/tags/${version}";
+          hash = "sha256-adkcUuPl0jdJjkBINCTW4Kmc16C/HzL+jaRZB/Qr09A=";
+        };
+
+        nativeBuildInputs = with super; [
+          setuptools
+        ];
+
+        propagatedBuildInputs = with super; [
+          requests
+        ];
+
+        doCheck = false; # no tests
       });
 
       # Pinned due to API changes in 1.3.0
@@ -130,6 +157,15 @@ let
         };
       });
 
+      p1monitor = super.p1monitor.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-VHY5AWxt5BZd1NQKzsgubEZBLKAlDNm8toyEazPUnDU=";
+        };
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -141,13 +177,12 @@ let
         };
       });
 
-      # https://github.com/home-assistant/core/pull/80931
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "2.5.0";
-        src = super.fetchPypi {
-          pname = "PyJWT";
-          inherit version;
-          hash = "sha256-53q4lICQXYaZhEKsV4jzUzP6hfZQR6U0rcOO3zyI/Ds=";
+      pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.1";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
         };
       });
 
@@ -179,7 +214,7 @@ let
           hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
         };
         propagatedBuildInputs = [
-          self.APScheduler
+          self.apscheduler
           self.cachetools
           self.certifi
           self.cryptography
@@ -197,6 +232,15 @@ let
             --replace "tornado==6.1" "tornado"
         '';
         doCheck = false;
+      });
+
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.9";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-lXGSFePscze59Xw8LtoOanYZvhlKUWbAfB5Zn2r8IPo=";
+        };
       });
 
       # Pinned due to API changes in 0.3.0
@@ -221,16 +265,6 @@ let
         };
       });
 
-      # Pinned due to API changes in 2.0
-      vsure = super.vsure.overridePythonAttrs (oldAttrs: rec {
-        version = "1.8.1";
-        src = super.fetchPypi {
-          pname = "vsure";
-          inherit version;
-          hash = "sha256-Zh83t7yjZU2NjOgCkqPUHbqvEyEWXGITRgr5d2fLtRI=";
-        };
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -239,6 +273,16 @@ let
           repo = "python-vultr";
           rev = "v${version}";
           sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+        };
+      });
+
+      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
+        version = "11.0.1";
+        src = fetchFromGitHub {
+          owner = "aaugustin";
+          repo = "websockets";
+          rev = "refs/tags/${version}";
+          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 
@@ -265,12 +309,8 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
-  # Create info about included packages and components
-  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
-  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
-
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.2.5";
+  hassVersion = "2023.4.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -283,17 +323,29 @@ in python.pkgs.buildPythonApplication rec {
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
 
-  # PyPI tarball is missing tests/ directory
-  src = fetchFromGitHub {
+  # Primary source is the pypi sdist, because it contains translations
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-054MOhLU7sImD5Sl5vUuik6mt7GCupMeBI2pdtpWuls=";
+  };
+
+  # Secondary source is git for tests
+  gitSrc = fetchFromGitHub {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-7rH4tEW5gQZ/dPkgGzygfT2PwdZGASuyiFrNyn3hfys=";
+    hash = "sha256-/SYJUW028HvxLMNHhm6cqQ6jv0J+8NatbZ7h7HyGYXs=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
   ];
+
+  # copy tests early, so patches apply as they would to the git repo
+  prePatch = ''
+    cp --no-preserve=mode --recursive ${gitSrc}/tests ./
+    chmod u+x tests/auth/providers/test_command_line_cmd.sh
+  '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
@@ -315,10 +367,12 @@ in python.pkgs.buildPythonApplication rec {
       "httpx"
       "ifaddr"
       "orjson"
+      "pip"
       "PyJWT"
       "pyOpenSSL"
       "requests"
       "typing-extensions"
+      "voluptuous-serialize"
       "yarl"
     ];
   in ''
@@ -354,12 +408,13 @@ in python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    ulid-transform
     voluptuous
     voluptuous-serialize
     yarl
     # Implicit dependency via homeassistant/requirements.py
     setuptools
-  ] ++ componentBuildInputs ++ extraBuildInputs;
+  ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
@@ -382,6 +437,7 @@ in python.pkgs.buildPythonApplication rec {
     requests-mock
     respx
     stdlib-list
+    syrupy
     tomli
     # required through tests/auth/mfa_modules/test_otp.py
     pyotp
@@ -405,6 +461,8 @@ in python.pkgs.buildPythonApplication rec {
     "--showlocals"
     # AssertionError: assert 1 == 0
     "--deselect tests/test_config.py::test_merge"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_translation.py::test_caching"
     # tests are located in tests/
     "tests"
   ];
@@ -428,11 +486,6 @@ in python.pkgs.buildPythonApplication rec {
     export PATH=${inetutils}/bin:$PATH
   '';
 
-  postInstall = ''
-    cp -v ${extraComponentsFile} $out/extra_components
-    cp -v ${extraPackagesFile} $out/extra_packages
-  '';
-
   passthru = {
     inherit
       availableComponents
@@ -440,6 +493,8 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
+    pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+    frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {
       nixos = nixosTests.home-assistant;

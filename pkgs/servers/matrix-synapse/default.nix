@@ -12,20 +12,20 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.77.0";
+  version = "1.82.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-//1BTiNH3n2eNjwOADb1OB7xp5QsH6arV5Pg3B7y3r0=";
+    hash = "sha256-j2lsdLYN5LqnIevUkD85i1XNIJa/Vpc1NHhIf2djlis=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-B9Z+7VtbbX/S01aaMFHgXH60sg8Lmwku2XPRnpMpwjo=";
+    hash = "sha256-iEPfYZd8RWlG5z8BbzESD9O0QV60EBiIIaxm9skt8Uc=";
   };
 
   postPatch = ''
@@ -51,8 +51,8 @@ buildPythonApplication rec {
     bleach
     canonicaljson
     daemonize
-    frozendict
     ijson
+    immutabledict
     jinja2
     jsonschema
     lxml

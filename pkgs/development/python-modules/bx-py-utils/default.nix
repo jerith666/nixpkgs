@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "75";
+  version = "78";
 
   disabled = pythonOlder "3.9";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+RHt5QTXxuaY1tDe1M66TrQfT9I7X56oVQAW36mzSwM=";
+    hash = "sha256-dMcbv/qf+8Qzu47MVFU2QUviT/vjKsHp+45F/6NOlWo=";
   };
 
   nativeBuildInputs = [

@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "helmfile";
-  version = "0.150.0";
+  version = "0.152.0";
 
   src = fetchFromGitHub {
     owner = "helmfile";
     repo = "helmfile";
     rev = "v${version}";
-    sha256 = "sha256-7wCt+JAuozsd+LifLArfPNwiKK/tDvgwpIwVCW4nU3Y=";
+    sha256 = "sha256-y7IM9YMbJvDmCwzR4Iz5losKberxtGkMfyxpyuBEb+o=";
   };
 
-  vendorSha256 = "sha256-vLLS+/Xfnlt6cvkNvXKX3DVLku1Q4bRCiv2vMTfOnfw=";
+  vendorHash = "sha256-GRTtpZ4du3FNGpD+LArmNkJFeHs72jkYKYbvp73I/5s=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X github.com/helmfile/helmfile/pkg/app/version.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X go.szostok.io/version.version=v${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 

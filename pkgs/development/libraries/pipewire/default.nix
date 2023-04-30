@@ -48,6 +48,8 @@
 , libopus
 , nativeHspSupport ? true
 , nativeHfpSupport ? true
+, nativeModemManagerSupport ? true
+, modemmanager
 , ofonoSupport ? true
 , hsphfpdSupport ? true
 , pulseTunnelSupport ? true
@@ -61,6 +63,9 @@
 , x11Support ? true
 , libcanberra
 , xorg
+, mysofaSupport ? true
+, libmysofa
+, tinycompress
 }:
 
 let
@@ -68,7 +73,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.65";
+    version = "0.3.70";
 
     outputs = [
       "out"
@@ -86,7 +91,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-O5nu58QFlOPTaN4qNi50Wp9acxM6dWNy63BD+AnVl5w=";
+      sha256 = "sha256-xhJzE6JcfNcLMm+TqTIPaBEnEthEqUZiTqhWz1fO5Ng=";
     };
 
     patches = [
@@ -102,20 +107,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # backport a fix to actually install the new module
-      # FIXME: remove after 0.3.66
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/fba7083f8ceb210c7c20aceafeb5c9a8767cf705.patch";
-        hash = "sha256-aZQ4OzK0B5YPq+jQNygxPE0coG2qB0ukbYzyI8E24XM=";
-      })
-
-      # backport a fix for rust-cbindgen errors in downstream packages
-      # See https://github.com/NixOS/nixpkgs/pull/211872#issuecomment-1415981135 for details.
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/caf58ecffb4dc8e2bfa7898d0ed910cf0a82d65f.patch";
-        hash = "sha256-kCQNG0j3lwT01WNfGsdUmKvDHg8tvMfS2eunPyXBV1E=";
-      })
     ];
 
     strictDeps = true;
@@ -144,16 +135,19 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
+      tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt liblc3 sbc fdk_aac libopus ]
+    ++ lib.optional nativeModemManagerSupport modemmanager
     ++ lib.optional pulseTunnelSupport libpulseaudio
     ++ lib.optional zeroconfSupport avahi
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
-    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ];
+    ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+    ++ lib.optional mysofaSupport libmysofa;
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -178,8 +172,10 @@ let
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
+      "-Dbluez5-backend-native-mm=${mesonEnableFeature nativeModemManagerSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      # source code is not easily obtainable
       "-Dbluez5-codec-lc3plus=disabled"
       "-Dbluez5-codec-lc3=${mesonEnableFeature bluezSupport}"
       "-Dsysconfdir=/etc"
@@ -188,7 +184,10 @@ let
       "-Dsession-managers="
       "-Dvulkan=enabled"
       "-Dx11=${mesonEnableFeature x11Support}"
+      "-Dlibmysofa=${mesonEnableFeature mysofaSupport}"
       "-Dsdl2=disabled" # required only to build examples, causes dependency loop
+      "-Drlimits-install=false" # installs to /etc, we won't use this anyway
+      "-Dcompress-offload=enabled"
     ];
 
     # Fontconfig error: Cannot load default config file
@@ -202,52 +201,19 @@ let
     '';
 
     postInstall = ''
-      mkdir $out/nix-support
-      ${if (stdenv.hostPlatform == stdenv.buildPlatform) then ''
-        pushd $lib/share/pipewire
-        for f in *.conf; do
-          echo "Generating JSON from $f"
-
-          $out/bin/spa-json-dump "$f" > "$out/nix-support/$f.json"
-        done
-        popd
-      '' else ''
-        cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
-      ''}
-
       ${lib.optionalString enableSystemd ''
         moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
         moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
       ''}
 
-      moveToOutput "bin/pipewire-pulse" "$pulse"
+      rm $out/bin/pipewire-pulse
+      mkdir -p $pulse/bin
+      ln -sf $out/bin/pipewire $pulse/bin/pipewire-pulse
 
       moveToOutput "bin/pw-jack" "$jack"
     '';
 
-    passthru = {
-      updateScript = ./update-pipewire.sh;
-      tests = {
-        installedTests = nixosTests.installed-tests.pipewire;
-
-        # This ensures that all the paths used by the NixOS module are found.
-        test-paths = callPackage ./test-paths.nix { package = self; } {
-          paths-out = [
-            "share/alsa/alsa.conf.d/50-pipewire.conf"
-            "nix-support/client-rt.conf.json"
-            "nix-support/client.conf.json"
-            "nix-support/jack.conf.json"
-            "nix-support/minimal.conf.json"
-            "nix-support/pipewire.conf.json"
-            "nix-support/pipewire-pulse.conf.json"
-          ];
-          paths-lib = [
-            "lib/alsa-lib/libasound_module_pcm_pipewire.so"
-            "share/alsa-card-profile/mixer"
-          ];
-        };
-      };
-    };
+    passthru.tests = nixosTests.installed-tests.pipewire;
 
     meta = with lib; {
       description = "Server and user space API to deal with multimedia pipelines";

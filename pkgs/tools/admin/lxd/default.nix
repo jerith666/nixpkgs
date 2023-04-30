@@ -32,17 +32,17 @@
 
 buildGoModule rec {
   pname = "lxd";
-  version = "5.10";
+  version = "5.13";
 
   src = fetchurl {
     urls = [
       "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
       "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
     ];
-    hash = "sha256-sYJkPr/tE22xJEjKX7fMjOLQ9zBDm52UjqbVLrm39zU=";
+    hash = "sha256-kys8zfqhkpJqq4ICg6dOsoJEoxJ209GwdjGRrfrZ7j0=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
