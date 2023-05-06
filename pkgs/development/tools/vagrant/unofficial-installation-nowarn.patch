@@ -1,6 +1,8 @@
---- a/bin/vagrant	2022-12-09 18:28:10.000000000 -0500
-+++ b/bin/vagrant	2023-04-28 20:25:49.540641541 -0400
-@@ -221,11 +221,6 @@
+diff --git a/bin/vagrant b/bin/vagrant
+index 7ca30b391..d3f4ea61a 100755
+--- a/bin/vagrant
++++ b/bin/vagrant
+@@ -221,11 +221,6 @@ begin
        end
      end
  
