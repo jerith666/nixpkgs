@@ -8,7 +8,11 @@ git fetch --all
 current=$(nixos-version --revision);
 
 if git merge-base --is-ancestor origin/nixos-unstable $current; then
-    echo "current version ($current) already contains latest nixos-unstable";
+    echo;
+    echo "as of $(date)";
+    echo "the current version:                               $(git log -1 --format='%h @ %ad' $current)";
+    echo "already contains the latest nixos-unstable commit: $(git log -1 --format='%h @ %ad' origin/nixos-unstable)"
+    echo;
     exit 0;
 fi;
 
