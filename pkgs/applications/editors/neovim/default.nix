@@ -4,6 +4,8 @@
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -49,6 +51,14 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+
+      # fix bug with the gsub directive
+      # https://github.com/neovim/neovim/pull/23015
+      (fetchpatch {
+        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
+        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
+        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
+      })
     ];
 
     dontFixCmake = true;
@@ -119,11 +129,24 @@ in
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
+
+    separateDebugInfo = true;
 
     meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";

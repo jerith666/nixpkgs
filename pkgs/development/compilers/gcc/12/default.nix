@@ -56,7 +56,7 @@ with builtins;
 
 let majorVersion = "12";
     version = "${majorVersion}.2.0";
-    disableBootstrap = !stdenv.hostPlatform.isDarwin;
+    disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -68,6 +68,7 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
+        ../install-info-files-serially.patch
       ]
       # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
       # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
@@ -288,6 +289,8 @@ lib.pipe (stdenv.mkDerivation ({
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
   buildFlags =
+    # we do not yet have Nix-driven profiling
+    assert profiledCompiler -> !disableBootstrap;
     let target =
           lib.optionalString (profiledCompiler) "profiled" +
           lib.optionalString (targetPlatform == hostPlatform && hostPlatform == buildPlatform && !disableBootstrap) "bootstrap";

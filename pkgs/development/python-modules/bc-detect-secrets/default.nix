@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
-  version = "1.4.23";
+  version = "1.4.27";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     rev = "refs/tags/${version}";
-    hash = "sha256-lMsGcCD7Qz8OMge6URtrARiR6YPRZRN87dbIlpFdvhY=";
+    hash = "sha256-iQNMU77nTv6KY9LJb1fiBUVs5LkpX732UpJAYdUWNyc=";
   };
 
   propagatedBuildInputs = [

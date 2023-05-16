@@ -10,8 +10,8 @@ let
   pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
     # include a fake "core" package
     core.pkgs = [
-      (bin.core.out // { pname = "core"; version = "0"; tlType = "bin"; })
-      (bin.core.doc // { pname = "core"; version = "0"; tlType = "doc"; })
+      (bin.core.out // { pname = "core"; tlType = "bin"; })
+      (bin.core.doc // { pname = "core"; tlType = "doc"; })
     ];
   };
   pkgList = rec {
@@ -248,7 +248,11 @@ in (buildEnv {
     # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
     # we cannot fix further randomness caused by luatex; for further details, see
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' fmtutil --sys --all | grep '^fmtutil' # too verbose
+    # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
+    # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
+    substitute "$out/bin/fmtutil" fmtutil \
+      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
+    FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
     #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
@@ -285,15 +289,6 @@ in (buildEnv {
   ''
     rm "$out"/bin/*-sys
     wrapBin
-  '' +
-    # Perform a small test to verify that the restricted mode get enabled when
-    # needed (detected by checking if it disallows --gscmd)
-  ''
-    if [[ -e "$out"/bin/epstopdf ]]; then
-      echo "Testing restricted mode for {,r}epstopdf"
-      ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-      (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-    fi
   '' +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29

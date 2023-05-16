@@ -12,10 +12,17 @@ major version available.
 
 Nextcloud is a PHP-based application which requires an HTTP server
 ([`services.nextcloud`](#opt-services.nextcloud.enable)
-optionally supports
-[`services.nginx`](#opt-services.nginx.enable))
-and a database (it's recommended to use
-[`services.postgresql`](#opt-services.postgresql.enable)).
+and optionally supports
+[`services.nginx`](#opt-services.nginx.enable)).
+
+For the database, you can set
+[`services.nextcloud.config.dbtype`](#opt-services.nextcloud.config.dbtype) to
+either `sqlite` (the default), `mysql`, or `pgsql`. The simplest is `sqlite`,
+which will be automatically created and managed by the application. For the
+last two, you can easily create a local database by setting
+[`services.nextcloud.database.createLocally`](#opt-services.nextcloud.database.createLocally)
+to `true`, Nextcloud will automatically be configured to connect to it through
+socket.
 
 A very basic configuration may look like this:
 ```
@@ -24,30 +31,11 @@ A very basic configuration may look like this:
   services.nextcloud = {
     enable = true;
     hostName = "nextcloud.tld";
+    database.createLocally = true;
     config = {
       dbtype = "pgsql";
-      dbuser = "nextcloud";
-      dbhost = "/run/postgresql"; # nextcloud will add /.s.PGSQL.5432 by itself
-      dbname = "nextcloud";
       adminpassFile = "/path/to/admin-pass-file";
-      adminuser = "root";
     };
-  };
-
-  services.postgresql = {
-    enable = true;
-    ensureDatabases = [ "nextcloud" ];
-    ensureUsers = [
-     { name = "nextcloud";
-       ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-     }
-    ];
-  };
-
-  # ensure that postgres is running *before* running the setup
-  systemd.services."nextcloud-setup" = {
-    requires = ["postgresql.service"];
-    after = ["postgresql.service"];
   };
 
   networking.firewall.allowedTCPPorts = [ 80 443 ];

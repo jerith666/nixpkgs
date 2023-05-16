@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-fCIvVbMaWAWzRfPc5/1CZq3gZ8kruuk9wBt8mzLHmyw=";
+    hash = "sha256-gW4wCpkyxoWfxXu8UHZfgopSQhOoPhGgqEqFiHJ+Db4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -53,6 +53,9 @@ buildPythonPackage rec {
     # try to download data:
     "FeatureExamplesTests"
     "test_infer_auto_device_map_on_t0pp"
+    # known failure with Torch>2.0; see https://github.com/huggingface/accelerate/pull/1339:
+    # (remove for next release)
+    "test_gradient_sync_cpu_multi"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"

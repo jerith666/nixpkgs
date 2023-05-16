@@ -153,6 +153,7 @@
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
+  ./programs/darling.nix
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/dmrconfig.nix
@@ -234,6 +235,7 @@
   ./programs/singularity.nix
   ./programs/skim.nix
   ./programs/slock.nix
+  ./programs/sniffnet.nix
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/starship.nix
@@ -306,6 +308,7 @@
   ./services/audio/alsa.nix
   ./services/audio/botamusique.nix
   ./services/audio/gmediarender.nix
+  ./services/audio/gonic.nix
   ./services/audio/hqplayerd.nix
   ./services/audio/icecast.nix
   ./services/audio/jack.nix
@@ -371,6 +374,7 @@
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
+  ./services/continuous-integration/gitea-actions-runner.nix
   ./services/continuous-integration/github-runner.nix
   ./services/continuous-integration/github-runners.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -396,6 +400,7 @@
   ./services/databases/hbase-standalone.nix
   ./services/databases/influxdb.nix
   ./services/databases/influxdb2.nix
+  ./services/databases/lldap.nix
   ./services/databases/memcached.nix
   ./services/databases/monetdb.nix
   ./services/databases/mongodb.nix
@@ -412,6 +417,9 @@
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
   ./services/desktops/cpupower-gui.nix
+  ./services/desktops/deepin/dde-api.nix
+  ./services/desktops/deepin/app-services.nix
+  ./services/desktops/deepin/dde-daemon.nix
   ./services/desktops/dleyna-renderer.nix
   ./services/desktops/dleyna-server.nix
   ./services/desktops/espanso.nix
@@ -440,6 +448,7 @@
   ./services/desktops/pipewire/wireplumber.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/system-config-printer.nix
+  ./services/desktops/system76-scheduler.nix
   ./services/desktops/telepathy.nix
   ./services/desktops/tumbler.nix
   ./services/desktops/zeitgeist.nix
@@ -681,6 +690,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rippled.nix
   ./services/misc/rmfakecloud.nix
+  ./services/misc/rshim.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/serviio.nix
@@ -798,6 +808,7 @@
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
   ./services/networking/adguardhome.nix
+  ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/antennas.nix
   ./services/networking/aria2.nix
@@ -812,6 +823,7 @@
   ./services/networking/bind.nix
   ./services/networking/bird-lg.nix
   ./services/networking/bird.nix
+  ./services/networking/birdwatcher.nix
   ./services/networking/bitcoind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
@@ -870,6 +882,7 @@
   ./services/networking/gobgpd.nix
   ./services/networking/gvpe.nix
   ./services/networking/hans.nix
+  ./services/networking/harmonia.nix
   ./services/networking/haproxy.nix
   ./services/networking/headscale.nix
   ./services/networking/hostapd.nix
@@ -962,6 +975,7 @@
   ./services/networking/pdns-recursor.nix
   ./services/networking/pdnsd.nix
   ./services/networking/peroxide.nix
+  ./services/networking/picosnitch.nix
   ./services/networking/pixiecore.nix
   ./services/networking/pleroma.nix
   ./services/networking/polipo.nix
@@ -1109,6 +1123,7 @@
   ./services/security/torsocks.nix
   ./services/security/usbguard.nix
   ./services/security/vault.nix
+  ./services/security/vault-agent.nix
   ./services/security/vaultwarden/default.nix
   ./services/security/yubikey-agent.nix
   ./services/system/automatic-timezoned.nix
@@ -1168,6 +1183,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/pixelfed.nix
   ./services/web-apps/healthchecks.nix
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/hledger-web.nix
@@ -1179,10 +1195,12 @@
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/kasmweb/default.nix
+  ./services/web-apps/kavita.nix
   ./services/web-apps/keycloak.nix
   ./services/web-apps/komga.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
+  ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix
   ./services/web-apps/matomo.nix
   ./services/web-apps/mattermost.nix
@@ -1361,6 +1379,7 @@
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/ecryptfs.nix
   ./tasks/filesystems/envfs.nix
+  ./tasks/filesystems/erofs.nix
   ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix

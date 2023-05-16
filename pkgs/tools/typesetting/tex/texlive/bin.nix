@@ -14,7 +14,7 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2022";
+  year = toString ((import ./tlpdb.nix)."00texlive.config").year;
   version = year; # keep names simple for now
 
   common = {
@@ -304,7 +304,8 @@ chktex = stdenv.mkDerivation {
   inherit (common) src;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ core/*kpathsea*/ ];
+  # perl used in shebang of script bin/deweb
+  buildInputs = [ core/*kpathsea*/ perl ];
 
   preConfigure = "cd texk/chktex";
 
