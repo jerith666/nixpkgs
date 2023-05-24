@@ -1410,6 +1410,8 @@ self: super: with self; {
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
+  boiboite-opener-framework = callPackage ../development/python-modules/boiboite-opener-framework { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -1456,6 +1458,10 @@ self: super: with self; {
   bpycv = callPackage ../development/python-modules/bpycv {};
 
   bpython = callPackage ../development/python-modules/bpython { };
+
+  bqplot = callPackage ../development/python-modules/bqplot { };
+
+  bqscales = callPackage ../development/python-modules/bqscales { };
 
   braceexpand = callPackage ../development/python-modules/braceexpand { };
 
@@ -1616,6 +1622,8 @@ self: super: with self; {
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
+
+  captcha = callPackage ../development/python-modules/captcha { };
 
   capturer = callPackage ../development/python-modules/capturer { };
 
@@ -2276,6 +2284,8 @@ self: super: with self; {
   dash-renderer = callPackage ../development/python-modules/dash-renderer { };
 
   dash-table = callPackage ../development/python-modules/dash-table { };
+
+  dashing = callPackage ../development/python-modules/dashing { };
 
   dask = callPackage ../development/python-modules/dask { };
 
@@ -3003,6 +3013,8 @@ self: super: with self; {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dsnap = callPackage ../development/python-modules/dsnap { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
@@ -3669,6 +3681,10 @@ self: super: with self; {
 
   flask-session = callPackage ../development/python-modules/flask-session { };
 
+  flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
+
+  flask-sessionstore = callPackage ../development/python-modules/flask-sessionstore { };
+
   flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
@@ -4055,6 +4071,8 @@ self: super: with self; {
   github-webhook = callPackage ../development/python-modules/github-webhook { };
 
   github3_py = callPackage ../development/python-modules/github3_py { };
+
+  gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
   gitpython = callPackage ../development/python-modules/gitpython { };
 
@@ -4974,6 +4992,8 @@ self: super: with self; {
   ipyvuetify = callPackage ../development/python-modules/ipyvuetify { };
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
+
+  ipyxact = callPackage ../development/python-modules/ipyxact { };
 
   irc = callPackage ../development/python-modules/irc { };
 
@@ -5997,8 +6017,6 @@ self: super: with self; {
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
-  markerlib = callPackage ../development/python-modules/markerlib { };
-
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   markuppy = callPackage ../development/python-modules/markuppy { };
@@ -6309,6 +6327,8 @@ self: super: with self; {
 
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
+  moddb = callPackage ../development/python-modules/moddb { };
+
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
@@ -6489,6 +6509,8 @@ self: super: with self; {
   mypy = callPackage ../development/python-modules/mypy { };
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
+
+  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
 
   mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
 
@@ -6932,6 +6954,8 @@ self: super: with self; {
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
+
+  okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
 
@@ -8083,6 +8107,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
+
   py-serializable = callPackage ../development/python-modules/py-serializable { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
@@ -9105,6 +9131,8 @@ self: super: with self; {
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
+  pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
+
   pyreadstat = callPackage ../development/python-modules/pyreadstat {
     inherit (pkgs.darwin) libiconv;
   };
@@ -9214,8 +9242,6 @@ self: super: with self; {
   pyserial = callPackage ../development/python-modules/pyserial { };
 
   pysftp = callPackage ../development/python-modules/pysftp { };
-
-  pysha3 = callPackage ../development/python-modules/pysha3 { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
@@ -9757,6 +9783,8 @@ self: super: with self; {
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
+  python-libnmap = callPackage ../development/python-modules/python-libnmap { };
+
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
@@ -10224,6 +10252,7 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
+  qtile = callPackage ../development/python-modules/qtile { };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
@@ -11065,6 +11094,8 @@ self: super: with self; {
 
   simplenote = callPackage ../development/python-modules/simplenote { };
 
+  simplesat = callPackage ../development/python-modules/simplesat { };
+
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
@@ -11080,6 +11111,8 @@ self: super: with self; {
   simpful = callPackage ../development/python-modules/simpful { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  single-source = callPackage ../development/python-modules/single-source { };
 
   single-version = callPackage ../development/python-modules/single-version { };
 
@@ -11548,8 +11581,6 @@ self: super: with self; {
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
-
-  ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
 
   sshfs = callPackage ../development/python-modules/sshfs { };
 
@@ -12904,6 +12935,8 @@ self: super: with self; {
 
   wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
 
+  wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
+
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
@@ -12947,8 +12980,6 @@ self: super: with self; {
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
-
-  word2vec = callPackage ../development/python-modules/word2vec { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
@@ -13279,6 +13310,8 @@ self: super: with self; {
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
   zimports = callPackage ../development/python-modules/zimports { };
+
+  zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
 
