@@ -8936,6 +8936,12 @@
     githubId = 1572058;
     name = "Leonardo Cecchi";
   };
+  leonid = {
+    email = "belyaev.l@northeastern.edu";
+    github = "leonidbelyaev";
+    githubId = 77865363;
+    name = "Leonid Belyaev";
+  };
   leshainc = {
     email = "leshainc@fomalhaut.me";
     github = "LeshaInc";
@@ -12497,6 +12503,12 @@
     githubId = 3737;
     name = "Peter Jones";
   };
+  pjrm = {
+    email = "pedrojrmagalhaes@gmail.com";
+    github = "pjrm";
+    githubId = 4622652;
+    name = "Pedro Magalhães";
+  };
   pkharvey = {
     email = "kayharvey@protonmail.com";
     github = "pkharvey";
@@ -14229,6 +14241,13 @@
     github = "sei40kr";
     githubId = 11665236;
   };
+  seirl = {
+    name = "Antoine Pietri";
+    email = "antoine.pietri1@gmail.com";
+    github = "seirl";
+    githubId = 4927883;
+    matrix = "@seirl:matrix.org";
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
@@ -15782,6 +15801,12 @@
     email = "nix@henning-thielemann.de";
     github = "thielema";
     githubId = 898989;
+  };
+  thilobillerbeck = {
+    name = "Thilo Billerbeck";
+    email = "thilo.billerbeck@officerent.de";
+    github = "thilobillerbeck";
+    githubId = 7442383;
   };
   thled = {
     name = "Thomas Le Duc";
