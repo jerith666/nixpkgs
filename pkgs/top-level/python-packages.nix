@@ -6082,7 +6082,7 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage pythonOlder fetchPypi;
+    inherit buildPythonPackage pythonOlder;
     inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 
@@ -9018,6 +9018,8 @@ self: super: with self; {
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 
+  pyperscan = callPackage ../development/python-modules/pyperscan { };
+
   pyperf = callPackage ../development/python-modules/pyperf { };
 
   pyphen = callPackage ../development/python-modules/pyphen { };
@@ -11796,6 +11798,11 @@ self: super: with self; {
   tabulate = callPackage ../development/python-modules/tabulate { };
 
   tabview = callPackage ../development/python-modules/tabview { };
+
+  taco = toPythonModule (pkgs.taco.override {
+    inherit (self) python;
+    enablePython = true;
+  });
 
   tadasets = callPackage ../development/python-modules/tadasets { };
 
