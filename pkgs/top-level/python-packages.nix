@@ -1633,6 +1633,8 @@ self: super: with self; {
 
   canopen = callPackage ../development/python-modules/canopen { };
 
+  camelot = callPackage ../development/python-modules/camelot { };
+
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
@@ -4845,8 +4847,6 @@ self: super: with self; {
 
   image-go-nord = callPackage ../development/python-modules/image-go-nord { };
 
-  image-match = callPackage ../development/python-modules/image-match { };
-
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   imantics = callPackage ../development/python-modules/imantics { };
@@ -6046,8 +6046,6 @@ self: super: with self; {
   markdown-macros = callPackage ../development/python-modules/markdown-macros { };
 
   markdownify  = callPackage ../development/python-modules/markdownify { };
-
-  markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
@@ -7820,6 +7818,8 @@ self: super: with self; {
   python-otbr-api = callPackage ../development/python-modules/python-otbr-api { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
+
+  python-opensky = callPackage ../development/python-modules/python-opensky { };
 
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
@@ -11231,6 +11231,8 @@ self: super: with self; {
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
+  sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
+
   siuba = callPackage ../development/python-modules/siuba { };
 
   six = callPackage ../development/python-modules/six { };
@@ -11840,6 +11842,8 @@ self: super: with self; {
   svg-path = callPackage ../development/python-modules/svg-path { };
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
+
+  sv-ttk = callPackage ../development/python-modules/sv-ttk { };
 
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
