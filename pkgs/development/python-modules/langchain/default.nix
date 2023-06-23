@@ -66,6 +66,7 @@
 , pytest-mock
 , pytest-socket
 , pandas
+, syrupy
 , toml
 , freezegun
 , responses
@@ -76,7 +77,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.195";
+  version = "0.0.207";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -85,7 +86,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PUBFAAqCAshUkASsGnFNQ5+Xh6416ISkMqJ0bYcx7WI=";
+    hash = "sha256-/gPkgHcHHyFAhPF4hqEMkOaHV9Z1159ZdB2lwtsJEKE=";
   };
 
   postPatch = ''
@@ -233,6 +234,7 @@ buildPythonPackage rec {
     pytest-socket
     pytest-asyncio
     pandas
+    syrupy
     toml
     freezegun
     responses

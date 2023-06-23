@@ -71,7 +71,7 @@ let
 
       configureFlags = [ "--with-scriptname=${scriptName}" ] ++ configureFlags;
 
-      buildFlags = "all";
+      buildFlags = [ "all" ];
 
       enableParallelBuilding = true;
 
@@ -180,5 +180,7 @@ let
 
   platform = stdenv.targetPlatform.system;
 in
-  vmsByPlatform.${platform} or
-    (throw "Unsupported platform ${platform}: only the following platforms are supported: ${builtins.attrNames vmsByPlatform}")
+  vmsByPlatform.${platform} or (throw (
+    "Unsupported platform ${platform}: only the following platforms are supported: " +
+    builtins.toString (builtins.attrNames vmsByPlatform)
+  ))
