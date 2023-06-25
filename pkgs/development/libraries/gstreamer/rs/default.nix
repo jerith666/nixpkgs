@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , writeText
 , rustPlatform
 , meson
@@ -27,11 +26,14 @@
 , Security
 , gst-plugins-good
 , nix-update-script
+# specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
+, plugins ? null
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
+, hotdoc
 # TODO: required for case-insensitivity hack below
 , yq
 , moreutils
-# specify a limited set of plugins to build if not all supported plugins
-, plugins ? null
 }:
 
 let
@@ -94,13 +96,13 @@ let
 
   selectedPlugins = if plugins != null then lib.unique (lib.sort lib.lessThan plugins) else lib.subtractLists (
     [
-      "audiofx" # tests have race-y failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/337
       "csound" # tests have weird failure on x86, does not currently work on arm or darwin
+      "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
     ] ++ lib.optionals stdenv.isDarwin [
       "reqwest" # tests hang on darwin
       "threadshare" # tests cannot bind to localhost on darwin
       "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
       # these require gstreamer-gl which requires darwin sdk bump
       "gtk4"
       "livesync"
@@ -116,7 +118,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-rs";
-  version = "0.10.7";
+  version = "0.10.8";
 
   outputs = [ "out" "dev" ];
 
@@ -125,7 +127,7 @@ stdenv.mkDerivation rec {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = version;
-    hash = "sha256-b+j7nAMK66+msRnIaj1S1DSvES5Gid3QazXgqO1II/Q=";
+    hash = "sha256-UxmfyqbQwkQjwHiARRpFJiGsrsNjv6V129lIHPk7gRk=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     nativeBuildInputs = [ yq moreutils ];
     postFetch = ''
@@ -136,15 +138,19 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    rm net/raptorq/tests/raptorq.rs
+  '';
+
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "cairo-rs-0.17.9" = "sha256-LiIb6y/Ks/o+rZhU8RpXN7jSo7JzBGmcNumxyx/lZs0=";
+      "cairo-rs-0.17.10" = "sha256-5lWlDHlMco380tRaxyApdNv5DDKJL9QrKI2DvHM3868=";
       "color-name-1.1.0" = "sha256-RfMStbe2wX5qjPARHIFHlSDKjzx8DwJ+RjzyltM5K7A=";
       "ffv1-0.0.0" = "sha256-af2VD00tMf/hkfvrtGrHTjVJqbl+VVpLaR0Ry+2niJE=";
       "flavors-0.2.0" = "sha256-zBa0X75lXnASDBam9Kk6w7K7xuH9fP6rmjWZBUB5hxk=";
       "gdk4-0.6.6" = "sha256-TI4F9MjIpxFEZItoewP/Zem1vM4MsKNJTzfgah1vjmI=";
-      "gstreamer-0.20.5" = "sha256-IQ56Upe73egId1IJRfzvqrJIzTc1x5FgAEbva9kuqPE=";
+      "gstreamer-0.20.6" = "sha256-IyzqCQ5oQt5QgFp6liGyDaFhteCceR1KPzJCE4R6zus=";
     };
   };
 
@@ -161,6 +167,8 @@ stdenv.mkDerivation rec {
     cargo
     cargo-c
     nasm
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -177,7 +185,7 @@ stdenv.mkDerivation rec {
     map (plugin: lib.mesonEnable plugin true) selectedPlugins
   ) ++ [
     (lib.mesonOption "sodium-source" "system")
-    (lib.mesonEnable "doc" false) # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ] ++ (let
     crossFile = writeText "cross-file.conf" ''
       [binaries]
@@ -187,7 +195,7 @@ stdenv.mkDerivation rec {
     "--cross-file=${crossFile}"
   ]);
 
-  # turn off all auto plugins if a list is specified
+  # turn off all auto plugins since we use a list of plugins we generate
   mesonAutoFeatures = "disabled";
 
   doCheck = true;
@@ -202,7 +210,7 @@ stdenv.mkDerivation rec {
     export CSOUND_LIB_DIR=${lib.getLib csound}/lib
   '' + lib.optionalString (lib.mutuallyExclusive [ "webrtc" "webrtchttp" ] selectedPlugins) ''
     sed -i "/\['gstreamer-webrtc-1\.0', 'gst-plugins-bad', 'gstwebrtc_dep', 'gstwebrtc'\]/d" meson.build
-  '' + lib.optionalString (stdenv.isDarwin && !stdenv.isAarch64) ''
+  '' + lib.optionalString (!gst-plugins-base.glEnabled) ''
     sed -i "/\['gstreamer-gl-1\.0', 'gst-plugins-base', 'gst_gl_dep', 'gstgl'\]/d" meson.build
   '';
 
@@ -210,7 +218,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    meson test --no-rebuild --verbose --timeout-multiplier 6
+    meson test --no-rebuild --verbose --timeout-multiplier 12
 
     runHook postCheck
   '';
