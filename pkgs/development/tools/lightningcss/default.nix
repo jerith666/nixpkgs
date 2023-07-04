@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
-  version = "1.21.0";
+  version = "1.21.2";
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
     rev = "refs/tags/v${version}";
-    sha256 = "ECBW0fXX7RrsnBrClwbFIa1i9GfqaYJXIP0zm68Ds84=";
+    sha256 = "ujYyyL9RWpTUJl2sQSJFYT5JQebjgLZy3F0S5zg3aRY=";
   };
 
-  cargoHash = "sha256-Y7aLtsnInNnh5p5keBHrfFlIi7F1tRasDmX4BFLLicU=";
+  cargoHash = "sha256-SI2UXp99JdWN6nkON/5lzm6nPmAqCwJ+qSg//jexIhA=";
 
   buildFeatures = [
     "cli"
