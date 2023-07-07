@@ -938,7 +938,9 @@ with pkgs;
 
   pacproxy = callPackage ../tools/networking/pacproxy { };
 
-  pacup = python3Packages.callPackage ../tools/package-management/pacup { };
+  pacup = callPackage ../tools/package-management/pacup { };
+
+  patcher9x = callPackage ../development/tools/patcher9x { };
 
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -1600,6 +1602,8 @@ with pkgs;
 
   dwarfs = callPackage ../tools/filesystems/dwarfs { };
 
+  dysk = callPackage ../tools/filesystems/dysk { };
+
   etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
 
   fscan = callPackage ../tools/security/fscan { };
@@ -1814,7 +1818,7 @@ with pkgs;
 
   systeroid = callPackage ../tools/system/systeroid { };
 
-  tailwindcss-bin = callPackage ../development/tools/tailwindcss { };
+  tailwindcss = callPackage ../development/tools/tailwindcss { };
 
   tauon = callPackage ../applications/audio/tauon { };
 
@@ -2664,9 +2668,7 @@ with pkgs;
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
 
-  joshuto = callPackage ../applications/file-managers/joshuto {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
-  };
+  joshuto = callPackage ../applications/file-managers/joshuto { };
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
@@ -8136,6 +8138,8 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
+  gitlab-elasticsearch-indexer = callPackage ../applications/version-management/gitlab/gitlab-elasticsearch-indexer { };
+
   gitleaks = callPackage ../tools/security/gitleaks { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly {
@@ -9462,8 +9466,6 @@ with pkgs;
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg-full;
   };
-
-  lfs = callPackage ../tools/filesystems/lfs { };
 
   linuxwave = callPackage ../tools/audio/linuxwave { };
 
@@ -12029,8 +12031,6 @@ with pkgs;
 
   rare-regex = callPackage ../tools/text/rare-regex { };
 
-  rarian = callPackage ../development/libraries/rarian { };
-
   ratman = callPackage ../tools/networking/ratman { };
 
   ratools = callPackage ../tools/networking/ratools { };
@@ -12234,6 +12234,8 @@ with pkgs;
   rnr = callPackage ../tools/text/rnr { };
 
   rnv = callPackage ../tools/text/xml/rnv { };
+
+  roam-research = callPackage ../applications/office/roam-research { };
 
   rosie = callPackage ../tools/text/rosie { };
 
@@ -12624,6 +12626,8 @@ with pkgs;
 
   signumone-ks = callPackage ../applications/misc/signumone-ks { };
 
+  sigtop = callPackage ../tools/backup/sigtop { };
+
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
   silc_server = callPackage ../servers/silc-server { };
@@ -12687,6 +12691,8 @@ with pkgs;
   sleuthkit = callPackage ../tools/system/sleuthkit { };
 
   slides = callPackage ../applications/misc/slides { };
+
+  slippy = callPackage ../applications/misc/slippy { };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
 
@@ -16345,7 +16351,7 @@ with pkgs;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
-  inherit (callPackage ../development/tools/ocaml/ocamlformat { })
+  inherit (ocamlPackages)
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1;
@@ -17974,6 +17980,8 @@ with pkgs;
   }));
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
+
+  dbus-test-runner = callPackage ../development/tools/dbus-test-runner { };
 
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
@@ -22512,6 +22520,14 @@ with pkgs;
 
   libplist = callPackage ../development/libraries/libplist { };
 
+  libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
+    inherit (lomiri) cmake-extras;
+  };
+
+  libqtdbustest = libsForQt5.callPackage ../development/libraries/libqtdbustest {
+    inherit (lomiri) cmake-extras;
+  };
+
   libre = callPackage ../development/libraries/libre { };
 
   libredwg = callPackage ../development/libraries/libredwg { };
@@ -26741,7 +26757,10 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
-  snipe-it = callPackage ../servers/web-apps/snipe-it { };
+  snipe-it = callPackage ../servers/web-apps/snipe-it {
+    php = php81;
+    phpPackages = php81Packages;
+  };
 
   sogo = callPackage ../servers/web-apps/sogo { };
 
@@ -28068,6 +28087,8 @@ with pkgs;
   scanmem = callPackage ../tools/misc/scanmem { };
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
+
+  sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
@@ -34203,7 +34224,7 @@ with pkgs;
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
-  pyrosimple = python3Packages.callPackage ../applications/networking/p2p/pyrosimple { };
+  pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
@@ -35655,6 +35676,8 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
+  whisper-ctranslate2 = callPackage ../tools/audio/whisper-ctranslate2 { };
+
   waon = callPackage ../applications/audio/waon { };
 
   warp = callPackage ../applications/networking/warp { };
@@ -36228,9 +36251,7 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
-  zine = callPackage ../applications/misc/zine {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  zine = callPackage ../applications/misc/zine { };
 
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
@@ -36612,6 +36633,8 @@ with pkgs;
   blockattack = callPackage ../games/blockattack { } ;
 
   colobot = callPackage ../games/colobot { };
+
+  corsix-th = callPackage ../games/corsix-th { };
 
   enigma = callPackage ../games/enigma { };
 
@@ -37965,6 +37988,8 @@ with pkgs;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
+  lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
+
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   ### DESKTOPS/LXDE
@@ -38993,6 +39018,8 @@ with pkgs;
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;
   };
+
+  gedit = callPackage ../applications/editors/gedit { };
 
   gerbv = callPackage ../applications/science/electronics/gerbv {
     cairo = cairo.override { x11Support = true; };

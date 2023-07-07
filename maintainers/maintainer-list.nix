@@ -813,6 +813,12 @@
       fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
     }];
   };
+  alxsimon = {
+    email = "alexis.simon@normalesup.org";
+    github = "alxsimon";
+    githubId = 9567176;
+    name = "Alexis Simon";
+  };
   alyaeanyx = {
     email = "alyaeanyx@mailbox.org";
     github = "alyaeanyx";
@@ -3770,6 +3776,12 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dbalan = {
+    email = "nix@dbalan.in";
+    github = "dbalan";
+    githubId = 223910;
+    name = "Dhananjay Balan";
+  };
   dbeckwith = {
     email = "djbsnx@gmail.com";
     github = "dbeckwith";
@@ -5574,6 +5586,12 @@
     github = "Fresheyeball";
     githubId = 609279;
     name = "Isaac Shapira";
+  };
+  fricklerhandwerk = {
+    email = "valentin@fricklerhandwerk.de";
+    github = "fricklerhandwerk";
+    githubId = 6599296;
+    name = "Valentin Gagarin";
   };
   fridh = {
     email = "fridh@fridh.nl";
@@ -14701,6 +14719,13 @@
     github = "sengaya";
     githubId = 1286668;
     name = "Thilo Uttendorfer";
+  };
+  sents = {
+    email = "finn@krein.moe";
+    github = "sents";
+    githubId = 26575793;
+    matrix = "@sents:matrix.org";
+    name = "Finn Krein";
   };
   sephalon = {
     email = "me@sephalon.net";
