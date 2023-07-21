@@ -16,6 +16,7 @@ platform_minor=$(dlquery '."#text" | split(".") | .[1]' -r);
 year=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[0:4]')
 buildmonth=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[4:6]')
 builddaytime=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[6:12]')
+timestamp="${year}${buildmonth}${builddaytime}";
 
 month=$buildmonth;
 if [[ "$buildmonth" == "02" || "$buildmonth" == "04" ]]; then
@@ -38,3 +39,11 @@ cat <<EOF
 EOF
 
 sed -i 's/64 = ".*";$/64 = "";/g' pkgs/applications/editors/eclipse/default.nix
+
+for u in $(grep 'url = ' pkgs/applications/editors/eclipse/default.nix | grep arch | cut -d '"' -f 2 | sed 's/&/\\&/g'); do
+    for arch in x86_64 aarch64; do
+        us=$(eval echo "$u");
+        echo prefetching $us;
+        nix-prefetch-url "$us";
+    done
+done
