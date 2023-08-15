@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , cargo
 , fetchPypi
@@ -6,11 +7,12 @@
 , pythonOlder
 , rustc
 , rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
   pname = "rpds-py";
-  version = "0.7.1";
+  version = "0.9.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,13 +20,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "rpds_py";
     inherit version;
-    hash = "sha256-2UC1ZE8U5JscbnkCueyKDHWEEJ+/OA+hgRWDGmQZJ8g=";
+    hash = "sha256-jXDo8UkA8mV8JJ6k3vljvthqKbgfgfW3a1qSFWgN6UU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-BAoE0oRQGf5ze/8uAH6gsFP77lPvOvYy8W9iDrqUn3Q=";
+    hash = "sha256-2LiQ+beFj9+kykObPNtqcg+F+8wBDzvWcauwDLHa7Yo=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +34,10 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeCheckInputs = [
