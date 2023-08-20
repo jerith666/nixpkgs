@@ -1153,6 +1153,8 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
+    ocaml-protoc-plugin = callPackage ../development/ocaml-modules/ocaml-protoc-plugin { };
+
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
     ocaml-recovery-parser = callPackage ../development/tools/ocaml/ocaml-recovery-parser { };
@@ -1539,6 +1541,8 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+    sel = callPackage ../development/ocaml-modules/sel {};
+
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
     semver = callPackage ../development/ocaml-modules/semver { };
@@ -1803,7 +1807,7 @@ let
 
     ### End ###
 
-  })).overrideScope' liftJaneStreet;
+  })).overrideScope liftJaneStreet;
 
 in let inherit (pkgs) callPackage; in rec
 {

@@ -131,6 +131,7 @@ mapAliases ({
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
   flask_login = flask-login; # added 2022-10-17
+  flask_marshmallow = flask-marshmallow; # added 2023-08-16
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
@@ -393,4 +394,5 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28
+  zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
 })

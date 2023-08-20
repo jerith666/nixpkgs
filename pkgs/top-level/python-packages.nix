@@ -548,6 +548,8 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+  anywidget = callPackage ../development/python-modules/anywidget { };
+
   aocd = callPackage ../development/python-modules/aocd { };
 
   apache-beam = callPackage ../development/python-modules/apache-beam { };
@@ -1210,6 +1212,8 @@ self: super: with self; {
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
+
+  backports-strenum = callPackage ../development/python-modules/backports-strenum { };
 
   backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
@@ -2458,6 +2462,8 @@ self: super: with self; {
   datatable = callPackage ../development/python-modules/datatable { };
 
   datauri = callPackage ../development/python-modules/datauri { };
+
+  datefinder = callPackage ../development/python-modules/datefinder { };
 
   dateparser = callPackage ../development/python-modules/dateparser { };
 
@@ -3820,7 +3826,7 @@ self: super: with self; {
 
   flask-mailman = callPackage ../development/python-modules/flask-mailman { };
 
-  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+  flask-marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
@@ -4024,6 +4030,8 @@ self: super: with self; {
   ftfy = callPackage ../development/python-modules/ftfy { };
 
   ftputil = callPackage ../development/python-modules/ftputil { };
+
+  fugashi = callPackage ../development/python-modules/fugashi { };
 
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
@@ -5035,6 +5043,8 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+  imagededup = callPackage ../development/python-modules/imagededup { };
+
   imagehash = callPackage ../development/python-modules/imagehash { };
 
   imageio = callPackage ../development/python-modules/imageio { };
@@ -5181,6 +5191,8 @@ self: super: with self; {
 
   iowait = callPackage ../development/python-modules/iowait { };
 
+  ipadic = callPackage ../development/python-modules/ipadic { };
+
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipdb = callPackage ../development/python-modules/ipdb { };
@@ -5212,6 +5224,8 @@ self: super: with self; {
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
+
+  ipytablewidgets = callPackage ../development/python-modules/ipytablewidgets { };
 
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
@@ -5882,7 +5896,10 @@ self: super: with self; {
     inherit (pkgs.config) cudaSupport;
   };
 
-  libiio = (toPythonModule (pkgs.libiio.override { inherit python; })).python;
+  libiio = (toPythonModule (pkgs.libiio.override {
+    pythonSupport = true;
+    inherit python;
+  })).python;
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
@@ -6643,6 +6660,8 @@ self: super: with self; {
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
   moddb = callPackage ../development/python-modules/moddb { };
+
+  model-bakery = callPackage ../development/python-modules/model-bakery { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 
@@ -7507,6 +7526,8 @@ self: super: with self; {
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
   optax = callPackage ../development/python-modules/optax { };
+
+  optimum = callPackage ../development/python-modules/optimum { };
 
   optuna = callPackage ../development/python-modules/optuna { };
 
@@ -10688,6 +10709,8 @@ self: super: with self; {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
@@ -11856,6 +11879,8 @@ self: super: with self; {
 
   soupsieve = callPackage ../development/python-modules/soupsieve { };
 
+  sourmash = callPackage ../development/python-modules/sourmash { };
+
   soxr = callPackage ../development/python-modules/soxr {
     libsoxr = pkgs.soxr;
   };
@@ -12900,6 +12925,8 @@ self: super: with self; {
 
   trustme = callPackage ../development/python-modules/trustme { };
 
+  truststore = callPackage ../development/python-modules/truststore { };
+
   trytond = callPackage ../development/python-modules/trytond { };
 
   tskit = callPackage ../development/python-modules/tskit { };
@@ -13159,6 +13186,8 @@ self: super: with self; {
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
   unidecode = callPackage ../development/python-modules/unidecode { };
+
+  unidic = callPackage ../development/python-modules/unidic { };
 
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
 
@@ -13994,7 +14023,7 @@ self: super: with self; {
 
   zope-hookable = callPackage ../development/python-modules/zope-hookable { };
 
-  zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
+  zope-i18nmessageid = callPackage ../development/python-modules/zope-i18nmessageid { };
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 

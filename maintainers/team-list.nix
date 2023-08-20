@@ -181,6 +181,19 @@ with lib.maintainers; {
     shortName = "Cosmopolitan";
   };
 
+  dotnet = {
+    members = [
+      ivar
+      mdarocha
+      corngood
+      raphaelr
+      jamiemagee
+      anpin
+    ];
+    scope = "Maintainers of the .NET build tools and packages";
+    shortName = "dotnet";
+  };
+
   deepin = {
     members = [
       rewine
@@ -413,6 +426,7 @@ with lib.maintainers; {
 
   jupyter = {
     members = [
+      GaetanLepage
       natsukium
     ];
     scope = "Maintain Jupyter and related packages.";
