@@ -1735,6 +1735,7 @@ self: super: {
       (super.hinit.override { haskeline = self.haskeline_0_8_2_1; }));
 
   servant-js = doJailbreak super.servant-js;
+  servant-foreign = doJailbreak super.servant-foreign;
 
   # 2020-11-23: https://github.com/Rufflewind/blas-hs/issues/8
   blas-hs = dontCheck super.blas-hs;
