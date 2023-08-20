@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   pname = "klipper";
-  version = "unstable-2023-06-29";
+  version = "unstable-2023-08-15";
 
   src = fetchFromGitHub {
     owner = "KevinOConnor";
     repo = "klipper";
-    rev = "a96608add40e316f25f15d9c9d1c1fbd86dbbebe";
-    sha256 = "sha256-bGJSeWq2TN7ukStu+oiYboGnm/RHbO6N0NdZC81IQ8k=";
+    rev = "01ed8096d8b53fd58f760b413533f1ef15f1b667";
+    sha256 = "sha256-vP1EmvUmxYRlBcxY7MKnBpLaSTEi5bZGaP42TsJhfjw=";
   };
 
-  sourceRoot = "source/klippy";
+  sourceRoot = "${src.name}/klippy";
 
   # NB: This is needed for the postBuild step
   nativeBuildInputs = [

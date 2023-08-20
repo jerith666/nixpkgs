@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
-  cudaSupport ? false, cudaPackages, magma,
+  config, cudaSupport ? config.cudaSupport, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
@@ -68,7 +68,7 @@ let
   # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
   supportedTorchCudaCapabilities =
     let
-      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.9" "9.0"];
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.7" "8.9" "9.0"];
       ptx = lists.map (x: "${x}+PTX") real;
     in
     real ++ ptx;
@@ -207,6 +207,9 @@ in buildPythonPackage rec {
 
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
+
+  # causes possible redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   BUILD_NAMEDTENSOR = setBool true;
   BUILD_DOCS = setBool buildDocs;

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -28,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.4.0";
+  version = "6.4.1";
 
   outputs = [ "out" "dev" ];
 
@@ -36,8 +37,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-mpCB8jRE9QIUiyBWkfYpfm6dsnMDcWvwwg8twbOiZ6I=";
+    sha256 = "sha256-s4Df2eLnr+RnbTwPzjt9bVA+xZ9xca2hiFdGlRUZRfU=";
   };
+
+  patches = [
+    # Fix log spam with new GLib
+    # https://github.com/elementary/files/pull/2257
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/7bd542fa0a646b5cb0972f5575c56a9ee4d9dce7.patch";
+      hash = "sha256-C+oSx0xn3YPuwEC0K+3ZmKeQrroKreJo1tfcpLGQ1S4=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils

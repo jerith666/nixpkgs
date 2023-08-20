@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "browsr";
-  version = "1.11.0";
+  version = "1.13.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
     rev = "v${version}";
-    hash = "sha256-LhrMQFkvdkYra/6jQtMAooGy76qLYldHoxEGMPhde7Q=";
+    hash = "sha256-vYb4XWBdQ4HJzICXNiBXit4aVgjYA9SCX15MppVtTS8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -70,5 +70,6 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/juftin/browsr/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
+    broken = versionAtLeast python3.pkgs.pandas.version "2" || versionAtLeast python3.pkgs.pillow.version "10";
   };
 }

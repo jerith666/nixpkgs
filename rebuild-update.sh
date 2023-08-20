@@ -40,7 +40,7 @@ for sd in calendar-filter client-ip-echo elbum bills-automation haskell-rest-ser
     echo; echo "confirming that nix-shell works for ${sd}";
     todo=$(nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --dry-run 2>&1 | grep '/nix/store/.*\.drv$' || true)
     if echo $todo | grep '/nix/store/.*\.drv$' > /dev/null; then
-        nix build $todo --keep-going --max-jobs 4;
+        nix build $(echo $todo | sed 's|.drv|.drv^\*|g') --keep-going --max-jobs 4;
     fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
     nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result

@@ -1635,7 +1635,7 @@ in {
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
-      wantedBy = [ "gitlab.target" ];
+      requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
@@ -1685,5 +1685,5 @@ in {
   };
 
   meta.doc = ./gitlab.md;
-
+  meta.maintainers = teams.gitlab.members;
 }

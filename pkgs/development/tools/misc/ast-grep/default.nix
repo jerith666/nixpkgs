@@ -6,26 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.6.6";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-iU7UtyF5isyc4G3vYu7f1bU7U38HsgkzNF+LctE08ds=";
+    hash = "sha256-chx37D0y05nIlXmP4SsWvsO+36BV7drTYpJCgMIl5xA=";
   };
 
-  cargoHash = "sha256-30cYsRj10uFUlxhr7kgOy3I0m9qtq6kVNednX7OSQUk=";
+  cargoHash = "sha256-VfuBee2F2FxhcTE1JwosFgQI9+stzDuOHfpLv25rcNw=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  checkFlags = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
-    # fails on emulated x86_64-darwin
-    # mach-o file, but is an incompatible architecture (have 'arm64', need 'x86_64')
-    "--skip=test::test_load_parser"
+  checkFlags = [
+    # disable flaky test
+    "--skip=test::test_load_parser_mac"
   ];
 
   meta = with lib; {
@@ -34,6 +33,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://ast-grep.github.io/";
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ montchr lord-valen ];
+    maintainers = with maintainers; [ montchr lord-valen cafkafk ];
   };
 }

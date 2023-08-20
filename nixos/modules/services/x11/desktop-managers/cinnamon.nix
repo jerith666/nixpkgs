@@ -212,13 +212,8 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt applications under Cinnamon
-      qt.enable = true;
-      qt.platformTheme = "gnome";
-      qt.style = "adwaita";
-
       # Default Fonts
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         source-code-pro # Default monospace font in 3.32
         ubuntu_font_family # required for default theme
       ];

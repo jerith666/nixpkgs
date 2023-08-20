@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.7.2";
+  version = "23.8.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-wdnYHpIrSGEOBC1mw8aHXCcSney0IDc1MKSFsbGNjq0=";
+    hash = "sha256-gcxhSVrOeUUHIQTIR3klaiF64H4wofgLB+PV47TYfiw=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +67,9 @@ buildPythonPackage rec {
     "test_successfully_sign"
     # calls git log, but our fetcher removes .git
     "test_git_error"
+    # Tests require git executable
+    "test_github_action_output"
+    "test_initial_release"
   ];
 
   pythonImportsCheck = [

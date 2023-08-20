@@ -20,12 +20,12 @@
 
 buildGoModule rec {
   pname = "gitea";
-  version = "1.19.4";
+  version = "1.20.2";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
     url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
-    hash = "sha256-vNMNEKMpUoVLUGwPPVhLKfElFmjCWgZHY5i1liNs+xk=";
+    hash = "sha256-a88ltflOcZQVWcEjC3r6rbPSk6LRtATcEQecYt/wg04=";
   };
 
   vendorHash = null;
@@ -88,5 +88,6 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
     broken = stdenv.isDarwin;
+    mainProgram = "gitea";
   };
 }

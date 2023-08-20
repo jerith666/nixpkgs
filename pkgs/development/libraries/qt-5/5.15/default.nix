@@ -170,6 +170,7 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
       })
+      ./qtwebengine-link-pulseaudio.patch
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -329,9 +330,6 @@ let
         propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
-    } // lib.optionalAttrs config.allowAliases {
-      # remove before 23.11
-      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
     };
 
 in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
