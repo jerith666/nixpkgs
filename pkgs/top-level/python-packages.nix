@@ -584,6 +584,8 @@ self: super: with self; {
 
   apispec-webframeworks = callPackage ../development/python-modules/apispec-webframeworks { };
 
+  apkit = callPackage ../development/python-modules/apkit { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   app-model = callPackage ../development/python-modules/app-model { };
@@ -1977,6 +1979,8 @@ self: super: with self; {
 
   cock = callPackage ../development/python-modules/cock { };
 
+  cobs = callPackage ../development/python-modules/cobs { };
+
   class-doc = callPackage ../development/python-modules/class-doc { };
 
   cliche = callPackage ../development/python-modules/cliche { };
@@ -2002,6 +2006,10 @@ self: super: with self; {
   click-help-colors = callPackage ../development/python-modules/click-help-colors { };
 
   click-log = callPackage ../development/python-modules/click-log { };
+
+  click-odoo = callPackage ../development/python-modules/click-odoo { };
+
+  click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
 
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
@@ -2556,6 +2564,8 @@ self: super: with self; {
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
+
+  debianbts = callPackage ../development/python-modules/debianbts { };
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
@@ -6327,6 +6337,10 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
+  manifestoo = callPackage ../development/python-modules/manifestoo { };
+
+  manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
+
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
@@ -8232,6 +8246,8 @@ self: super: with self; {
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+  pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
+
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
@@ -8778,6 +8794,8 @@ self: super: with self; {
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+  pybox2d = callPackage ../development/python-modules/pybox2d { };
+
   pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
@@ -9135,6 +9153,8 @@ self: super: with self; {
     # inherit (pkgs) meson won't work because it won't be spliced
     inherit (pkgs.buildPackages) meson;
   };
+
+  pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
 
   pygogo = callPackage ../development/python-modules/pygogo { };
 
@@ -10754,7 +10774,9 @@ self: super: with self; {
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
-  pywlroots = callPackage ../development/python-modules/pywlroots { };
+  pywlroots = callPackage ../development/python-modules/pywlroots {
+    wlroots = pkgs.wlroots_0_15;
+  };
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
 
@@ -10868,7 +10890,9 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
-  qtile = callPackage ../development/python-modules/qtile { };
+  qtile = callPackage ../development/python-modules/qtile {
+    wlroots = pkgs.wlroots_0_15;
+  };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
@@ -11639,6 +11663,8 @@ self: super: with self; {
   setuptools-git-versioning = callPackage ../development/python-modules/setuptools-git-versioning { };
 
   setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
+
+  setuptools-odoo = callPackage ../development/python-modules/setuptools-odoo { };
 
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
