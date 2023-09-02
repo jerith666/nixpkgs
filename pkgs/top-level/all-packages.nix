@@ -1904,6 +1904,8 @@ with pkgs;
     systemd = pkgs.systemd;
   };
 
+  node-glob = callPackage ../tools/misc/node-glob { };
+
   nominatim = callPackage ../servers/nominatim { };
 
   npm-check-updates = callPackage ../tools/package-management/npm-check-updates { };
@@ -6104,7 +6106,9 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
-  oneshot = callPackage ../tools/networking/oneshot { };
+  oneshot = callPackage ../tools/networking/oneshot {
+    buildGoModule = buildGo121Module;
+  };
 
   orjail = callPackage ../tools/security/orjail { };
 
@@ -7042,6 +7046,8 @@ with pkgs;
 
   biodiff = callPackage ../development/tools/biodiff { };
 
+  biome = callPackage ../development/tools/biome { };
+
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
@@ -7248,7 +7254,6 @@ with pkgs;
     idnSupport = true;
     zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
-    gssSupport = true;
     brotliSupport = true;
   });
 
@@ -9993,6 +9998,8 @@ with pkgs;
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
   matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot { };
+
+  mautrix-discord = callPackage ../servers/mautrix-discord { };
 
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
@@ -26654,7 +26661,7 @@ with pkgs;
 
   hiraeth = callPackage ../servers/hiraeth { };
 
-  hoard = callPackage ../tools/misc/hoard { inherit (darwin) Security; };
+  hoard = callPackage ../tools/misc/hoard { };
 
   home-assistant = callPackage ../servers/home-assistant { };
 
@@ -28543,6 +28550,8 @@ with pkgs;
   iferr = callPackage ../development/tools/iferr { };
 
   gci = callPackage ../development/tools/gci { };
+
+  gcov2lcov = callPackage ../development/tools/gcov2lcov { };
 
   ginkgo = callPackage ../development/tools/ginkgo { };
 
@@ -31499,7 +31508,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
-  inherit (recurseIntoAttrs (callPackage ../applications/editors/emacs { }))
+  inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
     emacs28-gtk3
