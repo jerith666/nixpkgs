@@ -163,6 +163,7 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
+  ./programs/ecryptfs.nix
   ./programs/environment.nix
   ./programs/evince.nix
   ./programs/extra-container.nix
@@ -596,6 +597,7 @@
   ./services/mail/rss2email.nix
   ./services/mail/schleuder.nix
   ./services/mail/spamassassin.nix
+  ./services/mail/stalwart-mail.nix
   ./services/mail/sympa.nix
   ./services/mail/zeyple.nix
   ./services/matrix/appservice-discord.nix

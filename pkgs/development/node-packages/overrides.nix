@@ -118,9 +118,6 @@ final: prev: {
     '';
   };
 
-  hsd = prev.hsd.override {
-    buildInputs = [ final.node-gyp-build pkgs.unbound ];
-  };
 
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
@@ -489,12 +486,4 @@ final: prev: {
       rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
     '';
   });
-
-  yaml-language-server = prev.yaml-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/yaml-language-server" \
-      --prefix NODE_PATH : ${final.prettier}/lib/node_modules
-    '';
-  };
 }
