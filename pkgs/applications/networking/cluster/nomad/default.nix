@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , buildGo120Module
+, buildGo121Module
 , fetchFromGitHub
 , nixosTests
 , installShellFiles
@@ -8,12 +9,12 @@
 
 let
   generic =
-    { buildGoModule, version, sha256, vendorSha256, ... }@attrs:
-    let attrs' = builtins.removeAttrs attrs [ "buildGoModule" "version" "sha256" "vendorSha256" ];
+    { buildGoModule, version, sha256, vendorHash, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "buildGoModule" "version" "sha256" "vendorHash" ];
     in
     buildGoModule (rec {
       pname = "nomad";
-      inherit version vendorSha256;
+      inherit version vendorHash;
 
       subPackages = [ "." ];
 
@@ -40,7 +41,7 @@ let
         homepage = "https://www.nomadproject.io/";
         description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey techknowlogick ];
+        maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes amaxine techknowlogick ];
       };
     } // attrs');
 in
@@ -57,7 +58,7 @@ rec {
     buildGoModule = buildGo120Module;
     version = "1.4.12";
     sha256 = "sha256-dO98FOaO5MB5pWzeF705s/aBDTaF0OyWnVxWGB91suI=";
-    vendorSha256 = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
+    vendorHash = "sha256-D5TcTZa64Jr47u4mrTXK4lUIC5gfBQNVgL6QKh1CaQM=";
     passthru.tests.nomad = nixosTests.nomad;
   };
 
@@ -65,7 +66,7 @@ rec {
     buildGoModule = buildGo120Module;
     version = "1.5.8";
     sha256 = "sha256-5VAUNunQz4s1Icd+s5i8Kx6u1P0By+ikl4C5wXM1oho=";
-    vendorSha256 = "sha256-y3WiQuoQn6SdwTgtPWuB6EBtsJC+YleQPzownZQNkno=";
+    vendorHash = "sha256-y3WiQuoQn6SdwTgtPWuB6EBtsJC+YleQPzownZQNkno=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
@@ -73,10 +74,10 @@ rec {
   };
 
   nomad_1_6 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.6.1";
-    sha256 = "sha256-RsyGUaLteGiNf0PTkKLcjHTevhKb/mNx2JORpXhHJMw=";
-    vendorSha256 = "sha256-Y3O7ADzZPlLWFbXSYBcI6b5MAhMD0UnkhQxO9VJMpOY=";
+    buildGoModule = buildGo121Module;
+    version = "1.6.2";
+    sha256 = "sha256-Q0RyO9FZWGxWgVmTU07/pw5P4Ebcwcednq8TDmshuAk=";
+    vendorHash = "sha256-XCuWhKuBtSPTK8fXwgjMKMjwLnl1KWZKSJ4Ih9XDIDc=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"

@@ -45,15 +45,6 @@ in {
       propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh) {};
 
-  flitBuildHook = callPackage ({ makePythonHook, flit }:
-    makePythonHook {
-      name = "flit-build-hook";
-      propagatedBuildInputs = [ flit ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
-    } ./flit-build-hook.sh) {};
-
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
@@ -221,9 +212,9 @@ in {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
-  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+  sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }

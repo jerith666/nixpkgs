@@ -14674,6 +14674,7 @@ with self; {
     meta = {
       description = "Parse and evaluate mathematical expressions";
       homepage = "https://github.com/Grinnz/Math-Calc-Parser";
+      broken = true;
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ sgo ];
     };
@@ -16063,10 +16064,10 @@ with self; {
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "9.26";
+    version = "9.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.26.tar.gz";
-      hash = "sha256-nkKMVRJpjwXhUTONj6Eq7eKHqzpeQp7D04yApKgsjYg=";
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojolicious-9.34.tar.gz";
+      hash = "sha256-UGnWjk4titZj21iFm0/sDOeasTTZ5YBVqq8/DzpzosY=";
     };
     meta = {
       description = "Real-time web framework";
@@ -19830,10 +19831,10 @@ with self; {
 
   PerlLanguageServer = buildPerlPackage {
     pname = "Perl-LanguageServer";
-    version = "2.5.0";
+    version = "2.6.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.5.0.tar.gz";
-      hash = "sha256-LQYcIkepqAT1JMkSuIN6mxivz6AZkpShcRsVD1oTmQQ=";
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.6.1.tar.gz";
+      hash = "sha256-IDM0uwsEXMeHAu9DA0CdCB87aN3XRoNEdGOIJ8NMsZg=";
     };
     propagatedBuildInputs = [ AnyEvent AnyEventAIO ClassRefresh CompilerLexer Coro DataDump HashSafeKeys IOAIO JSON Moose PadWalker ];
     meta = {
@@ -21506,6 +21507,10 @@ with self; {
       url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
       hash = "sha256-JSoZK/qcIHCkiDcH0TnDpF2cRRjM1moeaZtbeVm9T7U=";
     };
+    patches = [
+      # https://github.com/PerlGameDev/SDL/pull/304
+      ../development/perl-modules/sdl-modern-perl.patch
+    ];
     perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
     buildInputs = [ pkgs.SDL pkgs.SDL_gfx pkgs.SDL_mixer pkgs.SDL_image pkgs.SDL_ttf pkgs.SDL_Pango pkgs.SDL_net AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ];
@@ -23069,12 +23074,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "9.4.0";
+    version = "9.7.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-3ER6kcUfNM5ULhN/MlOil4Rx3O84fLnIvH+Cb/oXTFM=";
+      hash = "sha256-tXXB6Gj27oFZv9WD4dXWdY55jDDLrGYbud4qoyjNe5A=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -26619,6 +26624,11 @@ with self; {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
       hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
+    patches = [
+      # Fix failing configure test due to implicit int return value of main, which results
+      # in an error with clang 16.
+      ../development/perl-modules/tk-configure-implicit-int-fix.patch
+    ];
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.
