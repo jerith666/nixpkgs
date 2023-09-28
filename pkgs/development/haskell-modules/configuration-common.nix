@@ -1883,50 +1883,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  amazonka-core = appendPatches [
-    (fetchpatch {
-      relative = "core";
-      url = "https://github.com/brendanhay/amazonka/commit/c2a58330d586b3c1f1d093374dad4a4a157b7662.patch";
-      hash = "sha256-VJnr7+tR0+Kqhg/JGPKZyRJl3saljqf42bgqhtZigMA=";
-    })
-  ] (overrideCabal (old: {
-    postPatch = ''
-      substituteInPlace amazonka-core.cabal --replace \
-        "aeson                >= 0.8 && <1.6" \
-        "aeson                >= 0.8 && <3.0"
-      substituteInPlace amazonka-core.cabal --replace \
-        "http-client          >= 0.4 && < 0.7" \
-        "http-client          >= 0.4 && < 0.8"
-      substituteInPlace src/Network/AWS/Data/Log.hs --replace \
-        "Data.ByteString.Lazy.Builder as Build" \
-        "Data.ByteString.Builder as Build"
-      substituteInPlace src/Network/AWS/Data/ByteString.hs --replace \
-        "Data.ByteString.Lazy.Builder as Build" \
-        "Data.ByteString.Builder as Build"
-    '';
-  }) super.amazonka-core);
-
-  # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
-  amazonka = appendPatches [
-    (fetchpatch {
-      relative = "amazonka";
-      url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
-      sha256 = "sha256-9Ed3qrLGRaNCdvqWMyg8ydAnqDkFqWKLLoObv/5jG54=";
-    })
-  ] (overrideCabal (old:{
-    postPatch = ''
-      substituteInPlace amazonka.cabal --replace \
-        "http-client         >= 0.4 && < 0.7" \
-        "http-client         >= 0.4 && < 0.8"
-      substituteInPlace amazonka.cabal --replace \
-        "unliftio-core       >= 0.1 && <0.2" \
-        "unliftio-core       >= 0.1 && <0.3"
-      substituteInPlace src/Network/AWS/Internal/Logger.hs --replace \
-        "Data.ByteString.Lazy.Builder as Build" \
-        "Data.ByteString.Builder as Build"
-    '';
-  }) super.amazonka);
-
   # Test suite does not compile.
   feed = dontCheck super.feed;
 
