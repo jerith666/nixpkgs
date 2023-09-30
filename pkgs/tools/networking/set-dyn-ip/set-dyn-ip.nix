@@ -3,12 +3,12 @@
 }:
 mkDerivation {
   pname = "set-dyn-ip";
-  version = "0.1.1.3";
+  version = "0.1.1.4";
   src = fetchFromGitHub {
     owner = "jerith666";
     repo = "set-dyn-ip";
-    rev = "c7bab504cd35db2f5b14be72874639344d581930";
-    sha256 = "03k52m7zpd2dkvfjhr115xh9fhrdrz83n8b1yq7m5k7xfaykqyyn";
+    rev = "255b19a3edb019ac664de64b77d07a0072fe9be7";
+    hash = "sha256-mwA5vmopJrdwc7b04PId7M6uIx//YK1e4R9i5Ene3ZI=";
   };
   isLibrary = false;
   isExecutable = true;
