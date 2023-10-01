@@ -2,13 +2,13 @@
 
 (if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_14.stdenv else stdenv).mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20230922-4";
+  version = "20230928-1";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    hash = "sha256-6VzcylvGyEB+5KYX1r9wEEfSECh+O947KdcN3DMJxE0=";
+    hash = "sha256-wL9Yv6+7PynbBr+GgA8ohS5w5/iVTtrC3R2SG5MWJVQ=";
   };
 
   postPatch = ''
