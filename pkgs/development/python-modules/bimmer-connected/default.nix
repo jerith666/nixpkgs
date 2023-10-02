@@ -1,20 +1,23 @@
 { lib
-, aiofile
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , pbr
 , httpx
+, pillow
 , pycryptodome
 , pyjwt
+, pytest-asyncio
 , pytestCheckHook
+, python
 , respx
 , time-machine
+, tzdata
 }:
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.13.10";
+  version = "0.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +26,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-IylA73N3bZOs5HjQGbT6xqokb73iO3bdg5M2KCTX3p4=";
+    hash = "sha256-Fo30qDBqVxVuD/Ow0jsvN20Hx7Zhvie47CE+1ys1ewU=";
   };
 
   nativeBuildInputs = [
@@ -33,17 +36,26 @@ buildPythonPackage rec {
   PBR_VERSION = version;
 
   propagatedBuildInputs = [
-    aiofile
     httpx
+    pillow
     pycryptodome
     pyjwt
   ];
 
+  postInstall = ''
+    cp -R bimmer_connected/tests/responses $out/${python.sitePackages}/bimmer_connected/tests/
+  '';
+
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     respx
     time-machine
   ];
+
+  preCheck = ''
+    export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+  '';
 
   pythonImportsCheck = [
     "bimmer_connected"

@@ -16,6 +16,7 @@
 , libjpeg
 , makeDesktopItem
 , freetype
+, mumble
 }:
 
 stdenv.mkDerivation {
@@ -47,11 +48,14 @@ stdenv.mkDerivation {
     libvorbis
     libjpeg
     freetype
+    mumble
   ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "USE_INTERNAL_LIBS=0" "USE_FREETYPE=1" "USE_OPENAL_DLOPEN=0" "USE_CURL_DLOPEN=0" ];
+  preConfigure = ''
+    cp ${./Makefile.local} ./Makefile.local
+  '';
 
   installTargets = [ "copyfiles" ];
 
@@ -78,7 +82,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://ioquake3.org/";
     description = "A fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "ioquake3";
     maintainers = with lib.maintainers; [ abbradar drupol eelco rvolosatovs ];
     platforms = lib.platforms.linux;

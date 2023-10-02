@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mmdoc";
-  version = "0.15.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ryantm";
     repo = "mmdoc";
     rev = version;
-    hash = "sha256-xOi91BSQh+AN13V6YyAzOe7kUsyPAvUKWTJ+PUPlPJQ=";
+    hash = "sha256-NS8i5xvCwq0pSdfxnaxnpuwmDAkfH6Tkc4N2F6aGvWY=";
   };
 
   nativeBuildInputs = [ ninja meson pkg-config xxd ];

@@ -11,6 +11,7 @@ set -o nounset
 # scrape the downloads page for release info
 
 curl -s -o eclipse-dl.html https://download.eclipse.org/eclipse/downloads/
+trap "rm eclipse-dl.html" EXIT
 
 dlquery() {
     q=$1
@@ -27,22 +28,15 @@ buildmonth=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) 
 builddaytime=$(dlquery '."@href" | split("/") | .[] | select(. | startswith("R")) | split("-") | .[2] | .[6:12]')
 timestamp="${year}${buildmonth}${builddaytime}";
 
-# cleanup
-
-rm eclipse-dl.html;
-
 # account for possible release-month vs. build-month mismatches
 
 month=$buildmonth;
-if [[ "$buildmonth" == "02" || "$buildmonth" == "04" ]]; then
-    month = "03";
-elif [[ "$buildmonth" == "05" || "$buildmonth" == "07" ]]; then
-    month = "06";
-elif [[ "$buildmonth" == "08" || "$buildmonth" == "10" ]]; then
-    month = "09";
-elif [[ "$buildmonth" == "11" || "$buildmonth" == "01" ]]; then
-    month = "12";
-fi
+case "$buildmonth" in
+    '02'|'04') month='03' ;;
+    '05'|'07') month='06' ;;
+    '08'|'10') month='09' ;;
+    '11'|'01') month='12' ;;
+esac
 
 cat <<EOF
 

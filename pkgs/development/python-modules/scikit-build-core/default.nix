@@ -14,18 +14,20 @@
 , pyproject-metadata
 , pytest-subprocess
 , pytestCheckHook
+, setuptools
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build-core";
-  version = "0.4.8";
+  version = "0.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "scikit_build_core";
     inherit version;
-    hash = "sha256-n6wcrBo4uhFoGQt72Y9irs8GzUbbcYXsjCeyfg2krUs=";
+    hash = "sha256-pCqVAps0tc+JKFU0LZuURcd0y3l/yyTI/EwvtCsY38o=";
   };
 
   postPatch = ''
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     ninja
     pytest-subprocess
     pytestCheckHook
+    setuptools
+    wheel
   ] ++ passthru.optional-dependencies.pyproject;
 
   disabledTestPaths = [

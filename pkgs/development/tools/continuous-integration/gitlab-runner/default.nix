@@ -1,7 +1,7 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
-  version = "16.2.1";
+  version = "16.4.0";
 in
 buildGoModule rec {
   inherit version;
@@ -17,19 +17,18 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
-  vendorHash = "sha256-Rzy4R4QR+rPqzhjZlqcuiP3DDLOu9Z2fb42WPaSPR/4=";
+  vendorHash = "sha256-RIxGgS+7gNvexZLLtXymGZaODhax/oSi1gAUxXHZBp4=";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
-    sha256 = "sha256-GMvBZ3H29F4XyisAt3J4VWRwaEIF7ZQ/tI0gKbDTS/E=";
+    sha256 = "sha256-XYlrIUBT/zlnGYxckv36dqSEEpxUom/OJfqnL/HwYDo=";
   };
 
   patches = [
     ./fix-shell-path.patch
     ./remove-bash-test.patch
-    ./fix-invalid-host-header.patch # see https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4249
   ];
 
   prePatch = ''

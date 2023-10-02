@@ -3,15 +3,16 @@
 , fetchurl
 , sqlite
 , installShellFiles
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "honk";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
-    hash = "sha256-+0W9HncN+51dRE9bWJU4cAfYOc5bxNAqPe4xY+4UFg0=";
+    hash = "sha256-kfoSVGm1QKVjDiWvjK4QzAoA/iiU9j6DS3SYFSM+AaA=";
   };
   vendorHash = null;
 
@@ -48,6 +49,10 @@ buildGoModule rec {
     mv docs/{*.html,*.txt,*.jpg,*.png} $out/share/doc/${pname}
     mv views $out/share/${pname}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) honk;
+  };
 
   meta = {
     changelog = "https://humungus.tedunangst.com/r/honk/v/v${version}/f/docs/changelog.txt";

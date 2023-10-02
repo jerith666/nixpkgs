@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "static-web-server";
-  version = "2.21.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-4BQDbJTGEOZ+lB7b7KQE82I95+JCbPY9z/oU32TjYc4=";
+    hash = "sha256-RrwAT+la07A8PQhmUWmV4qrYha6GUFKMRx7jkVegPb8=";
   };
 
-  cargoHash = "sha256-kPd77hJHVfzfBLixROTXxIbWtAskxUEJqbdFME+FL1U=";
+  cargoHash = "sha256-YOBo2ey83QN26+9cUvoA1QWEPI3oTpwIJoqcPaWvovA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

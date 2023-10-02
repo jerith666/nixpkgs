@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "act";
-  version = "0.2.49";
+  version = "0.2.51";
 
   src = fetchFromGitHub {
     owner = "nektos";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dJt8XrcB1rYt6os3enLQz0YuqXNIqQTh85BIJdXwi2A=";
+    hash = "sha256-p41bb7g66FI9RTznmpJuP/Sk46VL2bkloYNcDxf/vjc=";
   };
 
-  vendorHash = "sha256-QPpwYec2Y0x/VOsiTWvObKrNWGGE7dj8Cl5eM2l8ibk=";
+  vendorHash = "sha256-/etFC27kw4qvfzyut13ISLYKWl2b5k8cTgKn+ygAT8I=";
 
   doCheck = false;
 
@@ -29,6 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/nektos/act";
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne kashw2 ];
   };
 }

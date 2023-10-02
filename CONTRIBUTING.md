@@ -129,7 +129,7 @@ When a PR is created, it will be pre-populated with some checkboxes detailed bel
 
 #### Tested using sandboxing
 
-When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see [sandbox](https://nixos.org/nix/manual/#conf-sandbox) in Nix manual for details.
+When sandbox builds are enabled, Nix will setup an isolated environment for each build process. It is used to remove further hidden dependencies set by the build environment to improve reproducibility. This includes access to the network during the build outside of `fetch*` functions and files outside the Nix store. Depending on the operating system access to other resources are blocked as well (ex. inter process communication is isolated on Linux); see [sandbox](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-sandbox) in the Nix manual for details.
 
 Sandboxing is not enabled by default in Nix due to a small performance hit on each build. In pull requests for [nixpkgs](https://github.com/NixOS/nixpkgs/) people are asked to test builds with sandboxing enabled (see `Tested using sandboxing` in the pull request template) because in [Hydra](https://nixos.org/hydra/) sandboxing is also used.
 
@@ -483,17 +483,17 @@ The oldest supported release (`YYMM`) can be found using
 nix-instantiate --eval -A lib.trivial.oldestSupportedRelease
 ```
 
-The release branches should generally not receive any breaking changes, both for the Nix expressions and derivations.
-So these changes are acceptable to backport:
-- New packages, modules and functions
-- Security fixes
-- Package version updates
-  - Patch versions with fixes
-  - Minor versions with new functionality, but no breaking changes
+The release branches should generally only receive backwards-compatible changes, both for the Nix expressions and derivations.
+Here are some examples of backwards-compatible changes that are okay to backport:
+- ✔️ New packages, modules and functions
+- ✔️ Security fixes
+- ✔️ Package version updates
+  - ✔️ Patch versions with fixes
+  - ✔️ Minor versions with new functionality, but no breaking changes
 
 In addition, major package version updates with breaking changes are also acceptable for:
-- Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
-- Security critical applications, such as `firefox` and `chromium`
+- ✔️ Services that would fail without up-to-date client software, such as `spotify`, `steam`, and `discord`
+- ✔️ Security critical applications, such as `firefox` and `chromium`
 
 ### Changes causing mass rebuilds
 [mass-rebuild]: #changes-causing-mass-rebuilds
@@ -534,6 +534,11 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
   * nixos/nginx: refactor config generation
 
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
+
+  When adding yourself as maintainer, in the same pull request, make a separate
+  commit with the message `maintainers: add <handle>`.
+  Add the commit before those making changes to the package or module.
+  See [Nixpkgs Maintainers](../maintainers/README.md) for details.
 
 ### Writing good commit messages
 
@@ -749,5 +754,3 @@ Names of files and directories should be in lowercase, with dashes between words
 
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
-
-- Arguments should be listed in the order they are used, with the exception of `lib`, which always goes first.
