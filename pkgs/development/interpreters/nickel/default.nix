@@ -3,18 +3,17 @@
 , fetchFromGitHub
 , python3
 , nix-update-script
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iHHZ2CXle8edJoJDIOMrUNucTdhyNZpSKfAPUmnt6eI=";
+    hash = "sha256-g7pRTwa2sniIOmgdYCxfYxGRtxnQP8zaVWuPjzEZTSg=";
   };
 
   cargoLock = {
@@ -29,11 +28,18 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" ];
+  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
 
   nativeBuildInputs = [
     python3
   ];
+
+  outputs = [ "out" "nls" ];
+
+  postInstall = ''
+    mkdir -p $nls/bin
+    mv $out/bin/nls $nls/bin/nls
+  '';
 
   passthru.updateScript = nix-update-script { };
 

@@ -2,6 +2,7 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+, freezegun
 , orjson
 , pydevccu
 , pytest-aiohttp
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.9.5";
+  version = "2023.10.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bs9rAlEgRYjQ2vEPfGxWo4sAn48hiC3IFh9VKVY33KY=";
+    hash = "sha256-m7jBL4qB8ZcGifd6F2/In8JrSMyFeEYKf52Y+y22yK0=";
   };
 
   postPatch = ''
@@ -48,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pydevccu
     pytest-aiohttp
     pytestCheckHook
