@@ -43,6 +43,18 @@ in
 
 runTests {
 
+# CUSTOMIZATION
+
+  testFunctionArgsMakeOverridable = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null}: {}));
+    expected = { a = false; b = false; c = true; };
+  };
+
+  testFunctionArgsMakeOverridableOverride = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
+    expected = { a = false; b = false; c = true; };
+  };
+
 # TRIVIAL
 
   testId = {
@@ -177,6 +189,11 @@ runTests {
   testConcatLines = {
     expr = concatLines ["a" "b" "c"];
     expected = "a\nb\nc\n";
+  };
+
+  testReplicateString = {
+    expr = strings.replicate 5 "hello";
+    expected = "hellohellohellohellohello";
   };
 
   testSplitStringsSimple = {
@@ -1894,4 +1911,32 @@ runTests {
     expr = (with types; either int (listOf (either bool str))).description;
     expected = "signed integer or list of (boolean or string)";
   };
+
+# Meta
+  testGetExe'Output = {
+    expr = getExe' {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+    } "executable";
+    expected = "somelonghash/bin/executable";
+  };
+
+  testGetExeOutput = {
+    expr = getExe {
+      type = "derivation";
+      out = "somelonghash";
+      bin = "somelonghash";
+      meta.mainProgram = "mainProgram";
+    };
+    expected = "somelonghash/bin/mainProgram";
+  };
+
+  testGetExe'FailureFirstArg = testingThrow (
+    getExe' "not a derivation" "executable"
+  );
+
+  testGetExe'FailureSecondArg = testingThrow (
+    getExe' { type = "derivation"; } "dir/executable"
+  );
 }

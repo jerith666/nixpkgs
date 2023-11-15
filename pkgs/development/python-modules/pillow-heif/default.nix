@@ -1,18 +1,30 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
+
+# build-system
 , cmake
-, pillow
-, pytest
 , nasm
+
+# native dependencies
 , libheif
 , libaom
 , libde265
 , x265
+
+# dependencies
+, pillow
+
+# tests
+, opencv4
+, numpy
+, pympler
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "pillow_heif";
+  pname = "pillow-heif";
   version = "0.13.0";
   format = "setuptools";
 
@@ -23,16 +35,43 @@ buildPythonPackage rec {
     hash = "sha256-GbOW29rGpLMS7AfShuO6UCzcspdHtFS7hyNKori0otI=";
   };
 
-  nativeBuildInputs = [ cmake nasm ];
-  buildInputs = [ libheif libaom libde265 x265 ];
-  propagatedBuildInputs = [ pillow ];
-  nativeCheckInputs = [ pytest ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ];
 
   dontUseCmakeConfigure = true;
 
-  pythonImportsCheck = [ "pillow_heif" ];
+  buildInputs = [
+    libaom
+    libde265
+    libheif
+    x265
+  ];
+
+  propagatedBuildInputs = [
+    pillow
+  ];
+
+  pythonImportsCheck = [
+    "pillow_heif"
+  ];
+
+  nativeCheckInputs = [
+    opencv4
+    numpy
+    pympler
+    pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # https://github.com/bigcat88/pillow_heif/issues/89
+    # not reproducible in nixpkgs
+    "test_opencv_crash"
+  ];
 
   meta = {
+    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/v${version}";
     description = "Python library for working with HEIF images and plugin for Pillow";
     homepage = "https://github.com/bigcat88/pillow_heif";
     license = with lib.licenses; [ bsd3 lgpl3 ];

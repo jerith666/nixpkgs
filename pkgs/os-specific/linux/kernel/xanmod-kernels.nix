@@ -3,14 +3,14 @@
 let
   # These names are how they are designated in https://xanmod.org.
   ltsVariant = {
-    version = "6.1.55";
-    hash = "sha256-kmiMbzH1hyteicjk1WfCQPYhLsVAbl1t5LJ83rUNZ1k=";
+    version = "6.1.62";
+    hash = "sha256-fo5OQ/MZ+QVdCmLzX0OgFUBedfqrkqp+Ev081RVdtWw=";
     variant = "lts";
   };
 
   mainVariant = {
-    version = "6.5.5";
-    hash = "sha256-XjSuhZ5ooXOVllKc29Pd+PlOK6OtcgVMVFzxOx5nkIw=";
+    version = "6.5.11";
+    hash = "sha256-1bb5LG6JvqX5eNSe2Xyu86HxaqkUVkKUf1H3T7bFkGE=";
     variant = "main";
   };
 
@@ -44,9 +44,9 @@ let
       # WineSync driver for fast kernel-backed Wine
       WINESYNC = module;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      HZ = freeform "500";
-      HZ_500 = yes;
+      # Preemptive Full Tickless Kernel at 250Hz
+      HZ = freeform "250";
+      HZ_250 = yes;
       HZ_1000 = no;
     };
 

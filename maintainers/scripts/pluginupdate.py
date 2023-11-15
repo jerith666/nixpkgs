@@ -327,7 +327,6 @@ def run_nix_expr(expr, nixpkgs: str):
     :param expr nix expression to fetch current plugins
     :param nixpkgs Path towards a nixpkgs checkout
     '''
-    # local_pkgs = str(Path(__file__).parent.parent.parent)
     with CleanEnvironment(nixpkgs) as nix_path:
         cmd = [
             "nix",
@@ -341,8 +340,8 @@ def run_nix_expr(expr, nixpkgs: str):
             "--nix-path",
             nix_path,
         ]
-        log.debug("Running command %s", " ".join(cmd))
-        out = subprocess.check_output(cmd)
+        log.debug("Running command: %s", " ".join(cmd))
+        out = subprocess.check_output(cmd, timeout=90)
         data = json.loads(out)
         return data
 
@@ -469,6 +468,7 @@ class Editor:
             "--input-names",
             "-i",
             dest="input_file",
+            type=Path,
             default=self.default_in,
             help="A list of plugins in the form owner/repo",
         )
@@ -477,6 +477,7 @@ class Editor:
             "-o",
             dest="outfile",
             default=self.default_out,
+            type=Path,
             help="Filename to save generated nix code",
         )
         common.add_argument(
@@ -572,7 +573,6 @@ class CleanEnvironment(object):
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
-        # os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
         return f"localpkgs={self.local_pkgs}"
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
@@ -788,8 +788,18 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
-        editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        from datetime import date
+
+        try:
+            repo = git.Repo(os.getcwd())
+            updated = date.today().strftime('%m-%d-%Y')
+            print(args.outfile)
+            commit(repo,
+                   f"{editor.attr_path}: updated the {updated}", [args.outfile]
+                   )
+        except git.InvalidGitRepositoryError as e:
+            print(f"Not in a git repository: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if redirects:
         update()

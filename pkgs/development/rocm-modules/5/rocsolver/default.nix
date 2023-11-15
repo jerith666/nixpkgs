@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver";
-  version = "5.7.0";
+  version = "5.7.1";
 
   outputs = [
     "out"
@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ bsd2 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    timeout = 14400; # 4 hours
+    maxSilent = 14400; # 4 hours
     broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

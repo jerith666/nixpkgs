@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fortune-kind";
-  version = "0.1.3";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "cafkafk";
     repo = "fortune-kind";
     rev = "v${version}";
-    hash = "sha256-q4r1Qdyh2L1vTi+CKln+a9lKGgyRAhvg1aJRd0CIEJs=";
+    hash = "sha256-8xXRIp6fNYo0Eylzz+i+YccEJZjqiT0TxguZheIblns=";
   };
 
-  cargoHash = "sha256-ArVOGWaKbge8nxxGpAT8TttFZYJpuFF5u/tHYC9Qkeo=";
+  cargoHash = "sha256-v1LmZRuknWFAwwuw4U7Y7jnhBi8UkglY0sege9nSKes=";
 
   nativeBuildInputs = [ makeBinaryWrapper installShellFiles ];
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];

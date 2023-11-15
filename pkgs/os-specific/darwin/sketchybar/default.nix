@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , AppKit
+, Carbon
 , CoreAudio
 , CoreWLAN
 , CoreVideo
@@ -21,17 +22,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.16.3";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PCAGIcO7lvIAEFXlJn/e9zG5kxvDABshxFbu/bXWX7o=";
+    hash = "sha256-Ge15Df65fvNJ8ZdJ8giqvYytIivup2IIFPS+Ie3Yl9A=";
   };
 
   buildInputs = [
     AppKit
+    Carbon
     CoreAudio
     CoreWLAN
     CoreVideo
@@ -40,6 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     MediaRemote
     SkyLight
   ];
+
+  # NOTE: Release didn't bump patch version remove with next release
+  postPatch = ''
+    substituteInPlace src/sketchybar.c \
+      --replace "#define PATCH 0" "#define PATCH 1"
+  '';
 
   makeFlags = [
     target

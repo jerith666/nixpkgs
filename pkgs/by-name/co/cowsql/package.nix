@@ -7,18 +7,18 @@
 , raft-cowsql
 , sqlite
 , incus
-, unstableGitUpdater
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "unstable-2023-09-21";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
-    rev = "b728f0a43b9ad416f9c5fa1fda8b205c7a469d80";
-    hash = "sha256-B4ORrsUTfk/7glSpDndw1fCfFmd72iFr+2Xm5CryeZQ=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-+za3pIcV4BhoImKvJlKatCK372wL4OyPbApQvGxGGGk=";
   };
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   passthru = {
-    tests = {
-      inherit incus;
-    };
+    inherit (incus) tests;
 
-    updateScript = unstableGitUpdater { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ adamcstephens ];
     platforms = platforms.unix;
   };
-}
+})
