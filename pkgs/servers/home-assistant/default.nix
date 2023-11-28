@@ -40,6 +40,16 @@ let
         };
       });
 
+      # https://github.com/home-assistant/core/pull/101913
+      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
+        version = "3.8.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -279,35 +289,6 @@ let
         };
       });
 
-      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
-        version = "13.15";
-        src = fetchFromGitHub {
-          owner = "python-telegram-bot";
-          repo = "python-telegram-bot";
-          rev = "v${version}";
-          hash = "sha256-EViSjr/nnuJIDTwV8j/O50hJkWV3M5aTNnWyzrinoyg=";
-        };
-        propagatedBuildInputs = [
-          self.apscheduler
-          self.cachetools
-          self.certifi
-          self.cryptography
-          self.decorator
-          self.future
-          self.tornado
-          self.urllib3
-        ];
-        setupPyGlobalFlags = [ "--with-upstream-urllib3" ];
-        postPatch = ''
-          rm -r telegram/vendor
-          substituteInPlace requirements.txt \
-            --replace "APScheduler==3.6.3" "APScheduler" \
-            --replace "cachetools==4.2.2" "cachetools" \
-            --replace "tornado==6.1" "tornado"
-        '';
-        doCheck = false;
-      });
-
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -316,16 +297,6 @@ let
           repo = "python-vultr";
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
-        };
-      });
-
-      websockets = super.websockets.overridePythonAttrs (oldAttrs: rec {
-        version = "11.0.1";
-        src = fetchFromGitHub {
-          owner = "aaugustin";
-          repo = "websockets";
-          rev = "refs/tags/${version}";
-          hash = "sha256-cD8pC7n2OGS8AjG0VdjNXi8jXxvN7yKkadNR0GCqc90=";
         };
       });
 
@@ -353,7 +324,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.11.2";
+  hassVersion = "2023.11.3";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -369,7 +340,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cnneRq0hIyvgKo0du/52ze0IVs8TgTPNQM3T1kyy03s=";
+    hash = "sha256-llGHI6LVpTo9m2RMtcDSkW2wWraje2OkVFx5P7lzZ30=";
   };
 
   # Secondary source is git for tests
@@ -377,7 +348,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-OljfYmlXSJVoWWsd4jcSF4nI/FXHqRA8e4LN5AaPVv8=";
+    hash = "sha256-KD53O+UlAjGfVGp4kbLgpgU7j0A+KqZZT492WmeCOnQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -489,7 +460,6 @@ in python.pkgs.buildPythonApplication rec {
     pytestCheckHook
     requests-mock
     respx
-    stdlib-list
     syrupy
     tomli
     # required through tests/auth/mfa_modules/test_otp.py
