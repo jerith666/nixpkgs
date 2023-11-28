@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.11.2";
+  version = "2023.11.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -4145,7 +4145,8 @@
       subarulink
     ];
     "suez_water" = ps: with ps; [
-    ]; # missing inputs: pysuez
+      pysuez
+    ];
     "sun" = ps: with ps; [
     ];
     "supervisord" = ps: with ps; [
@@ -4870,6 +4871,7 @@
       pymitv
     ];
     "xmpp" = ps: with ps; [
+      emoji
       slixmpp
     ];
     "xs1" = ps: with ps; [

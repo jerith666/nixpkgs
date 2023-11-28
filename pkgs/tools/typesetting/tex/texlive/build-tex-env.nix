@@ -58,7 +58,7 @@ let
         keySet = p: {
           key = ((p.name or "${p.pname}-${p.version}") + "-" + p.tlOutputName or p.outputName or "");
           inherit p;
-          tlDeps = p.tlDeps or (p.requiredTeXPackages or (_: [ ]) [ ]);
+          tlDeps = if p ? tlDeps then ensurePkgSets p.tlDeps else (p.requiredTeXPackages or (_: [ ]) tl);
         };
       in
       # texlive.combine: the wrapper already resolves all dependencies
@@ -70,7 +70,7 @@ let
 
     # group the specified outputs
     specified = builtins.partition (p: p.outputSpecified or false) all;
-    specifiedOutputs = builtins.groupBy (p: p.tlOutputName or p.outputName) specified.right;
+    specifiedOutputs = lib.groupBy (p: p.tlOutputName or p.outputName) specified.right;
     otherOutputNames = builtins.catAttrs "key" (builtins.genericClosure {
       startSet = map (key: { inherit key; }) (lib.concatLists (builtins.catAttrs "outputs" specified.wrong));
       operator = _: [ ];

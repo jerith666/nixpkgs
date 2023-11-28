@@ -15,6 +15,8 @@
 , sqlcipher
 , stdenv
 , CoreServices
+, testers
+, deltachat-desktop
 }:
 
 let
@@ -33,16 +35,16 @@ let
 in
 buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "unstable-2023-11-03";
+  version = "1.41.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
-    rev = "40152e9543eb773fc27e7a4f96ef1eecebe9310e";
-    hash = "sha256-9GPXFUCu9GKa/bJgO8CIPMLccI6WAJ6PhfoyJ6s/DHE=";
+    rev = "v${version}";
+    hash = "sha256-T2EPCYQ2N414sUEqpXtx459sZZXOnHgXM0/dz3Wi9hw=";
   };
 
-  npmDepsHash = "sha256-g3nkgqZNoq+xuwXbXLHEMVpHH6Sq3792xhITCx7WvOc=";
+  npmDepsHash = "sha256-q60qrTN6H1AfJGhula8dzRwnKw2l+X0BOIvnKZh5t2s=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -115,6 +117,12 @@ buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = deltachat-desktop;
+    };
+  };
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";
