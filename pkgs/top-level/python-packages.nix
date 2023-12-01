@@ -232,6 +232,8 @@ self: super: with self; {
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
+  aiohttp-fast-url-dispatcher = callPackage ../development/python-modules/aiohttp-fast-url-dispatcher { };
+
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
   aiohttp-oauthlib = callPackage ../development/python-modules/aiohttp-oauthlib { };
@@ -4371,6 +4373,8 @@ self: super: with self; {
 
   gekitchen = callPackage ../development/python-modules/gekitchen { };
 
+  gekko = callPackage ../development/python-modules/gekko { };
+
   gemfileparser = callPackage ../development/python-modules/gemfileparser { };
 
   gemfileparser2 = callPackage ../development/python-modules/gemfileparser2 { };
@@ -6109,6 +6113,8 @@ self: super: with self; {
   ldappool = callPackage ../development/python-modules/ldappool { };
 
   ldaptor = callPackage ../development/python-modules/ldaptor { };
+
+  ldfparser = callPackage ../development/python-modules/ldfparser { };
 
   leather = callPackage ../development/python-modules/leather { };
 
@@ -14135,10 +14141,6 @@ self: super: with self; {
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch {
-    magma =
-      if pkgs.config.cudaSupport
-      then pkgs.magma-cuda-static
-      else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
   };
@@ -14148,7 +14150,6 @@ self: super: with self; {
   };
 
   torchWithCuda = self.torch.override {
-    magma = pkgs.magma-cuda-static;
     openai-triton = self.openai-triton-cuda;
     cudaSupport = true;
     rocmSupport = false;
@@ -14159,7 +14160,6 @@ self: super: with self; {
   };
 
   torchWithRocm = self.torch.override {
-    magma = pkgs.magma-hip;
     openai-triton = self.openai-triton-no-cuda;
     rocmSupport = true;
     cudaSupport = false;
@@ -15186,6 +15186,8 @@ self: super: with self; {
   types-tabulate = callPackage ../development/python-modules/types-tabulate { };
 
   types-toml = callPackage ../development/python-modules/types-toml { };
+
+  types-tqdm = callPackage ../development/python-modules/types-tqdm { };
 
   types-typed-ast = callPackage ../development/python-modules/types-typed-ast { };
 
