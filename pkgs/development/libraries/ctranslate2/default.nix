@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ctranslate2";
-  version = "3.22.0";
+  version = "3.23.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-Fw0pMTc0Zmr4RfH2rdPgpOODZW9CL5UbDbIeH6A4zZQ=";
+    hash = "sha256-jqeLNKOGdGtAVx7ExGGDxxgi5zDmQgmJ6bxIuguaM3k=";
     fetchSubmodules = true;
   };
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
     cudaPackages.libcurand
-  ] ++ lib.optionals withCuDNN [
+  ] ++ lib.optionals (withCUDA && withCuDNN) [
     cudaPackages.cudnn
   ] ++ lib.optionals withOneDNN [
     oneDNN
@@ -87,5 +87,8 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa misuzu ];
+    broken =
+      (lib.versionOlder cudaPackages.cudaVersion "11.4")
+      || !(withCuDNN -> withCUDA);
   };
 }
