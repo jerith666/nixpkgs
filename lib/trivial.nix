@@ -11,6 +11,8 @@ let
     toBaseDigits
     version
     versionSuffix
+    revisionWithDefault
+    shortRevisionWithDefault
     warn;
 in {
 
