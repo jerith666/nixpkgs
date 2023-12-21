@@ -5383,6 +5383,13 @@
     githubId = 231483;
     name = "Jack Kelly";
   };
+  endle = {
+    email = "lizhenbo@yahoo.com";
+    github = "Endle";
+    githubId = 3221521;
+    name = "Zhenbo Li";
+    matrix = "@zhenbo:matrix.org";
+  };
   endocrimes = {
     email = "dani@builds.terrible.systems";
     github = "endocrimes";
@@ -6765,10 +6772,6 @@
     github = "globin";
     githubId = 1447245;
     name = "Robin Gloster";
-  };
-  gm6k = {
-    email = "nix@quidecco.pl";
-    name = "Isidor Zeuner";
   };
   gmemstr = {
     email = "git@gmem.ca";
@@ -11345,6 +11348,12 @@
     github = "massix";
     githubId = 585424;
     name = "Massimo Gengarelli";
+  };
+  matdibu = {
+    email = "contact@mateidibu.dev";
+    github = "matdibu";
+    githubId = 24750154;
+    name = "Matei Dibu";
   };
   matejc = {
     email = "cotman.matej@gmail.com";
