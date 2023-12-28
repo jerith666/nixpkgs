@@ -159,6 +159,11 @@ in
       description = lib.mdDoc "The package to use for Cloudflared.";
     };
 
+    originCertPath = mkOption {
+      type = types.str;
+      description = lib.mdDoc "The origin certificate (cert.pem produced by 'cloudflared tunnel login')";
+    };
+
     tunnels = mkOption {
       description = lib.mdDoc ''
         Cloudflare tunnels.
@@ -284,6 +289,7 @@ in
             fullConfig = {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
+              origincert = cfg.originCertPath;
               ingress =
                 (map
                   (key: {
