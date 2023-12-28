@@ -175,9 +175,16 @@ in
           credentialsFile = mkOption {
             type = types.str;
             description = lib.mdDoc ''
-              Credential file.
+              Credential file as created by 'cloudflared tunnel login && cloudflared tunnel create <tunnel-name>'.
 
               See [https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file](Credentials file).
+            '';
+            example = ''
+              {
+                "AccountTag": "...",
+                "TunnelSecret": "...",
+                "TunnelID": "..."
+              }
             '';
           };
 
