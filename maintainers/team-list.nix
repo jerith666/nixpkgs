@@ -319,6 +319,7 @@ with lib.maintainers; {
       imincik
       nh2
       nialov
+      r-burns
       sikmir
       willcohen
     ];
@@ -401,6 +402,16 @@ with lib.maintainers; {
     scope = "Maintain Haskell packages and infrastructure.";
     shortName = "Haskell";
     enableFeatureFreezePing = true;
+  };
+
+  helsinki-systems = {
+    # Verify additions to this team with at least one already existing member of the team.
+    members = [
+      ajs124
+      das_j
+    ];
+    scope = "Group registration for packages maintained by Helsinki Systems";
+    shortName = "Helsinki Systems employees";
   };
 
   home-assistant = {
@@ -513,7 +524,6 @@ with lib.maintainers; {
       dtzWill
       ericson2314
       lovek323
-      primeos
       qyliss
       raitobezarius
       rrbutani
@@ -756,7 +766,6 @@ with lib.maintainers; {
 
   podman = {
     members = [
-      adisbladis
       saschagrunert
       vdemeester
     ];

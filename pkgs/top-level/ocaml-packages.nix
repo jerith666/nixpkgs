@@ -891,6 +891,8 @@ let
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
 
+    kqueue = callPackage ../development/ocaml-modules/kqueue { };
+
     ### L ###
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };
@@ -1073,6 +1075,8 @@ let
     mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
+
+    minttea = callPackage ../development/ocaml-modules/minttea { };
 
     mirage = callPackage ../development/ocaml-modules/mirage { };
 
@@ -1439,6 +1443,8 @@ let
       inherit (pkgs) coreutils imagemagick;
     };
 
+    poll = callPackage ../development/ocaml-modules/poll { };
+
     polynomial = callPackage ../development/ocaml-modules/polynomial { };
 
     portaudio = callPackage ../development/ocaml-modules/portaudio {
@@ -1782,6 +1788,8 @@ let
     tsdl-ttf = callPackage ../development/ocaml-modules/tsdl-ttf { };
 
     tsort = callPackage ../development/ocaml-modules/tsort { };
+
+    tty = callPackage ../development/ocaml-modules/tty { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 

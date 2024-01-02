@@ -363,12 +363,12 @@
 
 buildPythonPackage rec {
   pname = "boto3-stubs";
-  version = "1.34.2";
+  version = "1.34.8";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PNsE3SPM9k8La03h+d9wNRskjzMy4uaDEFVf+MefaZU=";
+    hash = "sha256-A/4+po7ZeLAYiQnd2EjjYPEZns4GK6F0J53z3JDM/fA=";
   };
 
   propagatedBuildInputs = [
