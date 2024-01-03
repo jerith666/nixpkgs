@@ -7,15 +7,15 @@
 , pyxdg
 , requests
 , requests-mock
+, rich
 , setuptools
 , tomli
 , urllib3
-, wheel
 }:
 
 buildPythonPackage rec {
   pname = "podman";
-  version = "4.7.0";
+  version = "4.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,17 +24,17 @@ buildPythonPackage rec {
     owner = "containers";
     repo = "podman-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0p3o1pTqD5Y2JmyLcGS/OCb3HmRu5iqeFqoPlwAkNfY=";
+    hash = "sha256-KecYH3fUaWNXx6WQ0NFmEm8o4OkOyYfSHIAh2p+Am1k=";
   };
 
   nativeBuildInputs = [
     setuptools
-    wheel
   ];
 
   propagatedBuildInputs = [
     pyxdg
     requests
+    rich
     tomli
     urllib3
   ];

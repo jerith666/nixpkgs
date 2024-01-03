@@ -32,7 +32,10 @@
 , git
 , openssh
 , setuptools
-, pythonRelaxDepsHook
+, croniter
+, importlib-resources
+, packaging
+, unidiff
 , glibcLocales
 , nixosTests
 , callPackage
@@ -67,14 +70,14 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
-    version = "3.9.2";
+    version = "3.10.1";
     format = "pyproject";
 
-    disabled = pythonOlder "3.7";
+    disabled = pythonOlder "3.8";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
+      hash = "sha256-/J4jWoIZEObSZKw04Ib6h4AvJtfNwzwozRu+gFek1Dk=";
     };
 
     propagatedBuildInputs = [
@@ -91,6 +94,10 @@ let
       pyjwt
       pyyaml
       setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
     ]
       # tls
       ++ twisted.optional-dependencies.tls;
@@ -111,10 +118,7 @@ let
       git
       openssh
       glibcLocales
-      pythonRelaxDepsHook
     ];
-
-    pythonRelaxDeps = [ "Twisted" ];
 
     patches = [
       # This patch disables the test that tries to read /etc/os-release which

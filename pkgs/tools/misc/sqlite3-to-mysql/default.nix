@@ -4,13 +4,12 @@
 , nixosTests
 , testers
 , sqlite3-to-mysql
-, fetchPypi
 , mysql80
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite3-to-mysql";
-  version = "2.1.1";
+  version = "2.1.6";
   format = "pyproject";
 
   disabled = python3Packages.pythonOlder "3.8";
@@ -19,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "techouse";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g3W6ts5Mk//l6E4Yg49rf9dmu+yzgH+mCjz+vPW9ZRQ=";
+    hash = "sha256-RIe4If7R8snbNN2yIPxAh39EQplVyhMF2c0G06Zipds=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -59,5 +58,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/techouse/sqlite3-to-mysql";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    mainProgram = "sqlite3mysql";
   };
 }

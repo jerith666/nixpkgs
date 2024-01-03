@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchgit, cmake, pkg-config, libubox-nossl, ssl_implementation }:
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, pkg-config
+, libubox-nossl
+, ssl_implementation
+, additional_buildInputs ? [ ]
+}:
 
 stdenv.mkDerivation {
   pname = "ustream-ssl";
@@ -21,7 +29,7 @@ stdenv.mkDerivation {
   cmakeFlags = [ "-D${lib.toUpper ssl_implementation.pname}=ON" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ssl_implementation ];
+  buildInputs = [ ssl_implementation ] ++ additional_buildInputs;
 
   passthru = {
     inherit ssl_implementation;
@@ -31,7 +39,7 @@ stdenv.mkDerivation {
     description = "ustream SSL wrapper";
     homepage = "https://git.openwrt.org/?p=project/ustream-ssl.git;a=summary";
     license = licenses.isc;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz mkg20001 ];
     platforms = platforms.all;
   };
 }

@@ -47,6 +47,9 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
+  "FuzzyClock@johngoetz" = "fuzzy-clock";
+
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
 
@@ -76,9 +79,6 @@
   "unredirect@vaina.lt" = "disable-unredirect-fullscreen-windows";
   "unredirect@aunetx" = "disable-unredirect-fullscreen-windows-2";
 
-  "fuzzy-clock@keepawayfromfire.co.uk" = "fuzzy-clock-2";
-  "FuzzyClock@johngoetz" = "fuzzy-clock";
-
   # At the moment, ShutdownTimer@deminder is a fork of ShutdownTimer@neumann which adds new features
   # there seem to be upstream plans, so this should be checked periodically:
   # https://github.com/Deminder/ShutdownTimer https://github.com/neumann-d/ShutdownTimer/pull/46
@@ -88,7 +88,6 @@
 
   # ####### GNOME 40 #######
 
-  "system-monitor@paradoxxx.zero.gmail.com" = "system-monitor"; # manually packaged
   "System_Monitor@bghome.gmail.com" = "system-monitor-2";
 
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
@@ -109,9 +108,6 @@
   # Forks of each other, azan@faissal.bensefia.id is more recent
   "azan@faissal.bensefia.id" = "azan-islamic-prayer-times";
   "azan@hatem.masmoudi.org" = null;
-
-  # That extension is broken because of https://github.com/NixOS/nixpkgs/issues/118612
-  "flypie@schneegans.github.com" = null;
 
   # ############################################################################
   # Overrides for extensions that were manually packaged in the past but are gradually

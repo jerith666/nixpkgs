@@ -8,7 +8,6 @@
 , bc
 , ncurses
 , perl
-, glibcLocales
 , testers
 , fzf
 }:
@@ -19,7 +18,7 @@ let
   # warnings on non-nixos machines
   ourPerl = if !stdenv.isLinux then perl else (
     writeShellScriptBin "perl" ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      export PERL_BADLANG=0
       exec ${perl}/bin/perl "$@"
     '');
 in
@@ -60,6 +59,7 @@ buildGoModule rec {
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
+      --replace "command -v perl" "command -v ${ourPerl}/bin/perl" \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
     # fzf-tmux depends on bc
    substituteInPlace bin/fzf-tmux \
