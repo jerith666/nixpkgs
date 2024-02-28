@@ -1,27 +1,37 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , botocore
 , jmespath
 , s3transfer
+, pythonRelaxDepsHook
 , setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.28.57"; # N.B: if you change this, change botocore and awscli to a matching version
+  version = "1.34.21"; # N.B: if you change this, change botocore and awscli to a matching version
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = pname;
-    rev = version;
-    hash = "sha256-+kuILCUK10tvpfTEAHZGvKKmpw6Pgn+v2kQkwCkPMKg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oOrUVBh1sbaOibU8A+bGZ4z7IEiE4gjHwZ+8889Hv60=";
   };
 
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "botocore"
+    "s3transfer"
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +52,10 @@ buildPythonPackage rec {
     # Integration tests require networking
     "tests/integration"
   ];
+
+  passthru.optional-dependencies = {
+    crt = [ botocore.optional-dependencies.crt ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/boto/boto3";

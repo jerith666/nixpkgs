@@ -12,6 +12,7 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , setuptools
 , snitun
 , syrupy
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.75.1";
+  version = "0.78.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,11 +30,16 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-VQ5nxkrHt6xp+bk/wqAPJ+srTuf9WyamoLXawW1mKWo=";
+    hash = "sha256-ZqBYmh+MA4ZuhnUQPn/C8d7CVPrwp6mirsWnoB/ZMFw=";
   };
 
   nativeBuildInputs = [
     setuptools
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "acme"
   ];
 
   propagatedBuildInputs = [

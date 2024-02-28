@@ -1,21 +1,25 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , python-dateutil
 , jmespath
 , urllib3
 , pytestCheckHook
 , jsonschema
+, awscrt
 }:
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.31.57"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.34.21"; # N.B: if you change this, change boto3 and awscli to a matching version
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MBQ2F0Y1vsc5siW4QPw2XKAOXBpj5bKhnuZ50gTgG3g=";
+    hash = "sha256-IZg7sEc6GRMBksUOxpdNVfDEqkinCUvPQPeILItpuPE=";
   };
 
   propagatedBuildInputs = [
@@ -40,6 +44,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "botocore"
   ];
+
+  passthru.optional-dependencies = {
+    crt = [ awscrt ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/boto/botocore";

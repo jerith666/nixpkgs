@@ -22,11 +22,9 @@ let
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
-    editor = if cfg.editor then "True" else "False";
-
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
-    inherit (cfg) consoleMode graceful;
+    inherit (cfg) consoleMode graceful editor;
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
 
@@ -51,20 +49,19 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
-    nativeBuildInputs = [ pkgs.mypy ];
-  } ''
-    install -m755 ${systemdBootBuilder} $out
-    mypy \
+  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" { } ''
+    mkdir -p $out/bin
+    install -m755 ${systemdBootBuilder} $out/bin/systemd-boot-builder
+    ${lib.getExe pkgs.buildPackages.mypy} \
       --no-implicit-optional \
       --disallow-untyped-calls \
       --disallow-untyped-defs \
-      $out
+      $out/bin/systemd-boot-builder
   '';
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${checkedSystemdBootBuilder} "$@"
+    ${checkedSystemdBootBuilder}/bin/systemd-boot-builder "$@"
     ${cfg.extraInstallCommands}
   '';
 in {
@@ -81,7 +78,11 @@ in {
 
       type = types.bool;
 
-      description = lib.mdDoc "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+      description = lib.mdDoc ''
+        Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager.
+        For more information about systemd-boot:
+        https://www.freedesktop.org/wiki/Software/systemd/systemd-boot/
+      '';
     };
 
     editor = mkOption {
