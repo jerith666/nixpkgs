@@ -74,7 +74,7 @@ in
             description = lib.mdDoc "";
           };
           options.message-level = mkOption {
-            type = types.ints.between 0 3;
+            type = types.ints.between 0 6;
             default = 2;
             description = lib.mdDoc "Set verbosity of transmission messages.";
           };
@@ -294,7 +294,7 @@ in
       requires = optional apparmor.enable "apparmor.service";
       wantedBy = [ "multi-user.target" ];
       environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
-      environment.TRANSMISSION_WEB_HOME = lib.optionalString (cfg.webHome != null) cfg.webHome;
+      environment.TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
 
       serviceConfig = {
         # Use "+" because credentialsFile may not be accessible to User= or Group=.

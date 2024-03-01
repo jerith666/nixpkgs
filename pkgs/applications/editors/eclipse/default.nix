@@ -58,8 +58,8 @@ in rec {
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-dsl-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
         hash = {
-          x86_64 = "sha256-xdvEt26ovcT65Jy+ePEAHHMAyICBQwJser2uL9VrwrA=";
-          aarch64 = "sha256-GPgD29d81YFtHtqqb66io1BwbNuHTqVZYrY4Oh4MojQ=";
+          x86_64 = "sha256-U9CMwcDZP1ptnc+C7gTfTOcyppe7r6RtgPp65b3A7Qk=";
+          aarch64 = "sha256-wuh6IZtRPDNJAVcfukFjZfuOVJgfj2zI616YNDnRgWM=";
         }.${arch};
       };
   };

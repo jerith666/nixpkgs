@@ -3,6 +3,7 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+, fetchpatch
 , python311
 , substituteAll
 , ffmpeg-headless
@@ -30,45 +31,79 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.1";
+      aemet-opendata = super.aemet-opendata.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.7";
         src = fetchFromGitHub {
-          owner = "CorantGmbH";
-          repo = "aioairq";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-SRsDSHTZkkygaQZjHENKNLx3ZWMi/PubS1m/MonEKNk=";
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-kmU2HtNyYhfwWQv6asOtDpLZ6+O+eEICzBNLxUhAwaY=";
         };
       });
 
-      aioesphomeapi = super.aioesphomeapi.overridePythonAttrs (oldAttrs: rec {
-        version = "19.2.1";
+      aiogithubapi = super.aiogithubapi.overridePythonAttrs (oldAttrs: rec {
+        version = "22.10.1";
         src = fetchFromGitHub {
-          owner = "esphome";
-          repo = "aioesphomeapi";
+          owner = "ludeeus";
+          repo = "aiogithubapi";
+          rev = "refs/tags/${version}";
+          hash = "sha256-ceBuqaMqqL6qwN52765MG4sLt+08hx2G9rUVNC7x6ik=";
+        };
+        propagatedBuildInputs = with self; [
+          aiohttp
+          async-timeout
+          backoff
+        ];
+      });
+
+      aionotion = super.aionotion.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.05.5";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aionotion";
+          rev = "refs/tags/${version}";
+          hash = "sha256-/2sF8m5R8YXkP89bi5zR3h13r5LrFOl1OsixAcX0D4o=";
+        };
+        patches = [
+          (fetchpatch {
+            # clean up build dependencies; https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83
+            url = "https://github.com/bachya/aionotion/commit/53c7285110d12810f9b43284295f71d052a81b83.patch";
+            hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+          })
+        ];
+      });
+
+      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
+        version = "2022.12.1";
+        src = fetchFromGitHub {
+          owner = "bachya";
+          repo = "aiopurpleair";
+          rev = "refs/tags/${version}";
+          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
+        };
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace-fail \
+            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
+            '"poetry-core"'
+        '';
+      });
+
+      aiopvapi = super.aiopvapi.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.4";
+        src = fetchFromGitHub {
+          owner = "sander76";
+          repo = "aio-powerview-api";
           rev = "refs/tags/v${version}";
-          hash = "sha256-WSWGO0kI1m6oaImUYZ6m5WKJ+xPs/rtn5wVq1bDr+bE=";
+          hash = "sha256-cghfNi5T343/7GxNLDrE0iAewMlRMycQTP7SvDVpU2M=";
         };
       });
 
-      # https://github.com/home-assistant/core/pull/101913
-      aiohttp = super.aiohttp.overridePythonAttrs (old: rec {
-        version = "3.9.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-j8Sah6wmnUUp2kWHHi/7aHTod3nD0OLM2BPAiZIhI50=";
-        };
-        patches = [];
-        doCheck = false;
-      });
-
-      aiohttp-zlib-ng = super.aiohttp-zlib-ng.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.1";
+      aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
+        version = "22.7.0";
         src = fetchFromGitHub {
-          owner = "bdraco";
-          repo = "aiohttp-zlib-ng";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dTNwt4eX6ZQ8ySK2/9ziVbc3KFg2aL/EsiBWaJRC4x8=";
+          owner = "tkdrob";
+          repo = "aioskybell";
+          rev = "refs/tags/${version}";
+          hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
         };
       });
 
@@ -80,14 +115,20 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
         };
+        postPatch = ''
+          substituteInPlace pyproject.toml --replace-fail \
+            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
+            '"poetry-core"'
+        '';
       });
 
-      aioresponses = super.aioresponses.overridePythonAttrs (oldAttrs: rec {
-        pname = "aioresponses";
-        version = "0.7.6";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-95XZ29otYXdIQOfjL1Nm9FdS0a3Bt0yTYq/QFylsfuE=";
+      anova-wifi = super.anova-wifi.overridePythonAttrs (old: rec {
+        version = "0.10.3";
+        src = fetchFromGitHub {
+          owner = "Lash-L";
+          repo = "anova_wifi";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-tCmvp29KSCkc+g0w0odcB7vGjtDx6evac7XsHEF0syM=";
         };
       });
 
@@ -100,12 +141,27 @@ let
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
-            --replace "poetry>=1.0.0b1" "poetry-core" \
-            --replace "poetry.masonry" "poetry.core.masonry"
+            --replace-fail "poetry>=1.0.0b1" "poetry-core" \
+            --replace-fail "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
           self.pytz
         ];
+      });
+
+      brother = super.brother.overridePythonAttrs (oldAttrs: rec {
+        version = "3.0.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/${version}";
+          hash = "sha256-rRzcWT9DcNTBUYxyYYC7WORBbrkgj0toCp2e8ADUN5s=";
+        };
+      });
+
+      debugpy = super.debugpy.overridePythonAttrs (oldAttrs: {
+        # tests are deadlocking too often
+        # https://github.com/NixOS/nixpkgs/issues/262000
+        doCheck = false;
       });
 
       geojson = super.geojson.overridePythonAttrs (oldAttrs: rec {
@@ -143,6 +199,7 @@ let
           aenum
           aiohttp
           pydantic
+          requests
         ];
         doCheck = false; # requires asynctest, which does not work on python 3.11
       });
@@ -156,14 +213,25 @@ let
         };
       });
 
-      justnimbus = super.justnimbus.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6.0";
+      lxml = super.lxml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.0";
+        pyprojet = true;
+
         src = fetchFromGitHub {
-          owner = "kvanzuijlen";
-          repo = "justnimbus";
-          rev = "refs/tags/${version}";
-          hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
+          owner = "lxml";
+          repo = "lxml";
+          rev = "refs/tags/lxml-${version}";
+          hash = "sha256-eWLYzZWatYDmhuBTZynsdytlNFKKmtWQ1XIyzVD8sDY=";
         };
+
+        nativeBuildInputs = with self; [
+          cython_3
+          setuptools
+          libxml2.dev
+          libxslt.dev
+        ];
+
+        patches = [];
       });
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
@@ -188,32 +256,6 @@ let
         doCheck = false; # no tests
       });
 
-      openai = super.openai.overridePythonAttrs (oldAttrs: rec {
-        version = "0.28.1";
-        src = fetchFromGitHub {
-          owner = "openai";
-          repo = "openai-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-liJyeGxnYIC/jUQKdeATHpVJb/12KGbeM94Y2YQphfY=";
-        };
-        nativeBuildInputs = with self; [
-          setuptools
-        ];
-        propagatedBuildInputs = with self; [
-          aiohttp
-          requests
-          tqdm
-        ];
-        disabledTestPaths = [
-          # Requires a real API key
-          "openai/tests/test_endpoints.py"
-          "openai/tests/asyncio/test_endpoints.py"
-          # openai: command not found
-          "openai/tests/test_file_cli.py"
-          "openai/tests/test_long_examples_validator.py"
-        ];
-      });
-
       # Pinned due to API changes in 1.3.0
       ovoenergy = super.ovoenergy.overridePythonAttrs (oldAttrs: rec {
         version = "1.2.0";
@@ -232,15 +274,6 @@ let
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
-        version = "5.9.6";
-        src = fetchPypi {
-          pname = "psutil";
-          inherit version;
-          hash = "sha256-5Lkt3NfdTN0/kAGA6h4QSTLHvOI0+4iXbio7KWRBIlo=";
         };
       });
 
@@ -274,6 +307,18 @@ let
         };
       });
 
+      pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.18";
+        src = fetchFromGitHub {
+          owner = "yaleman";
+          repo = "aussiebb";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
+        };
+      });
+
+      pydantic = super.pydantic_1;
+
       pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.3";
         src = fetchFromGitHub {
@@ -281,16 +326,6 @@ let
           repo = "pydexcom";
           rev = "refs/tags/${version}";
           hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
-        };
-      });
-
-      pydrawise = super.pydrawise.overridePythonAttrs (oldAttrs: rec {
-        version = "2023.11.0";
-        src = fetchFromGitHub {
-          owner = "dknowles2";
-          repo = "pydrawise";
-          rev = "refs/tags/${version}";
-          hash = "sha256-gKOyTvdETGzKlpU67UKaHYTIvnAX9znHIynP3BiVbt4=";
         };
       });
 
@@ -314,21 +349,12 @@ let
       });
 
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
-        pname = "python-slugify";
-        version = "4.0.1";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
-        };
-      });
-
-      python-tado = super.python-tado.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
+        version = "8.0.1";
         src = fetchFromGitHub {
-          owner = "wmalgadey";
-          repo = "PyTado";
-          rev = "refs/tags/${version}";
-          hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
+          owner = "un33k";
+          repo =  "python-slugify";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
         };
       });
 
@@ -342,6 +368,25 @@ let
         };
       });
 
+      versioningit = super.versioningit.overridePythonAttrs (oldAttrs: rec {
+        version = "2.2.0";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-6xjnunJoqIC/HM/pLlNOlqs04Dl/KNy8s/wNpPaltr0=";
+        };
+      });
+
+      voluptuous = super.voluptuous.overridePythonAttrs (oldAttrs: rec {
+        version = "0.13.1";
+        src = fetchFromGitHub {
+          owner = "alecthomas";
+          repo = "voluptuous";
+          rev = "refs/tags/${version}";
+          hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
+        };
+      });
+
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -351,6 +396,46 @@ let
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
         };
+      });
+
+      wyoming = super.wyoming.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.2";
+        src = fetchFromGitHub {
+          owner = "rhasspy";
+          repo = "wyoming";
+          rev = "refs/tags/${version}";
+          hash = "sha256-2bc5coKL5KlTeL9fdghPmRF66NXfimHOKGtE2yPXgrA=";
+        };
+      });
+
+      xbox-webapi = super.xbox-webapi.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.11";
+        src = fetchFromGitHub {
+          owner = "OpenXbox";
+          repo = "xbox-webapi-python";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-fzMB+I8+ZTJUiZovcuj+d5GdHY9BJyJd6j92EhJeIFI=";
+        };
+        postPatch = ''
+          sed -i '/pytest-runner/d' setup.py
+        '';
+        propagatedBuildInputs = with self; [
+          aiohttp
+          appdirs
+          ms-cv
+          pydantic
+          ecdsa
+        ];
+        nativeCheckInputs = with self; [
+          aresponses
+        ];
+      });
+
+      youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
+        pytestFlagsArray = [
+          # fails with pydantic v1
+          "--deselect=tests/test_video.py::test_fetch_video"
+        ];
       });
 
       # internal python packages only consumed by home-assistant itself
@@ -377,7 +462,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.12.4";
+  hassVersion = "2024.2.5";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -395,40 +480,27 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-XzjsSM0xKxLeuP30u8LReJtmJMbJq+yQ2Pp5xWmNLFw=";
+    hash = "sha256-RRoxWNcubpxzmExzrifRKhgNm0IM5OuNZYHz6tp9zm8=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-dea0PacCzCWhMh2gw/kVJHwYCoT7zJ52qTQbHmqcwU8=";
+    hash = "sha256-qhUfOMSM4FKUQ9LdeoHLLrVm5cWFrlTER02s+tLVAMU=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     pythonRelaxDepsHook
     setuptools
-    wheel
   ];
 
   pythonRelaxDeps = [
-    "aiohttp"
     "attrs"
-    "awesomeversion"
-    "bcrypt"
     "ciso8601"
-    "cryptography"
-    "home-assistant-bluetooth"
-    "httpx"
-    "ifaddr"
     "orjson"
-    "pip"
-    "PyJWT"
-    "pyOpenSSL"
-    "PyYAML"
-    "requests"
+    "pyopenssl"
     "typing-extensions"
-    "voluptuous-serialize"
-    "yarl"
+    "urllib3"
   ];
 
   # extract translations from pypi sdist
@@ -439,7 +511,7 @@ in python.pkgs.buildPythonApplication rec {
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
     # Follow symlinks in /var/lib/hass/www
-    ./patches/static-symlinks.patch
+    ./patches/static-follow-symlinks.patch
 
     # Patch path to ffmpeg binary
     (substituteAll {
@@ -449,7 +521,7 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+    substituteInPlace tests/test_config.py --replace-fail '"/usr"' '"/build/media"'
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
     sed -i 's/wheel[~=]/wheel>/' pyproject.toml
@@ -458,6 +530,9 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiohttp
+    aiohttp-cors
+    aiohttp-fast-url-dispatcher
+    aiohttp-zlib-ng
     astral
     async-timeout
     atomicwrites-homeassistant

@@ -13,6 +13,7 @@
 , psutil
 , pytest-asyncio
 , pytestCheckHook
+, setuptools
 , sqlalchemy
 , websocket-client
 , websockets
@@ -20,8 +21,8 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.26.1";
-  format = "setuptools";
+  version = "3.27.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -29,8 +30,17 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jg4mUVT1sB9hxRqhLOeZxQHTpBK/N76b2XUaFe/nBKY=";
+    hash = "sha256-MA3pn6NQxzXYu/BBpOgfZWnS51dl7oXrAi43jenHhxI=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "pytest-runner"' ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     aiodns

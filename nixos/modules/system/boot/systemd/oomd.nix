@@ -4,7 +4,7 @@
 
 in {
   imports = [
-    (lib.mkRemovedOptionModule [ "systemd" "oomd" "enableUserServices" ] "Use systemd.oomd.enableUserSlices instead.")
+    (lib.mkRenamedOptionModule [ "systemd" "oomd" "enableUserServices" ] [ "systemd" "oomd" "enableUserSlices" ])
   ];
 
   options.systemd.oomd = {
@@ -49,18 +49,19 @@ in {
 
     systemd.slices."-".sliceConfig = lib.mkIf cfg.enableRootSlice {
       ManagedOOMMemoryPressure = "kill";
-      ManagedOOMMemoryPressureLimit = "80%";
+      ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };
     systemd.slices."system".sliceConfig = lib.mkIf cfg.enableSystemSlice {
       ManagedOOMMemoryPressure = "kill";
-      ManagedOOMMemoryPressureLimit = "80%";
+      ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };
     systemd.slices."user-".sliceConfig = lib.mkIf cfg.enableUserSlices {
       ManagedOOMMemoryPressure = "kill";
-      ManagedOOMMemoryPressureLimit = "80%";
+      ManagedOOMMemoryPressureLimit = lib.mkDefault "80%";
     };
     systemd.user.units."slice" = lib.mkIf cfg.enableUserSlices {
       text = ''
+        [Slice]
         ManagedOOMMemoryPressure=kill
         ManagedOOMMemoryPressureLimit=80%
       '';

@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (self: {
   name = "alacritty-theme";
-  version = "unstable-2023-11-07";
+  version = "unstable-2024-02-25";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = "alacritty-theme";
-    rev = "808b81b2e88884e8eca5d951b89f54983fa6c237";
-    hash = "sha256-g5tM6VBPLXin5s7X0PpzWOOGTEwHpVUurWOPqM/O13A=";
+    rev = "07c10441dae4d0490145a0f40178f8846b24e800";
+    hash = "sha256-aZlsKbFcm1bswx7k0cjwhj1MudR0Q0rD8sdHa7kQ0rY=";
   };
 
   dontConfigure = true;
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation (self: {
   sourceRoot = "${self.src.name}/themes";
   installPhase = ''
     runHook preInstall
-    install -Dt $out *.yaml
+    install -Dt $out *.toml
     runHook postInstall
   '';
 
