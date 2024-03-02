@@ -9,9 +9,12 @@ current=$(nixos-version --revision);
 
 if git merge-base --is-ancestor origin/nixos-unstable $current; then
     echo;
-    echo "as of $(date)";
-    echo "the current version:                               $(git log -1 --format='%h @ %ad' $current)";
-    echo "already contains the latest nixos-unstable commit: $(git log -1 --format='%h @ %ad' origin/nixos-unstable)"
+    echo "at                                         $(date +%c)";
+    echo;
+    echo "the current version:        $(git log -1 --date=format-local:%c --format='%h @ %ad' $current)";
+    echo;
+    echo "already contains the";
+    echo "latest nixos-unstable:      $(git log -1 --date=format-local:%c --format='%h @ %ad' origin/nixos-unstable)"
     echo;
     exit 0;
 fi;
