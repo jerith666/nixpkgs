@@ -2114,12 +2114,40 @@ self: super: {
   # https://github.com/kowainik/co-log/pull/218
   co-log = doJailbreak super.co-log;
 
-  # Test suite has a too strict bound on base
-  # https://github.com/jswebtools/language-ecmascript/pull/88
+  # https://github.com/jswebtools/language-ecmascript/pull/90
+  # adds support for GHC 9.6
   language-ecmascript =
-    appendPatch ./patches/language-ecmascript-ghc-9-templatehaskell.patch
-      # Test suite doesn't compile anymore
-      (dontCheck (doJailbreak super.language-ecmascript));
+    appendPatches (map ({ rev, hash }: fetchpatch {
+      name = "language-ecmascript-${lib.substring 0 7 rev}.patch";
+      url = "https://github.com/jswebtools/language-ecmascript/commit/${rev}.patch";
+      inherit hash;
+    }) [
+      {
+        rev = "bd39c6fd0f1e5adeb3ac5ae4b4d94c15617c7a44";
+        hash = "sha256-9H2Jlv9rTkgjLUiBOUQA+jWvhFHK0+cR3hbHxiIjie4=";
+      }
+      {
+        rev = "f9be061ff7fde939081283c57cee8b0b37d5462a";
+        hash = "sha256-3Wyw5xz5W2Bt5JBYXfqB+JcwEBQ1oYIUzxZLtVybTIw=";
+      }
+      {
+        rev = "b945b33e957d3ba51608be0b05fe53d65fcf4667";
+        hash = "sha256-bnUc4sILdyIbgXVieKam+VAvlXAk7F/YSPdz4YlwR68=";
+      }
+      {
+        rev = "419df9dd1e9c80b63b664ab40e4228737f79e48e";
+        hash = "sha256-qIvBaYuqSF7tIRDMiP8nco7XAtIEnD7Yc1CE5kxRWoY=";
+      }
+      {
+        rev = "089a6b0ea90f6eb5a428829fa1ee944f97258ac5";
+        hash = "sha256-0DJb6mdvQvQ3XGewD6dGD1kwNpKCkMdQpo9SdJRLRoo=";
+      }
+      {
+        rev = "3bd43dbe781934ebb69d01b48ccdf52d953cf37f";
+        hash = "sha256-N6MrWhbI8tT/a0WAEM96cCIvu7VxfexRcq7sBTTB8bY=";
+      }
+    ])
+    (doJailbreak super.language-ecmascript);
 
   # Too strict bounds on containers
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
