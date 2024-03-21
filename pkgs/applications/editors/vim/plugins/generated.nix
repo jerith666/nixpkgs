@@ -1517,6 +1517,18 @@ final: prev:
     meta.homepage = "https://github.com/asheq/close-buffers.vim/";
   };
 
+  cmake-tools-nvim = buildVimPlugin {
+    pname = "cmake-tools.nvim";
+    version = "2024-02-02";
+    src = fetchFromGitHub {
+      owner = "Civitasv";
+      repo = "cmake-tools.nvim";
+      rev = "055d7bb37d5c4038ce1e400656b6504602934ce7";
+      sha256 = "sha256-e16I51FbT0itLkyornd9RjShXmLxUzPrygFYVc66xoY=";
+    };
+    meta.homepage = "https://github.com/Civitasv/cmake-tools.nvim/";
+  };
+
   cmd-parser-nvim = buildVimPlugin {
     pname = "cmd-parser.nvim";
     version = "2022-02-23";
@@ -8591,6 +8603,18 @@ final: prev:
       sha256 = "0xjkp8fp8405bpjg0jwkhw6jris1sz39d46d0n4idyzxf5n8pcf4";
     };
     meta.homepage = "https://github.com/jmbuhr/otter.nvim/";
+  };
+
+  outline-nvim = buildVimPlugin {
+    pname = "outline.nvim";
+    version = "2024-01-22";
+    src = fetchFromGitHub {
+      owner = "hedyhli";
+      repo = "outline.nvim";
+      rev = "a8d40aecb799196303ff3521c0e31c87bba57198";
+      sha256 = "1xhqrgjj37d1wq7vrcw9vwmrvzl5a3vyz4k0dglvgjq5z2g5zb0x";
+    };
+    meta.homepage = "https://github.com/hedyhli/outline.nvim/";
   };
 
   overseer-nvim = buildVimPlugin {
