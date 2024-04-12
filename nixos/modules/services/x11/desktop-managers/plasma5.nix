@@ -363,7 +363,7 @@ in
         pkgs.media-player-info
       ];
 
-      services.xserver.displayManager.sddm = {
+      services.displayManager.sddm = {
         theme = mkDefault "breeze";
       };
 
@@ -409,16 +409,16 @@ in
       system.nixos-generate-config.desktopConfiguration = [
         ''
           # Enable the Plasma 5 Desktop Environment.
-          services.xserver.displayManager.sddm.enable = true;
+          services.displayManager.sddm.enable = true;
           services.xserver.desktopManager.plasma5.enable = true;
         ''
       ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-workspace ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-workspace ];
       # Default to be `plasma` (X11) instead of `plasmawayland`, since plasma wayland currently has
       # many tiny bugs.
       # See: https://github.com/NixOS/nixpkgs/issues/143272
-      services.xserver.displayManager.defaultSession = mkDefault "plasma";
+      services.displayManager.defaultSession = mkDefault "plasma";
 
       environment.systemPackages =
         with pkgs.plasma5Packages;
@@ -544,7 +544,7 @@ in
         };
       };
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-mobile ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-mobile ];
     })
 
     # Plasma Bigscreen
@@ -565,7 +565,7 @@ in
           kdeconnect-kde
         ];
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
+      services.displayManager.sessionPackages = [ pkgs.plasma5Packages.plasma-bigscreen ];
 
       # required for plasma-remotecontrollers to work correctly
       hardware.uinput.enable = true;
