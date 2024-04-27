@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.3.12";
+  version = "0.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4OwTY4OFkTQcQqHntjcfwPTx4w+2GPEUBy/XgW/nATU=";
+    hash = "sha256-wFDx90zTaPF9gHLZnWBJQlMBuz8iZQRHkcS8BAxcZRA=";
   };
 
   build-system = [

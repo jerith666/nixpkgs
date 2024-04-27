@@ -46,7 +46,6 @@ with lib.maintainers; {
   bazel = {
     members = [
       mboes
-      marsam
       uri-canva
       cbley
       olebedev
@@ -143,6 +142,15 @@ with lib.maintainers; {
     ];
     scope = "Maintain Cinnamon desktop environment and applications made by the Linux Mint team.";
     shortName = "Cinnamon";
+    enableFeatureFreezePing = true;
+  };
+
+  cloudposse = {
+    members = [
+      dudymas
+    ];
+    scope = "Maintain atmos and applications made by the Cloud Posse team.";
+    shortName = "CloudPosse";
     enableFeatureFreezePing = true;
   };
 
@@ -442,6 +450,7 @@ with lib.maintainers; {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
       das_j
+      conni2461
     ];
     scope = "Group registration for packages maintained by Helsinki Systems";
     shortName = "Helsinki Systems employees";
@@ -475,6 +484,7 @@ with lib.maintainers; {
       ryantm
       lassulus
       yayayayaka
+      asymmetric
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
@@ -507,6 +517,7 @@ with lib.maintainers; {
       cpages
       dschrempf
       edwtjo
+      kazenyuk
       minijackson
       peterhoeg
       sephalon
@@ -562,6 +573,9 @@ with lib.maintainers; {
       RossComputerGuy
       rrbutani
       sternenseemann
+    ];
+    githubTeams = [
+      "llvm"
     ];
     scope = "Maintain LLVM package sets and related packages";
     shortName = "LLVM";
@@ -721,7 +735,6 @@ with lib.maintainers; {
   node = {
     members = [
       lilyinstarlight
-      marsam
       winter
     ];
     scope = "Maintain Node.js runtimes and build tooling.";
@@ -891,7 +904,6 @@ with lib.maintainers; {
 
   ruby = {
     members = [
-      marsam
     ];
     scope = "Maintain the Ruby interpreter and related packages.";
     shortName = "Ruby";
