@@ -82,6 +82,17 @@ self: super: ({
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = dontCheck super.system-fileio;
 
+  git-annex = overrideCabal (drv: {
+    # We can't use testFlags since git-annex side steps the Cabal test mechanism
+    preCheck = drv.preCheck or "" + ''
+      checkFlagsArray+=(
+        # The addurl test cases require security(1) to be in PATH which we can't
+        # provide from nixpkgs to my (@sternenseemann) knowledge.
+        "-p" "!/addurl/"
+      )
+    '';
+  }) super.git-annex;
+
   # Prevents needing to add `security_tool` as a run-time dependency for
   # everything using x509-system to give access to the `security` executable.
   #
@@ -303,6 +314,8 @@ self: super: ({
     stripLen = 1;
   }) super.inline-c-cpp;
 
+  # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
+  zip = dontCheck super.zip;
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

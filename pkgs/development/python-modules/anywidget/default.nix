@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "anywidget";
-  version = "0.9.4";
-  format = "pyproject";
+  version = "0.9.9";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-97nCw1PohHKW2DtY6RARk1/RlMsc1s5wajuhbY3pQxo=";
+    hash = "sha256-vs5tYcVabzlkCeu1p20mDo9LIh+cUeUWFQc3o18WUu8=";
   };
 
   # We do not need the jupyterlab build dependency, because we do not need to
@@ -32,12 +32,12 @@ buildPythonPackage rec {
       --replace '"jupyterlab==3.*"' ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     ipywidgets
     psygnal
     typing-extensions

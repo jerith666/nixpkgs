@@ -1,27 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qovery-cli
-, testers
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qovery-cli,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "qovery-cli";
-  version = "0.86.2";
+  version = "0.89.0";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AUrN5T6Z4T0WLsBwv/zXb9CSrwGCAV5nh+42MktRxvo=";
+    hash = "sha256-3guMKAxDxv/R60pKP0y+XTTaxHZSTfnXtNO2RC74/xE=";
   };
 
-  vendorHash = "sha256-Lwg3PFmSipaaYtu88c1qI/Ws50TQOqEu4mSuxcpx3zI=";
+  vendorHash = "sha256-/wm/KCO/oYJkjh0AuUi9rUyrqen/otC4KVVXhROz9Ro=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ];
+  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
     installShellCompletion --cmd ${pname} \

@@ -5,14 +5,14 @@
 , git, nix, nixfmt-classic, jq, coreutils, gnused, curl, cacert, bash }:
 
 stdenv.mkDerivation rec {
-  version = "2023-11-29";
+  version = "2024-04-23";
   pname = "oh-my-zsh";
 
   src = fetchFromGitHub {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
-    rev = "418046e9583f635b0303e4b8cf31c356b175cec3";
-    sha256 = "sha256-r36vF37J+3rLGg0QzmT4U8Lp5nqRhAs8We0aDtBJKJM=";
+    rev = "5d2d35cd1741af19553007fe0cc5324744fc58fa";
+    sha256 = "sha256-qEF36Ne1b63XYqfiTOtjbkF/cqDDAPM4EyckhOjYFEE=";
   };
 
   strictDeps = true;
@@ -99,8 +99,7 @@ stdenv.mkDerivation rec {
         nixpkgs="$(git rev-parse --show-toplevel)"
         default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
         latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
-        update-source-version oh-my-zsh "$latestSha" --version-key=rev
-        update-source-version oh-my-zsh "$latestDate" --ignore-same-hash
+        update-source-version oh-my-zsh "$latestDate" --rev="$latestSha"
         nixfmt "$default_nix"
       else
         echo "${pname} is already up-to-date"

@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "smallstep";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B0LGedExlk9XllWilZ0QAwQHNyISAI2WJ48P2STbxSY=";
+    hash = "sha256-fxBWYz95yxNa7xotmId2SHLAIymJIBOJumYzAPB3Ias=";
   };
 
   ldflags = [
@@ -32,7 +32,7 @@ buildGoModule rec {
     homepage = "https://smallstep.com/cli/";
     changelog = "https://github.com/smallstep/cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "step";
   };

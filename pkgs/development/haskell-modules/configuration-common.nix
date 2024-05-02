@@ -20,11 +20,11 @@ with haskellLib;
 
 self: super: {
   # Make sure that Cabal 3.10.* can be built as-is
-  Cabal_3_10_2_1 = doDistribute (super.Cabal_3_10_2_1.override ({
-    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
+  Cabal_3_10_3_0 = doDistribute (super.Cabal_3_10_3_0.override ({
+    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_18_0;
+    process = self.process_1_6_19_0;
   }));
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -36,9 +36,9 @@ self: super: {
         {
           # Needs to be downgraded compared to Stackage LTS 21
           resolv = cself.resolv_0_1_2_0;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.6") {
-          Cabal = cself.Cabal_3_10_2_1;
-          Cabal-syntax = cself.Cabal-syntax_3_10_2_0;
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10") {
+          Cabal = cself.Cabal_3_10_3_0;
+          Cabal-syntax = cself.Cabal-syntax_3_10_3_0;
         } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.4") {
           # We need at least directory >= 1.3.7.0. Using the latest version
           # 1.3.8.* is not an option since it causes very annoying dependencies
@@ -48,7 +48,7 @@ self: super: {
           # cabal-install, but we need to recompile process even if the correct
           # version is available to prevent inconsistent dependencies:
           # process depends on directory.
-          process = cself.process_1_6_18_0;
+          process = cself.process_1_6_19_0;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -81,7 +81,7 @@ self: super: {
   extensions = doJailbreak (super.extensions.override {
     Cabal =
       if versionOlder self.ghc.version "9.6"
-      then self.Cabal_3_10_2_1
+      then self.Cabal_3_10_3_0
       else null; # use GHC bundled version
   });
 
@@ -185,6 +185,7 @@ self: super: {
 
   # https://github.com/mpickering/eventlog2html/pull/187
   eventlog2html = lib.pipe super.eventlog2html [
+    doJailbreak
     (appendPatch (fetchpatch {
       name = "blaze-html-compat.patch";
       url = "https://github.com/mpickering/eventlog2html/commit/666aee9ee44c571173a73036b36ad4154c188481.patch";
@@ -269,20 +270,7 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # 2024-03-10: Compatibility fixes have been applied upstream, but are unreleased.
-  ghc-debug-brick = appendPatches [
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/4f195b98a8d3159bd4586af49ea8e269214a848e.patch";
-        sha256 = "sha256-ZMxDkkI365w/qtRc21k9UTcIiTjoOd/BGJgt/6C6P6A=";
-        relative = "ghc-debug-brick";
-        includes = ["ghc-debug-brick.cabal"];
-      })
-      (fetchpatch {
-        url = "https://gitlab.haskell.org/ghc/ghc-debug/-/commit/5b8f848b82ea4c5a1867b9965a973e73e5d58dad.patch";
-        sha256 = "sha256-XydmqScUuXyxqvW1HeKlKiiGFQi/MkM81RMPxmADrhw=";
-        relative = "ghc-debug-brick";
-      })
-    ] super.ghc-debug-brick;
+  ghc-debug-client = doJailbreak super.ghc-debug-client;
 
   # Test failure.  Tests also disabled in Stackage:
   # https://github.com/jtdaugherty/brick/issues/499
@@ -410,6 +398,13 @@ self: super: {
         rm -r $out/doc/?ndroid*
       '';
     };
+
+    patches = drv.patches or [ ] ++ [
+      # Prevent .desktop files from being installed to $out/usr/share.
+      # TODO(@sternenseemann): submit upstreamable patch resolving this
+      # (this should be possible by also taking PREFIX into account).
+      ./patches/git-annex-no-usr-prefix.patch
+    ];
   }) super.git-annex;
 
   # Too strict bounds on servant
@@ -1520,7 +1515,7 @@ self: super: {
   # 2022-08-31: Jailbreak is done to allow aeson 2.0.*:
   # https://github.com/haskell-CI/haskell-ci/commit/6ad0d5d701cbe101013335d597acaf5feadd3ab9#r82681900
   cabal-install-parsers = doJailbreak (dontCheck (super.cabal-install-parsers.override {
-    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   }));
 
   # Test suite requires database
@@ -1594,8 +1589,14 @@ self: super: {
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
       sed -i 's/lens.*4.20/lens/' jsaddle-dom.cabal
+      rm Setup.hs
     '';
   }) (doJailbreak super.jsaddle-dom);
+  jsaddle-hello = doJailbreak super.jsaddle-hello;
+  ghcjs-dom-hello = doJailbreak super.ghcjs-dom-hello;
+
+  # Too strict upper bounds on text
+  lsql-csv = doJailbreak super.lsql-csv;
 
   reflex-dom = lib.pipe super.reflex-dom [
       (appendPatch
@@ -2341,7 +2342,7 @@ self: super: {
   # 2023-07-03: allow lattices-2.2, waiting on https://github.com/haskell-CI/haskell-ci/pull/664
   # 2024-03-21: pins specific version of ShellCheck
   haskell-ci = doJailbreak (super.haskell-ci.overrideScope (self: super: {
-    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
     ShellCheck = self.ShellCheck_0_9_0;
   }));
 
@@ -2608,7 +2609,7 @@ self: super: {
 
   cabal-fmt = doJailbreak (super.cabal-fmt.override {
     # Needs newer Cabal-syntax version.
-    Cabal-syntax = self.Cabal-syntax_3_10_2_0;
+    Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   });
 
   # 2023-07-18: https://github.com/srid/ema/issues/156
@@ -2653,15 +2654,6 @@ self: super: {
 
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
-
-  # 2022-03-16: package qualified import issue: https://github.com/ghcjs/ghcjs-dom/issues/101
-  ghcjs-dom = assert super.ghcjs-dom.version == "0.9.5.0"; overrideCabal (old: {
-    postPatch = ''
-      sed -i 's/import "jsaddle-dom" GHCJS.DOM.Document/import "ghcjs-dom-jsaddle" GHCJS.DOM.Document/' src/GHCJS/DOM/Document.hs
-    '' + (old.postPatch or "");
-    })
-    # 2023-07-15: Restrictive upper bounds on text
-    (doJailbreak super.ghcjs-dom);
 
   # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
   system-fileio = doJailbreak super.system-fileio;
@@ -3082,13 +3074,6 @@ self: super: {
     #   repa-query, repa-scalar, repa-store, repa-stream
   ;
 
-  # https://github.com/jhickner/smtp-mail/pull/41 Use crypton-connection instead of connection
-  smtp-mail = appendPatch (pkgs.fetchpatch {
-    name = "smtp-mail-crypton-connection.patch";
-    url = "https://github.com/jhickner/smtp-mail/commit/4c724c80814ab1da7c37256a6c10e04c88b9af95.patch";
-    hash = "sha256-rCyY4rB/wLspeAbLw1jji5BykYFLnmTjLiUyNkiEXmw";
-  }) (super.smtp-mail.override { connection = self.crypton-connection; });
-
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
     version = "unstable-2023-12-02";
@@ -3114,4 +3099,7 @@ self: super: {
     tasty = super.tasty_1_5;
     tasty-quickcheck = super.tasty-quickcheck_0_10_3;
   });
+
+  # Too strict bounds on text. Can be removed after https://github.com/alx741/currencies/pull/3 is merged
+  currencies = doJailbreak super.currencies;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

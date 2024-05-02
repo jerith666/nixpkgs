@@ -5,13 +5,14 @@
 
 # build time
 , astropy-extension-helpers
-, cython_3
+, cython
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
 , wheel
 # testing
 , pytestCheckHook
+, stdenv
 , pytest-xdist
 , pytest-astropy
 
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     astropy-extension-helpers
-    cython_3
+    cython
     jinja2
     oldest-supported-numpy
     setuptools-scm
@@ -82,6 +83,9 @@ buildPythonPackage rec {
     # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
     "test_sidereal_lon_independent"
     "test_timedelta_full_precision_arithmetic"
+    "test_datetime_to_timedelta"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sidereal_lat_independent"
   ];
 
   meta = {

@@ -126,6 +126,9 @@ let
       # GPIO power management
       POWER_RESET_GPIO                 = option yes;
       POWER_RESET_GPIO_RESTART         = option yes;
+
+      # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
+      PWM                              = yes;
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -612,8 +615,8 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_V2_ACL            = whenOlder "6.1" yes;
-      NFSD_V3                = whenOlder "5.18" yes;
+      NFSD_V2_ACL            = whenOlder "5.15" yes;
+      NFSD_V3                = whenOlder "5.15" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;
@@ -868,11 +871,12 @@ let
     };
 
     zram = {
-      ZRAM           = module;
-      ZRAM_WRITEBACK = option yes;
-      ZSWAP          = option yes;
-      ZPOOL          = yes;
-      ZBUD           = option yes;
+      ZRAM            = module;
+      ZRAM_WRITEBACK  = option yes;
+      ZRAM_MULTI_COMP = whenAtLeast "6.2" yes;
+      ZSWAP           = option yes;
+      ZPOOL           = yes;
+      ZBUD            = option yes;
     };
 
     brcmfmac = {
@@ -1048,6 +1052,21 @@ let
       MLX5_CORE_EN       = option yes;
 
       NVME_MULTIPATH = yes;
+
+      NVME_AUTH = mkMerge [
+        (whenBetween "6.0" "6.7" yes)
+        (whenAtLeast "6.7" module)
+      ];
+
+      NVME_HOST_AUTH = whenAtLeast "6.7" yes;
+      NVME_TCP_TLS = whenAtLeast "6.7" yes;
+
+      NVME_TARGET = module;
+      NVME_TARGET_PASSTHRU = whenAtLeast "5.9" yes;
+      NVME_TARGET_AUTH = whenAtLeast "6.0" yes;
+      NVME_TARGET_TCP_TLS = whenAtLeast "6.7" yes;
+
+      PCI_P2PDMA = mkIf (stdenv.hostPlatform.is64bit && versionAtLeast version "4.20") yes;
 
       PSI = whenAtLeast "4.20" yes;
 

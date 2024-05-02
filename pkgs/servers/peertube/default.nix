@@ -6,7 +6,7 @@
 , fetchYarnDeps
 , nixosTests
 , brotli
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , jq
 , nodejs
 , which
@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peertube";
-  version = "6.0.3";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "Chocobozzz";
     repo = "PeerTube";
     rev = "v${version}";
-    hash = "sha256-Pskxfi+qqVk75hu22niLNFsToCJks1k8w8mTnXjr6jg=";
+    hash = "sha256-FxXIvibwdRcv8OaTQEXiM6CvWOIptfQXDQ1/PW910wg=";
   };
 
   yarnOfflineCacheServer = fetchYarnDeps {
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "cli" "runner" ];
 
-  nativeBuildInputs = [ brotli prefetch-yarn-deps jq which yarn ];
+  nativeBuildInputs = [ brotli fixup-yarn-lock jq which yarn ];
 
   buildInputs = [ nodejs ];
 

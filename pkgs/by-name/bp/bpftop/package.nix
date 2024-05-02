@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bpftop";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
     rev = "v${version}";
-    hash = "sha256-N5sszFVU1nMS6QQENa9JcgFKSSWs07bWn6usvV/QmX4=";
+    hash = "sha256-zYCv3L+xDFAJ4Wo9xwfHJrqPQUv5KiFDbhCdC1Z6qNo=";
   };
 
-  cargoHash = "sha256-yVNql4fSU1HhLKy8HYUbNnMnxgr/gPuqKol5O0ZDQlY=";
+  cargoHash = "sha256-6uPfMxjSrSGrAgJcvzTY/i1ckoW/wIi7D5noOafCvZE=";
 
   buildInputs = [
     elfutils

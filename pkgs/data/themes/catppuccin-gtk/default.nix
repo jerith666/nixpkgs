@@ -29,13 +29,13 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.7.1";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-V3JasiHaATbVDQJeJPeFq5sjbkQnSMbDRWsaRzGccXU=";
+    hash = "sha256-pGL8vaE63ss2ZT2FoNDfDkeuCxjcbl02RmwwfHC/Vxg=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

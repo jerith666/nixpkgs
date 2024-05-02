@@ -1,5 +1,8 @@
-{ stdenv
+{ config
+, callPackages
+, stdenv
 , lib
+, addDriverRunpath
 , fetchpatch
 , fetchFromGitHub
 , protobuf
@@ -12,8 +15,6 @@
 , pkg-config
 , buildGoModule
 , makeWrapper
-, runCommand
-, testers
 
   # apply feature parameter names according to
   # https://github.com/NixOS/rfcs/pull/169
@@ -21,17 +22,14 @@
   # CPU extensions
 , enable_avx ? true
 , enable_avx2 ? true
-, enable_avx512 ? false
+, enable_avx512 ? stdenv.hostPlatform.avx512Support
 , enable_f16c ? true
 , enable_fma ? true
-
-, with_tinydream ? false
-, ncnn
 
 , with_openblas ? false
 , openblas
 
-, with_cublas ? false
+, with_cublas ? config.cudaSupport
 , cudaPackages
 
 , with_clblas ? false
@@ -39,14 +37,19 @@
 , ocl-icd
 , opencl-headers
 
-, with_stablediffusion ? false
+, with_tinydream ? false # do not compile with cublas
+, ncnn
+
+, with_stablediffusion ? true
 , opencv
 
-, with_tts ? false
+, with_tts ? true
 , onnxruntime
 , sonic
 , spdlog
 , fmt
+, espeak-ng
+, piper-tts
 }:
 let
   BUILD_TYPE =
@@ -56,13 +59,7 @@ let
     else if with_clblas then "clblas"
     else "";
 
-  typedBuiltInputs =
-    lib.optionals with_cublas
-      [ cudaPackages.cudatoolkit cudaPackages.cuda_cudart ]
-    ++ lib.optionals with_clblas
-      [ clblast ocl-icd opencl-headers ]
-    ++ lib.optionals with_openblas
-      [ openblas.dev ];
+  inherit (cudaPackages) libcublas cuda_nvcc cuda_cccl cuda_cudart cudatoolkit;
 
   go-llama-ggml = effectiveStdenv.mkDerivation {
     name = "go-llama-ggml";
@@ -77,9 +74,18 @@ let
       "libbinding.a"
       "BUILD_TYPE=${BUILD_TYPE}"
     ];
-    buildInputs = typedBuiltInputs;
+
+    buildInputs = [ ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ];
+
+    nativeBuildInputs = [ cmake ]
+      # backward compatiblity with nixos-23.11
+      # use cuda_nvcc after release of nixos-24.05
+      ++ lib.optionals with_cublas [ cudatoolkit ];
+
     dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
+
     installPhase = ''
       mkdir $out
       tar cf - --exclude=build --exclude=CMakeFiles --exclude="*.o" . \
@@ -92,8 +98,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "llama.cpp";
-      rev = "b06c16ef9f81d84da520232c125d4d8a1d273736";
-      hash = "sha256-t1AIx/Ir5RhasjblH4BSpGOXVvO84SJPSqa7rXWj6b4=";
+      rev = "1b67731e184e27a465b8c5476061294a4af668ea";
+      hash = "sha256-0WWbsklpW6HhFRkvWpYh8Lhi8VIansS/zmyIKNQRkIs=";
       fetchSubmodules = true;
     };
     postPatch = prev.postPatch + ''
@@ -148,6 +154,54 @@ let
     '';
   };
 
+  espeak-ng' = espeak-ng.overrideAttrs (self: {
+    name = "espeak-ng'";
+    inherit (go-piper) src;
+    sourceRoot = "source/espeak";
+    patches = [ ];
+    nativeBuildInputs = [ cmake ];
+    cmakeFlags = (self.cmakeFlags or [ ]) ++ [
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+      (lib.cmakeBool "USE_ASYNC" false)
+      (lib.cmakeBool "USE_MBROLA" false)
+      (lib.cmakeBool "USE_LIBPCAUDIO" false)
+      (lib.cmakeBool "USE_KLATT" false)
+      (lib.cmakeBool "USE_SPEECHPLAYER" false)
+      (lib.cmakeBool "USE_LIBSONIC" false)
+      (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
+    ];
+    preConfigure = null;
+    postInstall = null;
+  });
+
+  piper-phonemize = stdenv.mkDerivation {
+    name = "piper-phonemize";
+    inherit (go-piper) src;
+    sourceRoot = "source/piper-phonemize";
+    buildInputs = [ espeak-ng' onnxruntime ];
+    nativeBuildInputs = [ cmake pkg-config ];
+    cmakeFlags = [
+      (lib.cmakeFeature "ONNXRUNTIME_DIR" "${onnxruntime.dev}")
+      (lib.cmakeFeature "ESPEAK_NG_DIR" "${espeak-ng'}")
+    ];
+    passthru.espeak-ng = espeak-ng';
+  };
+
+  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+    name = "piper-tts'";
+    inherit (go-piper) src;
+    sourceRoot = "source/piper";
+    installPhase = null;
+    postInstall = ''
+      cp CMakeFiles/piper.dir/src/cpp/piper.cpp.o $out/piper.o
+      cd $out
+      mkdir bin lib
+      mv lib*so* lib/
+      mv piper piper_phonemize bin/
+      rm -rf cmake pkgconfig espeak-ng-data *.ort
+    '';
+  });
+
   go-piper = stdenv.mkDerivation {
     name = "go-piper";
     src = fetchFromGitHub {
@@ -157,25 +211,20 @@ let
       hash = "sha256-Yv9LQkWwGpYdOS0FvtP0vZ0tRyBAx27sdmziBR4U4n8=";
       fetchSubmodules = true;
     };
-    patchPhase = ''
+    postUnpack = ''
+      cp -r --no-preserve=mode ${piper-tts'}/* source
+    '';
+    postPatch = ''
       sed -i Makefile \
-        -e '/cd piper-phonemize/ s;cmake;cmake -DONNXRUNTIME_DIR=${onnxruntime.dev};' \
-        -e '/CXXFLAGS *= / s;$; -DSPDLOG_FMT_EXTERNAL=1;' \
-        -e '/cd piper\/build / s;cmake;cmake -DSPDLOG_DIR=${spdlog.src} -DFMT_DIR=${fmt};'
+        -e '/CXXFLAGS *= / s;$; -DSPDLOG_FMT_EXTERNAL=1;'
     '';
     buildFlags = [ "libpiper_binding.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ sonic spdlog onnxruntime ];
+    buildInputs = [ piper-tts' espeak-ng' piper-phonemize sonic fmt spdlog onnxruntime ];
     installPhase = ''
       cp -r --no-preserve=mode $src $out
-      tar cf - *.a \
-        espeak/ei/lib \
-        piper/src/cpp \
-        piper-phonemize/pi/lib \
-        piper-phonemize/pi/include \
-        piper-phonemize/pi/share \
-        | tar xf - -C $out
+      mkdir -p $out/piper-phonemize/pi
+      cp -r --no-preserve=mode ${piper-phonemize}/share $out/piper-phonemize/pi
+      cp *.a $out
     '';
   };
 
@@ -203,13 +252,20 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "1558ec5a16cb2b2a0bf54815df1d41f83dc3815b";
-      hash = "sha256-UAqWU3kvkHM+fV+T6gFVsAKuOG6N4FoFgTKGUptwjmE=";
+      rev = "8f253ef3af1c62c04316ba4afa7145fc4d701a8c";
+      hash = "sha256-yHHjhpQIn99A/hqFwAb7TfTf4Q9KnKat93zyXS70bT8=";
     };
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = typedBuiltInputs;
+
+    nativeBuildInputs = [ cmake pkg-config ]
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
+
+    buildInputs = [ ]
+      ++ lib.optionals with_cublas [ cuda_cccl cuda_cudart libcublas ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ];
+
     cmakeFlags = [
-      (lib.cmakeBool "WHISPER_CUBLAS" with_cublas)
+      (lib.cmakeBool "WHISPER_CUDA" with_cublas)
       (lib.cmakeBool "WHISPER_CLBLAST" with_clblas)
       (lib.cmakeBool "WHISPER_OPENBLAS" with_openblas)
       (lib.cmakeBool "WHISPER_NO_AVX" (!enable_avx))
@@ -279,19 +335,19 @@ let
     ];
   });
 
-  go-tiny-dream = stdenv.mkDerivation {
+  go-tiny-dream = effectiveStdenv.mkDerivation {
     name = "go-tiny-dream";
     src = fetchFromGitHub {
       owner = "M0Rf30";
       repo = "go-tiny-dream";
-      rev = "772a9c0d9aaf768290e63cca3c904fe69faf677a";
-      hash = "sha256-r+wzFIjaI6cxAm/eXN3q8LRZZz+lE5EA4lCTk5+ZnIY=";
+      rev = "22a12a4bc0ac5455856f28f3b771331a551a4293";
+      hash = "sha256-DAVHD6E0OKHf4C2ldoI0Mm7813DIrmWFONUhSCQPCfc=";
       fetchSubmodules = true;
     };
     postUnpack = ''
       rm -rf source/ncnn
-      mkdir -p source/ncnn/build
-      cp -r --no-preserve=mode ${go-tiny-dream-ncnn} source/ncnn/build/install
+      mkdir -p source/ncnn/build/src
+      cp -r --no-preserve=mode ${go-tiny-dream-ncnn}/lib/. ${go-tiny-dream-ncnn}/include/. source/ncnn/build/src
     '';
     buildFlags = [ "libtinydream.a" ];
     installPhase = ''
@@ -315,18 +371,18 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.11.0";
+  version = "2.12.4";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-Sqo4NOggUNb1ZemT9TRknBmz8dThe/X43R+4JFfQJ4M=";
+    hash = "sha256-piu2B6u4ZfxiOd9SXrE7jiiiwL2SM8EqXo2s5qeKRl0=";
   };
 
   self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-3bOr8DnAjTzOpVDB5wmlPxECNteWw3tI0yc1f2Wt4y0=";
+    vendorHash = "sha256-8Hu1y/PK21twnB7D22ltslFFzRrsB8d1R2hkgIFB/XY=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
@@ -352,11 +408,15 @@ let
       ''
     ;
 
-    buildInputs = typedBuiltInputs
-      ++ lib.optional with_stablediffusion go-stable-diffusion.buildInputs
-      ++ lib.optional with_tts go-piper.buildInputs;
+    buildInputs = [ ]
+      ++ lib.optionals with_cublas [ libcublas ]
+      ++ lib.optionals with_clblas [ clblast ocl-icd opencl-headers ]
+      ++ lib.optionals with_openblas [ openblas.dev ]
+      ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
+      ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ]
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
@@ -376,7 +436,7 @@ let
       "VERSION=v${version}"
       "BUILD_TYPE=${BUILD_TYPE}"
     ]
-    ++ lib.optional with_cublas "CUDA_LIBPATH=${cudaPackages.cuda_cudart}/lib"
+    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
     ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
@@ -410,22 +470,25 @@ let
 
     # patching rpath with patchelf doens't work. The execuable
     # raises an segmentation fault
-    postFixup = ''
-      wrapProgram $out/bin/${pname} \
-    '' + lib.optionalString with_cublas ''
-      --prefix LD_LIBRARY_PATH : "${cudaPackages.libcublas}/lib:${cudaPackages.cuda_cudart}/lib:/run/opengl-driver/lib" \
-    '' + lib.optionalString with_clblas ''
-      --prefix LD_LIBRARY_PATH : "${clblast}/lib:${ocl-icd}/lib" \
-    '' + lib.optionalString with_openblas ''
-      --prefix LD_LIBRARY_PATH : "${openblas}/lib" \
-    '' + ''
-      --prefix PATH : "${ffmpeg}/bin"
-    '';
+    postFixup =
+      let
+        LD_LIBRARY_PATH = [ ]
+          ++ lib.optionals with_cublas [ (lib.getLib libcublas) cuda_cudart addDriverRunpath.driverLink ]
+          ++ lib.optionals with_clblas [ clblast ocl-icd ]
+          ++ lib.optionals with_openblas [ openblas ]
+          ++ lib.optionals with_tts [ piper-phonemize ];
+      in
+      ''
+        wrapProgram $out/bin/${pname} \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath LD_LIBRARY_PATH}" \
+        --prefix PATH : "${ffmpeg}/bin"
+      '';
 
     passthru.local-packages = {
       inherit
         go-tiny-dream go-rwkv go-bert go-llama-ggml gpt4all go-piper
-        llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn;
+        llama-cpp-grpc whisper-cpp go-tiny-dream-ncnn espeak-ng' piper-phonemize
+        piper-tts';
     };
 
     passthru.features = {
@@ -434,29 +497,7 @@ let
         with_tinydream with_clblas;
     };
 
-    passthru.tests = {
-      version = testers.testVersion {
-        package = self;
-        version = "v" + version;
-      };
-      health =
-        let
-          port = "8080";
-        in
-        testers.runNixOSTest {
-          name = pname + "-health";
-          nodes.machine = {
-            systemd.services.local-ai = {
-              wantedBy = [ "multi-user.target" ];
-              serviceConfig.ExecStart = "${self}/bin/local-ai --localai-config-dir . --address :${port}";
-            };
-          };
-          testScript = ''
-            machine.wait_for_open_port(${port})
-            machine.succeed("curl -f http://localhost:${port}/readyz")
-          '';
-        };
-    };
+    passthru.tests = callPackages ./tests.nix { inherit self; };
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";

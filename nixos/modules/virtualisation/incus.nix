@@ -41,6 +41,7 @@ let
         qemu-utils
         rsync
         squashfsTools
+        swtpm
         systemd
         thin-provisioning-tools
         util-linux
@@ -109,14 +110,21 @@ in
         {command}`incus` command line tool, among others.
       '';
 
-      package = lib.mkPackageOption pkgs "incus" { };
+      package = lib.mkPackageOption pkgs "incus-lts" { };
 
-      lxcPackage = lib.mkPackageOption pkgs "lxc" { };
+      lxcPackage = lib.mkOption {
+        type = lib.types.package;
+        default = config.virtualisation.lxc.package;
+        defaultText = lib.literalExpression "config.virtualisation.lxc.package";
+        description = "The lxc package to use.";
+      };
 
-      clientPackage = lib.mkPackageOption pkgs [
-        "incus"
-        "client"
-      ] { };
+      clientPackage = lib.mkOption {
+        type = lib.types.package;
+        default = cfg.package.client;
+        defaultText = lib.literalExpression "config.virtualisation.incus.package.client";
+        description = "The incus client package to use. This package is added to PATH.";
+      };
 
       preseed = lib.mkOption {
         type = lib.types.nullOr (lib.types.submodule { freeformType = preseedFormat.type; });

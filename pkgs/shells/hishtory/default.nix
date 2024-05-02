@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "hishtory";
-  version = "0.282";
+  version = "0.292";
 
   src = fetchFromGitHub {
     owner = "ddworken";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vuIeNa2Kr19L2lHTtsamjvnMsNNPQYU0yOPXXtXAOvA=";
+    hash = "sha256-jCm/iSPKjQ0RRGw8bXPiKutMk/fM6mQ/Na6j+RrE0b4=";
   };
 
-  vendorHash = "sha256-MUE6cq3mTRUcxO+lhAWr73wAzSYv9eMmv9Twpq/QHTc=";
+  vendorHash = "sha256-9ZRhbRxQV9pzFzDhWIjgzQWXFWuzWMdeoNl4YsDuPFc=";
 
   ldflags = [ "-X github.com/ddworken/hishtory/client/lib.Version=${version}" ];
 
