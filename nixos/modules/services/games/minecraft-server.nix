@@ -113,7 +113,7 @@ in {
             };
           in types.attrsOf minecraftUUID;
         default = {};
-        description = lib.mdDoc ''
+        description = ''
           Level 4 operators. Only has an effect when
           {option}`services.minecraft-server.declarative` is
           `true`. This is a mapping from Minecraft usernames
