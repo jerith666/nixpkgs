@@ -156,7 +156,7 @@ in
 
     originCertPath = mkOption {
       type = types.str;
-      description = lib.mdDoc "The origin certificate (cert.pem produced by 'cloudflared tunnel login')";
+      description = "The origin certificate (cert.pem produced by 'cloudflared tunnel login')";
     };
 
     tunnels = mkOption {
