@@ -3849,6 +3849,8 @@ self: super: with self; {
 
   epion = callPackage ../development/python-modules/epion { };
 
+  epitran = callPackage ../development/python-modules/epitran { };
+
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
   equinox = callPackage ../development/python-modules/equinox { };
@@ -5513,6 +5515,8 @@ self: super: with self; {
 
   httpx-socks = callPackage ../development/python-modules/httpx-socks { };
 
+  httpx-sse = callPackage ../development/python-modules/httpx-sse { };
+
   huawei-lte-api = callPackage ../development/python-modules/huawei-lte-api { };
 
   huey = callPackage ../development/python-modules/huey { };
@@ -6411,6 +6415,8 @@ self: super: with self; {
 
   kornia = callPackage ../development/python-modules/kornia { };
 
+  kornia-rs = callPackage ../development/python-modules/kornia-rs { };
+
   krakenex = callPackage ../development/python-modules/krakenex { };
 
   krfzf-py = callPackage ../development/python-modules/krfzf-py { };
@@ -7110,6 +7116,8 @@ self: super: with self; {
 
   manhole = callPackage ../development/python-modules/manhole { };
 
+  manim = callPackage ../development/python-modules/manim { };
+
   manimpango = callPackage ../development/python-modules/manimpango {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
@@ -7501,8 +7509,6 @@ self: super: with self; {
   mkdocs-redoc-tag = callPackage ../development/python-modules/mkdocs-redoc-tag { };
 
   mkdocs-rss-plugin = callPackage ../development/python-modules/mkdocs-rss-plugin { };
-
-  mkdocs-simple-hooks = callPackage ../development/python-modules/mkdocs-simple-hooks { };
 
   mkdocs-swagger-ui-tag = callPackage ../development/python-modules/mkdocs-swagger-ui-tag { };
 
@@ -10974,6 +10980,12 @@ self: super: with self; {
     SDL2_image = pkgs.SDL2_image_2_0;
   };
 
+  pygame-ce = callPackage ../development/python-modules/pygame-ce {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
+    SDL2_image = pkgs.SDL2_image_2_0;
+    SDL2_mixer = pkgs.SDL2_mixer_2_0;
+  };
+
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygame-gui = callPackage ../development/python-modules/pygame-gui { };
@@ -12865,6 +12877,8 @@ self: super: with self; {
 
   quandl = callPackage ../development/python-modules/quandl { };
 
+  quantile-forest = callPackage ../development/python-modules/quantile-forest { };
+
   quantities = callPackage ../development/python-modules/quantities { };
 
   quantiphy = callPackage ../development/python-modules/quantiphy { };
@@ -12892,6 +12906,8 @@ self: super: with self; {
   queuelib = callPackage ../development/python-modules/queuelib { };
 
   quil = callPackage ../development/python-modules/quil { };
+
+  quixote = callPackage ../development/python-modules/quixote { };
 
   qutip = callPackage ../development/python-modules/qutip { };
 
@@ -13402,6 +13418,8 @@ self: super: with self; {
 
   ruamel-yaml-clib = callPackage ../development/python-modules/ruamel-yaml-clib { };
 
+  rubicon-objc = callPackage ../development/python-modules/rubicon-objc { };
+
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
   ruffus = callPackage ../development/python-modules/ruffus { };
@@ -13483,6 +13501,8 @@ self: super: with self; {
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
+
+  sanix = callPackage ../development/python-modules/sanix { };
 
   sansio-multipart = callPackage ../development/python-modules/sansio-multipart { };
 
@@ -14338,6 +14358,8 @@ self: super: with self; {
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels { };
 
+  spylls = callPackage ../development/python-modules/spylls { };
+
   spyse-python = callPackage ../development/python-modules/spyse-python { };
 
   spython = callPackage ../development/python-modules/spython { };
@@ -14427,6 +14449,8 @@ self: super: with self; {
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
+
+  ssg = callPackage ../development/python-modules/ssg { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
@@ -16277,6 +16301,8 @@ self: super: with self; {
   ua-parser = callPackage ../development/python-modules/ua-parser { };
 
   uarray = callPackage ../development/python-modules/uarray { };
+
+  uart-devices = callPackage ../development/python-modules/uart-devices { };
 
   uasiren = callPackage ../development/python-modules/uasiren { };
 
