@@ -1073,6 +1073,7 @@ mapAliases ({
   rccl = throw "'rccl' has been replaced with 'rocmPackages.rccl'"; # Added 2023-10-08
   rdc = throw "'rdc' has been replaced with 'rocmPackages.rdc'"; # Added 2023-10-08
   readline63 = throw "'readline63' has been replaced with 'readline'"; # Added 2024-02-10
+  redocly-cli = redocly; # Added 2024-04-14
   redpanda = redpanda-client; # Added 2023-10-14
   restya-board = throw "'restya-board' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-01-22
   retdec-full = throw "'retdec-full' is no longer needed, please use 'retdec'"; # Added 2024-02-05
@@ -1329,6 +1330,7 @@ mapAliases ({
   wordpress6_2 = throw "'wordpress6_2' has been removed in favor of the latest version"; # Added 2023-10-10
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
   wmii_hg = wmii;
+  wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
   wxGTK30 = throw "wxGTK30 has been removed from nixpkgs as it has reached end of life"; # Added 2023-03-22
   wxGTK30-gtk2 = wxGTK30; # Added 2022-12-03
   wxGTK30-gtk3 = wxGTK30; # Added 2022-12-03

@@ -193,6 +193,7 @@ in {
   cinnamon = handleTest ./cinnamon.nix {};
   cinnamon-wayland = handleTest ./cinnamon-wayland.nix {};
   cjdns = handleTest ./cjdns.nix {};
+  clatd = handleTest ./clatd.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
   cloud-init-hostname = handleTest ./cloud-init-hostname.nix {};
@@ -451,6 +452,7 @@ in {
   jirafeau = handleTest ./jirafeau.nix {};
   jitsi-meet = handleTest ./jitsi-meet.nix {};
   jool = import ./jool.nix { inherit pkgs runTest; };
+  jotta-cli = handleTest ./jotta-cli.nix {};
   k3s = handleTest ./k3s {};
   kafka = handleTest ./kafka.nix {};
   kanidm = handleTest ./kanidm.nix {};
@@ -992,6 +994,7 @@ in {
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
   varnish74 = handleTest ./varnish.nix { package = pkgs.varnish74; };
+  varnish75 = handleTest ./varnish.nix { package = pkgs.varnish75; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
