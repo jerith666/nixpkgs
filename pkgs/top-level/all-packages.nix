@@ -4143,8 +4143,6 @@ with pkgs;
 
   aptdec = callPackage ../development/libraries/aptdec { };
 
-  argc = callPackage ../development/tools/argc { };
-
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7456,8 +7454,6 @@ with pkgs;
 
   dorkscout = callPackage ../tools/security/dorkscout { };
 
-  downonspot = callPackage ../applications/misc/downonspot { };
-
   sl1-to-photon = python3Packages.callPackage ../applications/misc/sl1-to-photon { };
 
   drive = callPackage ../applications/networking/drive { };
@@ -9258,10 +9254,7 @@ with pkgs;
 
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
-  invidious = callPackage ../servers/invidious {
-    # normally video.js is downloaded at build time
-    videojs = callPackage ../servers/invidious/videojs.nix { };
-  };
+  invidious = callPackage ../servers/invidious { };
 
   invoice2data  = callPackage ../tools/text/invoice2data  { };
 
@@ -18101,17 +18094,19 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron-bin
     electron_24-bin
     electron_27-bin
     electron_28-bin
-    electron_29-bin;
+    electron_29-bin
+    electron_30-bin;
 
   electron_24 = electron_24-bin;
   electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron_28 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_28 then electron-source.electron_28 else electron_28-bin;
   electron_29 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_29 then electron-source.electron_29 else electron_29-bin;
+  electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
   electron = electron_29;
+  electron-bin = electron_29-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -19212,7 +19207,7 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold {
+  mold = callPackage ../by-name/mo/mold/package.nix {
     stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     tbb = tbb_2021_11;
   };
@@ -26590,9 +26585,7 @@ with pkgs;
   };
 
   radicale2 = callPackage ../servers/radicale/2.x.nix { };
-  radicale3 = callPackage ../servers/radicale/3.x.nix { };
-
-  radicale = radicale3;
+  radicale3 = radicale;
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
@@ -28356,8 +28349,6 @@ with pkgs;
   ananicy = callPackage ../misc/ananicy { };
 
   ananicy-cpp = callPackage ../misc/ananicy-cpp { };
-
-  ananicy-rules-cachyos = callPackage ../misc/ananicy-rules-cachyos { };
 
   andagii = callPackage ../data/fonts/andagii { };
 
@@ -35327,7 +35318,7 @@ with pkgs;
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
-  neovim-unwrapped = callPackage ../applications/editors/neovim {
+  neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
     CoreServices =  darwin.apple_sdk.frameworks.CoreServices;
     lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
   };
@@ -35345,8 +35336,6 @@ with pkgs;
   gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   gnvim = callPackage ../applications/editors/neovim/gnvim/wrapper.nix { };
-
-  neovide = callPackage ../applications/editors/neovim/neovide { };
 
   neovim-remote = callPackage ../applications/editors/neovim/neovim-remote.nix { };
 
@@ -40903,10 +40892,8 @@ with pkgs;
     name = "bsd-setup-hook";
   } ../os-specific/bsd/setup-hook.sh;
 
-  freebsd = callPackage ../os-specific/bsd/freebsd { };
-  freebsdCross = callPackage ../os-specific/bsd/freebsd {
-    stdenv = crossLibcStdenv;
-  };
+  inherit (callPackage ../os-specific/bsd/freebsd { })
+    freebsd freebsdCross;
 
   netbsd = callPackage ../os-specific/bsd/netbsd { };
   netbsdCross = callPackage ../os-specific/bsd/netbsd {
