@@ -1467,6 +1467,14 @@ self: super: with self; {
 
   beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
+  beanhub-cli = callPackage ../development/python-modules/beanhub-cli { };
+
+  beanhub-extract = callPackage ../development/python-modules/beanhub-extract { };
+
+  beanhub-forms = callPackage ../development/python-modules/beanhub-forms { };
+
+  beanhub-import = callPackage ../development/python-modules/beanhub-import { };
+
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
   beartype = callPackage ../development/python-modules/beartype { };
@@ -4561,8 +4569,6 @@ self: super: with self; {
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   functiontrace = callPackage ../development/python-modules/functiontrace { };
-
-  functools32 = callPackage ../development/python-modules/functools32 { };
 
   funcy = callPackage ../development/python-modules/funcy { };
 
@@ -9666,6 +9672,8 @@ self: super: with self; {
   ping3 = callPackage ../development/python-modules/ping3 { };
 
   pins = callPackage ../development/python-modules/pins { };
+
+  pipetools = callPackage ../development/python-modules/pipetools { };
 
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
@@ -16826,6 +16834,8 @@ self: super: with self; {
   wavefile = callPackage ../development/python-modules/wavefile { };
 
   wavinsentio = callPackage ../development/python-modules/wavinsentio { };
+
+  waybackpy = callPackage ../development/python-modules/waybackpy {};
 
   wazeroutecalculator = callPackage ../development/python-modules/wazeroutecalculator { };
 
