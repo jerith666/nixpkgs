@@ -3207,6 +3207,16 @@
     githubId = 3212452;
     name = "Cameron Nemo";
   };
+  cameronraysmith = {
+    email = "cameronraysmith@gmail.com";
+    matrix = "@cameronraysmith:matrix.org";
+    github = "cameronraysmith";
+    githubId = 420942;
+    name = "Cameron Smith";
+    keys = [{
+      fingerprint = "3F14 C258 856E 88AE E0F9  661E FF04 3B36 8811 DD1C";
+    }];
+  };
   camillemndn = {
     email = "camillemondon@free.fr";
     github = "camillemndn";
@@ -4228,6 +4238,11 @@
     github = "cryptix";
     githubId = 111202;
     name = "Henry Bubert";
+  };
+  cryptoluks = {
+    github = "cryptoluks";
+    githubId = 9020527;
+    name = "cryptoluks";
   };
   CrystalGamma = {
     email = "nixos@crystalgamma.de";
@@ -6838,6 +6853,12 @@
     keys = [{
       fingerprint = "B722 6464 838F 8BDB 2BEA  C8C8 5B0E FDDF BA81 6105";
     }];
+  };
+  Forden = {
+    email = "forden@zuku.tech";
+    github = "Forden";
+    githubId = 24463229;
+    name = "Forden";
   };
   forkk = {
     email = "forkk@forkk.net";
@@ -10479,6 +10500,12 @@
     github = "kbdharun";
     githubId = 26346867;
     name = "K.B.Dharun Krishna";
+  };
+  kbudde = {
+    email = "kris@budd.ee";
+    github = "kbudde";
+    githubId = 1072181;
+    name = "Kris Budde";
   };
   kcalvinalvin = {
     email = "calvin@kcalvinalvin.info";
@@ -14973,6 +15000,13 @@
     email = "nyawox.git@gmail.com";
     github = "nyawox";
     githubId = 93813719;
+  };
+  nydragon = {
+    name = "nydragon";
+    github = "nydragon";
+    email = "nix@ccnlc.eu";
+    githubId = 56591727;
+    keys = [ { fingerprint = "25FF 8464 F062 7EC0 0129 6A43 14AA 30A8 65EA 1209"; } ];
   };
   nzbr = {
     email = "nixos@nzbr.de";
@@ -20597,6 +20631,12 @@
       fingerprint = "7944 74B7 D236 DAB9 C9EF  E7F9 5CCE 6F14 66D4 7C9E";
     }];
   };
+  toasteruwu = {
+    email = "Aki@ToasterUwU.com";
+    github = "ToasterUwU";
+    githubId = 43654377;
+    name = "Aki";
+  };
   tobiasBora = {
     email = "tobias.bora.list@gmail.com";
     github = "tobiasBora";
@@ -21710,6 +21750,12 @@
     github = "wegank";
     githubId = 9713184;
   };
+  weitzj = {
+    name = "Jan Weitz";
+    email = "nixpkgs@janweitz.de";
+    github = "weitzj";
+    githubId = 829277;
+  };
   welteki = {
     email = "welteki@pm.me";
     github = "welteki";
@@ -22093,6 +22139,12 @@
     github = "xavierzwirtz";
     githubId = 474343;
     name = "Xavier Zwirtz";
+  };
+  XBagon = {
+    name = "XBagon";
+    email = "xbagon@outlook.de";
+    github = "XBagon";
+    githubId = 1523292;
   };
   xbreak = {
     email = "xbreak@alphaware.se";
