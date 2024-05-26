@@ -1068,8 +1068,6 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
-  mods = callPackage ../tools/misc/mods { };
-
   mongosh = callPackage ../development/tools/mongosh { };
 
   mya = callPackage ../applications/misc/mya { };
@@ -4141,9 +4139,7 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
-  atlas = callPackage ../development/tools/database/atlas {
-    buildGoModule = buildGo122Module;
-  };
+  atlas = callPackage ../development/tools/database/atlas { };
 
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5124,7 +5120,7 @@ with pkgs;
   eschalot = callPackage ../tools/security/eschalot { };
 
   espanso = callPackage ../applications/office/espanso {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit;
+    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit System;
   };
   espanso-wayland = espanso.override {
     x11Support = false;
@@ -6134,8 +6130,6 @@ with pkgs;
   reg = callPackage ../tools/virtualization/reg { };
 
   rex = callPackage ../tools/system/rex { };
-
-  river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
 
@@ -7918,7 +7912,7 @@ with pkgs;
   ferm = callPackage ../tools/networking/ferm { };
 
   feroxbuster = callPackage ../tools/security/feroxbuster {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   ffsend = callPackage ../tools/misc/ffsend {
@@ -12897,8 +12891,6 @@ with pkgs;
 
   sigal = callPackage ../applications/misc/sigal { };
 
-  sigi = callPackage ../applications/misc/sigi { };
-
   sigil = libsForQt5.callPackage ../applications/editors/sigil { };
 
   signalbackup-tools = darwin.apple_sdk_11_0.callPackage
@@ -14402,8 +14394,6 @@ with pkgs;
 
   unclutter-xfixes = callPackage ../tools/misc/unclutter-xfixes { };
 
-  unbound = callPackage ../tools/networking/unbound { };
-
   unbound-with-systemd = unbound.override {
     withSystemd = true;
   };
@@ -15494,6 +15484,7 @@ with pkgs;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
   gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
   gcc13Stdenv = overrideCC gccStdenv buildPackages.gcc13;
+  gcc14Stdenv = overrideCC gccStdenv buildPackages.gcc14;
 
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
@@ -15584,9 +15575,9 @@ with pkgs;
   };
 
   inherit (callPackage ../development/compilers/gcc/all.nix { inherit noSysDirs; })
-    gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
+    gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13 gcc14;
 
-  gcc_latest = gcc13;
+  gcc_latest = gcc14;
 
   # Use the same GCC version as the one from stdenv by default
   gfortran = wrapCC (gcc.cc.override {
@@ -15670,6 +15661,14 @@ with pkgs;
   });
 
   gfortran13 = wrapCC (gcc13.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran14 = wrapCC (gcc14.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -15770,6 +15769,29 @@ with pkgs;
       else stdenv;
   });
 
+  gnat14 = wrapCC (gcc14.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnat-bootstrap =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat-bootstrap12
+      else buildPackages.gnat13;
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gnat-bootstrap12
+      else stdenv;
+  });
+
   gnat-bootstrap = gnat-bootstrap12;
   gnat-bootstrap11 = wrapCC (callPackage ../development/compilers/gnat-bootstrap { majorVersion = "11"; });
   gnat-bootstrap12 = wrapCCWith ({
@@ -15813,6 +15835,18 @@ with pkgs;
   });
 
   gccgo13 = wrapCC (gcc13.cc.override {
+    name = "gccgo";
+    langCC = true; #required for go.
+    langC = true;
+    langGo = true;
+    langJit = true;
+    profiledCompiler = false;
+  } // {
+    # not supported on darwin: https://github.com/golang/go/issues/463
+    meta.broken = stdenv.hostPlatform.isDarwin;
+  });
+
+  gccgo14 = wrapCC (gcc14.cc.override {
     name = "gccgo";
     langCC = true; #required for go.
     langC = true;
@@ -15986,10 +16020,6 @@ with pkgs;
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gocover-cobertura = callPackage ../development/tools/gocover-cobertura { };
-
-  gobang = callPackage ../development/tools/database/gobang {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
-  };
 
   goblob = callPackage ../tools/security/goblob { };
 
@@ -16970,7 +17000,7 @@ with pkgs;
       # want the C++ library to be explicitly chosen by the caller, and null by
       # default.
       libcxx ? null
-    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) ((threadsCrossFor cc.version).package)
+    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross.package
     , nixSupport ? {}
     , ...
     } @ extraArgs:
@@ -20899,7 +20929,7 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
-  gr-framework = libsForQt5.callPackage ../development/libraries/gr-framework {
+  gr-framework = callPackage ../by-name/gr/gr-framework/package.nix {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
@@ -21009,16 +21039,12 @@ with pkgs;
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
-  threadsCross = threadsCrossFor null;
-  threadsCrossFor = cc_version:
+  threadsCross =
     lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
-      package =
-        if cc_version == null || lib.versionAtLeast cc_version "13"
-        then targetPackages.windows.mcfgthreads or windows.mcfgthreads
-        else targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
+      package = targetPackages.windows.mcfgthreads or windows.mcfgthreads;
     };
 
   wasilibc = callPackage ../development/libraries/wasilibc {
@@ -24558,8 +24584,6 @@ with pkgs;
 
   swiftclient = with python3Packages; toPythonApplication python-swiftclient;
 
-  sword = callPackage ../development/libraries/sword { };
-
   biblesync = callPackage ../development/libraries/biblesync { };
 
   szip = callPackage ../development/libraries/szip { };
@@ -27329,6 +27353,8 @@ with pkgs;
   linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
   linuxPackages_6_8_hardened = linuxKernel.packages.linux_6_8_hardened;
   linux_6_8_hardened = linuxKernel.kernels.linux_6_8_hardened;
+  linuxPackages_6_9_hardened = linuxKernel.packages.linux_6_9_hardened;
+  linux_6_9_hardened = linuxKernel.kernels.linux_6_9_hardened;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
@@ -28675,7 +28701,7 @@ with pkgs;
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono { };
 
-  kde-rounded-corners = libsForQt5.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
+  kde-rounded-corners = kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
 
   khmeros = callPackage ../data/fonts/khmeros { };
 
@@ -29643,8 +29669,6 @@ with pkgs;
   artha = callPackage ../applications/misc/artha { };
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
-
-  pulsar = callPackage ../applications/editors/pulsar { };
 
   asap = callPackage ../tools/audio/asap { };
 
@@ -31750,8 +31774,6 @@ with pkgs;
 
   waycorner = callPackage ../applications/misc/waycorner { };
 
-  waylock = callPackage ../applications/misc/waylock { };
-
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
@@ -31945,8 +31967,6 @@ with pkgs;
   imdshift = callPackage ../tools/security/imdshift { };
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
-
-  imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber { };
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
@@ -32434,56 +32454,49 @@ with pkgs;
 
   libreoffice-unwrapped = libreoffice.unwrapped;
 
-  libreoffice-args = {
-    inherit (perlPackages) ArchiveZip IOCompress;
-    zip = zip.override { enableNLS = false; };
-    fontsConf = makeFontsConf {
-      fontDirectories = [
-        carlito dejavu_fonts
-        freefont_ttf xorg.fontmiscmisc
-        liberation_ttf_v1
-        liberation_ttf_v2
-      ];
-    };
-    clucene_core = clucene_core_2;
-    lcms = lcms2;
-    harfbuzz = harfbuzz.override {
-      withIcu = true; withGraphite2 = true;
-    };
-    boost = boost179;
-  };
-
   libreoffice-qt-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice
-      (libreoffice-args // {
-        kdeIntegration = true;
-        variant = "fresh";
-      });
+    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice {
+      kdeIntegration = true;
+      variant = "fresh";
+    };
   });
   libreoffice-qt-fresh-unwrapped = libreoffice-qt-fresh.unwrapped;
 
   libreoffice-qt-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice
-      (libreoffice-args // {
-        kdeIntegration = true;
-        variant = "still";
-      });
+    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice {
+      kdeIntegration = true;
+      variant = "still";
+    };
   });
   libreoffice-qt-still-unwrapped = libreoffice-qt-still.unwrapped;
 
+  libreoffice-qt6-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
+      kdeIntegration = true;
+      variant = "fresh";
+    };
+  });
+  libreoffice-qt6-fresh-unwrapped = libreoffice-qt6-fresh.unwrapped;
+
+  libreoffice-qt6-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
+    unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
+      kdeIntegration = true;
+      variant = "still";
+    };
+  });
+  libreoffice-qt6-still-unwrapped = libreoffice-qt-still.unwrapped;
+
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = callPackage ../applications/office/libreoffice
-      (libreoffice-args // {
-        variant = "fresh";
-      });
+    unwrapped = callPackage ../applications/office/libreoffice {
+      variant = "fresh";
+    };
   });
   libreoffice-fresh-unwrapped = libreoffice-fresh.unwrapped;
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = callPackage ../applications/office/libreoffice
-      (libreoffice-args // {
-        variant = "still";
-      });
+    unwrapped = callPackage ../applications/office/libreoffice {
+      variant = "still";
+    };
   });
   libreoffice-still-unwrapped = libreoffice-still.unwrapped;
 
@@ -36279,8 +36292,6 @@ with pkgs;
 
   ballerburg = callPackage ../games/ballerburg { } ;
 
-  blockattack = callPackage ../games/blockattack { } ;
-
   colobot = callPackage ../games/colobot { };
 
   corsix-th = callPackage ../games/corsix-th { };
@@ -36534,7 +36545,8 @@ with pkgs;
   btanks = callPackage ../games/btanks { };
 
   bugdom = callPackage ../games/bugdom {
-    inherit (darwin.apple_sdk.frameworks) IOKit Foundation;
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit Foundation OpenGL;
   };
 
   bzflag = callPackage ../games/bzflag {
@@ -37701,8 +37713,6 @@ with pkgs;
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
-
-  pantheon-tweaks = callPackage ../desktops/pantheon/third-party/pantheon-tweaks { };
 
   wingpanel-indicator-ayatana = callPackage ../desktops/pantheon/third-party/wingpanel-indicator-ayatana { };
 
@@ -41054,8 +41064,6 @@ with pkgs;
   gitrs = callPackage ../tools/misc/gitrs { };
 
   dict-cc-py = callPackage ../applications/misc/dict-cc-py { };
-
-  sirikali = libsForQt5.callPackage ../tools/security/sirikali { };
 
   wpm = callPackage ../applications/misc/wpm { };
 
