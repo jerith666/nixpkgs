@@ -1,37 +1,38 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, packaging
-, pluggy
-, py
-, six
-, virtualenv
-, setuptools-scm
-, toml
-, tomli
-, filelock
-, hatchling
-, hatch-vcs
-, platformdirs
-, pyproject-api
-, colorama
-, chardet
-, cachetools
-, testers
-, tox
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  packaging,
+  pluggy,
+  py,
+  six,
+  virtualenv,
+  setuptools-scm,
+  toml,
+  tomli,
+  filelock,
+  hatchling,
+  hatch-vcs,
+  platformdirs,
+  pyproject-api,
+  colorama,
+  chardet,
+  cachetools,
+  testers,
+  tox,
 }:
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.14.2";
+  version = "4.15.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     rev = "refs/tags/${version}";
-    hash = "sha256-+ed47GK76Wn8PwXsd0qo1xYWJTcZ5wNXnFEEQEZ7CMM=";
+    hash = "sha256-aKk3a0RAcLyrHK6I3Q7rcBdZVJGNBXsBqA8N7Kpdrms=";
   };
 
   postPatch = ''
@@ -57,9 +58,7 @@ buildPythonPackage rec {
     six
     toml
     virtualenv
-  ]  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ];
+  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   doCheck = false; # infinite recursion via devpi-client
 

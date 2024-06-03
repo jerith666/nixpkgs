@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, comm
-, ipykernel
-, ipython
-, jsonschema
-, jupyterlab-widgets
-, lib
-, pytest7CheckHook
-, pytz
-, traitlets
-, widgetsnbextension
+{
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  comm,
+  ipykernel,
+  ipython,
+  jsonschema,
+  jupyterlab-widgets,
+  lib,
+  pytest7CheckHook,
+  pytz,
+  traitlets,
+  widgetsnbextension,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,5 @@ buildPythonPackage rec {
     description = "IPython HTML widgets for Jupyter";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

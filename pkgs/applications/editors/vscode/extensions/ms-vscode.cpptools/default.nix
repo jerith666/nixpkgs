@@ -1,8 +1,18 @@
-{ lib, vscode-utils
-, fetchurl, writeScript, runtimeShell
-, jq, clang-tools
-, gdbUseFixed ? true, gdb # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
-, autoPatchelfHook, makeWrapper, stdenv, lttng-ust, libkrb5, zlib
+{
+  lib,
+  vscode-utils,
+  writeScript,
+  runtimeShell,
+  jq,
+  clang-tools,
+  gdbUseFixed ? true,
+  gdb, # The gdb default setting will be fixed to specified. Use version from `PATH` otherwise.
+  autoPatchelfHook,
+  makeWrapper,
+  stdenv,
+  lttng-ust,
+  libkrb5,
+  zlib,
 }:
 
 /*
@@ -32,11 +42,11 @@ let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
   supported = {
     x86_64-linux = {
-      hash = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
+      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-Kjl8mEpayA1xMHEAMJ5k3Ctk3l48KlUBU5w3dL4pGWM=";
+      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
       arch = "linux-arm64";
     };
   };
@@ -47,7 +57,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.17.3";
+    version = "1.20.5";
   };
 
   nativeBuildInputs = [
@@ -94,7 +104,13 @@ vscode-utils.buildVscodeMarketplaceExtension {
     description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.jraygauthier lib.maintainers.stargate01 ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with lib.maintainers; [
+      jraygauthier
+      stargate01
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }
