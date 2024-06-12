@@ -17865,6 +17865,11 @@
     githubId = 7439756;
     name = "Rowan Goemans";
   };
+  roydubnium = {
+    github = "RoyDubnium";
+    githubId = 72664566;
+    name = "Roy Davison";
+  };
   royneary = {
     email = "christian@ulrich.earth";
     github = "royneary";
@@ -22519,6 +22524,11 @@
     github = "xrelkd";
     githubId = 46590321;
     name = "xrelkd";
+  };
+  xtrayambak = {
+    github = "xTrayambak";
+    githubId = 59499552;
+    name = "Trayambak Rai";
   };
   xurei = {
     email = "olivier.bourdoux@gmail.com";
