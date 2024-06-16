@@ -459,10 +459,12 @@
 
   copilot-vim = super.copilot-vim.overrideAttrs {
     postInstall = ''
-      substituteInPlace $out/autoload/copilot/agent.vim \
+      substituteInPlace $out/autoload/copilot/client.vim \
         --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
                   "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
     '';
+
+    meta.license = lib.licenses.unfree;
   };
 
   coq_nvim = super.coq_nvim.overrideAttrs {
@@ -1011,6 +1013,10 @@
     dependencies = [ self.plenary-nvim ];
   };
 
+  neotest-playwright = super.neotest-playwright.overrideAttrs {
+    dependencies = [ self.telescope-nvim ];
+  };
+
   neo-tree-nvim = super.neo-tree-nvim.overrideAttrs {
     dependencies = with self; [ plenary-nvim nui-nvim ];
   };
@@ -1040,6 +1046,13 @@
 
     doInstallCheck = true;
     nvimRequireCheck = "dapui";
+  };
+
+  nvim-genghis = super.nvim-genghis.overrideAttrs {
+    dependencies = [ self.dressing-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "genghis";
   };
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs {
@@ -1093,7 +1106,7 @@
         inherit (old) version src;
         sourceRoot = "${old.src.name}/spectre_oxi";
 
-        cargoHash = "sha256-4XAQFKsTM5IxNld1TIC0i861i/3uPjwsDWoW7ZbHfXg=";
+        cargoHash = "sha256-ZBlxJjkHb2buvXK6VGP6FMnSFk8RUX7IgHjNofnGDAs=";
 
         preCheck = ''
           mkdir tests/tmp/

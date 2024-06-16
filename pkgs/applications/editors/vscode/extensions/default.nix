@@ -505,8 +505,8 @@ let
         mktplcRef = {
           name = "vscode-bazel";
           publisher = "bazelbuild";
-          version = "0.7.0";
-          sha256 = "05wvih09184bsp4rv2m55z0sasra2qrvch5m3bkbrjq7rcqgibgx";
+          version = "0.10.0";
+          sha256 = "sha256-8SUOzsUmfgt9fAy037qLVNrGJPvTnIeMNz2tbN5psbs=";
         };
         meta = {
           description = "Bazel support for Visual Studio Code";
@@ -1492,8 +1492,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.21.3";
-          hash = "sha256-C6QFlqMIcefQhzBuVd3CnQHHaDdM1de7j+a/06wZ9FQ=";
+          version = "0.22.0";
+          hash = "sha256-pus5rOyVgheiblvWrkM3H/GZifBzUGR++JiHN4aU/3I=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
