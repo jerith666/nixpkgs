@@ -1,5 +1,12 @@
-{ stdenv, lib, fetchurl
-, cmake, qtwebsockets, qtwebengine, qtkeychain, wrapQtAppsHook, openconnect
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, qtwebsockets
+, qtwebengine
+, qtkeychain
+, wrapQtAppsHook
+, openconnect
 }:
 
 stdenv.mkDerivation rec {
