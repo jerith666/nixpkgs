@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, cargo
 , qtwebsockets
 , qtwebengine
 , qtkeychain
@@ -17,11 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-HwVXKz36VzIYNwmbRekZI6qmWyagbZkHcCk1ObA5D1I=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ cargo wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
-  OFFLINE = 1;
   INCLUDE_GUI = 0;
   BUILD_FE = 0;
 
