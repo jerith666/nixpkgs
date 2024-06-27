@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, cargo
+, rustPlatform
 , qtwebsockets
 , qtwebengine
 , qtkeychain
@@ -9,7 +9,7 @@
 , openconnect
 }:
 
-stdenv.mkDerivation rec {
+rustPlatform.buildRustPackage rec {
   pname = "globalprotect-openconnect";
   version = "2.3.3";
 
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-HwVXKz36VzIYNwmbRekZI6qmWyagbZkHcCk1ObA5D1I=";
   };
 
-  nativeBuildInputs = [ cargo wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
+
+  cargoHash = "sha256-LubGbTSIr/REqfOzCJe0ElnjELOA5H3N3Ng+lImGrtA=";
 
   INCLUDE_GUI = 0;
   BUILD_FE = 0;
