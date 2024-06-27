@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
+  OFFLINE = 1;
+  INCLUDE_GUI = 0;
+  BUILD_FE = 0;
+
   meta = with lib; {
     description = "GlobalProtect VPN client (GUI) for Linux based on OpenConnect that supports SAML auth mode";
     homepage = "https://github.com/yuezk/GlobalProtect-openconnect";
