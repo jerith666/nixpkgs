@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, cmake
 , qtwebsockets
 , qtwebengine
 , qtkeychain
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-HwVXKz36VzIYNwmbRekZI6qmWyagbZkHcCk1ObA5D1I=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
