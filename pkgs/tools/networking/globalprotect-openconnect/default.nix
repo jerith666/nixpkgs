@@ -2,6 +2,7 @@
 , lib
 , fetchurl
 , rustPlatform
+, perl
 , qtwebsockets
 , qtwebengine
 , qtkeychain
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-HwVXKz36VzIYNwmbRekZI6qmWyagbZkHcCk1ObA5D1I=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [ perl wrapQtAppsHook ];
 
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
