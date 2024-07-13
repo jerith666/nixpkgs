@@ -27033,15 +27033,6 @@ let
         sha512 = "v7w209VPj4L6pPn/ftFRJu31Oa8QagwcVw7BZmLCUWU4AQoc954rX9ogSIahDf67Pg+GjPbkW/Kn9XWnlWJG0g==";
       };
     };
-    "fraction.js-4.3.7" = {
-      name = "fraction.js";
-      packageName = "fraction.js";
-      version = "4.3.7";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/fraction.js/-/fraction.js-4.3.7.tgz";
-        sha512 = "ZsDfxO51wGAXREY55a7la9LScWpwv9RxIrYABrlvOFBlH/ShPnrtsXeuUIfXKKOVicNxQ+o8JTbJvjS4M89yew==";
-      };
-    };
     "fragment-cache-0.2.1" = {
       name = "fragment-cache";
       packageName = "fragment-cache";
@@ -57402,15 +57393,6 @@ let
         sha512 = "rvw3QTZc8lAxyVrqcSGVm5yP/IJ2UcB3U0graE3LCFoZ0Yn2x4EoVSqJKdB/T5M+FLcRPjz4TDacRf3OCfNUzw==";
       };
     };
-    "workerd-1.20240610.1" = {
-      name = "workerd";
-      packageName = "workerd";
-      version = "1.20240610.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/workerd/-/workerd-1.20240610.1.tgz";
-        sha512 = "Rtut5GrsODQMh6YU43b9WZ980Wd05Ov1/ds88pT/SoetmXFBvkBzdRfiHiATv+azmGX8KveE0i/Eqzk/yI01ug==";
-      };
-    };
     "workerpool-6.2.1" = {
       name = "workerpool";
       packageName = "workerpool";
@@ -63300,39 +63282,6 @@ in
     meta = {
       description = "Concat small audio files into single file and export in many formats.";
       homepage = "https://github.com/tonistiigi/audiosprite#readme";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  autoprefixer = nodeEnv.buildNodePackage {
-    name = "autoprefixer";
-    packageName = "autoprefixer";
-    version = "10.4.19";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.4.19.tgz";
-      sha512 = "BaENR2+zBZ8xXhM4pUaKUxlVdxZ0EZhjvbopwnXmxRUfqDmwSpC2lAi/QXvx7NRdPCo1WKEcEF6mV64si1z4Ew==";
-    };
-    dependencies = [
-      sources."browserslist-4.23.1"
-      sources."caniuse-lite-1.0.30001634"
-      sources."electron-to-chromium-1.4.802"
-      sources."escalade-3.1.2"
-      sources."fraction.js-4.3.7"
-      sources."nanoid-3.3.7"
-      sources."node-releases-2.0.14"
-      sources."normalize-range-0.1.2"
-      sources."picocolors-1.0.1"
-      sources."postcss-8.4.38"
-      sources."postcss-value-parser-4.2.0"
-      sources."source-map-js-1.2.0"
-      sources."update-browserslist-db-1.0.16"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Parse CSS and add vendor prefixes to CSS rules using values from the Can I Use website";
-      homepage = "https://github.com/postcss/autoprefixer#readme";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
@@ -80762,24 +80711,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  lv_font_conv = nodeEnv.buildNodePackage {
-    name = "lv_font_conv";
-    packageName = "lv_font_conv";
-    version = "1.5.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/lv_font_conv/-/lv_font_conv-1.5.3.tgz";
-      sha512 = "0xJQThBOw2iptFccSXrKDIUTQAwr/2zhKjCI1lATIRgZo8uvYRTmenKafW9yTw6G0y5AyW00tqGpUtYuTuBIbQ==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Rasterize vector fonts for embedded use. Supports subsettings & merge.";
-      homepage = "https://github.com/lvgl/lv_font_conv#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   madoko = nodeEnv.buildNodePackage {
     name = "madoko";
     packageName = "madoko";
@@ -90175,59 +90106,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  typescript-language-server = nodeEnv.buildNodePackage {
-    name = "typescript-language-server";
-    packageName = "typescript-language-server";
-    version = "4.3.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/typescript-language-server/-/typescript-language-server-4.3.3.tgz";
-      sha512 = "3QLj57Ru9S6zv10sa4z1pA3TIR1Rdkd04Ke0EszbO4fx5PLdlYhlC/PMxwlyxls9wrZs7wPCME1Ru0s1Gabz4Q==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Language Server Protocol (LSP) implementation for TypeScript using tsserver";
-      license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  uglify-js = nodeEnv.buildNodePackage {
-    name = "uglify-js";
-    packageName = "uglify-js";
-    version = "3.18.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/uglify-js/-/uglify-js-3.18.0.tgz";
-      sha512 = "SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "JavaScript parser, mangler/compressor and beautifier toolkit";
-      homepage = "https://github.com/mishoo/UglifyJS#readme";
-      license = "BSD-2-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  undollar = nodeEnv.buildNodePackage {
-    name = "undollar";
-    packageName = "undollar";
-    version = "1.0.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/undollar/-/undollar-1.0.0.tgz";
-      sha512 = "nV0/O+9yV/We9a0ZwH8LTXW9Aqit2em7zMpHetUk/kXxw6ongHs4D8PyPPryYGx5/w8iHqu6dJ+qJjHtA7SfUw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "undollar strips the dollar sign from the beginning of the terminal command you just copied from StackOverflow when you were searching for what arguments to pass to `tar` (`xzf`? `xvfJ`? Or was it `xvf`? You never seem to remember).";
-      homepage = "https://github.com/ImFeelingDucky/undollar#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   unified-language-server = nodeEnv.buildNodePackage {
     name = "unified-language-server";
     packageName = "unified-language-server";
@@ -92511,129 +92389,6 @@ in
       description = "WebTorrent, the streaming torrent client. For the command line.";
       homepage = "https://webtorrent.io";
       license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  wrangler = nodeEnv.buildNodePackage {
-    name = "wrangler";
-    packageName = "wrangler";
-    version = "3.60.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/wrangler/-/wrangler-3.60.3.tgz";
-      sha512 = "a6zn/KFnYaYp3nxJR/aP0TeaBvJDkrrfI89KoxUtx28H7zpya/5/VLu3CxQ3PRspEojJGF0s6f3/pddRy3F+BQ==";
-    };
-    dependencies = [
-      sources."@cloudflare/kv-asset-handler-0.3.2"
-      sources."@cloudflare/workers-types-4.20240605.0"
-      sources."@cspotcode/source-map-support-0.8.1"
-      sources."@esbuild-plugins/node-globals-polyfill-0.2.3"
-      sources."@esbuild-plugins/node-modules-polyfill-0.2.2"
-      sources."@esbuild/android-arm-0.17.19"
-      sources."@esbuild/android-arm64-0.17.19"
-      sources."@esbuild/android-x64-0.17.19"
-      sources."@esbuild/darwin-arm64-0.17.19"
-      sources."@esbuild/darwin-x64-0.17.19"
-      sources."@esbuild/freebsd-arm64-0.17.19"
-      sources."@esbuild/freebsd-x64-0.17.19"
-      sources."@esbuild/linux-arm-0.17.19"
-      sources."@esbuild/linux-arm64-0.17.19"
-      sources."@esbuild/linux-ia32-0.17.19"
-      sources."@esbuild/linux-loong64-0.17.19"
-      sources."@esbuild/linux-mips64el-0.17.19"
-      sources."@esbuild/linux-ppc64-0.17.19"
-      sources."@esbuild/linux-riscv64-0.17.19"
-      sources."@esbuild/linux-s390x-0.17.19"
-      sources."@esbuild/linux-x64-0.17.19"
-      sources."@esbuild/netbsd-x64-0.17.19"
-      sources."@esbuild/openbsd-x64-0.17.19"
-      sources."@esbuild/sunos-x64-0.17.19"
-      sources."@esbuild/win32-arm64-0.17.19"
-      sources."@esbuild/win32-ia32-0.17.19"
-      sources."@esbuild/win32-x64-0.17.19"
-      sources."@fastify/busboy-2.1.1"
-      sources."@jridgewell/resolve-uri-3.1.2"
-      sources."@jridgewell/sourcemap-codec-1.4.15"
-      sources."@jridgewell/trace-mapping-0.3.9"
-      sources."@types/node-20.14.2"
-      sources."@types/node-forge-1.3.11"
-      sources."acorn-8.12.0"
-      sources."acorn-walk-8.3.3"
-      sources."anymatch-3.1.3"
-      sources."as-table-1.0.55"
-      sources."binary-extensions-2.3.0"
-      sources."blake3-wasm-2.1.5"
-      sources."braces-3.0.3"
-      sources."bufferutil-4.0.8"
-      sources."capnp-ts-0.7.0"
-      sources."chokidar-3.6.0"
-      sources."consola-3.2.3"
-      sources."cookie-0.5.0"
-      sources."data-uri-to-buffer-2.0.2"
-      sources."debug-4.3.5"
-      sources."defu-6.1.4"
-      sources."esbuild-0.17.19"
-      sources."escape-string-regexp-4.0.0"
-      sources."estree-walker-0.6.1"
-      sources."exit-hook-2.2.1"
-      sources."fill-range-7.1.1"
-      sources."fsevents-2.3.3"
-      sources."function-bind-1.1.2"
-      sources."get-source-2.0.12"
-      sources."glob-parent-5.1.2"
-      sources."glob-to-regexp-0.4.1"
-      sources."hasown-2.0.2"
-      sources."is-binary-path-2.1.0"
-      sources."is-core-module-2.13.1"
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-number-7.0.0"
-      sources."magic-string-0.25.9"
-      sources."mime-3.0.0"
-      sources."miniflare-3.20240610.0"
-      sources."ms-2.1.2"
-      sources."mustache-4.2.0"
-      sources."nanoid-3.3.7"
-      sources."node-fetch-native-1.6.4"
-      sources."node-forge-1.3.1"
-      sources."node-gyp-build-4.8.1"
-      sources."normalize-path-3.0.0"
-      sources."path-parse-1.0.7"
-      sources."path-to-regexp-6.2.2"
-      sources."pathe-1.1.2"
-      sources."picomatch-2.3.1"
-      sources."printable-characters-1.0.42"
-      sources."readdirp-3.6.0"
-      sources."resolve-1.22.8"
-      sources."resolve.exports-2.0.2"
-      sources."rollup-plugin-inject-3.0.2"
-      sources."rollup-plugin-node-polyfills-0.2.1"
-      sources."rollup-pluginutils-2.8.2"
-      sources."selfsigned-2.4.1"
-      sources."source-map-0.6.1"
-      sources."sourcemap-codec-1.4.8"
-      sources."stacktracey-2.1.8"
-      sources."stoppable-1.1.0"
-      sources."supports-preserve-symlinks-flag-1.0.0"
-      sources."to-regex-range-5.0.1"
-      sources."tslib-2.6.3"
-      sources."ufo-1.5.3"
-      sources."undici-5.28.4"
-      sources."undici-types-5.26.5"
-      sources."unenv-1.10.0-1717606461.a117952"
-      sources."utf-8-validate-6.0.4"
-      sources."workerd-1.20240610.1"
-      sources."ws-8.17.0"
-      sources."xxhash-wasm-1.0.2"
-      sources."youch-3.3.3"
-      sources."zod-3.23.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Command-line interface for all things Cloudflare Workers";
-      homepage = "https://github.com/cloudflare/workers-sdk#readme";
-      license = "MIT OR Apache-2.0";
     };
     production = true;
     bypassCache = true;
