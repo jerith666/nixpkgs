@@ -1,33 +1,46 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , stdenv
 , darwin
 , rust-jemalloc-sys
 , ruff-lsp
+, nix-update-script
 , testers
 , ruff
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.4.9";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-40ZXD52d/kZNkSZ64H/s/OiiU99IiblGfYa4KmU8xD4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2tW/p9A7jpQg8ZmSF7KRuN6kBNKK1cfjnS9KlvnCpQA=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "lsp-types-0.95.1" = "sha256-8Oh299exWXVi6A39pALOISNfp8XBya8z+KT/Z7suRxQ=";
-      "salsa-2022-0.1.0" = "sha256-mt+X1hO+5ZrCAgy6N4aArnixJ9GjY/KwM0uIMUSrDsg=";
+      "salsa-0.18.0" = "sha256-gcaAsrrJXrWOIHUnfBwwuTBG1Mb+lUEmIxSGIVLhXaM=";
     };
   };
+
+  # Fix compatibility with cargo-auditable
+  # https://github.com/astral-sh/ruff/pull/12275
+  # TODO: this will be included in the next release
+  patches = [
+    (fetchpatch {
+      name = "fix-compatibility-with-cargo-auditable";
+      url = "https://github.com/astral-sh/ruff/commit/d0298dc26d471666acc01dacdb603e3e95aca06f.patch";
+      hash = "sha256-Shf1Gw1pY98ZE+h9OhlpkJwq/S52EAJqUUk/uHix2fg=";
+    })
+  ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -64,7 +77,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=semantic::types::infer::tests::resolve_visible_def"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ruff \
       --bash <($out/bin/ruff generate-shell-completion bash) \
       --fish <($out/bin/ruff generate-shell-completion fish) \
@@ -73,13 +86,14 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests = {
     inherit ruff-lsp;
+    updateScript = nix-update-script { };
     version = testers.testVersion { package = ruff; };
   };
 
   meta = {
     description = "Extremely fast Python linter";
     homepage = "https://github.com/astral-sh/ruff";
-    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/${version}";
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [

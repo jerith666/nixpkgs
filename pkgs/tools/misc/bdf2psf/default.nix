@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
-  version = "1.227";
+  version = "1.228";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
-    sha256 = "sha256-EJnxgz+ZKMtl6eIpIPYdXeMAnV/gydgklC/7yG2THpM=";
+    sha256 = "sha256-wx6JRblOsMcI/1UN0FaN41vc/lVC1lOPMHt90JVf3Vo=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       Font converter to generate console fonts from BDF source fonts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rnhmjoj vrthra ];
+    maintainers = with maintainers; [ rnhmjoj  ];
     platforms = platforms.all;
     mainProgram = "bdf2psf";
   };

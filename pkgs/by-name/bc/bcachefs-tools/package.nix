@@ -21,20 +21,19 @@
   makeWrapper,
   nix-update-script,
   python3,
+  fetchpatch,
   fuseSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.7.0-unstable-2024-05-09";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
-    # FIXME: switch to a tagged release once available > 1.7.0
-    # Fix for https://github.com/NixOS/nixpkgs/issues/313350
-    rev = "3ac510f6a41feb1b695381fa30869d557c00b822";
-    hash = "sha256-ZmkeYPiCy7vkXnMFbtUF4761K+I+Ef7UbmSY7dJG09U=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-1GsRBAVAfD0SAM1gk8W+bX7MtxunGKOLtXweL4rrf9Q=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-RsRz/nb8L+pL1U4l6RnvqeDFddPvcBFH4wdV7G60pxA=";
+    hash = "sha256-rabiNqw4hg0Js8VadxfkhNLIsrKfMuoKa5lFIfSMNPY=";
   };
 
   makeFlags = [
@@ -71,14 +70,18 @@ stdenv.mkDerivation (finalAttrs: {
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ] ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
 
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+    "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+  };
+
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
-  patches = [
-    # code refactoring of bcachefs-tools broke reading passphrases from stdin (vs. terminal)
-    # upstream issue https://github.com/koverstreet/bcachefs-tools/issues/261
-    ./fix-encrypted-boot.patch
-  ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
+  '';
 
   preCheck = lib.optionalString (!fuseSupport) ''
     rm tests/test_fuse.py

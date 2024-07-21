@@ -10,15 +10,15 @@
 , stdenvNoCC
 , runtimeShell
 , bintools ? null, libc ? null, coreutils ? null, gnugrep ? null
-, netbsd ? null
+, netbsd ? null, netbsdCross ? null
 , sharedLibraryLoader ?
   if libc == null then
     null
   else if stdenvNoCC.targetPlatform.isNetBSD then
-    if !(targetPackages ? netbsd) then
+    if !(targetPackages ? netbsdCross) then
       netbsd.ld_elf_so
-    else if libc != targetPackages.netbsd.headers then
-      targetPackages.netbsd.ld_elf_so
+    else if libc != targetPackages.netbsdCross.headers then
+      targetPackages.netbsdCross.ld_elf_so
     else
       null
   else
@@ -45,16 +45,21 @@
     "relro"
     "stackprotector"
     "strictoverflow"
-  ] ++ lib.optional (with stdenvNoCC;
-    # Musl-based platforms will keep "pie", other platforms will not.
-    # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-    # in the nixpkgs manual to inform users about the defaults.
-    targetPlatform.libc == "musl"
-    # Except when:
-    #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-    #    - static armv7l, where compilation fails.
-    && !(targetPlatform.isAarch && targetPlatform.isStatic)
-  ) "pie"
+    "zerocallusedregs"
+  ] ++ lib.optional (with stdenvNoCC; lib.any (x: x) [
+    # OpenBSD static linking requires PIE
+    (with targetPlatform; isOpenBSD && isStatic)
+    (lib.all (x: x) [
+      # Musl-based platforms will keep "pie", other platforms will not.
+      # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+      # in the nixpkgs manual to inform users about the defaults.
+      (targetPlatform.libc == "musl")
+      # Except when:
+      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+      #    - static armv7l, where compilation fails.
+      (!(targetPlatform.isAarch && targetPlatform.isStatic))
+    ])
+  ]) "pie"
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null

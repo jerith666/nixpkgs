@@ -29,24 +29,19 @@ let
   pname = "faiss";
   version = "1.7.4";
 
-  inherit (cudaPackages) cudaFlags backendStdenv;
-  inherit (cudaFlags) cudaCapabilities dropDot;
+  inherit (cudaPackages) flags backendStdenv;
 
   stdenv = if cudaSupport then backendStdenv else inputs.stdenv;
 
-  cudaJoined = symlinkJoin {
-    name = "cuda-packages-unsplit";
-    paths = with cudaPackages; [
-      cuda_cudart # cuda_runtime.h
-      libcublas
-      libcurand
-      cuda_cccl
-    ] ++ lib.optionals (cudaPackages ? cuda_profiler_api) [
-      cuda_profiler_api # cuda_profiler_api.h
-    ] ++ lib.optionals (!(cudaPackages ? cuda_profiler_api)) [
-      cuda_nvprof # cuda_profiler_api.h
-    ];
-  };
+  cudaComponents = with cudaPackages; [
+    cuda_cudart # cuda_runtime.h
+    libcublas
+    libcurand
+    cuda_cccl
+
+    # cuda_profiler_api.h
+    (cudaPackages.cuda_profiler_api or cudaPackages.cuda_nvprof)
+  ];
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -69,9 +64,7 @@ stdenv.mkDerivation {
     pythonPackages.wheel
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
-  ] ++ lib.optionals cudaSupport [
-    cudaJoined
-  ];
+  ] ++ lib.optionals cudaSupport cudaComponents;
 
   propagatedBuildInputs = lib.optionals pythonSupport [
     pythonPackages.numpy
@@ -93,8 +86,7 @@ stdenv.mkDerivation {
     "-DFAISS_ENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
     "-DFAISS_OPT_LEVEL=${optLevel}"
   ] ++ lib.optionals cudaSupport [
-    "-DCMAKE_CUDA_ARCHITECTURES=${builtins.concatStringsSep ";" (map dropDot cudaCapabilities)}"
-    "-DCUDAToolkit_INCLUDE_DIR=${cudaJoined}/include"
+    "-DCMAKE_CUDA_ARCHITECTURES=${flags.cmakeCudaArchitecturesString}"
   ];
 
   buildFlags = [

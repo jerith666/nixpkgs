@@ -48,8 +48,6 @@
 , nlohmann_json
 , websocketpp
 , asio
-, decklinkSupport ? false
-, blackmagic-desktop-video
 , libdatachannel
 , libvpl
 , qrcodegencpp
@@ -66,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "obsproject";
-    repo = finalAttrs.pname;
+    repo = "obs-studio";
     rev = finalAttrs.version;
     sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
     fetchSubmodules = true;
@@ -167,8 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libvlc
       libGL
-    ] ++ optionals decklinkSupport [
-      blackmagic-desktop-video
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail

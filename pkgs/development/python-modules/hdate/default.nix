@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pdm-backend,
-  pythonRelaxDepsHook,
   pytestCheckHook,
   pythonOlder,
   pytz,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "0.10.9";
+  version = "0.10.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     owner = "py-libhdate";
     repo = "py-libhdate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Cni8GegB8GAhtIKKCgSn3QavE/Gi9Rcm9v0grToMyq4=";
+    hash = "sha256-HmdXTvtNiIE2XPFhqs7WpcceEQU7F7RsLFp6/+63yDw=";
   };
 
   pythonRelaxDeps = [
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   build-system = [
     pdm-backend
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

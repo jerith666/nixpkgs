@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.5";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     rev = "v${version}";
-    hash = "sha256-copxy9fgHTHfF14bh9ddF4eTWx2GP2Mkw3lr+1NKKkI=";
+    hash = "sha256-kUdy8zSt8RvGlMKa0gxp0tnZbo7/igDeFV2zsel5LXA=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-whddW3ThC/zlttqhV3wf15roaCgp0H/BELWLs9/c5Jc=";
+    npmDepsHash = "sha256-sjQJn94GmSdOY1B2bmFTsxjLrc7LSBgDpWNrXIHunsg=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -63,8 +63,11 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     aiohttp
+    alembic
+    anthropic
     apscheduler
     argon2-cffi
+    authlib
     bcrypt
     beautifulsoup4
     black
@@ -85,6 +88,7 @@ python3.pkgs.buildPythonApplication rec {
     langchain-community
     langfuse
     markdown
+    openai
     opencv4
     openpyxl
     pandas
@@ -94,6 +98,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymongo
     pymysql
     pypandoc
     pypdf
@@ -105,8 +110,10 @@ python3.pkgs.buildPythonApplication rec {
     pyxlsb
     rank-bm25
     rapidocr-onnxruntime
+    redis
     requests
     sentence-transformers
+    sqlalchemy
     unstructured
     uvicorn
     validators
@@ -116,7 +123,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ hatchling ];
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
   pythonImportsCheck = [ "open_webui" ];
 

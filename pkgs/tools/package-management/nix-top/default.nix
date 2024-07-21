@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "samueldr";
+    owner = "jerith666";
     repo = "nix-top";
     rev = "v${version}";
     sha256 = "sha256-w/TKzbZmMt4CX2KnLwPvR1ydp5NNlp9nNx78jJvhp54=";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Tracks what nix is building";
     homepage = "https://github.com/samueldr/nix-top";
     license = licenses.mit;
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = with maintainers; [ jerith666 ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     mainProgram = "nix-top";
   };
