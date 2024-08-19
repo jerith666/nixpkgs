@@ -101,7 +101,10 @@ in
         Enabling this and using version 545 or newer of the proprietary NVIDIA
         driver causes it to provide its own framebuffer device, which can cause
         Wayland compositors to work when they otherwise wouldn't.
-      '';
+      '' // {
+        default = lib.versionAtLeast cfg.package.version "535";
+        defaultText = lib.literalExpression "lib.versionAtLeast cfg.package.version \"535\"";
+      };
 
       prime.nvidiaBusId = lib.mkOption {
         type = busIDType;
@@ -253,7 +256,9 @@ in
 
       open = lib.mkEnableOption ''
         the open source NVIDIA kernel module
-      '';
+      '' // {
+        defaultText = lib.literalExpression ''lib.versionAtLeast config.hardware.nvidia.package.version "560"'';
+      };
     };
   };
 
@@ -302,6 +307,8 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
+
+          hardware.nvidia.open = lib.mkDefault (lib.versionAtLeast nvidia_x11.version "560");
         })
 
         # X11
@@ -469,7 +476,6 @@ in
 
           hardware.graphics = {
             extraPackages = [ pkgs.nvidia-vaapi-driver ];
-            extraPackages32 = [ pkgs.pkgsi686Linux.nvidia-vaapi-driver ];
           };
 
           environment.systemPackages =
@@ -566,11 +572,16 @@ in
           boot = {
             extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
             # nvidia-uvm is required by CUDA applications.
-            kernelModules = lib.optionals config.services.xserver.enable [
-              "nvidia"
-              "nvidia_modeset"
-              "nvidia_drm"
-            ];
+            kernelModules =
+              lib.optionals config.services.xserver.enable [
+                "nvidia"
+                "nvidia_modeset"
+                "nvidia_drm"
+              ]
+              # With the open driver, nvidia-uvm does not automatically load as
+              # a softdep of the nvidia module, so we explicitly load it for now.
+              # See https://github.com/NixOS/nixpkgs/issues/334180
+              ++ lib.optionals (config.services.xserver.enable && cfg.open) [ "nvidia_uvm" ];
 
             # If requested enable modesetting via kernel parameters.
             kernelParams =

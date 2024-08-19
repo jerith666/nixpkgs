@@ -1,9 +1,9 @@
 {
-  "version" = "1.11.70";
+  "version" = "1.11.74";
   "hashes" = {
-    "desktopSrcHash" = "sha256-BLRblkBcl7wGU/sJpvdvRFD0/qBaql0wqJBSZlDkXRw=";
-    "desktopYarnHash" = "1nrnqlvilgs7xzwn1xkx3yh3rwsca47r1rmbzhyylq00bqaym1wf";
-    "webSrcHash" = "sha256-kx6xQIuYSXkkBTYb+fZLL3cuHFcNj7RkC60o6Fyp8LI=";
-    "webYarnHash" = "1pqcdlgwrrjjmmd9ds8dxjb04b2bv0r230dicmbihs719yjrpwmb";
+    "desktopSrcHash" = "sha256-RKDwtoad8gP1fAjkg2+6BJj6z8SqYk1ddG7wQ9wI1XQ=";
+    "desktopYarnHash" = "0bl78yd7apd5qbsqyhxnwj7lwrjx5820zh22rzgn9jqkcv25jwgw";
+    "webSrcHash" = "sha256-5Tujhqias3+k4BgQbO8R0toHlKQcAywG2MWBZX1SVOM=";
+    "webYarnHash" = "06wmzxsc0iijrz017lb40nydb05n8ckmin2rrwiw25bl8ywfw0qr";
   };
 }

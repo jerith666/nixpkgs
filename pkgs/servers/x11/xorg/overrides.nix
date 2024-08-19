@@ -147,7 +147,8 @@ self: super:
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ] ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -255,7 +256,8 @@ self: super:
       sed 's,^as_dummy.*,as_dummy="\$PATH",' -i configure
     '';
     configureFlags = attrs.configureFlags or []
-      ++ malloc0ReturnsNullCrossFlag;
+      ++ malloc0ReturnsNullCrossFlag
+      ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "ac_cv_path_RAWCPP=cpp";
     propagatedBuildInputs = attrs.propagatedBuildInputs or [] ++ [ xorg.libSM ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     CPP = if stdenv.isDarwin then "clang -E -" else "${stdenv.cc.targetPrefix}cc -E -";

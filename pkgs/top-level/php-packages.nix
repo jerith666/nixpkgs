@@ -6,7 +6,6 @@
 , phpPackage
 , autoconf
 , pkg-config
-, aspell
 , bzip2
 , curl
 , cyrus_sasl
@@ -266,6 +265,9 @@ in {
 
     imagick = callPackage ../development/php-packages/imagick { };
 
+    # Shadowed by built-in version on PHP < 8.3.
+    imap = callPackage ../development/php-packages/imap { };
+
     inotify = callPackage ../development/php-packages/inotify { };
 
     ioncube-loader = callPackage ../development/php-packages/ioncube-loader { };
@@ -323,6 +325,8 @@ in {
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
+
+    pspell = callPackage ../development/php-packages/pspell { };
 
     rdkafka = callPackage ../development/php-packages/rdkafka { };
 
@@ -393,6 +397,26 @@ in {
                 "NEWS"
               ];
             })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.4") [
+            # Fix compatibility with libxml2 ≥ 2.13.2
+            # https://github.com/php/php-src/issues/15331
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/8d7365b6f009ba43e305d6459013ac4fbed7c606.diff?full_index=1";
+              hash = "sha256-ct0Ml9kjjcRLryjxMsUQQsDXiDExjpnCnWKf+mYgTsQ=";
+              excludes = [ "NEWS" ];
+            })
           ];
         }
         {
@@ -440,6 +464,8 @@ in {
           name = "imap";
           buildInputs = [ uwimap openssl pam pcre2 libkrb5 ];
           configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" "--with-kerberos" ];
+          # Using version from PECL on new PHP versions.
+          enable = lib.versionOlder php.version "8.3";
         }
         {
           name = "intl";
@@ -548,6 +574,7 @@ in {
         {
           name = "pdo_odbc";
           internalDeps = [ php.extensions.pdo ];
+          buildInputs = [ unixODBC ];
           configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
           doCheck = false;
         }
@@ -571,7 +598,6 @@ in {
           doCheck = false;
         }
         { name = "posix"; doCheck = false; }
-        { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
         {
           name = "readline";
           buildInputs = [
@@ -604,6 +630,19 @@ in {
           configureFlags = [
             "--enable-simplexml"
           ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "snmp";
@@ -619,8 +658,21 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = false;
+          doCheck = stdenv.isDarwin;  # TODO: a couple tests still fail on *-linux
           internalDeps = [ php.extensions.session ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "sockets";
@@ -653,6 +705,19 @@ in {
             "--enable-xml"
           ];
           doCheck = false;
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
+          ];
         }
         {
           name = "xmlreader";
@@ -669,6 +734,19 @@ in {
           buildInputs = [ libxml2 ];
           configureFlags = [
             "--enable-xmlwriter"
+          ];
+          patches = lib.optionals (lib.versions.majorMinor php.version == "8.2" && lib.versionOlder php.version "8.2.22") [
+            # Fixes compatibility with libxml2 2.13. Part of 8.3.10RC1+, 8.2.22RC1+
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/4fe821311cafb18ca8bdf20b9d796c48a13ba552.diff?full_index=1";
+              hash = "sha256-YC3I0BQi3o3+VmRu/UqpqPpaSC+ekPqzbORTHftbPvY=";
+            })
+          ] ++ lib.optionals (lib.versions.majorMinor php.version == "8.3" && lib.versionOlder php.version "8.3.10") [
+            (fetchpatch {
+              url = "https://github.com/php/php-src/commit/ecf0bb0fd12132d853969c5e9a212e5f627f2da2.diff?full_index=1";
+              hash = "sha256-sodGODHb4l04P0srn3L8l3K+DjZzCsCNbamfkmIyF+k=";
+              excludes = [ "NEWS" ];
+            })
           ];
         }
         {
@@ -712,7 +790,7 @@ in {
       namedExtensions = builtins.map
         (drv: {
           name = drv.name;
-          value = mkExtension drv;
+          value = mkExtension (builtins.removeAttrs drv [ "enable" ]);
         })
         (builtins.filter (i: i.enable or true) extensionData);
 

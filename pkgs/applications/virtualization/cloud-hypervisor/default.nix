@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, dtc, openssl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, rustPlatform, pkg-config, dtc, openssl
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cloud-hypervisor";
@@ -10,6 +12,14 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-zrMJGdbOukNbzmcTuIcHlwAbJvTzhz53dc4TO/Fplb4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "ub.patch";
+      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/02f146fef81c4aa4a7ef3555c176d3b533158d7a.patch";
+      hash = "sha256-g9WcGJy8Q+Bc0egDfoQVSVfKqyXa8vkIZk+aYQyFuy8=";
+    })
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -26,7 +36,8 @@ rustPlatform.buildRustPackage rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isAarch64 dtc;
+  buildInputs = lib.optional stdenv.isAarch64 dtc;
+  checkInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = true;
 

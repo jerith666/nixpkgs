@@ -28,6 +28,7 @@ DISTRO_NAME = "@distroName@"
 NIX = "@nix@"
 SYSTEMD = "@systemd@"
 CONFIGURATION_LIMIT = int("@configurationLimit@")
+REBOOT_FOR_BITLOCKER = bool("@rebootForBitlocker@")
 CAN_TOUCH_EFI_VARIABLES = "@canTouchEfiVariables@"
 GRACEFUL = "@graceful@"
 COPY_EXTRA_FILES = "@copyExtraFiles@"
@@ -44,6 +45,7 @@ class BootSpec:
     toplevel: str
     specialisations: dict[str, "BootSpec"]
     sortKey: str  # noqa: N815
+    devicetree: str | None = None  # noqa: N815
     initrdSecrets: str | None = None  # noqa: N815
 
 
@@ -99,11 +101,12 @@ def generation_conf_filename(profile: str | None, generation: int, specialisatio
 
 def write_loader_conf(profile: str | None, generation: int, specialisation: str | None) -> None:
     with open(f"{LOADER_CONF}.tmp", 'w') as f:
-        if TIMEOUT != "":
-            f.write(f"timeout {TIMEOUT}\n")
+        f.write(f"timeout {TIMEOUT}\n")
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not EDITOR:
             f.write("editor 0\n")
+        if REBOOT_FOR_BITLOCKER:
+            f.write("reboot-for-bitlocker yes\n");
         f.write(f"console-mode {CONSOLE_MODE}\n")
         f.flush()
         os.fsync(f.fileno())
@@ -135,10 +138,12 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
     specialisations = {k: bootspec_from_json(v) for k, v in specialisations.items()}
     systemdBootExtension = bootspec_json.get('org.nixos.systemd-boot', {})
     sortKey = systemdBootExtension.get('sortKey', 'nixos')
+    devicetree = systemdBootExtension.get('devicetree')
     return BootSpec(
         **bootspec_json['org.nixos.bootspec.v1'],
         specialisations=specialisations,
-        sortKey=sortKey
+        sortKey=sortKey,
+        devicetree=devicetree,
     )
 
 
@@ -157,6 +162,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
     initrd = copy_from_file(bootspec.initrd)
+    devicetree = copy_from_file(bootspec.devicetree) if bootspec.devicetree is not None else None
 
     title = "{name}{profile}{specialisation}".format(
         name=DISTRO_NAME,
@@ -194,6 +200,8 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                     description=f"{bootspec.label}, built on {build_date}"))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
+        if devicetree is not None:
+            f.write("devicetree %s\n" % devicetree)
         f.flush()
         os.fsync(f.fileno())
     os.rename(tmp_path, entry_file)
