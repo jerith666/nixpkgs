@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "spicetify-cli";
-  version = "2.36.14";
+  version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-F5fXTkUbpVwscM2GwMA/hSpe0ZVQU12Jb8I8dxuRzYc=";
+    hash = "sha256-YX3Fbeup2xYcaKEm/tQudE7tYsqO2n4BScSIZ8CqVQ4=";
   };
 
-  vendorHash = "sha256-po0ZrIXtyK0txK+eWGZDEIGMI1/cwyLVsGUVnTaHKP0=";
+  vendorHash = "sha256-kv+bMyVOJTztn8mNNTK/kp4nvc5m1I5M041s3nPpob8=";
 
   ldflags = [
     "-s -w"

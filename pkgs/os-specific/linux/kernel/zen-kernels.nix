@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # comments with variant added for update script
-  # ./update-zen.py zen
-  zenVariant = {
-    version = "6.9.8"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "1ixrdx2a6jp1x8kryjmxnrgl0fsrjg6fngg5c48vbl2574nizlbz"; #zen
-    isLqx = false;
-  };
-  # ./update-zen.py lqx
-  lqxVariant = {
-    version = "6.9.8"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "1r5ld2xibr0qkwi1yy7h746sclsmd8cq68z0zdpbbn2qrgyx302k"; #lqx
-    isLqx = true;
+  variants = {
+    # ./update-zen.py zen
+    zen = {
+      version = "6.10.5"; #zen
+      suffix = "zen1"; #zen
+      sha256 = "08ibz7560xsmlnrm8j13hxf8hjjcxfmnjdrwffqc81g9g6rvpqra"; #zen
+      isLqx = false;
+    };
+    # ./update-zen.py lqx
+    lqx = {
+      version = "6.10.5"; #lqx
+      suffix = "lqx1"; #lqx
+      sha256 = "09rscj20j94qkmvk0hlpjm6v1n1ndnkv2vl035gsp5lwggws2jqm"; #lqx
+      isLqx = true;
+    };
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
     inherit version;
@@ -62,7 +64,7 @@ let
       RCU_FANOUT = freeform "64";
       RCU_FANOUT_LEAF = freeform "16";
       RCU_BOOST = yes;
-      RCU_BOOST_DELAY = freeform "500";
+      RCU_BOOST_DELAY = option (freeform "500");
       RCU_NOCB_CPU = yes;
       RCU_LAZY = yes;
       RCU_DOUBLE_CHECK_CB_TIME = yes;
@@ -94,7 +96,7 @@ let
 
       # https://github.com/damentz/liquorix-package/commit/a7055b936c0f4edb8f6afd5263fe1d2f8a5cd877
       RCU_BOOST = no;
-      RCU_LAZY = no;
+      RCU_LAZY = lib.mkOverride 60 no;
 
       # Swap storage is compressed with LZ4 using zswap
       ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
@@ -123,7 +125,4 @@ let
 
   } // (args.argsOverride or { }));
 in
-{
-  zen = zenKernelsFor zenVariant;
-  lqx = zenKernelsFor lqxVariant;
-}
+zenKernelsFor variants.${variant}
