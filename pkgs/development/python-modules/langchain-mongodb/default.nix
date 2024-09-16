@@ -18,6 +18,7 @@
   responses,
   syrupy,
   toml,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -62,8 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
-  passthru = {
-    updateScript = langchain-core.updateScript;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "langchain-mongodb==(.*)"
+    ];
   };
 
   meta = {

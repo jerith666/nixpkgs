@@ -32,9 +32,9 @@
 
   containerapp = mkAzExtension rec {
     pname = "containerapp";
-    version = "0.3.53";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/containerapp-${version}-py2.py3-none-any.whl";
-    sha256 = "f9b4f3928469efcc1bfbc98cd906d9d92e72617e5c21cf3ade8b37651607c3e1";
+    sha256 = "d80b83b0e22770925c24bca150c84182376b7b0aff9b6f28498d769dc8618b45";
     description = "Microsoft Azure Command-Line Tools Containerapp Extension";
     propagatedBuildInputs = with python3Packages; [
       docker
@@ -66,13 +66,10 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/ssh-${version}-py3-none-any.whl";
     sha256 = "80c98b10d7bf1ce4005b7694aedd05c47355456775ba6125308be65fb0fefc93";
     description = "SSH into Azure VMs using RBAC and AAD OpenSSH Certificates";
-    propagatedBuildInputs = (
-      with python3Packages;
-      [
-        oras
-        oschmod
-      ]
-    );
+    propagatedBuildInputs = with python3Packages; [
+      oras
+      oschmod
+    ];
     meta.maintainers = with lib.maintainers; [ gordon-bp ];
   };
 

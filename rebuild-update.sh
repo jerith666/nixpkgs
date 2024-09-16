@@ -3,9 +3,19 @@
 set -o errexit
 set -o nounset
 
-d=$1
+if [ -v 1 ]; then
+    d=$1
+else
+    d=$(basename $(realpath $(dirname $0)) | sed 's/nixpkgs-update-//')
+    echo rebuild-update guessing date-tag: $d
+fi
 
-wt=$2
+if [ -v 2 ]; then
+    wt=$2
+else
+    wt=$(dirname $(realpath $0))
+    echo rebuild-update guessing worktree: $wt
+fi
 
 ulimit -s 100000;
 

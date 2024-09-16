@@ -8,27 +8,25 @@
   poetry-core,
   pytestCheckHook,
   pytest-asyncio,
-  nix-update-script,
+  langchain-standard-tests,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-aws";
-  version = "0.1.16";
+  version = "0.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WICv4tD9abTLO6mp/gZ4dgYVWmLMdUHgkwpZPd+u+Ek=";
+    hash = "sha256-n9nQheuUZMrjZMpR3aqbrRb/AhcgiF4CFO9ROh9aFNc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "--snapshot-warn-unused" "" \
       --replace-fail "--cov=langchain_aws" ""
-
-    ln -s ${langchain-core.src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
   '';
 
   sourceRoot = "${src.name}/libs/aws";
@@ -42,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    langchain-standard-tests
     pytest-asyncio
     pytestCheckHook
   ];

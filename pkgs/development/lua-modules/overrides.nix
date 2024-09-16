@@ -545,8 +545,7 @@ in
   });
 
   neotest  = prev.neotest.overrideAttrs(oa: {
-    # A few tests fail for strange reasons on darwin
-    doCheck = !stdenv.isDarwin;
+    doCheck = true;
     nativeCheckInputs = oa.nativeCheckInputs ++ [
       final.nlua final.busted neovim-unwrapped
     ];
@@ -560,7 +559,7 @@ in
       export LUA_PATH="./lua/?.lua;./lua/?/init.lua;$LUA_PATH"
       nvim --headless -i NONE \
         --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory tests/ {}"
+        -c "PlenaryBustedDirectory tests/ {sequential = true}"
 
       runHook postCheck
       '';
@@ -744,6 +743,17 @@ in
     };
   })) {};
 
+  rtp-nvim  = prev.rtp-nvim.overrideAttrs(oa: {
+    doCheck = lua.luaversion == "5.1";
+    nativeCheckInputs = [ final.nlua final.busted ];
+    checkPhase = ''
+      runHook preCheck
+      export HOME=$(mktemp -d)
+      busted --lua=nlua
+      runHook postCheck
+      '';
+  });
+
   rustaceanvim  = prev.rustaceanvim.overrideAttrs(oa: {
     doCheck = lua.luaversion == "5.1";
     nativeCheckInputs = [ final.nlua final.busted ];
@@ -756,7 +766,6 @@ in
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
-
     doCheck = true;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
 
@@ -773,7 +782,7 @@ in
 
       nvim --headless -i NONE \
         -u test/minimal_init.vim --cmd "set rtp+=${vimPlugins.plenary-nvim}" \
-        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+        -c "PlenaryBustedDirectory test/auto/ { sequential = true, minimal_init = './test/minimal_init.vim' }"
     '';
 
   });
@@ -819,17 +828,13 @@ in
   });
 
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (oa: {
-    nativeBuildInputs = let
-      # HACK: luarocks-nix doesn't pick up rockspec build dependencies,
-      # so we have to pass the correct package in here.
+    propagatedBuildInputs = let
+      # HACK: luarocks-nix puts rockspec build dependencies in the nativeBuildInputs,
+      # but that doesn't seem to work
       lua = lib.head oa.propagatedBuildInputs;
-    in oa.nativeBuildInputs ++ [
-      lua.pkgs.luarocks-build-treesitter-parser
-    ] ++ (lib.optionals stdenv.isDarwin [
-      clang
-      tree-sitter
-    ]);
-    meta.broken = (luaOlder "5.1" || stdenv.isDarwin);
+    in oa.propagatedBuildInputs ++ [
+      lua.pkgs.luarocks-build-treesitter-parser-cpp
+    ];
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
