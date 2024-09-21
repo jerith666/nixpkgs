@@ -285,11 +285,11 @@ in
             ingressesSet = filterIngressSet tunnel.ingress;
             ingressesStr = filterIngressStr tunnel.ingress;
 
-            fullConfig = lib.filterConfig {
+            fullConfig = filterConfig {
               tunnel = name;
               "credentials-file" = tunnel.credentialsFile;
-              warp-routing = lib.filterConfig tunnel.warp-routing;
-              originRequest = lib.filterConfig tunnel.originRequest;
+              warp-routing = filterConfig tunnel.warp-routing;
+              originRequest = filterConfig tunnel.originRequest;
               origincert = cfg.originCertPath;
               ingress =
                 (map
