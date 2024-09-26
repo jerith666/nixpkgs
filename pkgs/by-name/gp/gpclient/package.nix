@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   inherit (gpauth) version src meta;
 
   buildAndTestSubdir = "apps/gpclient";
-  cargoHash = "sha256-JolUeKEfEAILBBHf3KbI/3RxUUE3j36XMyEJW4vDH5o=";
+  cargoHash = "sha256-aJYFBvVrj1n2+9WLLBH5WTRRzTle19LsdJ2DielJYik=";
 
   nativeBuildInputs = [ perl ];
   buildInputs = [
