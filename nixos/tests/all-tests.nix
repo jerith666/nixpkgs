@@ -455,6 +455,7 @@ in {
   icingaweb2 = handleTest ./icingaweb2.nix {};
   ifm = handleTest ./ifm.nix {};
   iftop = handleTest ./iftop.nix {};
+  immich = handleTest ./web-apps/immich.nix {};
   incron = handleTest ./incron.nix {};
   incus = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; inherit (pkgs) incus; });
   incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit handleTestOn; });
@@ -669,6 +670,7 @@ in {
   nginx-etag-compression = handleTest ./nginx-etag-compression.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-mime = handleTest ./nginx-mime.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-moreheaders = handleTest ./nginx-moreheaders.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
@@ -715,6 +717,7 @@ in {
   nzbhydra2 = handleTest ./nzbhydra2.nix {};
   ocis = handleTest ./ocis.nix {};
   oddjobd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./oddjobd.nix {};
+  obs-studio = handleTest ./obs-studio.nix {};
   oh-my-zsh = handleTest ./oh-my-zsh.nix {};
   ollama = runTest ./ollama.nix;
   ollama-cuda = runTestOn ["x86_64-linux" "aarch64-linux"] ./ollama-cuda.nix;
@@ -739,6 +742,7 @@ in {
   image-contents = handleTest ./image-contents.nix {};
   openvscode-server = handleTest ./openvscode-server.nix {};
   open-webui = runTest ./open-webui.nix;
+  openvswitch = runTest ./openvswitch.nix;
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};
   osquery = handleTestOn ["x86_64-linux"] ./osquery.nix {};
@@ -856,6 +860,7 @@ in {
   redlib = handleTest ./redlib.nix {};
   redmine = handleTest ./redmine.nix {};
   renovate = handleTest ./renovate.nix {};
+  replace-dependencies = handleTest ./replace-dependencies {};
   restartByActivationScript = handleTest ./restart-by-activation-script.nix {};
   restic-rest-server = handleTest ./restic-rest-server.nix {};
   restic = handleTest ./restic.nix {};
@@ -868,6 +873,7 @@ in {
   rshim = handleTest ./rshim.nix {};
   rspamd = handleTest ./rspamd.nix {};
   rspamd-trainer = handleTest ./rspamd-trainer.nix {};
+  rss-bridge = handleTest ./web-apps/rss-bridge.nix {};
   rss2email = handleTest ./rss2email.nix {};
   rstudio-server = handleTest ./rstudio-server.nix {};
   rsyncd = handleTest ./rsyncd.nix {};

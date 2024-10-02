@@ -88,12 +88,7 @@ let
                 }
                 {
                   after = "19";
-                  before = "20";
                   path = ../19;
-                }
-                {
-                  after = "20";
-                  path = ../git;
                 }
               ];
               "clang/purity.patch" = [
@@ -483,7 +478,18 @@ let
               stripLen = 1;
               hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
             })
-          ];
+          ]
+          ++
+            lib.optional (lib.versions.major metadata.release_version == "20")
+              # Fix for vt_gen, remove during next git bump
+              # https://github.com/llvm/llvm-project/pull/109817
+              (
+                fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/cace9869775a185793122f845d81a5ff46f15728.patch";
+                  stripLen = 1;
+                  hash = "sha256-lt1iQfNIc3ot1+6J7d7dbqULwT0MyLIwR2EZB7RfPp4=";
+                }
+              );
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -1058,7 +1064,7 @@ let
               lib.optional
                 (
                   lib.versions.major metadata.release_version == "17"
-                  && stdenv.isDarwin
+                  && stdenv.hostPlatform.isDarwin
                   && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
                 )
                 # https://github.com/llvm/llvm-project/issues/64226
@@ -1073,7 +1079,7 @@ let
               lib.optional
                 (
                   lib.versionAtLeast metadata.release_version "18"
-                  && stdenv.isDarwin
+                  && stdenv.hostPlatform.isDarwin
                   && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
                 )
                 # https://github.com/llvm/llvm-project/issues/64226

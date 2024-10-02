@@ -172,6 +172,7 @@ mapAliases {
     lib.warn "blender-with-packages is deprecated in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"
       (blender.withPackages (_: args.packages)).overrideAttrs
       (lib.optionalAttrs (args ? name) { pname = "blender-" + args.name; }); # Added 2023-10-30
+  bless = throw "'bless' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'imhex' or 'ghex' instead"; # Added 2024-09-15
   blockbench-electron = blockbench; # Added 2024-03-16
   bluezFull = throw "'bluezFull' has been renamed to/replaced by 'bluez'"; # Converted to throw 2023-09-10
   bmap-tools = bmaptool; # Added 2024-08-05
@@ -214,6 +215,7 @@ mapAliases {
 
   ### C ###
 
+  calligra = kdePackages.calligra; # Added 2024-09-27
   callPackage_i686 = pkgsi686Linux.callPackage;
   cadence = throw "cadence has been removed from nixpkgs, as it was archived upstream"; # Added 2023-10-28
   cask = emacs.pkgs.cask; # Added 2022-11-12
@@ -227,6 +229,7 @@ mapAliases {
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   ccloud-cli = throw "ccloud-cli has been removed, please use confluent-cli instead"; # Added 2023-06-09
   certmgr-selfsigned = certmgr; # Added 2023-11-30
+  challenger = taler-challenger; # Added 2024-09-04
   chefdk = throw "chefdk has been removed due to being deprecated upstream by Chef Workstation"; # Added 2023-03-22
   chia = throw "chia has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
   chia-dev-tools = throw "chia-dev-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # Added 2023-11-30
@@ -414,6 +417,7 @@ mapAliases {
   elixir_ls = elixir-ls; # Added 2023-03-20
 
   # Emacs
+  emacs28-gtk2 = throw "emacs28-gtk2 was removed because GTK2 is EOL; migrate to emacs28{,-gtk3,-nox} or to more recent versions of Emacs."; # Added 2024-09-20
   emacs28NativeComp = emacs28; # Added 2022-06-08
   emacs28Packages = emacs28.pkgs; # Added 2021-10-04
   emacs28WithPackages = emacs28.pkgs.withPackages; # Added 2021-10-04
@@ -453,6 +457,8 @@ mapAliases {
 
   ### F ###
 
+  fahcontrol = throw "fahcontrol has been removed because the download is no longer available"; # added 2024-09-24
+  fahviewer = throw "fahviewer has been removed because the download is no longer available"; # added 2024-09-24
   fam = throw "'fam' (aliased to 'gamin') has been removed as it is unmaintained upstream"; # Added 2024-04-19
   fancypp = throw "'fancypp' was removed because it and its dependants are unmaintained"; # Added 2024-02-14
   faustStk = faustPhysicalModeling; # Added 2023-05-16
@@ -493,7 +499,7 @@ mapAliases {
   francis = kdePackages.francis; # added 2024-07-13
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   frostwire = throw "frostwire was removed, as it was broken due to reproducibility issues, use `frostwire-bin` package instead."; # added 2024-05-17
-  fuse2fs = if stdenv.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
+  fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   futuresql = libsForQt5.futuresql; # added 2023-11-11
   fx_cast_bridge = fx-cast-bridge; # added 2023-07-26
 
@@ -525,6 +531,7 @@ mapAliases {
   gcj = gcj6; # Added 2024-09-13
   gcj6 = throw "gcj6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcl_2_6_13_pre = throw "'gcl_2_6_13_pre' has been removed in favor of 'gcl'"; # Added 2024-01-11
+  gcolor2 = throw "'gcolor2' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-09-15
   geekbench4 = throw "'geekbench4' has been renamed to 'geekbench_4'"; # Added 2023-03-10
   geekbench5 = throw "'geekbench5' has been renamed to 'geekbench_5'"; # Added 2023-03-10
   gfortran48 = throw "'gfortran48' has been removed from nixpkgs"; # Added 2024-09-10
@@ -631,10 +638,11 @@ mapAliases {
   gocode = throw "'gocode' has been removed as the upstream project was archived. 'gopls' is suggested as replacement"; # Added 2023-12-26
   govendor = throw "'govendor' has been removed as it is no longer maintained upstream, please use Go modules instead"; # Added 2023-12-26
   gometer = throw "gometer has been removed from nixpkgs because goLance stopped offering Linux support"; # Added 2023-02-10
+  gpicview = throw "'gpicview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'loupe', 'gthumb' or 'image-roll' instead"; # Added 2024-09-15
   gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
 
   gpt4all-chat = throw "gpt4all-chat has been renamed to gpt4all"; # Added 2024-02-27
-
+  gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead";
   graalvm11-ce = throw "graalvm11-ce has been removed because upstream dropped support to different JDK versions for each GraalVM release. Please use graalvm-ce instead"; # Added 2023-09-26
   graalvm17-ce = throw "graalvm17-ce has been removed because upstream dropped support to different JDK versions for each GraalVM release. Please use graalvm-ce instead"; # Added 2023-09-26
   graalvm19-ce = throw "graalvm19-ce has been removed because upstream dropped support to different JDK versions for each GraalVM release. Please use graalvm-ce instead"; # Added 2023-09-26
@@ -805,7 +813,7 @@ mapAliases {
   libbpf_1 = libbpf; # Added 2022-12-06
   libbson = mongoc; # Added 2024-03-11
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
-  libclc = llvmPackages_latest.libclc; # Added 2023-10-28
+  libclc = llvmPackages_18.libclc; # Added 2023-10-28
   libcxxabi = throw "'libcxxabi' was merged into 'libcxx'"; # Converted to throw 2024-03-08
   libdwarf_20210528 = throw "'libdwarf_20210528' has been removed because it is not used in nixpkgs, move to libdwarf"; # Added 2024-03-23
   libgme = game-music-emu; # Added 2022-07-20
@@ -1182,6 +1190,7 @@ mapAliases {
   osxfuse = macfuse-stubs; # Added 2021-03-20
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
   oxen = throw "'oxen' has been removed, because it was broken, outdated and unmaintained"; # Added 2023-12-09
+  oysttyer = throw "oysttyer has been removed; it is no longer maintained because of Twitter disabling free API access"; # Added 2024-09-23
 
   ### P ###
 
@@ -1512,6 +1521,7 @@ mapAliases {
   swtpm-tpm2 = swtpm; # Added 2021-02-26
   Sylk = sylk; # Added 2024-06-12
   symbiyosys = sby; # Added 2024-08-18
+  sync = taler-sync; # Added 2024-09-04
   syncthing-cli = syncthing; # Added 2021-04-06
   syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
 
@@ -1694,6 +1704,7 @@ mapAliases {
   xtrt = throw "xtrt has been removed due to being abandoned"; # Added 2023-05-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = xvfb-run; # Added 2021-05-07
+  xwaylandvideobridge = libsForQt5.xwaylandvideobridge; # Added 2024-09-27
 
   ### Y ###
 
@@ -1741,7 +1752,7 @@ mapAliases {
   openbsdCross = openbsd; # Added 2024-09-06
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_18;
+  llvmPackages_latest = llvmPackages_19;
 
   /* If these are in the scope of all-packages.nix, they cause collisions
     between mixed versions of qt. See:
