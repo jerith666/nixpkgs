@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flitter";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
     rev = "v${version}";
-    sha256 = "sha256-XyHUUuENnGmIUlfYl7+NuSP115+sZfjXtd4bEIZQpf8=";
+    sha256 = "sha256-8e13kSQEjzzf+j4uTrocVioZjJ6lAz+80dLfWwjPb9o=";
   };
 
-  cargoHash = "sha256-ydYBHC/LxdYGA1+eYLTSZdkOhAgkw99J9JVT5micgdg=";
+  cargoHash = "sha256-NpUSWoOUhSgbzeCkXEgn4P387bada6fv/M8aZYe8CoU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,6 +34,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/alexozer/flitter";
     platforms = platforms.unix;
     mainProgram = "flitter";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
