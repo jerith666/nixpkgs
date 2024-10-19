@@ -28819,12 +28819,6 @@ with pkgs;
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
 
-  eclipsesJdk8 = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
-    jdk = jdk8;
-    gtk3 = gtk2;
-    webkitgtk = null;
-  });
-
   ecpdap = callPackage ../development/embedded/fpga/ecpdap {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
