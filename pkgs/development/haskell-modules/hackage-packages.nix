@@ -1369,6 +1369,7 @@ self: {
        ];
        description = "Deriving Parsers and Quasi-Quoters from BNF Grammars";
        license = lib.licenses.gpl2Only;
+       maintainers = [ lib.maintainers.artem ];
      }) {};
 
   "BPS" = callPackage
@@ -28205,6 +28206,7 @@ self: {
        libraryToolDepends = [ alex happy ];
        description = "Quasi-quoter for Alex lexers";
        license = lib.licenses.bsd3;
+       maintainers = [ lib.maintainers.artem ];
      }) {};
 
   "alex-prelude" = callPackage
@@ -124113,7 +124115,7 @@ self: {
   "gi-javascriptcore" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-glib
      , gi-gobject, haskell-gi, haskell-gi-base, haskell-gi-overloading
-     , text, transformers, webkitgtk
+     , text, transformers, webkitgtk_4_0
      }:
      mkDerivation {
        pname = "gi-javascriptcore";
@@ -124124,11 +124126,11 @@ self: {
          base bytestring containers gi-glib gi-gobject haskell-gi
          haskell-gi-base haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ webkitgtk ];
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
        description = "JavaScriptCore bindings";
        license = lib.licenses.lgpl21Only;
        badPlatforms = lib.platforms.darwin;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "gi-javascriptcore_6_0_4" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-glib
@@ -124469,7 +124471,7 @@ self: {
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-atk
      , gi-cairo, gi-gdk, gi-gio, gi-glib, gi-gobject, gi-gtk
      , gi-javascriptcore, gi-soup, haskell-gi, haskell-gi-base
-     , haskell-gi-overloading, text, transformers, webkitgtk
+     , haskell-gi-overloading, text, transformers, webkitgtk_4_0
      }:
      mkDerivation {
        pname = "gi-webkit";
@@ -124484,17 +124486,17 @@ self: {
          gi-gobject gi-gtk gi-javascriptcore gi-soup haskell-gi
          haskell-gi-base haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ webkitgtk ];
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
        description = "WebKit bindings";
        license = lib.licenses.lgpl21Only;
        hydraPlatforms = lib.platforms.none;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "gi-webkit2" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-atk
      , gi-cairo, gi-gdk, gi-gio, gi-glib, gi-gobject, gi-gtk
      , gi-javascriptcore, gi-soup, haskell-gi, haskell-gi-base
-     , haskell-gi-overloading, text, transformers, webkitgtk
+     , haskell-gi-overloading, text, transformers, webkitgtk_4_0
      }:
      mkDerivation {
        pname = "gi-webkit2";
@@ -124509,17 +124511,17 @@ self: {
          gi-gobject gi-gtk gi-javascriptcore gi-soup haskell-gi
          haskell-gi-base haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ webkitgtk ];
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
        description = "WebKit2 bindings";
        license = lib.licenses.lgpl21Only;
        badPlatforms = lib.platforms.darwin;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "gi-webkit2webextension" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-gdk
      , gi-gio, gi-gobject, gi-gtk, gi-javascriptcore, gi-soup
      , haskell-gi, haskell-gi-base, haskell-gi-overloading, text
-     , transformers, webkitgtk
+     , transformers, webkitgtk_4_0
      }:
      mkDerivation {
        pname = "gi-webkit2webextension";
@@ -124534,13 +124536,13 @@ self: {
          gi-javascriptcore gi-soup haskell-gi haskell-gi-base
          haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ webkitgtk ];
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
        description = "WebKit2-WebExtension bindings";
        license = lib.licenses.lgpl21Only;
        badPlatforms = lib.platforms.darwin;
        hydraPlatforms = lib.platforms.none;
        broken = true;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "gi-webkitwebprocessextension" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-gdk
@@ -138797,6 +138799,7 @@ self: {
        libraryToolDepends = [ happy ];
        description = "Quasi-quoter for Happy parsers";
        license = lib.licenses.bsd3;
+       maintainers = [ lib.maintainers.artem ];
      }) {};
 
   "happybara" = callPackage
@@ -309513,7 +309516,7 @@ self: {
      , gi-gtk, gi-webkit2, gtk3, haskell-gi-base, http-types, lens
      , mime-types, mtl, network, process, random, scientific, split
      , tasty, tasty-quickcheck, text, transformers, unordered-containers
-     , utf8-string, vector, webkitgtk, xdg-basedir, xmonad
+     , utf8-string, vector, webkitgtk_4_0, xdg-basedir, xmonad
      , xmonad-contrib
      }:
      mkDerivation {
@@ -309532,7 +309535,7 @@ self: {
          mime-types mtl network process random scientific split text
          transformers unordered-containers utf8-string vector xdg-basedir
        ];
-       executablePkgconfigDepends = [ gtk3 webkitgtk ];
+       executablePkgconfigDepends = [ gtk3 webkitgtk_4_0 ];
        testHaskellDepends = [
          aeson base bytestring containers dbus directory filepath gi-gdk
          gi-gio gi-glib gi-gtk gi-webkit2 haskell-gi-base http-types lens
@@ -309545,7 +309548,7 @@ self: {
        hydraPlatforms = lib.platforms.none;
        mainProgram = "tianbar";
        broken = true;
-     }) {inherit (pkgs) gtk3; inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) gtk3; inherit (pkgs) webkitgtk_4_0;};
 
   "tibetan-utils" = callPackage
     ({ mkDerivation, base, composition-prelude, hspec, hspec-megaparsec
@@ -325848,6 +325851,7 @@ self: {
        ];
        description = "Efficient vector-based mutable hashtables implementation";
        license = lib.licenses.bsd3;
+       maintainers = [ lib.maintainers.artem ];
      }) {};
 
   "vector-heterogenous" = callPackage
@@ -332051,30 +332055,30 @@ self: {
        setupHaskellDepends = [ base Cabal gtk2hs-buildtools ];
        libraryHaskellDepends = [ base ];
        libraryPkgconfigDepends = [ webkit ];
-       description = "JavaScriptCore FFI from webkitgtk";
+       description = "JavaScriptCore FFI from webkitgtk_4_0";
        license = lib.licenses.bsd3;
        hydraPlatforms = lib.platforms.none;
        broken = true;
      }) {webkit = null;};
 
   "webkit2gtk3-javascriptcore" = callPackage
-    ({ mkDerivation, base, Cabal, gtk2hs-buildtools, webkitgtk }:
+    ({ mkDerivation, base, Cabal, gtk2hs-buildtools, webkitgtk_4_0 }:
      mkDerivation {
        pname = "webkit2gtk3-javascriptcore";
        version = "0.14.4.6";
        sha256 = "06g9ik2pzv761bj5kas17jxh6wxks3dd4vvrimliybs5s5b61b24";
        setupHaskellDepends = [ base Cabal gtk2hs-buildtools ];
        libraryHaskellDepends = [ base ];
-       libraryPkgconfigDepends = [ webkitgtk ];
-       description = "JavaScriptCore FFI from webkitgtk";
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
+       description = "JavaScriptCore FFI from webkitgtk_4_0";
        license = lib.licenses.bsd3;
        badPlatforms = lib.platforms.darwin;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "webkitgtk3" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, cairo, glib
      , gtk2hs-buildtools, gtk3, mtl, pango, text, transformers
-     , webkitgtk
+     , webkitgtk_4_0
      }:
      mkDerivation {
        pname = "webkitgtk3";
@@ -332085,27 +332089,27 @@ self: {
        libraryHaskellDepends = [
          base bytestring cairo glib gtk3 mtl pango text transformers
        ];
-       libraryPkgconfigDepends = [ webkitgtk ];
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
        libraryToolDepends = [ gtk2hs-buildtools ];
        description = "Binding to the Webkit library";
        license = lib.licenses.lgpl21Only;
        hydraPlatforms = lib.platforms.none;
        broken = true;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "webkitgtk3-javascriptcore" = callPackage
-    ({ mkDerivation, base, Cabal, gtk2hs-buildtools, webkitgtk }:
+    ({ mkDerivation, base, Cabal, gtk2hs-buildtools, webkitgtk_4_0 }:
      mkDerivation {
        pname = "webkitgtk3-javascriptcore";
        version = "0.14.2.1";
        sha256 = "0kcjrka0c9ifq3zfhmkv05wy3xb7v0cyznfxldp2gjcn1haq084j";
        setupHaskellDepends = [ base Cabal gtk2hs-buildtools ];
        libraryHaskellDepends = [ base ];
-       libraryPkgconfigDepends = [ webkitgtk ];
-       description = "JavaScriptCore FFI from webkitgtk";
+       libraryPkgconfigDepends = [ webkitgtk_4_0 ];
+       description = "JavaScriptCore FFI from webkitgtk_4_0";
        license = lib.licenses.bsd3;
        hydraPlatforms = lib.platforms.none;
-     }) {inherit (pkgs) webkitgtk;};
+     }) {inherit (pkgs) webkitgtk_4_0;};
 
   "webmention" = callPackage
     ({ mkDerivation, base, bytestring, case-insensitive, either
