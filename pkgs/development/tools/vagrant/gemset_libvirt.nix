@@ -150,10 +150,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08ximcyfjy94pm1rhcx04ny1vx2sk0x4y185gzn86yfsbzwkng53";
+      sha256 = "sha256-evBFnRCN/W/6fTjGfIRk4gD1ydR21Maj0YmekoCNY8Y=";
       type = "gem";
     };
-    version = "3.2.5";
+    version = "3.3.6";
   };
   xml-simple = {
     groups = ["default"];
