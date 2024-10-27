@@ -23,7 +23,7 @@
   config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
-      k3b
+      kdePackages.k3b
       dvdplusrwtools
       cdrdao
       cdrtools
