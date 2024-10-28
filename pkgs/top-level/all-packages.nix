@@ -38674,4 +38674,8 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  globalprotect-openconnect_2_withGui = callPackage ../by-name/gl/globalprotect-openconnect_2/package.nix {
+    includeUnfreeGui = true;
+  };
 }
