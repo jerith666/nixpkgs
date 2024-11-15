@@ -4382,6 +4382,8 @@ self: super: with self; {
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
+  fastcrc = callPackage ../development/python-modules/fastcrc { };
+
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
@@ -9000,6 +9002,8 @@ self: super: with self; {
   nethsm = callPackage ../development/python-modules/nethsm { };
 
   netifaces = callPackage ../development/python-modules/netifaces { };
+
+  netifaces2 = callPackage ../development/python-modules/netifaces2 { };
 
   netmiko = callPackage ../development/python-modules/netmiko { };
 
@@ -15012,6 +15016,8 @@ self: super: with self; {
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
   sphinx-autodoc-typehints = callPackage ../development/python-modules/sphinx-autodoc-typehints { };
+
+  sphinx-autodoc2 = callPackage ../development/python-modules/sphinx-autodoc2 { };
 
   sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
 
