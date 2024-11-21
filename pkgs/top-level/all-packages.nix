@@ -432,9 +432,9 @@ with pkgs;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_8_0;
 
   inherit (dotnetCorePackages) buildDotnetModule buildDotnetGlobalTool mkNugetSource mkNugetDeps;
 
@@ -947,9 +947,7 @@ with pkgs;
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
 
-  afsctool = callPackage ../tools/filesystems/afsctool {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
+  afsctool = callPackage ../tools/filesystems/afsctool { };
 
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
@@ -5470,10 +5468,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  termscp = callPackage ../tools/networking/termscp {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation Security;
-  };
-
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     extraFonts = true;
@@ -7088,10 +7082,6 @@ with pkgs;
   opensyclWithRocm = opensycl.override { rocmSupport = true; };
 
   rustfmt = rustPackages.rustfmt;
-  rust-analyzer-unwrapped = callPackage ../development/tools/rust/rust-analyzer {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-  rust-analyzer = callPackage ../development/tools/rust/rust-analyzer/wrapper.nix { };
   rust-bindgen-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped.nix { };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
@@ -7856,14 +7846,6 @@ with pkgs;
     src = oldAttrs.src.override {
       inherit version;
       hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
-    };
-  }));
-  ansible_2_15 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.15.9";
-    src = oldAttrs.src.override {
-      inherit version;
-      pname = "ansible-core";
-      hash = "sha256-JfmxtaWvPAmGvTko7QhurduGdSf7XIOv7xoDz60080U=";
     };
   }));
 
@@ -9518,7 +9500,7 @@ with pkgs;
 
   gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer {
     callPackage = newScope gst_all_1;
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "12.3" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "12.3" else stdenv;
     inherit (darwin.apple_sdk_12_3.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL Security SystemConfiguration VideoToolbox;
     inherit (darwin.apple_sdk_12_3.libs) xpc;
   });
@@ -10497,7 +10479,7 @@ with pkgs;
     else callPackage ../development/libraries/ncurses {
       # ncurses is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
       stdenv =
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           darwin.bootstrapStdenv
         else
           stdenv;
@@ -12311,6 +12293,10 @@ with pkgs;
 
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
+  shairport-sync-airplay2 = shairport-sync.override {
+    enableAirplay2 = true;
+  };
+
   showoff = callPackage ../servers/http/showoff { };
 
   ruby-zoom = callPackage ../tools/text/ruby-zoom { };
@@ -12350,11 +12336,6 @@ with pkgs;
     matomo
     matomo_5
     matomo-beta;
-
-  inherit (callPackages ../servers/unifi { })
-    unifi8;
-
-  unifi = unifi8;
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
@@ -14138,10 +14119,18 @@ with pkgs;
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) { };
 
-  firefox-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox.nix { };
-  firefox-beta-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-beta.nix { };
-  firefox-devedition-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-devedition.nix { };
-  firefox-esr-128-unwrapped = callPackage ../applications/networking/browsers/firefox/packages/firefox-esr-128.nix { };
+  firefox-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-beta-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-beta.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-devedition-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-devedition.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
+  firefox-esr-128-unwrapped = import ../applications/networking/browsers/firefox/packages/firefox-esr-128.nix {
+    inherit stdenv lib callPackage fetchurl nixosTests buildMozillaMach;
+  };
   firefox-esr-unwrapped = firefox-esr-128-unwrapped;
 
   firefox = wrapFirefox firefox-unwrapped { };
@@ -14198,7 +14187,9 @@ with pkgs;
     wmClass = "firefox-aurora";
   };
 
-  librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf { };
+  librewolf-unwrapped = import ../applications/networking/browsers/librewolf {
+    inherit stdenv lib callPackage buildMozillaMach nixosTests;
+  };
 
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
@@ -14207,7 +14198,9 @@ with pkgs;
 
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
-  floorp-unwrapped = callPackage ../applications/networking/browsers/floorp { };
+  floorp-unwrapped = import ../applications/networking/browsers/floorp {
+    inherit stdenv lib fetchFromGitHub buildMozillaMach nixosTests;
+  };
 
   floorp = wrapFirefox floorp-unwrapped { };
 
@@ -16013,8 +16006,6 @@ with pkgs;
 
   terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects ;
 
-  texturepacker = qt6.callPackage ../applications/graphics/texturepacker { };
-
   inherit (callPackage ../applications/graphics/tesseract {
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   })
@@ -17350,10 +17341,6 @@ with pkgs;
     buildShareware = true;
   };
 
-  space-cadet-pinball = callPackage ../games/space-cadet-pinball {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
-
   starsector = callPackage ../games/starsector {
     openjdk = openjdk8;
   };
@@ -18239,15 +18226,6 @@ with pkgs;
   nextinspace = python3Packages.callPackage ../applications/science/misc/nextinspace { };
 
   ns-3 = callPackage ../development/libraries/science/networking/ns-3 { python = python3; };
-
-  root = callPackage ../applications/science/misc/root {
-    python = python3;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreSymbolication OpenGL;
-  };
-
-  root5 = lowPrio (callPackage ../applications/science/misc/root/5.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
-  });
 
   rink = callPackage ../applications/science/misc/rink {
     inherit (darwin.apple_sdk.frameworks) Security;
