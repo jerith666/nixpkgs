@@ -1,5 +1,5 @@
 { lib, mkChromiumDerivation
-, channel, chromiumVersionAtLeast
+, chromiumVersionAtLeast
 , enableWideVine, ungoogled
 }:
 
@@ -66,8 +66,6 @@ mkChromiumDerivation (base: rec {
       -e '/\[Desktop Entry\]/a\' \
       -e 'StartupWMClass=chromium-browser' \
       $out/share/applications/chromium-browser.desktop
-  '' + lib.optionalString (channel == "dev") ''
-    cp -v "$buildPath/crashpad_handler" "$libExecPath/"
   '';
 
   passthru = { inherit sandboxExecutableName; };
@@ -92,7 +90,7 @@ mkChromiumDerivation (base: rec {
     license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     mainProgram = "chromium";
-    hydraPlatforms = lib.optionals (channel == "stable" || channel == "ungoogled-chromium") ["aarch64-linux" "x86_64-linux"];
+    hydraPlatforms = ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

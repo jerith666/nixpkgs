@@ -24,16 +24,16 @@ let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in phpPackage.buildComposerProject rec {
   pname = "librenms";
-  version = "24.9.1";
+  version = "24.11.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = pname;
     rev = "${version}";
-    sha256 = "sha256-6LNhMtw2U7/31Qsd1C8u+iT99CCdoz3qQh0hjsDM+9A=";
+    sha256 = "sha256-pcUkmcqD/NNedKlpNEBFf9Pmxkq6qXVdagRj/QTePzw=";
   };
 
-  vendorHash = "sha256-VWf1gN2VczS/4+aO+QFjBMjeritO/3dF6oeaOfSQibo=";
+  vendorHash = "sha256-0ZMQYODlXLHOjwWYvbrY/VQ2Zm9D7r1NvXRyP0q346M=";
 
   php = phpPackage;
 
@@ -123,7 +123,7 @@ in phpPackage.buildComposerProject rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage    = "https://www.librenms.org/";
     license     = licenses.gpl3Only;
-    maintainers = teams.wdz.members;
+    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
     platforms   = platforms.linux;
   };
 }
