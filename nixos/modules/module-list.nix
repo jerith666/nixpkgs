@@ -52,6 +52,7 @@
   ./hardware/bladeRF.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
+  ./hardware/coral.nix
   ./hardware/corectrl.nix
   ./hardware/cpu/amd-microcode.nix
   ./hardware/cpu/amd-sev.nix
@@ -64,7 +65,6 @@
   ./hardware/digitalbitbox.nix
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
-  ./hardware/gkraken.nix
   ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/graphics.nix
@@ -124,6 +124,7 @@
   ./i18n/input-method/kime.nix
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
+  ./image/images.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
@@ -264,6 +265,7 @@
   ./programs/openvpn3.nix
   ./programs/obs-studio.nix
   ./programs/partition-manager.nix
+  ./programs/pay-respects.nix
   ./programs/plotinus.nix
   ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
@@ -812,6 +814,7 @@
   ./services/misc/octoprint.nix
   ./services/misc/ollama.nix
   ./services/misc/ombi.nix
+  ./services/misc/omnom.nix
   ./services/misc/open-webui.nix
   ./services/misc/osrm.nix
   ./services/misc/owncast.nix
@@ -881,6 +884,7 @@
   ./services/misc/zookeeper.nix
   ./services/monitoring/alerta.nix
   ./services/monitoring/alloy.nix
+  ./services/monitoring/amazon-cloudwatch-agent.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
   ./services/monitoring/below.nix
@@ -894,6 +898,7 @@
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/gatus.nix
+  ./services/monitoring/gitwatch.nix
   ./services/monitoring/glances.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-agent.nix
@@ -1239,6 +1244,7 @@
   ./services/networking/sunshine.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
+  ./services/networking/suricata/default.nix
   ./services/networking/syncplay.nix
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncthing.nix
@@ -1301,6 +1307,7 @@
   ./services/scheduling/atd.nix
   ./services/scheduling/cron.nix
   ./services/scheduling/fcron.nix
+  ./services/scheduling/scx.nix
   ./services/search/elasticsearch-curator.nix
   ./services/search/elasticsearch.nix
   ./services/search/hound.nix
@@ -1315,6 +1322,7 @@
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/bitwarden-directory-connector-cli.nix
+  ./services/security/canaille.nix
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
@@ -1493,6 +1501,7 @@
   ./services/web-apps/onlyoffice.nix
   ./services/web-apps/openvscode-server.nix
   ./services/web-apps/mediagoblin.nix
+  ./services/web-apps/open-web-calendar.nix
   ./services/web-apps/mobilizon.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
@@ -1505,6 +1514,7 @@
   ./services/web-apps/pingvin-share.nix
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
+  ./services/web-apps/porn-vault/default.nix
   ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
@@ -1616,6 +1626,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activatable-system.nix
   ./system/activation/activation-script.nix
+  ./system/activation/pre-switch-check.nix
   ./system/activation/specialisation.nix
   ./system/activation/switchable-system.nix
   ./system/activation/bootspec.nix
