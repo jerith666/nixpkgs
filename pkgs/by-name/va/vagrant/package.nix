@@ -66,8 +66,6 @@ in buildRubyGem rec {
   postPatch = ''
     substituteInPlace lib/vagrant/plugin/manager.rb --subst-var-by \
       system_plugin_dir "$out/vagrant-plugins"
-    substituteInPlace vagrant.gemspec \
-      --replace-fail '"rexml", "~> 3.2"' '"rexml", "~> 3.3"'
   '';
 
   # PATH additions:

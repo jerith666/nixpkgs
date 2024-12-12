@@ -430,10 +430,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "sha256-evBFnRCN/W/6fTjGfIRk4gD1ydR21Maj0YmekoCNY8Y=";
+      sha256 = "05i8518ay14kjbma550mv0jm8a6di8yp5phzrd8rj44z9qnrlrp0";
       type = "gem";
     };
-    version = "3.3.6";
+    version = "3.2.6";
   };
   rgl = {
     dependencies = ["pairing_heap" "rexml" "stream"];
