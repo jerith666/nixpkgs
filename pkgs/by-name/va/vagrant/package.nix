@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, buildRubyGem, bundlerEnv, ruby, libarchive
+{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
 , libguestfs, qemu, writeText, withLibvirt ? stdenv.hostPlatform.isLinux
 , openssl
 }:
@@ -61,10 +61,6 @@ in buildRubyGem rec {
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
     ./0001-Revert-Merge-pull-request-12225-from-chrisroberts-re.patch
-#    (fetchpatch {
-#      url = "https://github.com/hashicorp/vagrant_cloud/commit/493f8c6cd048e5684b0202716a89d4316d924b4e.patch";
-#      hash = "sha256-TivsDXKm23EAA+rQjwOSdx2a+nCNQjmQ9/7+q4mIgl8=";
-#    })
   ];
 
   postPatch = ''
