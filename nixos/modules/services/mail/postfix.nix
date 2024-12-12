@@ -854,6 +854,7 @@ in
         smtpd_tls_key_file = cfg.sslKey;
 
         smtpd_tls_security_level = lib.mkDefault "may";
+
       };
 
       services.postfix.masterConfig = {

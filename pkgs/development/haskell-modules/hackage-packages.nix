@@ -124461,7 +124461,7 @@ self: {
   "gi-soup" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-gio
      , gi-glib, gi-gobject, haskell-gi, haskell-gi-base
-     , haskell-gi-overloading, libsoup, text, transformers
+     , haskell-gi-overloading, libsoup_2_4, text, transformers
      }:
      mkDerivation {
        pname = "gi-soup";
@@ -124474,15 +124474,15 @@ self: {
          base bytestring containers gi-gio gi-glib gi-gobject haskell-gi
          haskell-gi-base haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ libsoup ];
+       libraryPkgconfigDepends = [ libsoup_2_4 ];
        description = "Libsoup bindings";
        license = lib.licenses.lgpl21Only;
-     }) {inherit (pkgs) libsoup;};
+     }) {inherit (pkgs) libsoup_2_4;};
 
   "gi-soup_3_0_3" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-gio
      , gi-glib, gi-gobject, haskell-gi, haskell-gi-base
-     , haskell-gi-overloading, libsoup, text, transformers
+     , haskell-gi-overloading, libsoup_3, text, transformers
      }:
      mkDerivation {
        pname = "gi-soup";
@@ -124495,11 +124495,11 @@ self: {
          base bytestring containers gi-gio gi-glib gi-gobject haskell-gi
          haskell-gi-base haskell-gi-overloading text transformers
        ];
-       libraryPkgconfigDepends = [ libsoup ];
+       libraryPkgconfigDepends = [ libsoup_3 ];
        description = "Libsoup bindings";
        license = lib.licenses.lgpl21Only;
        hydraPlatforms = lib.platforms.none;
-     }) {inherit (pkgs) libsoup;};
+     }) {inherit (pkgs) libsoup_3;};
 
   "gi-vips" = callPackage
     ({ mkDerivation, base, bytestring, Cabal, containers, gi-glib
@@ -227265,33 +227265,18 @@ self: {
      }) {};
 
   "opencascade-hs" = callPackage
-    ({ mkDerivation, base, resourcet, TKBO, TKBRep, TKDEGLTF, TKDEOBJ
-     , TKDESTEP, TKDESTL, TKernel, TKFillet, TKG2d, TKG3d, TKGeomBase
-     , TKLCAF, TKMath, TKMesh, TKOffset, TKPrim, TKRWMesh, TKService
-     , TKShHealing, TKStd, TKTopAlgo, TKV3d, TKXCAF, TKXSBase
-     }:
+    ({ mkDerivation, base, opencascade-occt, resourcet }:
      mkDerivation {
        pname = "opencascade-hs";
        version = "0.4.0.0";
        sha256 = "1dhasjjhcg54qihcihid69z70l75dn7xsbsd765lsgzc35m1qbrl";
        libraryHaskellDepends = [ base resourcet ];
-       librarySystemDepends = [
-         TKBO TKBRep TKDEGLTF TKDEOBJ TKDESTEP TKDESTL TKernel TKFillet
-         TKG2d TKG3d TKGeomBase TKLCAF TKMath TKMesh TKOffset TKPrim
-         TKRWMesh TKService TKShHealing TKStd TKTopAlgo TKV3d TKXCAF
-         TKXSBase
-       ];
+       librarySystemDepends = [ opencascade-occt ];
        description = "Thin Wrapper for the OpenCASCADE CAD Kernel";
        license = lib.licenses.lgpl21Only;
        hydraPlatforms = lib.platforms.none;
        broken = true;
-     }) {TKBO = null; TKBRep = null; TKDEGLTF = null; TKDEOBJ = null; 
-         TKDESTEP = null; TKDESTL = null; TKFillet = null; TKG2d = null; 
-         TKG3d = null; TKGeomBase = null; TKLCAF = null; TKMath = null; 
-         TKMesh = null; TKOffset = null; TKPrim = null; TKRWMesh = null; 
-         TKService = null; TKShHealing = null; TKStd = null; 
-         TKTopAlgo = null; TKV3d = null; TKXCAF = null; TKXSBase = null; 
-         TKernel = null;};
+     }) {inherit (pkgs) opencascade-occt;};
 
   "opencc" = callPackage
     ({ mkDerivation, base, bytestring, mtl, opencc, text, transformers
@@ -289355,8 +289340,8 @@ self: {
 
   "spike" = callPackage
     ({ mkDerivation, base, containers, directory, filepath, glib
-     , global-variables, gtk, libsoup, mtl, process, random, rosezipper
-     , stm, webkit
+     , global-variables, gtk, libsoup_2_4, mtl, process, random
+     , rosezipper, stm, webkit
      }:
      mkDerivation {
        pname = "spike";
@@ -289368,12 +289353,12 @@ self: {
          base containers directory filepath glib global-variables gtk mtl
          process random rosezipper stm webkit
        ];
-       executablePkgconfigDepends = [ libsoup ];
+       executablePkgconfigDepends = [ libsoup_2_4 ];
        description = "Experimental web browser";
        license = lib.licenses.bsd3;
        hydraPlatforms = lib.platforms.none;
        mainProgram = "spike";
-     }) {inherit (pkgs) libsoup;};
+     }) {inherit (pkgs) libsoup_2_4;};
 
   "spine" = callPackage
     ({ mkDerivation, base }:
