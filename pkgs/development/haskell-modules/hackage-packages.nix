@@ -319309,6 +319309,18 @@ self: {
        license = lib.licenses.mit;
      }) {};
 
+  "typst-symbols_0_1_6" = callPackage
+    ({ mkDerivation, base, text }:
+     mkDerivation {
+       pname = "typst-symbols";
+       version = "0.1.6";
+       sha256 = "17a2grflk67vs68b2pxygvk7p50rj9fb3ri7fcwa19j9jnhg4zwl";
+       libraryHaskellDepends = [ base text ];
+       description = "Symbol and emoji lookup for typst language";
+       license = lib.licenses.mit;
+       hydraPlatforms = lib.platforms.none;
+     }) {};
+
   "typst-symbols_0_1_7" = callPackage
     ({ mkDerivation, base, text }:
      mkDerivation {

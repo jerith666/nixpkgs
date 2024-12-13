@@ -161,6 +161,7 @@
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
   ./programs/bazecor.nix
+  ./programs/bat.nix
   ./programs/bcc.nix
   ./programs/benchexec.nix
   ./programs/browserpass.nix
@@ -206,6 +207,7 @@
   ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
   ./programs/git.nix
+  ./programs/git-worktree-switcher.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
@@ -1029,6 +1031,7 @@
   ./services/networking/coredns.nix
   ./services/networking/corerad.nix
   ./services/networking/coturn.nix
+  ./services/networking/crab-hole.nix
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
   ./services/networking/dae.nix
