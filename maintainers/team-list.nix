@@ -452,6 +452,17 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  gnome-circle = {
+    members = [
+      aleksana
+      dawidd6
+      getchoo
+      michaelgrahamevans
+    ];
+    scope = "Maintain GNOME Circle applications.";
+    shortName = "GNOME Circle";
+  };
+
   graalvm-ce = {
     members = [
       bandresen

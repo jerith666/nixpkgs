@@ -71,6 +71,7 @@
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
+  ./hardware/inputmodule.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
@@ -395,6 +396,7 @@
   ./services/audio/jack.nix
   ./services/audio/jmusicbot.nix
   ./services/audio/liquidsoap.nix
+  ./services/audio/marytts.nix
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
@@ -623,6 +625,7 @@
   ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
+  ./services/hardware/scanservjs.nix
   ./services/hardware/spacenavd.nix
   ./services/hardware/supergfxd.nix
   ./services/hardware/tcsd.nix
@@ -1766,6 +1769,7 @@
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
   ./virtualisation/vmware-host.nix
+  ./virtualisation/waagent.nix
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix

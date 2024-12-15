@@ -153,6 +153,8 @@ self: super: with self; {
 
   aio-pika = callPackage ../development/python-modules/aio-pika { };
 
+  aioairctrl = callPackage ../development/python-modules/aioairctrl { };
+
   aioacaia = callPackage ../development/python-modules/aioacaia { };
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
@@ -459,6 +461,8 @@ self: super: with self; {
 
   aiotankerkoenig = callPackage ../development/python-modules/aiotankerkoenig { };
 
+  aiotarfile = callPackage ../development/python-modules/aiotarfile { };
+
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
@@ -739,6 +743,8 @@ self: super: with self; {
   apsystems-ez1 = callPackage ../development/python-modules/apsystems-ez1 { };
 
   apsw = callPackage ../development/python-modules/apsw { };
+
+  apt-repo = callPackage ../development/python-modules/apt-repo { };
 
   apycula = callPackage ../development/python-modules/apycula { };
 
@@ -2055,6 +2061,8 @@ self: super: with self; {
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
+
+  cardimpose = callPackage ../development/python-modules/cardimpose { };
 
   cart = callPackage ../development/python-modules/cart { };
 
@@ -4854,6 +4862,8 @@ self: super: with self; {
 
   glyphtools = callPackage ../development/python-modules/glyphtools { };
 
+  fnllm = callPackage ../development/python-modules/fnllm { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
@@ -7573,6 +7583,8 @@ self: super: with self; {
   };
 
   llm = callPackage ../development/python-modules/llm { };
+
+  llm-gguf = callPackage ../development/python-modules/llm-gguf { };
 
   llmx = callPackage ../development/python-modules/llmx { };
 
@@ -10508,6 +10520,8 @@ self: super: with self; {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  pyituran = callPackage ../development/python-modules/pyituran { };
+
   pyixapi = callPackage ../development/python-modules/pyixapi { };
 
   pykcs11 = callPackage ../development/python-modules/pykcs11 { };
@@ -10804,6 +10818,8 @@ self: super: with self; {
   plux = callPackage ../development/python-modules/plux { };
 
   ply = callPackage ../development/python-modules/ply { };
+
+  plyara = callPackage ../development/python-modules/plyara { };
 
   plyer = callPackage ../development/python-modules/plyer { };
 
