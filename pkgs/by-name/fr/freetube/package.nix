@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "freetube";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
-    hash = "sha256-YRXKL09XXX6HxC1lsk0iQnTGmPHFwfNL5XRA+u/crus=";
+    hash = "sha256-HbU5yRSP5Gk473ZoQL3HD2Bph/U/sq1Dd0eFpxyKc9s=";
   };
 
   passthru.tests = nixosTests.freetube;
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
   '';
 
   meta = {
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
       ryneeverett
       alyaeanyx
       ryand56
+      sigmasquadron
     ];
     inherit (electron.meta) platforms;
     mainProgram = "freetube";

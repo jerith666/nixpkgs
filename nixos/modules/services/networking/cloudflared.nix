@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.cloudflared;
 
@@ -121,7 +126,12 @@ let
     };
 
     proxyType = lib.mkOption {
-      type = with lib.types; nullOr (enum [ "" "socks" ]);
+      type =
+        with lib.types;
+        nullOr (enum [
+          ""
+          "socks"
+        ]);
       default = null;
       example = "";
       description = ''
@@ -160,7 +170,10 @@ in
       description = ''
         Cloudflare tunnels.
       '';
-      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (
+        lib.types.submodule (
+          { name, ... }:
+          {
         options = {
           inherit originRequest;
 
@@ -203,7 +216,13 @@ in
           };
 
           ingress = lib.mkOption {
-            type = with lib.types; attrsOf (either str (submodule ({ hostname, ... }: {
+                type =
+                  with lib.types;
+                  attrsOf (
+                    either str (
+                      submodule (
+                        { hostname, ... }:
+                        {
               options = {
                 inherit originRequest;
 
@@ -230,7 +249,10 @@ in
                 };
 
               };
-            })));
+                        }
+                      )
+                    )
+                  );
             default = { };
             description = ''
               Ingress rules.
@@ -243,7 +265,9 @@ in
             };
           };
         };
-      }));
+          }
+        )
+      );
 
       default = { };
       example = {
@@ -261,23 +285,27 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.targets =
-      lib.mapAttrs'
-        (name: tunnel:
+    systemd.targets = lib.mapAttrs' (
+      name: tunnel:
           lib.nameValuePair "cloudflared-tunnel-${name}" {
             description = "Cloudflare tunnel '${name}' target";
             requires = [ "cloudflared-tunnel-${name}.service" ];
             after = [ "cloudflared-tunnel-${name}.service" ];
             unitConfig.StopWhenUnneeded = true;
           }
-        )
-        config.services.cloudflared.tunnels;
+    ) config.services.cloudflared.tunnels;
 
-    systemd.services =
-      lib.mapAttrs'
-        (name: tunnel:
+    systemd.services = lib.mapAttrs' (
+      name: tunnel:
           let
-            filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
+        filterConfig = lib.attrsets.filterAttrsRecursive (
+          _: v:
+          !builtins.elem v [
+            null
+            [ ]
+            { }
+          ]
+        );
 
             filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
             filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
@@ -292,26 +320,31 @@ in
               originRequest = filterConfig tunnel.originRequest;
               origincert = cfg.originCertPath;
               ingress =
-                (map
-                  (key: {
+            (map (
+              key:
+              {
                     hostname = key;
-                  } // lib.getAttr key (filterConfig (filterConfig ingressesSet)))
-                  (lib.attrNames ingressesSet))
-                ++
-                (map
-                  (key: {
+              }
+              // lib.getAttr key (filterConfig (filterConfig ingressesSet))
+            ) (lib.attrNames ingressesSet))
+            ++ (map (key: {
                     hostname = key;
                     service = lib.getAttr key ingressesStr;
-                  })
-                  (lib.attrNames ingressesStr))
-                ++ [{ service = tunnel.default; }];
+            }) (lib.attrNames ingressesStr))
+            ++ [ { service = tunnel.default; } ];
             };
 
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
           lib.nameValuePair "cloudflared-tunnel-${name}" ({
-            after = [ "network.target" "network-online.target" ];
-            wants = [ "network.target" "network-online.target" ];
+        after = [
+          "network.target"
+          "network-online.target"
+        ];
+        wants = [
+          "network.target"
+          "network-online.target"
+        ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig = {
               User = cfg.user;
@@ -320,8 +353,7 @@ in
               Restart = "on-failure";
             };
           })
-        )
-        config.services.cloudflared.tunnels;
+    ) config.services.cloudflared.tunnels;
 
     users.users = lib.mkIf (cfg.user == "cloudflared") {
       cloudflared = {
@@ -335,5 +367,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ bbigras anpin ];
+  meta.maintainers = with lib.maintainers; [
+    bbigras
+    anpin
+  ];
 }

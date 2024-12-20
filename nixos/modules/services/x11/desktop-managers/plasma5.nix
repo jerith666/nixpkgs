@@ -39,7 +39,7 @@ let
     # on NixOS because the timestamp never changes. As a workaround, delete the
     # icon cache at login and session activation.
     # See also: http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
-    rm -fv $HOME/.cache/icon-cache.kcache
+    rm -fv "$HOME"/.cache/icon-cache.kcache
 
     # more kde cache busting
     # helped work around a crash of the alt-tab task switcher between 6c3e156bd2 and e04eff7610
@@ -50,7 +50,7 @@ let
     # xdg-desktop-settings generates this empty file but
     # it makes kbuildsyscoca5 fail silently. To fix this
     # remove that menu if it exists.
-    rm -fv ''${XDG_CONFIG_HOME}/menus/applications-merged/xdg-desktop-menu-dummy.menu
+    rm -fv "''${XDG_CONFIG_HOME}"/menus/applications-merged/xdg-desktop-menu-dummy.menu
 
     # Qt writes a weird ‘libraryPath’ line to
     # ~/.config/Trolltech.conf that causes the KDE plugin
@@ -67,7 +67,7 @@ let
     # Remove the kbuildsyscoca5 cache. It will be regenerated
     # immediately after. This is necessary for kbuildsyscoca5 to
     # recognize that software that has been removed.
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME"/.cache/ksycoca*
 
     ${pkgs.plasma5Packages.kservice}/bin/kbuildsycoca5
   '';
