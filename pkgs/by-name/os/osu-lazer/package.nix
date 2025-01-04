@@ -21,17 +21,17 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1208.0";
+  version = "2025.101.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = version;
-    hash = "sha256-cMPVtzoTxIUVZNNAqF+H0873ZsXGluFEXwNDp7zOq8c=";
+    hash = "sha256-8sckmwFFL7Vcf947EVxqIRPU/yYrEFVwz+zqwZZ34Mw=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;

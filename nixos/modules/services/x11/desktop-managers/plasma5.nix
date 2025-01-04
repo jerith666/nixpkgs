@@ -298,7 +298,7 @@ in
         # Optional hardware support features
         ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt pkgs.openobex pkgs.obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
-        ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+        ++ lib.optional config.services.pulseaudio.enable plasma-pa
         ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable pkgs.colord-kde
@@ -483,7 +483,7 @@ in
         }
         {
           # The user interface breaks without pulse
-          assertion = config.hardware.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
+          assertion = config.services.pulseaudio.enable || (config.services.pipewire.enable && config.services.pipewire.pulse.enable);
           message = "Plasma Mobile requires a Pulseaudio compatible sound server.";
         }
       ];
