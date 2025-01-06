@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     owner = "SoftFever";
     repo = "OrcaSlicer";
     tag = version;
-    hash = "sha256-2JHGNVKLJ5aJlcS0KCdegrTmj80utT5sfKO6XlG9blg=";
+    hash = "sha256-h+cHWhrp894KEbb3ic2N4fNTn13WlOSYoMsaof0RvRI=";
   };
 
   nativeBuildInputs = [
