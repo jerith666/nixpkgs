@@ -172001,8 +172001,6 @@ self: {
        ];
        description = "iCalendar data types, parser, and printer";
        license = lib.licenses.bsd3;
-       hydraPlatforms = lib.platforms.none;
-       broken = true;
      }) {};
 
   "iException" = callPackage
