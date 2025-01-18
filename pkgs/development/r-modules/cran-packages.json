@@ -107961,8 +107961,8 @@
     },
     "rix": {
       "name": "rix",
-      "version": "0.12.4",
-      "sha256": "0m2njhb9cbl9qvrvwxjjh07416diw4r5zbdnrdxv0szpb7s58i09",
+      "version": "0.14.3",
+      "sha256": "sha256-FKrq5HZ9RwofzdCzVvzzGfKiw/z55ct95EpoYOHYOlQ=",
       "depends": ["codetools", "curl", "jsonlite", "sys"]
     },
     "rjade": {
