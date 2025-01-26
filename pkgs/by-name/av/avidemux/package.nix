@@ -18,9 +18,7 @@
   makeWrapper,
   libXext,
   libGLU,
-  qttools,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
   alsa-lib,
   withX265 ? true,
   x265,
@@ -48,7 +46,7 @@
   withPlugins ? true,
 }:
 
-assert withQT -> qttools != null && qtbase != null;
+assert withQT -> libsForQt5.qttools != null && libsForQt5.qtbase != null;
 assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
@@ -90,7 +88,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
-  ] ++ lib.optional withQT wrapQtAppsHook;
+  ] ++ lib.optional withQT libsForQt5.wrapQtAppsHook;
   buildInputs =
     [
       zlib
@@ -115,10 +113,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional withPulse libpulseaudio
     ++ lib.optional withFAAD faad2
     ++ lib.optional withOpus libopus
-    ++ lib.optionals withQT [
-      qttools
-      qtbase
-    ]
+    ++ lib.optionals withQT (
+      with libsForQt5;
+      [
+        qttools
+        qtbase
+      ]
+    )
     ++ lib.optional withVPX libvpx;
 
   dontWrapQtApps = true;
