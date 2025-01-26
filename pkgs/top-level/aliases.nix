@@ -315,6 +315,7 @@ mapAliases {
   dotnet-sdk_2 = throw "'dotnet-sdk_2' has been renamed to/replaced by 'dotnetCorePackages.sdk_2_1'"; # Converted to throw 2024-10-17
   dotnet-sdk_3 = throw "'dotnet-sdk_3' has been renamed to/replaced by 'dotnetCorePackages.sdk_3_1'"; # Converted to throw 2024-10-17
   dotnet-sdk_5 = throw "'dotnet-sdk_5' has been renamed to/replaced by 'dotnetCorePackages.sdk_5_0'"; # Converted to throw 2024-10-17
+  dstat = throw "'dstat' has been removed because it has been unmaintained since 2020. Use 'dool' instead."; # Added 2025-01-21
   drush = throw "drush as a standalone package has been removed because it's no longer supported as a standalone tool";
   dtv-scan-tables_linuxtv = dtv-scan-tables; # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables; # Added 2023-03-03
@@ -676,6 +677,7 @@ mapAliases {
   libbitcoin-protocol = throw "libbitcoin-protocol has been removed as it required an obsolete version of Boost and had no maintainer in Nixpkgs"; # Added 2024-11-24
   libdwg = throw "libdwg has been removed as upstream is unmaintained, the code doesn't build without significant patches, and the package had no reverse dependencies"; # Added 2024-12-28
   libgcrypt_1_8 = throw "'libgcrypt_1_8' is end-of-life. Consider using 'libgcrypt' instead"; # Added 2025-01-05
+  libgda = lib.warnOnInstantiate "‘libgda’ has been renamed to ‘libgda5’" libgda5; # Added 2025-01-21
   libgme = game-music-emu; # Added 2022-07-20
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libgpgerror = throw "'libgpgerror' has been renamed to/replaced by 'libgpg-error'"; # Converted to throw 2024-10-17
@@ -744,6 +746,7 @@ mapAliases {
   linuxPackages_6_10 = linuxKernel.packages.linux_6_10;
   linuxPackages_6_11 = linuxKernel.packages.linux_6_11;
   linuxPackages_6_12 = linuxKernel.packages.linux_6_12;
+  linuxPackages_6_13 = linuxKernel.packages.linux_6_13;
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
@@ -769,6 +772,7 @@ mapAliases {
   linux_6_10 = linuxKernel.kernels.linux_6_10;
   linux_6_11 = linuxKernel.kernels.linux_6_11;
   linux_6_12 = linuxKernel.kernels.linux_6_12;
+  linux_6_13 = linuxKernel.kernels.linux_6_13;
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi02w = linuxKernel.kernels.linux_rpi3;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
@@ -837,6 +841,7 @@ mapAliases {
   mathematica10 = throw "mathematica10 has been removed as it was obsolete, broken, and depended on OpenCV 2"; # Added 2024-08-20
   mathematica11 = throw "mathematica11 has been removed as it was obsolete, broken, and depended on OpenCV 2"; # Added 2024-08-20
   matomo_5 = matomo; # Added 2024-12-12
+  matomo-beta = throw "matomo-beta has been removed as it mostly just pointed to the latest matomo release, use `matomo.overrideAttrs` to access a specific beta version instead"; # Added 2025-01-15
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
   maui-nota = libsForQt5.mauiPackages.nota; # added 2022-05-17
@@ -898,6 +903,18 @@ mapAliases {
   neocities-cli = neocities; # Added 2024-07-31
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
+  nextcloud28 = throw ''
+    Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
+
+        services.nextcloud.package = pkgs.nextcloud29;
+
+    in your NixOS config.
+
+    WARNING: if you were on Nextcloud 27 you have to upgrade to Nextcloud 28
+    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
+  ''; # Added 2025-01-19
+  nextcloud28Packages = throw "Nextcloud 28 is EOL!"; # Added 2025-01-19
   nextcloud27 = throw ''
     Nextcloud v27 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2024-06. Please upgrade to at least Nextcloud v28 by declaring
@@ -1057,6 +1074,7 @@ mapAliases {
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   pltScheme = racket; # just to be sure
+  poac = cabinpkg; # Added 2025-01-22
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   powerdns = pdns; # Added 2022-03-28
 
@@ -1184,6 +1202,7 @@ mapAliases {
   rustic-rs = rustic; # Added 2024-08-02
   rxvt_unicode = throw "'rxvt_unicode' has been renamed to/replaced by 'rxvt-unicode-unwrapped'"; # Converted to throw 2024-10-17
   rxvt_unicode-with-plugins = throw "'rxvt_unicode-with-plugins' has been renamed to/replaced by 'rxvt-unicode'"; # Converted to throw 2024-10-17
+  ryujinx-greemdev = ryubing; # Added 2025-01-20
 
   # The alias for linuxPackages*.rtlwifi_new is defined in ./all-packages.nix,
   # due to it being inside the linuxPackagesFor function.
@@ -1495,6 +1514,7 @@ mapAliases {
 
   ### Z ###
 
+  zeromq4 = zeromq; # Added 2024-11-03
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zfs_2_1 = throw "zfs 2.1 has been removed as it is EOL. Please upgrade to a newer version"; # Added 2024-12-25

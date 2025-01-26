@@ -197,6 +197,14 @@ in {
       ];
     };
 
+    linux_6_13 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.13";
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    };
+
     linux_testing = let
       testing = callPackage ../os-specific/linux/kernel/mainline.nix {
         # A special branch that tracks the kernel under the release process
@@ -321,6 +329,8 @@ in {
     inherit (pkgs) dpdk; # added 2024-03
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
+
+    ajantv2 = callPackage ../os-specific/linux/ajantv2 { };
 
     akvcam = callPackage ../os-specific/linux/akvcam { };
 
@@ -643,6 +653,7 @@ in {
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
+    linux_6_13 = recurseIntoAttrs (packagesFor kernels.linux_6_13);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -707,9 +718,9 @@ in {
   });
 
   packageAliases = {
-    linux_default = packages.linux_6_6;
+    linux_default = packages.linux_6_12;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_12;
+    linux_latest = packages.linux_6_13;
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   } // lib.optionalAttrs config.allowAliases {

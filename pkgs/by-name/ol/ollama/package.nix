@@ -43,17 +43,17 @@ assert builtins.elem acceleration [
 let
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.5.4";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${version}";
-    hash = "sha256-JyP7A1+u9Vs6ynOKDwun1qLBsjN+CVHIv39Hh2TYa2U=";
+    hash = "sha256-DW7gHNyW1ML8kqgMFsqTxS/30bjNlWmYmeov2/uZn00=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-xz9v91Im6xTLPzmYoVecdF7XiPKBZk3qou1SGokgPXQ=";
+  vendorHash = "sha256-1uk3Oi0n4Q39DVZe3PnZqqqmlwwoHmEolcRrib0uu4I=";
 
   validateFallback = lib.warnIf (config.rocmSupport && config.cudaSupport) (lib.concatStrings [
     "both `nixpkgs.config.rocmSupport` and `nixpkgs.config.cudaSupport` are enabled, "
@@ -129,7 +129,10 @@ let
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
-    if enableCuda then buildGoModule.override { stdenv = overrideCC stdenv gcc12; } else buildGoModule;
+    if enableCuda then
+      buildGoModule.override { stdenv = cudaPackages.backendStdenv; }
+    else
+      buildGoModule;
   inherit (lib) licenses platforms maintainers;
 in
 goBuild {
@@ -146,9 +149,7 @@ goBuild {
       CLBlast_DIR = "${clblast}/lib/cmake/CLBlast";
       HIP_PATH = rocmPath;
     }
-    // lib.optionalAttrs enableCuda {
-      CUDA_PATH = cudaPath;
-    };
+    // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
   nativeBuildInputs =
     [
@@ -199,6 +200,13 @@ goBuild {
       make ${dist_cmd} -j $NIX_BUILD_CORES
     '';
 
+  postInstall = lib.optionalString (stdenv.hostPlatform.isx86 || enableRocm || enableCuda) ''
+    # copy libggml_*.so and runners into lib
+    # https://github.com/ollama/ollama/blob/v0.4.4/llama/make/gpu.make#L90
+    mkdir -p $out/lib
+    cp -r dist/*/lib/* $out/lib/
+  '';
+
   postFixup =
     # the app doesn't appear functional at the moment, so hide it
     ''
@@ -218,9 +226,7 @@ goBuild {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheck = [
-    versionCheckHook
-  ];
+  nativeInstallCheck = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
