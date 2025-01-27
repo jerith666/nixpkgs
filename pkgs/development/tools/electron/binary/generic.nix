@@ -10,7 +10,7 @@
   unzip,
   at-spi2-atk,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   libxshmfence,
   libGL,
@@ -53,7 +53,7 @@ let
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
-    knownVulnerabilities = optional (versionOlder version "31.0.0") "Electron version ${version} is EOL";
+    knownVulnerabilities = optional (versionOlder version "32.0.0") "Electron version ${version} is EOL";
   };
 
   fetcher =
@@ -120,7 +120,7 @@ let
     ]
     ++ lib.optionals (lib.versionAtLeast version "9.0.0") [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]

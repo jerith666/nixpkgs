@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3,
-  nodejs,
+  nodejs_20,
   node-gyp,
   runCommand,
   nixosTests,
@@ -27,6 +27,7 @@
   vips,
 }:
 let
+  nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON ./sources.json;
   inherit (sources) version;
@@ -84,7 +85,7 @@ let
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit (sources) hash;
   };
 
@@ -135,7 +136,7 @@ let
     src = fetchFromGitHub {
       owner = "nodejs";
       repo = "node-addon-api";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
     };
     installPhase = ''
@@ -186,7 +187,7 @@ buildNpmPackage' {
     mkdir node_modules
     ln -s ${node-addon-api} node_modules/node-addon-api
 
-    ${lib.getExe nodejs} install/check
+    node install/check
 
     rm -r node_modules
 
@@ -245,6 +246,7 @@ buildNpmPackage' {
   };
 
   meta = {
+    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = with lib.licenses; [

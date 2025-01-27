@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mitra";
-  version = "3.9.0";
+  version = "3.13.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "silverpill";
     repo = "mitra";
     rev = "v${version}";
-    hash = "sha256-reBG9h3jI4ONxYIwM2QdXlTC8ohmSrPm18sLOeI/2wY=";
+    hash = "sha256-jAh3sWOHbqo5EpH+Ap/AOha2AKk6iwMvyUme6Ct96qI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-WoJzFhxBDHuUNGaNsqieev93hg0Eo604tAM0HZJv9tA=";
+  cargoHash = "sha256-GDhdMShO+W05ny/hgXKcwDzcO9Stk3NM4U95ArImRYU=";
 
-  # MEMO: mitra v3.9.0 tests failed with cargo option, "--offline"
+  # require running database
   doCheck = false;
 
   RUSTFLAGS = [

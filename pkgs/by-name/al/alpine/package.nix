@@ -3,6 +3,7 @@
   stdenv,
   fetchgit,
   buildPackages,
+  autoconf,
   ncurses,
   tcl,
   openssl,
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
+    autoconf
     ncurses
     tcl
     openssl
@@ -37,11 +39,23 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  patches = [
+    # gcc 14 causes the qsort test program in configure.ac to fail to compile,
+    # leading configure to deduce the wrong argument type for qsort
+    ./qsort-arg-type.patch
+  ];
+
+  preConfigure = "autoconf";
+
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-passfile=.pine-passfile"
     "--with-c-client-target=slx"
   ];
+
+  # Fixes https://github.com/NixOS/nixpkgs/issues/372699
+  # See also https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1074804
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-incompatible-pointer-types" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

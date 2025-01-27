@@ -19,6 +19,7 @@ let
     ps: with ps; [
       epc
       orjson
+      packaging
       paramiko
       rapidfuzz
       setuptools
@@ -30,13 +31,13 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-12-09";
+  version = "0-unstable-2025-01-11";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "520d253a00d360d7aa47d85a9c4a99ea6702acde";
-    hash = "sha256-NQ7lkTC8JGfMAsDA//Zj8IGV03b2frOuHuvjRSVNGXE=";
+    rev = "6fd5eb21a174e6a04247a2f370b544dcd6cb2420";
+    hash = "sha256-+E1l0Ea0Db5ksX9tDW+cvNUMjT4be5i9qcI/rIvFKbY=";
   };
 
   patches = [

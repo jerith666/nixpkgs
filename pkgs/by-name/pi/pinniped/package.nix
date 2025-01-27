@@ -7,18 +7,18 @@
 
 buildGoModule rec {
   pname = "pinniped";
-  version = "0.35.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
     rev = "v${version}";
-    sha256 = "sha256-6cvF2aBibEG7EfzeM/hb/263+AY/OtmY/qcMWmZ1p84=";
+    sha256 = "sha256-8GMVJR3Rmn7z+EH6avbdSifcnEC6aH4eTEVacgyY1sE=";
   };
 
   subPackages = "cmd/pinniped";
 
-  vendorHash = "sha256-I8lO4jUMFh0icwxSBCTgtFBn2nq10FKOx39XBHDdEZg=";
+  vendorHash = "sha256-aejhRVW5Y0qsVEQbOBi75iQP9uAMS4U0tktatzagwIo=";
 
   ldflags = [
     "-s"

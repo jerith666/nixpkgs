@@ -8,7 +8,7 @@
 
 let
   pname = "beekeeper-studio";
-  version = "4.6.8";
+  version = "5.0.9";
 
   plat =
     {
@@ -19,8 +19,8 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-EKGL+aeuCcBuSh+VtkdgFhI1LccuvO8WHoqbZ/JdX7c=";
-      x86_64-linux = "sha256-LyO9xCqZG5gNAvCIX9wacSb59wiLjXPDta+Fipu24fk=";
+      aarch64-linux = "sha256-Ky7nowci7PNp9IAbmnr1W8+sN8A9f2BakBRUQHx14HY=";
+      x86_64-linux = "sha256-DAxY2b6WAl9llgDr5SNlvp8ZnwQuVKVrC4T++1FyiZE=";
     }
     .${stdenv.hostPlatform.system};
 

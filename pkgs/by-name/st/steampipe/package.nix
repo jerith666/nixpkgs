@@ -13,12 +13,12 @@ buildGoModule rec {
   pname = "steampipe";
   version = "1.0.1";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9Tlc6BlfSQyAmmk/G6TdWB0kWpbwzGWOPNNNgI3tYPM=";
   };
 

@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-q71LczFsJAvZaWCQg4Lgzg2XX4XDFvA3x255Re00D9Q=";
   };
 
@@ -43,6 +43,9 @@ python.pkgs.buildPythonApplication rec {
       ffmpeg = "${lib.getBin ffmpeg-headless}/bin/ffmpeg";
       ffprobe = "${lib.getBin ffmpeg-headless}/bin/ffprobe";
     })
+
+    # Disable interactive dependency resolution, which clashes with the immutable Python environment
+    ./dont-install-deps.patch
   ];
 
   postPatch = ''

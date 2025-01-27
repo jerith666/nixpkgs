@@ -18,7 +18,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
   };
 
@@ -27,7 +27,7 @@ buildDotnetModule rec {
 
   projectFile = "Lumafly/Lumafly.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.sdk_9_0;

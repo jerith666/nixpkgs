@@ -8,6 +8,7 @@
   pystring,
   imath,
   minizip-ng,
+  zlib,
   # Only required on Linux
   glew,
   libglut,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-7Uj1YBpunj9/32U5hpCokxfcVoRB9Oi2G9Cso+gAu5Q=";
+    hash = "sha256-Ytqvd4qSqO+6hId3v7X9cd+zrOElcqTBev5miJL/07M=";
   };
 
   patches = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
       --replace 'OCIO_ADD_TEST(Config, virtual_display_with_active_displays)' 'static void _skip_virtual_display_with_active_displays()'
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals pythonBindings [ python3Packages.python ];
   buildInputs =
     [
       expat
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
       pystring
       imath
       minizip-ng
+      zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glew

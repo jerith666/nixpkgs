@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     repo = "gose";
     owner = "stv0g";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vcp9gMJ296KS8OFOIcWvvYrS+LrOVlN3KN20yJxoo5U=";
   };
 
@@ -39,7 +39,7 @@ buildGoModule {
 
   vendorHash = "sha256-U/umJ6McCuD0HARVMj1JXHOpVxcph16z7Y7i47Nf3cg=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/gose

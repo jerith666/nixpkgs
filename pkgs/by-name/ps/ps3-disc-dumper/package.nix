@@ -14,7 +14,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ax2Q1VodzktXSdZBvO1fys+xigk/jzbMWHxqoLIKE7w=";
   };
 
@@ -23,7 +23,7 @@ buildDotnetModule rec {
   dotnetFlags = [ "-p:TargetFramework=net9.0" ];
   buildType = "Linux";
   projectFile = "UI.Avalonia/UI.Avalonia.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config

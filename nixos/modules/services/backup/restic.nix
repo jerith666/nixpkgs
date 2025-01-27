@@ -458,17 +458,17 @@ in
         resticCmd = "${backup.package}/bin/restic${extraOptions}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
-        set -a  # automatically export variables
-        ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-        # set same environment variables as the systemd service
-        ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-          (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrsToList (n: v: "${n}=${v}"))
-          (lib.concatStringsSep "\n")
-        ]}
-        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+          set -a  # automatically export variables
+          ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+          # set same environment variables as the systemd service
+          ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+            (lib.filterAttrs (n: v: v != null && n != "PATH"))
+            (lib.mapAttrsToList (n: v: "${n}=${v}"))
+            (lib.concatStringsSep "\n")
+          ]}
+          PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-        exec ${resticCmd} $@
+        exec ${resticCmd} "$@"
       ''
     ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
