@@ -15,6 +15,8 @@
   systemd,
   cppunit,
   esi ? false,
+  ipv6 ? true,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [
-      "--enable-ipv6"
       "--disable-strict-error-checking"
       "--disable-arch-native"
       "--with-openssl"
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--enable-x-accelerator-vary"
       "--enable-htcp"
     ]
+    ++ (if ipv6 then [ "--enable-ipv6" ] else [ "--disable-ipv6" ])
     ++ lib.optional (!esi) "--disable-esi"
     ++ lib.optional (
       stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl
@@ -78,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "/bin/true" "$(realpath fake-true)"
     done
   '';
+
+  passthru.tests.squid = nixosTests.squid;
 
   meta = with lib; {
     description = "Caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
