@@ -48,6 +48,7 @@ rec {
       runCommand,
       writeText,
       autoPatchelfHook,
+      buildPackages,
 
       # The JDK/JRE used for running Gradle.
       java ? defaultJava,
@@ -78,7 +79,6 @@ rec {
         ];
 
       buildInputs = [
-        java
         stdenv.cc.cc
         ncurses5
         ncurses6
@@ -99,7 +99,9 @@ rec {
           varDefs = concatStringsSep "\n" (
             map (x: "  --set ${x} \\") ([ "JAVA_HOME ${java}" ] ++ toolchain.varDefs)
           );
-          jnaLibraryPath = lib.makeLibraryPath [ udev ];
+          jnaLibraryPath = if stdenv.hostPlatform.isLinux then lib.makeLibraryPath [ udev ] else "";
+          jnaFlag =
+            if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
         in
         ''
           mkdir -pv $out/lib/gradle/
@@ -109,7 +111,7 @@ rec {
           test -f $gradle_launcher_jar
           makeWrapper ${java}/bin/java $out/bin/gradle \
             ${varDefs}
-            --add-flags "-Djna.library.path=${jnaLibraryPath}" \
+            ${jnaFlag} \
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';
 
@@ -121,6 +123,8 @@ rec {
           newFileEvents = toString (lib.versionAtLeast version "8.12");
         in
         ''
+          # get the correct jar executable for cross
+          export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
           nativeVersion="$(extractVersion native-platform $out/lib/gradle/lib/native-platform-*.jar)"
@@ -157,7 +161,7 @@ rec {
           # Gradle will refuse to start without _both_ 5 and 6 versions of ncurses.
           echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
           echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
-          echo ${udev} >> $out/nix-support/manual-runtime-dependencies
+          ${lib.optionalString stdenv.hostPlatform.isLinux "echo ${udev} >> $out/nix-support/manual-runtime-dependencies"}
         '';
 
       passthru.tests = {
@@ -242,7 +246,7 @@ rec {
       lib,
       callPackage,
       mitm-cache,
-      substituteAll,
+      replaceVars,
       symlinkJoin,
       concatTextFile,
       makeSetupHook,
@@ -262,11 +266,10 @@ rec {
             name = "setup-hook.sh";
             files = [
               (mitm-cache.setupHook)
-              (substituteAll {
-                src = ./setup-hook.sh;
+              (replaceVars ./setup-hook.sh {
                 # jdk used for keytool
                 inherit (gradle) jdk;
-                init_script = ./init-build.gradle;
+                init_script = "${./init-build.gradle}";
               })
             ];
           }))

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.8.9";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     tag = version;
-    hash = "sha256-yUn7tDAu4DJZFJAMdsSnEjlvCHxp1y7OO8xR86lus54=";
+    hash = "sha256-AR7JMvx5qWPFtMhotO2MlqKH5d/CcGOrvpaB031vTX8=";
   };
 
   patches = [

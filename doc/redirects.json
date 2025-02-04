@@ -1,12 +1,21 @@
 {
+  "chap-build-helpers-finalAttrs": [
+    "index.html#chap-build-helpers-finalAttrs"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
+  ],
+  "ex-build-helpers-extendMkDerivation": [
+    "index.html#ex-build-helpers-extendMkDerivation"
   ],
   "neovim": [
     "index.html#neovim"
   ],
   "neovim-custom-configuration": [
     "index.html#neovim-custom-configuration"
+  ],
+  "neovim-luarocks-based-plugins": [
+    "index.html#neovim-luarocks-based-plugins"
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
@@ -37,6 +46,9 @@
   ],
   "sec-allow-insecure": [
     "index.html#sec-allow-insecure"
+  ],
+  "sec-build-helper-extendMkDerivation": [
+    "index.html#sec-build-helper-extendMkDerivation"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -3799,7 +3811,8 @@
   "testing-neovim-plugins-neovim-require-check": [
     "index.html#testing-neovim-plugins-neovim-require-check"
   ],
-  "vim-plugin-required-snippet": [
+  "neovim-plugin-required-snippet": [
+    "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
   ],
   "updating-plugins-in-nixpkgs": [
