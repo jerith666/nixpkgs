@@ -1670,9 +1670,9 @@ with pkgs;
   #     pkgsCross.aarch64-multiplatform.freshBootstrapTools.build
   freshBootstrapTools = if stdenv.hostPlatform.isDarwin then
     callPackage ../stdenv/darwin/make-bootstrap-tools.nix {
-      localSystem = stdenv.buildPlatform;
+      localSystem = { config = lib.systems.parse.tripleFromSystem stdenv.buildPlatform; };
       crossSystem =
-        if stdenv.buildPlatform == stdenv.hostPlatform then null else stdenv.hostPlatform;
+        if stdenv.buildPlatform == stdenv.hostPlatform then null else { config = lib.systems.parse.tripleFromSystem stdenv.hostPlatform; };
     }
   else if stdenv.hostPlatform.isLinux then
     callPackage ../stdenv/linux/make-bootstrap-tools.nix {}
@@ -4742,10 +4742,6 @@ with pkgs;
 
   podman-desktop = callPackage ../applications/virtualization/podman-desktop {
     inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
-  poedit = callPackage ../tools/text/poedit {
-    wxGTK32 = wxGTK32.override { withWebKit = true; };
   };
 
   polaris = callPackage ../servers/polaris { };
@@ -15581,8 +15577,6 @@ with pkgs;
     onlyLibVLC = true;
   };
 
-  vmpk = libsForQt5.callPackage ../applications/audio/vmpk { };
-
   vmware-horizon-client = callPackage ../applications/networking/remote/vmware-horizon-client { };
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
@@ -17245,8 +17239,6 @@ with pkgs;
 
   degate = libsForQt5.callPackage ../applications/science/electronics/degate { };
 
-  flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
-
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_2;
   };
@@ -17735,7 +17727,7 @@ with pkgs;
                 [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;
-                    config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
+                    config.nixpkgs.localSystem = lib.mkDefault ({ config = lib.systems.parse.tripleFromSystem stdenv.hostPlatform; });
                   }
                 )] ++ (
                   if builtins.isList configuration
@@ -17815,7 +17807,7 @@ with pkgs;
 
   nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
 
-  nixci = callPackage ../tools/nix/nixci {
+  nixci = callPackage ../by-name/ni/nixci/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration IOKit;
   };
 
