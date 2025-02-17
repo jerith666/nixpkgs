@@ -92,7 +92,7 @@ let
       chmod 0755 "$root/etc" "$root/var/lib"
       mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
       chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
-      if ! [ -e "$root/etc/os-release" ]; then
+      if ! [ -e "$root/etc/os-release" ] && ! [ -h "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
 
@@ -506,12 +506,8 @@ in
                         config = {
                           nixpkgs =
                             if options.nixpkgs?hostPlatform
-                            then {
-                              hostPlatform =
-                                if host.options.nixpkgs.hostPlatform.isDefined
-                                then host.config.nixpkgs.hostPlatform
-                                else lib.defaultTo host.config.nixpkgs.localSystem host.config.nixpkgs.crossSystem;
-                            } else { localSystem = lib.defaultTo host.config.nixpkgs.localSystem host.config.nixpkgs.crossSystem; }
+                            then { inherit (host.pkgs.stdenv) hostPlatform; }
+                            else { localSystem = host.pkgs.stdenv.hostPlatform; }
                           ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;

@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "llama-index-core";
-  version = "0.12.15";
+  version = "0.12.17.post2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${version}";
-    hash = "sha256-GcY7AuyUYniEbjsMTMcRe4ulpR5kMvAW+XDoPzgjblw=";
+    hash = "sha256-lAjaW/Kx7tYdsiyWnv6VLQG6lPkVyliD1KPJA/Or0YA=";
   };
 
   sourceRoot = "${src.name}/${pname}";
@@ -144,7 +144,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
-    changelog = "https://github.com/run-llama/llama_index/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -85,6 +85,7 @@
   ./hardware/network/eg25-manager.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/new-lg4ff.nix
+  ./hardware/nfc-nci.nix
   ./hardware/nitrokey.nix
   ./hardware/onlykey/default.nix
   ./hardware/openrazer.nix
@@ -566,6 +567,7 @@
   ./services/development/lorri.nix
   ./services/development/nixseparatedebuginfod.nix
   ./services/development/rstudio-server/default.nix
+  ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
   ./services/display-managers/default.nix
   ./services/display-managers/greetd.nix
@@ -738,7 +740,6 @@
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
   ./services/matrix/maubot.nix
-  ./services/matrix/mautrix-facebook.nix
   ./services/matrix/mautrix-meta.nix
   ./services/matrix/mautrix-signal.nix
   ./services/matrix/mautrix-telegram.nix
@@ -864,6 +865,7 @@
   ./services/misc/radicle.nix
   ./services/misc/readarr.nix
   ./services/misc/realmd.nix
+  ./services/misc/recyclarr.nix
   ./services/misc/redlib.nix
   ./services/misc/redmine.nix
   ./services/misc/renovate.nix
@@ -927,6 +929,7 @@
   ./services/monitoring/gatus.nix
   ./services/monitoring/gitwatch.nix
   ./services/monitoring/glances.nix
+  ./services/monitoring/glpi-agent.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix
