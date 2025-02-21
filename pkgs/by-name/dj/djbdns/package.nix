@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   glibc,
   dns-root-data,
   nixosTests,
@@ -34,17 +33,6 @@ stdenv.mkDerivation {
     # To fix https://github.com/NixOS/nixpkgs/issues/119066.
     # Note that the NixOS test <nixpkgs/nixos/tests/tinydns.nix> tests for this.
     ./softlimit.patch
-
-    # the following 3 patches are for gcc 14 compatibility
-    (fetchpatch {
-      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/8d9ca97ea32f8a1bb673d20c520b42092c34e166/main/djbdns/implicit.patch";
-      hash = "sha256-mVldzoOIZDyqxzVTWx7eGWjrS1txkUktoydbAyleGXU=";
-    })
-    # based on
-    # https://gitlab.alpinelinux.org/alpine/aports/-/raw/8d9ca97ea32f8a1bb673d20c520b42092c34e166/main/djbdns/incompatible.patch
-    # but with a minor edit for compatibility with fix-nix-usernamespace-build.patch
-    ./incompatible.patch
-    ./include_unistd_grp.patch
   ];
 
   postPatch = ''
