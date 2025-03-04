@@ -4,6 +4,13 @@
   fetchurl,
   fetchzip,
   unzip,
+  autoPatchelfHook,
+  freetype,
+  libX11,
+  libXext,
+  libXrender,
+  libXtst,
+  alsa-lib
 }:
 
 rec {
@@ -648,18 +655,29 @@ rec {
 
   sonarlint = buildEclipseUpdateSite rec {
     name = "sonarlint-${version}";
-    version = "7.0.0.37874";
+    version = "11.2.0.82640";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://binaries.sonarsource.com/SonarLint-for-Eclipse/releases/org.sonarlint.eclipse.site-${version}.zip";
-      sha256 = "sha256:193k30452200ps85wplgpc1x61fknh6xh165ryq7chl48g6f1ajz";
+      sha256 = "sha256-x+4Q01+PWPRi6vXhQI/SIeZTrcKdgwr/dtS63wGf9dI=";
       postFetch = ''
         #update site includes source, which we don't care about
         cd $out
         find . -name \*source_\* -exec rm -v {} \;
       '';
     };
+
+    # this plugin bundles its own JVM binary :(
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [
+      freetype
+      libX11
+      libXext
+      libXrender
+      libXtst
+      alsa-lib
+    ];
 
     meta = with lib; {
       homepage = "https://github.com/SonarSource/sonarlint-eclipse";
