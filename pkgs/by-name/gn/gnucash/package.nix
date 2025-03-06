@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # fixes QIF imports: https://bugs.gnucash.org/show_bug.cgi?id=799492
-    ./0005-fix-qif-import.patch
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress
