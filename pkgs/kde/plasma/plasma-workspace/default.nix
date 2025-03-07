@@ -32,6 +32,7 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
+    ./kde-lock-screen.patch
   ];
 
   postInstall = ''
