@@ -124,7 +124,12 @@ let
               ];
               "llvm/gnu-install-dirs.patch" = [
                 {
+                  after = "20";
+                  path = ../20;
+                }
+                {
                   after = "18";
+                  before = "20";
                   path = ../18;
                 }
               ];
@@ -342,7 +347,6 @@ let
         mkExtraBuildCommands0 cc
         + ''
           ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
-          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/share" "$rsrc/share"
         '';
       mkExtraBuildCommands =
         cc:
@@ -448,14 +452,21 @@ let
               stripLen = 1;
             })
           ]
-          ++ lib.optionals (lib.versions.major metadata.release_version == "14") [
-            # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
-              relative = "llvm";
-              hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
-            })
-          ]
+          ++
+            lib.optionals
+              (
+                (lib.versionAtLeast (lib.versions.major metadata.release_version) "14")
+                && (lib.versionOlder (lib.versions.major metadata.release_version) "17")
+              )
+              [
+                # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
+                # See also: https://github.com/numba/numba/issues/9109
+                (fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
+                  relative = "llvm";
+                  hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
+                })
+              ]
           ++
             lib.optional (lib.versions.major metadata.release_version == "17")
               # resolves https://github.com/llvm/llvm-project/issues/75168
@@ -489,9 +500,9 @@ let
               (lib.versionAtLeast metadata.release_version "17" && lib.versionOlder metadata.release_version "19")
               [
                 # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-                (fetchpatch2 {
+                (fetchpatch {
                   url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-                  hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
+                  hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
                   stripLen = 1;
                 })
               ];
@@ -507,9 +518,11 @@ let
       llvm = tools.libllvm;
 
       tblgen = callPackage ./tblgen.nix {
-        patches = builtins.filter
-          # Crude method to drop polly patches if present, they're not needed for tblgen.
-          (p: (!lib.hasInfix "-polly" p)) tools.libllvm.patches;
+        patches =
+          builtins.filter
+            # Crude method to drop polly patches if present, they're not needed for tblgen.
+            (p: (!lib.hasInfix "-polly" p))
+            tools.libllvm.patches;
         clangPatches = [
           # Would take tools.libclang.patches, but this introduces a cycle due
           # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
@@ -532,12 +545,13 @@ let
             # libraries. eg: `clang -munsupported hello.c -lc`
             ./clang/clang-unsupported-option.patch
           ]
-          ++ lib.optional (lib.versions.major metadata.release_version == "13")
-            # Revert of https://reviews.llvm.org/D100879
-            # The malloc alignment assumption is incorrect for jemalloc and causes
-            # mis-compilation in firefox.
-            # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
-            (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
+          ++
+            lib.optional (lib.versions.major metadata.release_version == "13")
+              # Revert of https://reviews.llvm.org/D100879
+              # The malloc alignment assumption is incorrect for jemalloc and causes
+              # mis-compilation in firefox.
+              # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
+              (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
           ++ lib.optional (lib.versionOlder metadata.release_version "17") (
             if lib.versionAtLeast metadata.release_version "14" then
               fetchpatch {
@@ -666,7 +680,7 @@ let
       lldbPlugins = lib.makeExtensible (
         lldbPlugins:
         let
-          callPackage = newScope ( lldbPlugins // tools // args // metadata );
+          callPackage = newScope (lldbPlugins // tools // args // metadata);
         in
         lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
       );
@@ -1208,10 +1222,16 @@ let
       // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
         libc-overlay = callPackage ./libc {
           isFullBuild = false;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmTools.clang;
         };
 
         libc-full = callPackage ./libc {
           isFullBuild = true;
+          # Use clang due to "gnu::naked" not working on aarch64.
+          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
         };
 
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;

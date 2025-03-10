@@ -221,6 +221,7 @@ with lib.maintainers;
     members = [
       xanderio
       blitz
+      snu
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
@@ -377,13 +378,14 @@ with lib.maintainers;
       piegames
       infinisil
       das_j
-      tomberek
       _0x4A6F
+      MattSturgeon
+      jfly
       # Not in the maintainer list
       # Sereja313
     ];
-    scope = "Tentative Nix formatter team to be established in https://github.com/NixOS/rfcs/pull/166";
-    shortName = "Nix formatter team";
+    scope = "Nix formatting team: https://nixos.org/community/teams/formatting/";
+    shortName = "Nix formatting team";
   };
 
   freedesktop = {
@@ -470,7 +472,6 @@ with lib.maintainers;
   gnome-circle = {
     members = [
       aleksana
-      dawidd6
       getchoo
       michaelgrahamevans
     ];
@@ -516,7 +517,6 @@ with lib.maintainers;
     members = [
       fab
       hexa
-      mic92
     ];
     scope = "Maintain the Home Assistant ecosystem";
     shortName = "Home Assistant";
@@ -547,7 +547,6 @@ with lib.maintainers;
       cleverca22
       disassembler
       manveru
-      nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
     shortName = "Input-Output Global employees";
@@ -571,6 +570,7 @@ with lib.maintainers;
       edwtjo
       leona
       theCapypara
+      thiagokokada
     ];
     shortName = "Jetbrains";
     scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
@@ -771,7 +771,6 @@ with lib.maintainers;
       mguentner
       ralith
       dandellion
-      sumnerevans
       nickcao
       teutat3s
     ];
@@ -833,7 +832,12 @@ with lib.maintainers;
   };
 
   neovim = {
-    members = [ ];
+    members = [
+      GaetanLepage
+      khaneliman
+      mrcjkb
+      perchun
+    ];
     githubTeams = [ "neovim" ];
     scope = "Maintain the vim and neovim text editors and related packages.";
     shortName = "Vim/Neovim";
@@ -1160,7 +1164,10 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [ figsoda ];
+    members = [
+      figsoda
+      RossComputerGuy
+    ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;

@@ -32,7 +32,7 @@ in
               default = null;
               description = ''
                 file containing the credentials to access the repository, in the
-            format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
+                format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
               '';
             };
 
@@ -206,6 +206,7 @@ in
                 Extra arguments passed to restic backup.
               '';
               example = [
+                "--cleanup-cache"
                 "--exclude-file=/etc/nixos/restic-ignore"
               ];
             };
@@ -303,6 +304,15 @@ in
                 having to manually specify most options.
               '';
             };
+
+            progressFps = lib.mkOption {
+              type = with lib.types; nullOr numbers.nonnegative;
+              default = null;
+              description = ''
+                Controls the frequency of progress reporting.
+              '';
+              example = 0.1;
+            };
           };
         }
       )
@@ -347,13 +357,14 @@ in
           "--what='sleep'"
           "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
         ];
-        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${backup.package}/bin/restic${extraOptions}";
+        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
         excludeFlags = lib.optional (
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
         filesFromTmpFile = "/run/restic-backups-${name}/includes";
         doBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
         pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
+          (resticCmd + " unlock")
           (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
         ];
         checkCmd = lib.optionals backup.runCheck [
@@ -387,7 +398,10 @@ in
               lib.mapAttrs' (
                 name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               ) backup.rcloneConfig
-            );
+            )
+            // lib.optionalAttrs (backup.progressFps != null) {
+              RESTIC_PROGRESS_FPS = toString backup.progressFps;
+            };
           path = [ config.programs.ssh.package ];
           restartIfChanged = false;
           wants = [ "network-online.target" ];
@@ -455,18 +469,18 @@ in
       name: backup:
       let
         extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${backup.package}/bin/restic${extraOptions}";
+        resticCmd = "${lib.getExe backup.package}${extraOptions}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
-          set -a  # automatically export variables
-          ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-          # set same environment variables as the systemd service
-          ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-            (lib.filterAttrs (n: v: v != null && n != "PATH"))
-            (lib.mapAttrsToList (n: v: "${n}=${v}"))
-            (lib.concatStringsSep "\n")
-          ]}
-          PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+        set -a  # automatically export variables
+        ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+        # set same environment variables as the systemd service
+        ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+          (lib.filterAttrs (n: v: v != null && n != "PATH"))
+          (lib.mapAttrsToList (n: v: "${n}=${v}"))
+          (lib.concatStringsSep "\n")
+        ]}
+        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
         exec ${resticCmd} "$@"
       ''

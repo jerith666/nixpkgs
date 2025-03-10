@@ -32,6 +32,7 @@
   jansson,
   libXaw,
   libXcursor,
+  libXft,
   libXi,
   libXpm,
   libgccjit,
@@ -45,6 +46,7 @@
   libxml2,
   llvmPackages_14,
   m17n_lib,
+  mailcap,
   mailutils,
   makeWrapper,
   motif,
@@ -60,6 +62,7 @@
   texinfo,
   webkitgtk_4_0,
   wrapGAppsHook3,
+  writeText,
   zlib,
 
   # Boolean flags
@@ -69,6 +72,7 @@
   withAcl ? false,
   withAlsaLib ? false,
   withAthena ? false,
+  withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
   withGTK3 ? withPgtk && !noGui,
@@ -182,7 +186,6 @@ mkDerivation (finalAttrs: {
             ./native-comp-driver-options-30.patch
         )
         {
-
           backendPath = (
             lib.concatStringsSep " " (
               builtins.map (x: ''"-B${x}"'') (
@@ -240,6 +243,14 @@ mkDerivation (finalAttrs: {
       for makefile_in in $(find . -name Makefile.in -print); do
         substituteInPlace $makefile_in --replace-warn /bin/pwd pwd
       done
+    ''
+
+    ''
+      substituteInPlace lisp/net/mailcap.el \
+        --replace-fail '"/etc/mime.types"' \
+                       '"/etc/mime.types" "${mailcap}/etc/mime.types"' \
+        --replace-fail '("/etc/mailcap" system)' \
+                       '("/etc/mailcap" system) ("${mailcap}/etc/mailcap" system)'
     ''
 
     ""
@@ -333,7 +344,6 @@ mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals withX [
       Xaw3d
-      cairo
       giflib
       libXaw
       libXpm
@@ -341,6 +351,12 @@ mkDerivation (finalAttrs: {
       libpng
       librsvg
       libtiff
+    ]
+    ++ lib.optionals withCairo [
+      cairo
+    ]
+    ++ lib.optionals (withX && !withCairo) [
+      libXft
     ]
     ++ lib.optionals withXinput2 [
       libXi
@@ -396,8 +412,8 @@ mkDerivation (finalAttrs: {
       else if withX then
         [
           (lib.withFeatureAs true "x-toolkit" toolkit)
-          (lib.withFeature true "cairo")
-          (lib.withFeature true "xft")
+          (lib.withFeature withCairo "cairo")
+          (lib.withFeature (!withCairo) "xft")
         ]
       else if withPgtk then
         [
@@ -501,6 +517,8 @@ mkDerivation (finalAttrs: {
     patchelf --add-needed "libXcursor.so.1" "$out/bin/emacs"
   '';
 
+  setupHook = ./setup-hook.sh;
+
   passthru = {
     inherit withNativeCompilation;
     inherit withTreeSitter;
@@ -511,5 +529,8 @@ mkDerivation (finalAttrs: {
 
   meta = meta // {
     broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    knownVulnerabilities = lib.optionals (lib.versionOlder version "30") [
+      "CVE-2024-53920 CVE-2025-1244, please use newer versions such as emacs30"
+    ];
   };
 })

@@ -18,7 +18,6 @@
   makeWrapper,
   libXext,
   libGLU,
-  libsForQt5,
   alsa-lib,
   withX265 ? true,
   x265,
@@ -41,12 +40,12 @@
   withVPX ? true,
   libvpx,
   withQT ? true,
+  libsForQt5,
   withCLI ? true,
   default ? "qt5",
   withPlugins ? true,
 }:
 
-assert withQT -> libsForQt5.qttools != null && libsForQt5.qtbase != null;
 assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
