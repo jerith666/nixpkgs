@@ -1,0 +1,33 @@
+diff --git a/src/tabbox/switchers/thumbnail_grid/contents/ui/main.qml b/src/tabbox/switchers/thumbnail_grid/contents/ui/main.qml
+index 20b90d84..e899daad 100644
+--- a/src/tabbox/switchers/thumbnail_grid/contents/ui/main.qml
++++ b/src/tabbox/switchers/thumbnail_grid/contents/ui/main.qml
+@@ -34,7 +34,7 @@ KWin.TabBoxSwitcher {
+                 focus: true
+ 
+                 property int maxWidth: tabBox.screenGeometry.width * 0.9
+-                property int maxHeight: tabBox.screenGeometry.height * 0.7
++                property int maxHeight: tabBox.screenGeometry.height * 0.9
+                 property real screenFactor: tabBox.screenGeometry.width / tabBox.screenGeometry.height
+                 property int maxGridColumnsByWidth: Math.floor(maxWidth / thumbnailGridView.cellWidth)
+ 
+@@ -104,8 +104,18 @@ KWin.TabBoxSwitcher {
+                     readonly property int iconSize: Kirigami.Units.iconSizes.huge
+                     readonly property int captionRowHeight: Kirigami.Units.gridUnit * 2
+                     readonly property int columnSpacing: Kirigami.Units.gridUnit
+-                    readonly property int thumbnailWidth: Kirigami.Units.gridUnit * 16
++
++                    readonly property int maxThumbnailWidth: tabBox.screenGeometry.width * 0.85
++                    readonly property int minThumbnailWidth: Kirigami.Units.gridUnit * 16
++                    readonly property int thumbnailWidth: Math.round(Math.max(
++                        (thumbnailGridView.count <= 1  ? maxThumbnailWidth     : // 1 window: max size
++                         thumbnailGridView.count <= 4  ? maxThumbnailWidth / 2 : // 2-4 windows: half size (for 2x2 grid)
++                         thumbnailGridView.count <= 12 ? maxThumbnailWidth / 4 : // 5-12 windows: 1/4 size (for 3x4 grid)
++                         thumbnailGridView.count <= 20 ? maxThumbnailWidth / 5 : // 13-20 windows: 1/4 size (for 4x5 grid)
++                         thumbnailGridView.count <= 42 ? maxThumbnailWidth / 6 : // 21-42 windows: 1/6 size (for 7x6 grid)
++                         minThumbnailWidth),minThumbnailWidth))                  // 43+ windows: original 16 grid units
+                     readonly property int thumbnailHeight: thumbnailWidth * (1.0/dialogMainItem.screenFactor)
++
+                     cellWidth: hoverItem.margins.left + thumbnailWidth + hoverItem.margins.right
+                     cellHeight: hoverItem.margins.top + captionRowHeight + thumbnailHeight + hoverItem.margins.bottom
+ 

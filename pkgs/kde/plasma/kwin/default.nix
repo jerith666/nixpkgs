@@ -31,6 +31,8 @@ mkKdeDerivation {
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
+    ./0005-bigger-thumbnails-in-grid-task-switcher.patch
+
     # Backport fix for crashes with multiple displays as recommended by upstream
     # FIXME: remove in 6.3.3
     (fetchpatch {
