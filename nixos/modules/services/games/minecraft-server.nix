@@ -176,7 +176,7 @@ in {
       };
 
       package = lib.mkPackageOption pkgs "minecraft-server" {
-        example = "minecraft-server_1_12_2";
+        example = "pkgs.minecraft-server_1_12_2";
       };
 
       jvmOpts = lib.mkOption {
