@@ -710,9 +710,9 @@ with pkgs;
 
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
-  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
+  makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false, extraFirmwarePaths ? [ ] }:
     callPackage ../build-support/kernel/modules-closure.nix {
-      inherit kernel firmware rootModules allowMissing;
+      inherit kernel firmware rootModules allowMissing extraFirmwarePaths;
     };
 
   mkBinaryCache = callPackage ../build-support/binary-cache { };
@@ -1001,6 +1001,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa VideoToolbox;
   };
 
+  inherit (callPackage ../development/tools/genealogos { }) genealogos-cli genealogos-api;
+
   # This is to workaround gfal2-python broken against Python 3.12 or later.
   # TODO: Remove these lines after solving the breakage.
   gfal2-util = callPackage ../by-name/gf/gfal2-util/package.nix (lib.optionalAttrs python3Packages.gfal2-python.meta.broken {
@@ -1190,9 +1192,7 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
-  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix {
-    buildGoModule = buildGo123Module;
-  };
+  forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   gfold = callPackage ../applications/version-management/gfold { };
 
@@ -1638,7 +1638,7 @@ with pkgs;
   };
 
   authelia = callPackage ../servers/authelia {
-    buildGoModule = buildGo123Module;
+    buildGoModule = buildGo124Module;
     pnpm = pnpm_10;
   };
 
@@ -2818,15 +2818,6 @@ with pkgs;
 
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
 
-  netbird = callPackage ../tools/networking/netbird {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit Kernel UserNotifications WebKit;
-    buildGoModule = buildGo123Module;
-  };
-
-  netbird-ui = netbird.override {
-    ui = true;
-  };
-
   skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
 
   ibus = callPackage ../tools/inputmethods/ibus { };
@@ -2921,10 +2912,6 @@ with pkgs;
   };
 
   cmdpack = callPackages ../tools/misc/cmdpack { };
-
-  cobalt = callPackage ../applications/misc/cobalt {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
 
   cocoapods = callPackage ../development/tools/cocoapods { };
 
@@ -3500,14 +3487,12 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
-  graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
-
   graylog-5_2 = callPackage ../tools/misc/graylog/5.2.nix { };
 
   graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
 
   graylogPlugins = recurseIntoAttrs (
-    callPackage ../tools/misc/graylog/plugins.nix { }
+    callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_0; }
   );
 
   graphviz = callPackage ../tools/graphics/graphviz {
@@ -4210,10 +4195,6 @@ with pkgs;
 
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
-  };
-
-  morgen = callPackage ../applications/office/morgen {
-    electron = electron_32;
   };
 
   metasploit = callPackage ../tools/security/metasploit { };
@@ -5661,7 +5642,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages) compcert;
+  inherit (coqPackages_8_20) compcert;
 
   computecpp = wrapCCWith rec {
     cc = computecpp-unwrapped;
@@ -5756,6 +5737,15 @@ with pkgs;
         };
       };
     }) else ccWrapper;
+
+  gnuStdenv =
+    if stdenv.cc.isGNU
+    then stdenv
+    else gccStdenv.override {
+      cc = gccStdenv.cc.override {
+        bintools = buildPackages.binutils;
+      };
+    };
 
   gccStdenv =
     if stdenv.cc.isGNU
@@ -6589,9 +6579,7 @@ with pkgs;
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security SystemConfiguration;
-  };
+  cargo-outdated = callPackage ../development/tools/rust/cargo-outdated { };
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
     cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_5
@@ -7413,10 +7401,10 @@ with pkgs;
     };
   }));
   ansible_2_16 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.16.8";
+    version = "2.16.14";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-WeSqQO1azbTvm789BYkY//k/ZqFJNz2BWciilgRBC9o=";
+      hash = "sha256-gCef/9mGhrrfqjLh7HhdmKbfGy/B5Al97AWXZA10ZBU=";
     };
   }));
 
@@ -9011,10 +8999,6 @@ with pkgs;
   });
 
   qxmpp = qt6Packages.callPackage ../development/libraries/qxmpp { };
-
-  gnu-efi = if stdenv.hostPlatform.isEfi
-              then callPackage ../development/libraries/gnu-efi { }
-            else null;
 
   gnutls = callPackage ../development/libraries/gnutls {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -13121,8 +13105,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  electron-cash = libsForQt5.callPackage ../applications/misc/electron-cash { };
-
   electrum = libsForQt5.callPackage ../applications/misc/electrum { };
 
   electrum-grs = libsForQt5.callPackage ../applications/misc/electrum/grs.nix { };
@@ -16128,6 +16110,8 @@ with pkgs;
 
   factorio-demo = factorio.override { releaseType = "demo"; };
 
+  factorio-demo-experimental = factorio.override { releaseType = "demo"; experimental = true; };
+
   factorio-space-age = factorio.override { releaseType = "expansion"; };
 
   factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
@@ -17066,13 +17050,15 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  why3 = callPackage ../applications/science/logic/why3 { };
+  why3 = callPackage ../applications/science/logic/why3
+    { coqPackages = coqPackages_8_20; };
 
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
   };
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
+    z3_4_14
     z3_4_13
     z3_4_12
     z3_4_11
@@ -18157,7 +18143,7 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
-  tremotesf = libsForQt5.callPackage ../applications/networking/p2p/tremotesf { };
+  tremotesf = callPackage ../applications/networking/p2p/tremotesf { };
 
   yazi-unwrapped = callPackage ../by-name/ya/yazi-unwrapped/package.nix { inherit (darwin.apple_sdk.frameworks) Foundation; };
 
