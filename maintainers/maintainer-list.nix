@@ -1092,6 +1092,12 @@
     githubId = 45104896;
     name = "Alexandru Nechita";
   };
+  alexandrutocar = {
+    email = "at@myquiet.place";
+    github = "alexandrutocar";
+    githubId = 65486851;
+    name = "Alexandru Tocar";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
@@ -4182,6 +4188,12 @@
     githubId = 1774239;
     name = "Charlie Egan";
   };
+  charludo = {
+    email = "github@charlotteharludo.com";
+    github = "charludo";
+    githubId = 47758554;
+    name = "Charlotte Harludo";
+  };
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
@@ -5082,6 +5094,12 @@
     github = "ctron";
     githubId = 202474;
     name = "Jens Reimann";
+  };
+  curran = {
+    email = "curran@mercury.com";
+    github = "curranosaurus";
+    githubId = 148147150;
+    name = "Curran McConnell";
   };
   cust0dian = {
     email = "serg@effectful.software";
@@ -6410,7 +6428,7 @@
     name = "Sebastian Krohn";
   };
   drawbu = {
-    email = "clement2104.boillot@gmail.com";
+    email = "nixpkgs@drawbu.dev";
     github = "drawbu";
     githubId = 69208565;
     name = "Clément Boillot";
@@ -6676,6 +6694,12 @@
     github = "earldouglas";
     githubId = 424946;
     name = "James Earl Douglas";
+  };
+  EarthGman = {
+    email = "earthgman@protonmail.com";
+    name = "EarthGman";
+    github = "EarthGman";
+    githubId = 117403037;
   };
   EBADBEEF = {
     name = "EBADBEEF";
@@ -10408,6 +10432,7 @@
   };
   isabelroses = {
     email = "isabel@isabelroses.com";
+    matrix = "@isabel:isabelroses.com";
     github = "isabelroses";
     githubId = 71222764;
     name = "Isabel Roses";
@@ -11697,6 +11722,12 @@
     email = "j.g.chang@gmail.com";
     github = "jonochang";
     githubId = 13179;
+  };
+  jonocodes = {
+    name = "Jono Finger";
+    email = "jono@foodnotblogs.com";
+    github = "jonocodes";
+    githubId = 1310468;
   };
   jopejoe1 = {
     email = "nixpkgs@missing.ninja";
@@ -13694,6 +13725,13 @@
     githubId = 10554636;
     name = "Braian A. Diez";
   };
+  linuxwhata = {
+    email = "linuxwhata@qq.com";
+    matrix = "@lwa:envs.net";
+    github = "linuxwhata";
+    githubId = 68576488;
+    name = "Zhou Ke";
+  };
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
@@ -14248,6 +14286,17 @@
     github = "lxea";
     githubId = 7910815;
     name = "Alex McGrath";
+  };
+  lykos153 = {
+    email = "silvio.ankermann@cloudandheat.com";
+    github = "Lykos153";
+    githubId = 6453662;
+    name = "Silvio Ankermann";
+    keys = [
+      {
+        fingerprint = "8D47 6294 7205 541C 62A4  9C88 F422 6CA3 971C 4E97";
+      }
+    ];
   };
   lyn = {
     name = "Lyn";
@@ -15145,6 +15194,13 @@
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
   };
+  mcparland = {
+    email = "john@mcpar.land";
+    github = "mcpar-land";
+    githubId = 55669980;
+    name = "John McParland";
+    keys = [ { fingerprint = "39D2 171D D733 C718 DD21  285E B326 E14B 05D8 7A4E"; } ];
+  };
   McSinyx = {
     email = "cnx@loang.net";
     github = "McSinyx";
@@ -15424,16 +15480,10 @@
   };
   mic92 = {
     email = "joerg@thalheim.io";
-    matrix = "@mic92:nixos.dev";
+    matrix = "@joerg:thalheim.io";
     github = "Mic92";
     githubId = 96200;
     name = "Jörg Thalheim";
-    keys = [
-      {
-        # compare with https://keybase.io/Mic92
-        fingerprint = "3DEE 1C55 6E1C 3DC5 54F5  875A 003F 2096 411B 5F92";
-      }
-    ];
   };
   michaeladler = {
     email = "therisen06@gmail.com";
@@ -18657,6 +18707,12 @@
     githubId = 88469;
     name = "Jaime Breva";
   };
+  phodina = {
+    email = "phodina@protonmail.com";
+    github = "phodina";
+    githubId = 2997905;
+    name = "Petr Hodina";
+  };
   photex = {
     email = "photex@gmail.com";
     github = "photex";
@@ -20698,6 +20754,13 @@
     keys = [ { fingerprint = "7DCA 5615 8AB2 621F 2F32  9FF4 1C7C E491 479F A273"; } ];
     name = "Rahul Butani";
   };
+  rseichter = {
+    email = "nixos.org@seichter.de";
+    github = "rseichter";
+    githubId = 30873939;
+    keys = [ { fingerprint = "6AE2 A847 23D5 6D98 5B34  0BC0 8E5F A470 9F69 E911"; } ];
+    name = "Ralph Seichter";
+  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
@@ -20973,6 +21036,13 @@
     github = "ryota-ka";
     githubId = 7309170;
     name = "Ryota Kameoka";
+  };
+  rypervenche = {
+    email = "git@ryper.org";
+    github = "rypervenche";
+    githubId = 1411504;
+    name = "rypervenche";
+    keys = [ { fingerprint = "1198 7A9F 03AE 47F0 4919  E334 6A41 2C4A ECE1 66EF"; } ];
   };
   rytone = {
     email = "max@ryt.one";
@@ -21583,6 +21653,12 @@
     github = "sepi";
     githubId = 529649;
     name = "Raffael Mancini";
+  };
+  sepiabrown = {
+    email = "bboxone@gmail.com";
+    github = "sepiabrown";
+    githubId = 35622998;
+    name = "Suwon Park";
   };
   seppeljordan = {
     email = "sebastian.jordan.mail@googlemail.com";
@@ -23281,6 +23357,12 @@
       }
     ];
   };
+  taliyahwebb = {
+    email = "taliyahmail@proton.me";
+    github = "taliyahwebb";
+    githubId = 161863235;
+    name = "Taliyah Webb";
+  };
   talkara = {
     email = "taito.horiuchi@relexsolutions.com";
     github = "talkara";
@@ -24649,6 +24731,12 @@
     github = "uku3lig";
     githubId = 61147779;
   };
+  ulic-youthlic = {
+    name = "youthlic";
+    email = "ulic.youthlic+nixpkgs@gmail.com";
+    github = "ulic-youthlic";
+    githubId = 121918198;
+  };
   ulinja = {
     email = "julian@lobbes.dev";
     github = "ulinja";
@@ -25789,6 +25877,17 @@
     email = "wraithm@gmail.com";
     github = "wraithm";
     githubId = 1512913;
+  };
+  wrbbz = {
+    name = "Arsenii Zorin";
+    email = "me@wrb.bz";
+    github = "wrbbz";
+    githubId = 14261606;
+    keys = [
+      { fingerprint = "3724 B33B 0B85 F067 814C  DA30 FC77 0786 0149 E41E"; }
+      { fingerprint = "A18D 996A D48C 10E8 B985  A219 B43D 995D 2501 1DFA"; }
+      { fingerprint = "34DB 8D31 F782 2B61 FF06  9503 8B5C 43DC 9105 2999"; }
+    ];
   };
   wrmilling = {
     name = "Winston R. Milling";
