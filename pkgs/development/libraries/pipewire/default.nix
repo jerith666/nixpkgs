@@ -3,6 +3,7 @@
   lib,
   buildPackages,
   fetchFromGitLab,
+  fetchpatch,
   python3,
   meson,
   ninja,
@@ -94,6 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./0060-libjack-path.patch
     # Move installed tests into their own output.
     ./0070-installed-tests-path.patch
+
+    # patch alsa midi 100% cpu usage with old kernels
+    ( fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/merge_requests/2313.diff";
+      hash = "sha256-TDM2EPPYuZkFxYP1Nc8NYHAschAcvGJzMHdPuWUUHLA=";
+    } )
   ];
 
   strictDeps = true;
