@@ -1560,6 +1560,10 @@ in
     ];
   };
 
+  lf-nvim = super.lf-nvim.overrideAttrs {
+    dependencies = [ self.toggleterm-nvim ];
+  };
+
   lf-vim = super.lf-vim.overrideAttrs {
     dependencies = [ self.vim-floaterm ];
   };
@@ -2287,6 +2291,7 @@ in
   nvim-highlight-colors = super.nvim-highlight-colors.overrideAttrs {
     # Test module
     nvimSkipModules = [
+      "nvim-highlight-colors.utils_spec"
       "nvim-highlight-colors.buffer_utils_spec"
       "nvim-highlight-colors.color.converters_spec"
       "nvim-highlight-colors.color.patterns_spec"
@@ -3614,6 +3619,9 @@ in
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
+    # Code updated to find relative path at runtime
+    # https://github.com/fisadev/vim-isort/pull/41
+    dontCheckForBrokenSymlinks = true;
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
@@ -3725,6 +3733,13 @@ in
   virt-column-nvim = super.virt-column-nvim.overrideAttrs {
     # Meta file
     nvimSkipModules = "virt-column.config.types";
+  };
+
+  vs-tasks-nvim = super.vs-tasks-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
   };
 
   which-key-nvim = super.which-key-nvim.overrideAttrs {
