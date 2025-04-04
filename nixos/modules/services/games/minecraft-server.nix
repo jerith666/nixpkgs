@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.minecraft-server;
 
@@ -12,16 +17,25 @@ let
     (builtins.toJSON
       (lib.mapAttrsToList (n: v: { name = n; uuid = v; level = 4; }) cfg.ops));
 
-  whitelistFile = pkgs.writeText "whitelist.json"
-    (builtins.toJSON
-      (lib.mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist));
+  whitelistFile = pkgs.writeText "whitelist.json" (
+    builtins.toJSON (
+      lib.mapAttrsToList (n: v: {
+        name = n;
+        uuid = v;
+      }) cfg.whitelist
+    )
+  );
 
   cfgToString = v: if builtins.isBool v then lib.boolToString v else toString v;
 
-  serverPropertiesFile = pkgs.writeText "server.properties" (''
+  serverPropertiesFile = pkgs.writeText "server.properties" (
+    ''
     # server.properties managed by NixOS configuration
-  '' + lib.concatStringsSep "\n" (lib.mapAttrsToList
-    (n: v: "${n}=${cfgToString v}") cfg.serverProperties));
+    ''
+    + lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (n: v: "${n}=${cfgToString v}") cfg.serverProperties
+    )
+  );
 
   stopScript = pkgs.writeShellScript "minecraft-server-stop" ''
     echo stop > ${config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO}
@@ -40,15 +54,20 @@ let
 
   serverPort = cfg.serverProperties.server-port or defaultServerPort;
 
-  rconPort = if cfg.serverProperties.enable-rcon or false
-    then cfg.serverProperties."rcon.port" or 25575
-    else null;
+  rconPort =
+    if cfg.serverProperties.enable-rcon or false then
+      cfg.serverProperties."rcon.port" or 25575
+    else
+      null;
 
-  queryPort = if cfg.serverProperties.enable-query or false
-    then cfg.serverProperties."query.port" or 25565
-    else null;
+  queryPort =
+    if cfg.serverProperties.enable-query or false then
+      cfg.serverProperties."query.port" or 25565
+    else
+      null;
 
-in {
+in
+{
   options = {
     services.minecraft-server = {
 
@@ -126,13 +145,16 @@ in {
       };
 
       whitelist = lib.mkOption {
-        type = let
-          minecraftUUID = lib.types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
+        type =
+          let
+            minecraftUUID =
+              lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              // {
               description = "Minecraft UUID";
             };
-          in lib.types.attrsOf minecraftUUID;
-        default = {};
+          in
+          lib.types.attrsOf minecraftUUID;
+        default = { };
         description = ''
           Whitelisted players, only has an effect when
           {option}`services.minecraft-server.declarative` is
@@ -152,8 +174,14 @@ in {
       };
 
       serverProperties = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ bool int str ]);
-        default = {};
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+        default = { };
         example = lib.literalExpression ''
           {
             server-port = 43000;
@@ -183,7 +211,8 @@ in {
         type = lib.types.separatedString " ";
         default = "-Xmx2048M -Xms2048M";
         # Example options from https://minecraft.gamepedia.com/Tutorials/Server_startup_script
-        example = "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
+        example =
+          "-Xms4092M -Xmx4092M -XX:+UseG1GC -XX:+CMSIncrementalPacing "
           + "-XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 "
           + "-XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10";
         description = "JVM options for the Minecraft server.";
@@ -200,7 +229,7 @@ in {
       isSystemUser    = true;
       group           = "minecraft";
     };
-    users.groups.minecraft = {};
+    users.groups.minecraft = { };
 
     systemd.sockets.minecraft-server = {
       bindsTo = [ "minecraft-server.service" ];
@@ -218,7 +247,10 @@ in {
       description   = "Minecraft Server Service";
       wantedBy      = [ "multi-user.target" ];
       requires      = [ "minecraft-server.socket" ];
-      after         = [ "network.target" "minecraft-server.socket" ];
+      after = [
+        "network.target"
+        "minecraft-server.socket"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/minecraft-server ${cfg.jvmOpts}";
@@ -246,7 +278,10 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -254,9 +289,13 @@ in {
         UMask = "0077";
       };
 
-      preStart = ''
+      preStart =
+        ''
         ln -sf ${eulaFile} eula.txt
-      '' + (if cfg.declarative then ''
+        ''
+        + (
+          if cfg.declarative then
+            ''
 
         if [ -e .declarative ]; then
 
@@ -279,26 +318,37 @@ in {
             > .declarative
 
         fi
-      '' else ''
+            ''
+          else
+            ''
         if [ -e .declarative ]; then
           rm .declarative
         fi
-      '');
+            ''
+        );
     };
 
-    networking.firewall = lib.mkIf cfg.openFirewall (if cfg.declarative then {
+    networking.firewall = lib.mkIf cfg.openFirewall (
+      if cfg.declarative then
+        {
       allowedUDPPorts = [ serverPort ];
-      allowedTCPPorts = [ serverPort ]
+          allowedTCPPorts =
+            [ serverPort ]
         ++ lib.optional (queryPort != null) queryPort
         ++ lib.optional (rconPort != null) rconPort;
-    } else {
+        }
+      else
+        {
       allowedUDPPorts = [ defaultServerPort ];
       allowedTCPPorts = [ defaultServerPort ];
-    });
+        }
+    );
 
     assertions = [
-      { assertion = cfg.eula;
-        message = "You must agree to Mojangs EULA to run minecraft-server."
+      {
+        assertion = cfg.eula;
+        message =
+          "You must agree to Mojangs EULA to run minecraft-server."
           + " Read https://account.mojang.com/documents/minecraft_eula and"
           + " set `services.minecraft-server.eula` to `true` if you agree.";
       }

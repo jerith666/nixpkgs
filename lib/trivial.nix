@@ -13,18 +13,19 @@ let
     versionSuffix
     revisionWithDefault
     shortRevisionWithDefault
-    warn;
+    warn
+    ;
   inherit (lib)
     isString
     ;
-in {
+in
+{
 
   ## Simple (higher order) functions
 
   /**
     The identity function
     For when you need a function that does “nothing”.
-
 
     # Inputs
 
@@ -45,7 +46,6 @@ in {
 
     Ignores the second argument. If called with only one argument,
     constructs a function that always returns a static value.
-
 
     # Inputs
 
@@ -74,9 +74,7 @@ in {
 
     :::
   */
-  const =
-    x:
-    y: x;
+  const = x: y: x;
 
   /**
     Pipes a value through a list of functions, left to right.
@@ -142,7 +140,6 @@ in {
   /**
     Concatenate two lists
 
-
     # Inputs
 
     `x`
@@ -175,7 +172,6 @@ in {
   /**
     boolean “or”
 
-
     # Inputs
 
     `x`
@@ -191,7 +187,6 @@ in {
   /**
     boolean “and”
 
-
     # Inputs
 
     `x`
@@ -206,7 +201,6 @@ in {
 
   /**
     boolean “exclusive or”
-
 
     # Inputs
 
@@ -234,7 +228,6 @@ in {
     boolean values. Calling `toString` on a bool instead returns "1"
     and "" (sic!).
 
-
     # Inputs
 
     `b`
@@ -254,7 +247,6 @@ in {
 
     mergeAttrs :: attrs -> attrs -> attrs
 
-
     # Inputs
 
     `x`
@@ -264,7 +256,6 @@ in {
     `y`
 
     : Right attribute set (higher precedence for equal keys)
-
 
     # Examples
     :::{.example}
@@ -277,13 +268,10 @@ in {
 
     :::
   */
-  mergeAttrs =
-    x:
-    y: x // y;
+  mergeAttrs = x: y: x // y;
 
   /**
     Flip the order of the arguments of a binary function.
-
 
     # Inputs
 
@@ -316,11 +304,12 @@ in {
 
     :::
   */
-  flip = f: a: b: f b a;
+  flip =
+    f: a: b:
+    f b a;
 
   /**
     Return `maybeValue` if not null, otherwise return `default`.
-
 
     # Inputs
 
@@ -331,7 +320,6 @@ in {
     `maybeValue`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -348,13 +336,10 @@ in {
 
     :::
   */
-  defaultTo = default: maybeValue:
-    if maybeValue != null then maybeValue
-    else default;
+  defaultTo = default: maybeValue: if maybeValue != null then maybeValue else default;
 
   /**
     Apply function if the supplied argument is non-null.
-
 
     # Inputs
 
@@ -365,7 +350,6 @@ in {
     `a`
 
     : Argument to check for null before passing it to `f`
-
 
     # Examples
     :::{.example}
@@ -380,16 +364,25 @@ in {
 
     :::
   */
-  mapNullable =
-    f:
-    a: if a == null then a else f a;
+  mapNullable = f: a: if a == null then a else f a;
 
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
-    pathExists readFile isBool
-    isInt isFloat add sub lessThan
-    seq deepSeq genericClosure
-    bitAnd bitOr bitXor;
+    pathExists
+    readFile
+    isBool
+    isInt
+    isFloat
+    add
+    sub
+    lessThan
+    seq
+    deepSeq
+    genericClosure
+    bitAnd
+    bitOr
+    bitXor
+    ;
 
   ## nixpkgs version strings
 
@@ -424,7 +417,6 @@ in {
     Whether a feature is supported in all supported releases (at the time of
     release branch-off, if applicable). See `oldestSupportedRelease`.
 
-
     # Inputs
 
     `release`
@@ -441,9 +433,7 @@ in {
     Alias for `isInOldestRelease` introduced in 24.11.
     Use `isInOldestRelease` in expressions outside of Nixpkgs for greater compatibility.
    */
-  oldestSupportedReleaseIsAtLeast =
-    release:
-      release <= lib.trivial.oldestSupportedRelease;
+  oldestSupportedReleaseIsAtLeast = release: release <= lib.trivial.oldestSupportedRelease;
 
   /**
     Returns the current nixpkgs release code name.
@@ -474,7 +464,6 @@ in {
     Attempts to return the the current revision of nixpkgs and
     returns the supplied default value otherwise.
 
-
     # Inputs
 
     `default`
@@ -492,10 +481,13 @@ in {
     let
       revisionFile = "${toString ./..}/.git-revision";
       gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsGitRepo gitRepo
-       then lib.commitIdFromGitRepo gitRepo
-       else if lib.pathExists revisionFile then lib.fileContents revisionFile
-       else default;
+    in
+    if lib.pathIsGitRepo gitRepo then
+      lib.commitIdFromGitRepo gitRepo
+    else if lib.pathExists revisionFile then
+      lib.fileContents revisionFile
+    else
+      default;
 
   nixpkgsVersion = warn "lib.nixpkgsVersion is a deprecated alias of lib.version." version;
 
@@ -522,13 +514,12 @@ in {
     inPureEvalMode :: bool
     ```
   */
-  inPureEvalMode = ! builtins ? currentSystem;
+  inPureEvalMode = !builtins ? currentSystem;
 
   ## Integer operations
 
   /**
     Return minimum of two numbers.
-
 
     # Inputs
 
@@ -545,7 +536,6 @@ in {
   /**
     Return maximum of two numbers.
 
-
     # Inputs
 
     `x`
@@ -561,7 +551,6 @@ in {
   /**
     Integer modulus
 
-
     # Inputs
 
     `base`
@@ -571,7 +560,6 @@ in {
     `int`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -588,7 +576,6 @@ in {
   */
   mod = base: int: base - (int * (builtins.div base int));
 
-
   ## Comparisons
 
   /**
@@ -597,7 +584,6 @@ in {
     a < b,  compare a b => -1
     a == b, compare a b => 0
     a > b,  compare a b => 1
-
 
     # Inputs
 
@@ -609,19 +595,20 @@ in {
 
     : 2\. Function argument
   */
-  compare = a: b:
-    if a < b
-    then -1
-    else if a > b
-         then 1
-         else 0;
+  compare =
+    a: b:
+    if a < b then
+      -1
+    else if a > b then
+      1
+    else
+      0;
 
   /**
     Split type into two subtypes by predicate `p`, take all elements
     of the first subtype to be less than all the elements of the
     second subtype, compare elements of a single subtype with `yes`
     and `no` respectively.
-
 
     # Inputs
 
@@ -671,10 +658,12 @@ in {
   */
   splitByAndCompare =
     p: yes: no: a: b:
-    if p a
-    then if p b then yes a b else -1
-    else if p b then 1 else no a b;
-
+    if p a then
+      if p b then yes a b else -1
+    else if p b then
+      1
+    else
+      no a b;
 
   /**
     Reads a JSON file.
@@ -723,8 +712,7 @@ in {
     importJSON :: path -> any
     ```
   */
-  importJSON = path:
-    builtins.fromJSON (builtins.readFile path);
+  importJSON = path: builtins.fromJSON (builtins.readFile path);
 
   /**
     Reads a TOML file.
@@ -771,11 +759,9 @@ in {
     importTOML :: path -> any
     ```
   */
-  importTOML = path:
-    builtins.fromTOML (builtins.readFile path);
+  importTOML = path: builtins.fromTOML (builtins.readFile path);
 
   /**
-
     `warn` *`message`* *`value`*
 
     Print a warning before returning the second argument.
@@ -802,19 +788,26 @@ in {
   warn =
     # Since Nix 2.23, https://github.com/NixOS/nix/pull/10592
     builtins.warn or (
-      let mustAbort = lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"];
+      let
+        mustAbort = lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") [
+          "1"
+          "true"
+          "yes"
+        ];
       in
         # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
         msg: v:
           # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
           assert isString msg;
-          if mustAbort
-          then builtins.trace "[1;31mevaluation warning:[0m ${msg}" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
-          else builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
+      if mustAbort then
+        builtins.trace "[1;31mevaluation warning:[0m ${msg}" (
+          abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors."
+        )
+      else
+        builtins.trace "[1;35mevaluation warning:[0m ${msg}" v
     );
 
   /**
-
     `warnIf` *`condition`* *`message`* *`value`*
 
     Like `warn`, but only warn when the first argument is `true`.
@@ -842,7 +835,6 @@ in {
   warnIf = cond: msg: if cond then warn msg else x: x;
 
   /**
-
     `warnIfNot` *`condition`* *`message`* *`value`*
 
     Like `warnIf`, but negated: warn if the first argument is `false`.
@@ -880,7 +872,6 @@ in {
     Calls can be juxtaposed using function application, as `(r: r) a = a`, so
     `(r: r) (r: r) a = a`, and so forth.
 
-
     # Inputs
 
     `cond`
@@ -914,7 +905,6 @@ in {
   /**
     Like throwIfNot, but negated (throw if the first argument is `true`).
 
-
     # Inputs
 
     `cond`
@@ -935,7 +925,6 @@ in {
 
   /**
     Check if the elements in a list are valid values from a enum, returning the identity function, or throwing an error message otherwise.
-
 
     # Inputs
 
@@ -970,11 +959,12 @@ in {
 
     :::
   */
-  checkListOfEnum = msg: valid: given:
+  checkListOfEnum =
+    msg: valid: given:
     let
       unexpected = lib.subtractLists valid given;
     in
-      lib.throwIfNot (unexpected == [])
+    lib.throwIfNot (unexpected == [ ])
         "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
@@ -994,7 +984,6 @@ in {
     function of the { a, b ? foo, ... }: format, but some facilities
     like callPackage expect to be able to query expected arguments.
 
-
     # Inputs
 
     `f`
@@ -1005,8 +994,8 @@ in {
 
     : 2\. Function argument
   */
-  setFunctionArgs = f: args:
-    { # TODO: Should we add call-time "type" checking like built in?
+  setFunctionArgs = f: args: {
+    # TODO: Should we add call-time "type" checking like built in?
       __functor = self: f;
       __functionArgs = args;
     };
@@ -1018,36 +1007,34 @@ in {
     has the same return type and semantics as builtins.functionArgs.
     setFunctionArgs : (a → b) → Map String Bool.
 
-
     # Inputs
 
     `f`
 
     : 1\. Function argument
   */
-  functionArgs = f:
-    if f ? __functor
-    then f.__functionArgs or (functionArgs (f.__functor f))
-    else builtins.functionArgs f;
+  functionArgs =
+    f:
+    if f ? __functor then
+      f.__functionArgs or (functionArgs (f.__functor f))
+    else
+      builtins.functionArgs f;
 
   /**
     Check whether something is a function or something
     annotated with function args.
 
-
     # Inputs
 
     `f`
 
     : 1\. Function argument
   */
-  isFunction = f: builtins.isFunction f ||
-    (f ? __functor && isFunction (f.__functor f));
+  isFunction = f: builtins.isFunction f || (f ? __functor && isFunction (f.__functor f));
 
   /**
     `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
     but its function arguments mirroring `f` (`lib.functionArgs g' == lib.functionArgs f`).
-
 
     # Inputs
 
@@ -1094,20 +1081,17 @@ in {
     let
       fArgs = functionArgs f;
     in
-    g:
-    setFunctionArgs g fArgs;
+    g: setFunctionArgs g fArgs;
 
   /**
     Turns any non-callable values into constant functions.
     Returns callable values as is.
-
 
     # Inputs
 
     `v`
 
     : Any value
-
 
     # Examples
     :::{.example}
@@ -1123,11 +1107,7 @@ in {
 
     :::
   */
-  toFunction =
-    v:
-    if isFunction v
-    then v
-    else k: v;
+  toFunction = v: if isFunction v then v else k: v;
 
   /**
     Convert a hexadecimal string to it's integer representation.
@@ -1148,12 +1128,15 @@ in {
     => 9223372036854775807
     ```
   */
-  fromHexString = value:
+  fromHexString =
+    value:
   let
     noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower value);
-  in let
+    in
+    let
     parsed = builtins.fromTOML "v=0x${noPrefix}";
-  in parsed.v;
+    in
+    parsed.v;
 
   /**
     Convert the given positive integer to a string of its hexadecimal
@@ -1165,7 +1148,8 @@ in {
 
     toHexString 250 => "FA"
   */
-  toHexString = let
+  toHexString =
+    let
     hexDigits = {
       "10" = "A";
       "11" = "B";
@@ -1174,11 +1158,9 @@ in {
       "14" = "E";
       "15" = "F";
     };
-    toHexDigit = d:
-      if d < 10
-      then toString d
-      else hexDigits.${toString d};
-  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+      toHexDigit = d: if d < 10 then toString d else hexDigits.${toString d};
+    in
+    i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /**
     `toBaseDigits base i` converts the positive integer i to a list of its
@@ -1190,7 +1172,6 @@ in {
 
     toBaseDigits 16 250 => [ 15 10 ]
 
-
     # Inputs
 
     `base`
@@ -1201,17 +1182,19 @@ in {
 
     : 2\. Function argument
   */
-  toBaseDigits = base: i:
+  toBaseDigits =
+    base: i:
     let
-      go = i:
-        if i < base
-        then [i]
+      go =
+        i:
+        if i < base then
+          [ i ]
         else
           let
             r = i - ((i / base) * base);
             q = (i - r) / base;
           in
-            [r] ++ go q;
+          [ r ] ++ go q;
     in
       assert (isInt base);
       assert (isInt i);
