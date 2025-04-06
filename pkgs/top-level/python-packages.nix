@@ -2192,6 +2192,10 @@ self: super: with self; {
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
 
+  canonical-sphinx-extensions =
+    callPackage ../development/python-modules/canonical-sphinx-extensions
+      { };
+
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   canopen = callPackage ../development/python-modules/canopen { };
@@ -3274,6 +3278,8 @@ self: super: with self; {
   decli = callPackage ../development/python-modules/decli { };
 
   decopatch = callPackage ../development/python-modules/decopatch { };
+
+  decora-wifi = callPackage ../development/python-modules/decora-wifi { };
 
   decorator = callPackage ../development/python-modules/decorator { };
 
@@ -7454,10 +7460,6 @@ self: super: with self; {
 
   langgraph-checkpoint = callPackage ../development/python-modules/langgraph-checkpoint { };
 
-  langgraph-checkpoint-duckdb =
-    callPackage ../development/python-modules/langgraph-checkpoint-duckdb
-      { };
-
   langgraph-checkpoint-postgres =
     callPackage ../development/python-modules/langgraph-checkpoint-postgres
       { };
@@ -7800,7 +7802,7 @@ self: super: with self; {
       p.override {
         enablePython = true;
         python3 = python;
-        python3Packages = pythonPackages;
+        python3Packages = self;
       }
     )
     (p: p.py)
@@ -10418,6 +10420,8 @@ self: super: with self; {
 
   ormar = callPackage ../development/python-modules/ormar { };
 
+  ormsgpack = callPackage ../development/python-modules/ormsgpack { };
+
   ortools = (toPythonModule (pkgs.or-tools.override { inherit (self) python; })).python;
 
   orvibo = callPackage ../development/python-modules/orvibo { };
@@ -12772,6 +12776,8 @@ self: super: with self; {
 
   pyoppleio = callPackage ../development/python-modules/pyoppleio { };
 
+  pyorc = callPackage ../development/python-modules/pyorc { };
+
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyosf = callPackage ../development/python-modules/pyosf { };
@@ -12872,6 +12878,8 @@ self: super: with self; {
   pypoint = callPackage ../development/python-modules/pypoint { };
 
   pypoolstation = callPackage ../development/python-modules/pypoolstation { };
+
+  pyporscheconnectapi = callPackage ../development/python-modules/pyporscheconnectapi { };
 
   pyppeteer = callPackage ../development/python-modules/pyppeteer { };
 
@@ -13316,6 +13324,8 @@ self: super: with self; {
 
   pyspellchecker = callPackage ../development/python-modules/pyspellchecker { };
 
+  pyspelling = callPackage ../development/python-modules/pyspelling { };
+
   pyspf = callPackage ../development/python-modules/pyspf { };
 
   pyspice = callPackage ../development/python-modules/pyspice { };
@@ -13540,6 +13550,8 @@ self: super: with self; {
   pytest-json-report = callPackage ../development/python-modules/pytest-json-report { };
 
   pytest-jupyter = callPackage ../development/python-modules/pytest-jupyter { };
+
+  pytest-kafka = callPackage ../development/python-modules/pytest-kafka { };
 
   pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
 
@@ -16159,6 +16171,10 @@ self: super: with self; {
 
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
+  sphinx-reredirects = callPackage ../development/python-modules/sphinx-reredirects { };
+
+  sphinx-remove-toctrees = callPackage ../development/python-modules/sphinx-remove-toctrees { };
+
   sphinx-rtd-dark-mode = callPackage ../development/python-modules/sphinx-rtd-dark-mode { };
 
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
@@ -16668,6 +16684,8 @@ self: super: with self; {
   swh-auth = callPackage ../development/python-modules/swh-auth { };
 
   swh-core = callPackage ../development/python-modules/swh-core { };
+
+  swh-export = callPackage ../development/python-modules/swh-export { };
 
   swh-journal = callPackage ../development/python-modules/swh-journal { };
 
@@ -18717,6 +18735,8 @@ self: super: with self; {
   wget = callPackage ../development/python-modules/wget { };
 
   wgnlpy = callPackage ../development/python-modules/wgnlpy { };
+
+  wgpu-py = callPackage ../development/python-modules/wgpu-py { };
 
   whatthepatch = callPackage ../development/python-modules/whatthepatch { };
 

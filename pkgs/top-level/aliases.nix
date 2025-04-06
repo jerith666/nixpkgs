@@ -324,6 +324,7 @@ mapAliases {
   bashInteractive_5 = throw "'bashInteractive_5' has been renamed to/replaced by 'bashInteractive'"; # Converted to throw 2024-10-17
   bash_5 = throw "'bash_5' has been renamed to/replaced by 'bash'"; # Converted to throw 2024-10-17
   BeatSaberModManager = beatsabermodmanager; # Added 2024-06-12
+  beam_nox = throw "beam_nox has been removed in favor of beam_minimal or beamMinimalPackages"; # Added 2025-04-01
   beatsabermodmanager = throw "'beatsabermodmanager' has been removed due to lack of upstream maintainenance. Consider using 'bs-manager' instead"; # Added 2025-03-18
   betterbird = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
   betterbird-unwrapped = throw "betterbird has been removed as there were insufficient maintainer resources to keep up with security updates"; # Added 2024-10-25
@@ -564,24 +565,29 @@ mapAliases {
 
   erlang_24 = throw "erlang_24 has been removed as it is unmaintained upstream";
   erlang_27-rc3 = throw "erlang_27-rc3 has been removed in favor of erlang_27"; # added 2024-05-20
+  erlang_nox = throw "erlang_nox has been removed in favor of beam_minimal.packages.erlang or beamMinimalPackages.erlang"; # added 2025-04-01
   erlangR24 = throw "erlangR24 has been removed in favor of erlang_24"; # added 2024-05-24
   erlangR24_odbc = throw "erlangR24_odbc has been removed in favor of erlang_24_odbc"; # added 2024-05-24
   erlangR24_javac = throw "erlangR24_javac has been removed in favor of erlang_24_javac"; # added 2024-05-24
   erlangR24_odbc_javac = throw "erlangR24_odbc_javac has been removed in favor of erlang_24_odbc_javac"; # added 2024-05-24
-  erlangR25 = throw "erlangR25 has been removed in favor of erlang_25"; # added 2024-05-24
-  erlangR25_odbc = throw "erlangR25_odbc has been removed in favor of erlang_25_odbc"; # added 2024-05-24
-  erlangR25_javac = throw "erlangR25_javac has been removed in favor of erlang_25_javac"; # added 2024-05-24
-  erlangR25_odbc_javac = throw "erlangR25_odbc_javac has been removed in favor of erlang_25_odbc_javac"; # added 2024-05-24
+  erlang_25 = throw "erlang_25 has been removed as it is unmaintained upstream"; # added 2025-03-31
+  erlangR25 = throw "erlangR25 has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_odbc = throw "erlangR25_odbc has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_javac = throw "erlangR25_javac has been removed as it is unmaintained upstream"; # added 2024-05-24
+  erlangR25_odbc_javac = throw "erlangR25_odbc_javac has been removed as it is unmaintained upstream"; # added 2024-05-24
   erlangR26 = throw "erlangR26 has been removed in favor of erlang_26"; # added 2024-05-24
   erlangR26_odbc = throw "erlangR26_odbc has been removed in favor of erlang_26_odbc"; # added 2024-05-24
   erlangR26_javac = throw "erlangR26_javac has been removed in favor of erlang_26_javac"; # added 2024-05-24
   erlangR26_odbc_javac = throw "erlangR26_odbc_javac has been removed in favor of erlang_26_odbc_javac"; # added 2024-05-24
+
+  erlang_language_platform = throw "erlang_language_platform has been renamed erlang-language-platform"; # added 2025-04-04
 
   ethabi = throw "ethabi has been removed due to lack of maintainence upstream and no updates in Nixpkgs"; # Added 2024-07-16
   eww-wayland = lib.warnOnInstantiate "eww now can build for X11 and wayland simultaneously, so `eww-wayland` is deprecated, use the normal `eww` package instead." eww;
 
   ### F ###
 
+  factor-lang-scope = throw "'factor-lang-scope' has been renamed to 'factorPackages'"; # added 2024-11-28
   fahcontrol = throw "fahcontrol has been removed because the download is no longer available"; # added 2024-09-24
   fahviewer = throw "fahviewer has been removed because the download is no longer available"; # added 2024-09-24
   fam = throw "'fam' (aliased to 'gamin') has been removed as it is unmaintained upstream"; # Added 2024-04-19
@@ -747,6 +753,7 @@ mapAliases {
   gobby5 = throw "'gobby5' has been renamed to/replaced by 'gobby'"; # Converted to throw 2024-10-17
   gradle_6 = throw "Gradle 6 has been removed, as it is end-of-life (https://endoflife.date/gradle) and has many vulnerabilities that are not resolved until Gradle 7."; # Added 2024-10-30
   gradle_6-unwrapped = throw "Gradle 6 has been removed, as it is end-of-life (https://endoflife.date/gradle) and has many vulnerabilities that are not resolved until Gradle 7."; # Added 2024-10-30
+  grafana-agent = throw "'grafana-agent' has been removed, as it only works with an EOL compiler and will become EOL during the 25.05 release. Consider migrating to 'grafana-alloy' instead"; # Added 2025-04-02
 
   #godot
 
@@ -1039,7 +1046,6 @@ mapAliases {
   lobster-two = throw "'lobster-two' has been renamed to/replaced by 'google-fonts'"; # Converted to throw 2024-10-17
   loc = throw "'loc' has been removed due to lack of upstream maintenance. Consider 'tokei' as an alternative."; # Added 2025-01-25
   loco-cli = loco; # Added 2025-02-24
-  logseq = throw "logseq has been removed, due to lack of maintenance and blocking the Electron 27 removal."; # Added 2025-02-24
   loop = throw "'loop' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   luna-icons = throw "luna-icons has been removed as it was removed upstream"; # Added 2024-10-29
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
@@ -1253,6 +1259,7 @@ mapAliases {
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
   oauth2_proxy = throw "'oauth2_proxy' has been renamed to/replaced by 'oauth2-proxy'"; # Converted to throw 2024-10-17
+  ocis-bin = throw "ocis-bin has been renamed to ocis_5-bin'. Future major.minor versions will be made available as separate packages"; # Added 2025-03-30
   oil = lib.warnOnInstantiate "Oil has been replaced with the faster native C++ version and renamed to 'oils-for-unix'. See also https://github.com/oils-for-unix/oils/wiki/Oils-Deployments" oils-for-unix; # Added 2024-10-22
   onevpl-intel-gpu = lib.warnOnInstantiate "onevpl-intel-gpu has been renamed to vpl-gpu-rt" vpl-gpu-rt; # Added 2024-06-04
   openai-whisper-cpp = whisper-cpp; # Added 2024-12-13
@@ -1859,6 +1866,7 @@ mapAliases {
   xonsh-unwrapped = python3Packages.xonsh; # Added 2024-06-18
   xplayer = throw "xplayer has been removed as the upstream project was archived"; # Added 2024-12-27
   xprite-editor = throw "'xprite-editor' has been removed due to lack of maintenance upstream. Consider using 'pablodraw' or 'aseprite' instead"; # Added 2024-09-14
+  xsd = throw "'xsd' has been removed."; # Added 2025-04-02
   xsv = throw "'xsv' has been removed due to lack of upstream maintenance. Please see 'xan' for a maintained alternative";
   xtrlock-pam = throw "xtrlock-pam has been removed because it is unmaintained for 10 years and doesn't support Python 3.10 or newer"; # Added 2025-01-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
