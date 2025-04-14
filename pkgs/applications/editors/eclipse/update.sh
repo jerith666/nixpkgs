@@ -41,7 +41,7 @@ esac
 ECLIPSES_JSON=$(dirname $0)/eclipses.json;
 
 t=$(mktemp);
-cat $ECLIPSES_JSON | jq ". + {platform_major: \"${platform_major}\",platform_minor: \"${platform_minor}\",year: \"${year}\",month: \"${month}\",buildmonth: \"${buildmonth}\",dayHourMinute: \"${builddaytime}\"}" > $t;
+cat $ECLIPSES_JSON | jq ". + {platform_major: \"${platform_major}\",platform_minor: \"${platform_minor}\",version:\"${platform_major}.${platform_minor}\",year: \"${year}\",month: \"${month}\",buildmonth: \"${buildmonth}\",dayHourMinute: \"${builddaytime}\"}" > $t;
 mv $t $ECLIPSES_JSON;
 
 # prefetch new download hashes
