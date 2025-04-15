@@ -13,7 +13,7 @@
   libGL,
   libjack2,
   curl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libsysprof-capture,
   pcre2,
   util-linux,
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     lerc
     freetype
     curl
-    webkitgtk_4_0
+    webkitgtk_4_1
     pcre2
     util-linux
     sqlite
