@@ -1410,6 +1410,7 @@
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
+  ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix
   ./services/security/esdm.nix
@@ -1567,6 +1568,7 @@
   ./services/web-apps/isso.nix
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
+  ./services/web-apps/karakeep.nix
   ./services/web-apps/kasmweb/default.nix
   ./services/web-apps/kanboard.nix
   ./services/web-apps/kavita.nix

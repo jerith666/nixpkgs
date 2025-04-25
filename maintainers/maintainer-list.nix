@@ -2129,6 +2129,11 @@
     githubId = 11493130;
     name = "Asbjørn Olling";
   };
+  aschleck = {
+    name = "April Schleck";
+    github = "aschleck";
+    githubId = 115766;
+  };
   ascii17 = {
     name = "Allen Conlon";
     email = "software@conlon.dev";
@@ -2513,6 +2518,7 @@
   };
   awwpotato = {
     email = "awwpotato@voidq.com";
+    matrix = "@awwpotato:envs.net";
     github = "awwpotato";
     githubId = 153149335;
     name = "awwpotato";
@@ -8483,6 +8489,12 @@
     githubId = 12715461;
     name = "Anders Bo Rasmussen";
   };
+  fvckgrimm = {
+    email = "nixpkgs@grimm.wtf";
+    github = "fvckgrimm";
+    githubId = 55907409;
+    name = "Grimm";
+  };
   fwc = {
     github = "fwc";
     githubId = 29337229;
@@ -12835,6 +12847,12 @@
     githubId = 1915;
     name = "Asherah Connor";
   };
+  kiyotoko = {
+    email = "karl.zschiebsch@gmail.com";
+    github = "Kiyotoko";
+    githubId = 49951907;
+    name = "Karl Zschiebsch";
+  };
   kjeremy = {
     email = "kjeremy@gmail.com";
     name = "Jeremy Kolb";
@@ -13203,6 +13221,12 @@
     github = "KUD-00";
     githubId = 70764075;
     name = "kud";
+  };
+  kuflierl = {
+    email = "kuflierl@gmail.com";
+    github = "kuflierl";
+    name = "Kennet Flierl";
+    githubId = 41301536;
   };
   kugland = {
     email = "kugland@gmail.com";
@@ -13876,12 +13900,6 @@
     github = "linuxissuper";
     githubId = 74221543;
     name = "Moritz Goltdammer";
-  };
-  linuxmobile = {
-    email = "bdiez19@gmail.com";
-    github = "linuxmobile";
-    githubId = 10554636;
-    name = "Braian A. Diez";
   };
   linuxwhata = {
     email = "linuxwhata@qq.com";
@@ -22455,6 +22473,12 @@
     github = "sinanmohd";
     githubId = 69694713;
   };
+  sinics = {
+    name = "Zhifan";
+    email = "nonno.felice69uwu@gmail.com";
+    matrix = "@c3n21:matrix.org";
+    githubId = 37077738;
+  };
   sioodmy = {
     name = "Antoni Sokołowski";
     github = "sioodmy";
@@ -26299,6 +26323,13 @@
     email = "nix@x3ro.dev";
     github = "x3rAx";
     githubId = 2268851;
+  };
+  x807x = {
+    name = "x807x";
+    email = "s10855168@gmail.com";
+    matrix = "@x807x:matrix.org";
+    github = "x807x";
+    githubId = 86676478;
   };
   xanderio = {
     name = "Alexander Sieg";
