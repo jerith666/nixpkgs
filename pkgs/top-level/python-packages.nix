@@ -632,6 +632,8 @@ self: super: with self; {
 
   amcrest = callPackage ../development/python-modules/amcrest { };
 
+  ament-package = callPackage ../development/python-modules/ament-package { };
+
   amply = callPackage ../development/python-modules/amply { };
 
   amqp = callPackage ../development/python-modules/amqp { };
@@ -2665,6 +2667,10 @@ self: super: with self; {
 
   colcon-argcomplete = callPackage ../development/python-modules/colcon-argcomplete { };
 
+  colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
+
+  colcon-notification = callPackage ../development/python-modules/colcon-notification { };
+
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
@@ -2957,6 +2963,8 @@ self: super: with self; {
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csaf-tool = callPackage ../development/python-modules/csaf-tool { };
+
+  csaps = callPackage ../development/python-modules/csaps { };
 
   cson = callPackage ../development/python-modules/cson { };
 
@@ -6805,6 +6813,8 @@ self: super: with self; {
 
   ipycanvas = callPackage ../development/python-modules/ipycanvas { };
 
+  ipydatagrid = callPackage ../development/python-modules/ipydatagrid { };
+
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
@@ -8897,6 +8907,8 @@ self: super: with self; {
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
+
+  mlcroissant = callPackage ../development/python-modules/mlcroissant { };
 
   mlflow = callPackage ../development/python-modules/mlflow { };
 
@@ -11483,6 +11495,8 @@ self: super: with self; {
     callPackage ../development/python-modules/proton-vpn-network-manager
       { };
 
+  proton-vpn-local-agent = callPackage ../development/python-modules/proton-vpn-local-agent { };
+
   protonup-ng = callPackage ../development/python-modules/protonup-ng { };
 
   protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib {
@@ -11738,6 +11752,8 @@ self: super: with self; {
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
 
   py2bit = callPackage ../development/python-modules/py2bit { };
+
+  py2vega = callPackage ../development/python-modules/py2vega { };
 
   py3buddy = callPackage ../development/python-modules/py3buddy { };
 
@@ -14782,6 +14798,8 @@ self: super: with self; {
   };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
+
+  reactionmenu = callPackage ../development/python-modules/reactionmenu { };
 
   reactivex = callPackage ../development/python-modules/reactivex { };
 
@@ -19224,12 +19242,7 @@ self: super: with self; {
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
 
-  z3-solver =
-    (toPythonModule (
-      (pkgs.z3.override { inherit python; }).overrideAttrs (_: {
-        pname = "z3-solver";
-      })
-    )).python;
+  z3-solver = (toPythonModule (pkgs.z3.override { python3 = python; })).python;
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 

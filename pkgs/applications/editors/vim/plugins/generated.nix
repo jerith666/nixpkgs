@@ -4355,6 +4355,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  ecolog-nvim = buildVimPlugin {
+    pname = "ecolog.nvim";
+    version = "2025-04-23";
+    src = fetchFromGitHub {
+      owner = "t3ntxcl3s";
+      repo = "ecolog.nvim";
+      rev = "cfd19e7a8841c538fdb706ee6ba3a22943d45ca6";
+      sha256 = "12mlhmzqgv45v98gi5jvqkn9bkl6nfixlgvb76b6ci6rzdkyxg52";
+    };
+    meta.homepage = "https://github.com/t3ntxcl3s/ecolog.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   edge = buildVimPlugin {
     pname = "edge";
     version = "2025-04-16";
@@ -14934,6 +14947,19 @@ final: prev: {
       sha256 = "07ri7vi4fzqdxn35646kswij61dpg63pq8f2d46jyifxzv1kbis7";
     };
     meta.homepage = "https://github.com/tummetott/unimpaired.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  unimpaired-which-key-nvim = buildVimPlugin {
+    pname = "unimpaired-which-key.nvim";
+    version = "2024-08-16";
+    src = fetchFromGitHub {
+      owner = "afreakk";
+      repo = "unimpaired-which-key.nvim";
+      rev = "c35f413a631e2d2a29778cc390e4d2da28fc2727";
+      sha256 = "11skr474c9drq25823rx1jxcv5d57si0085zw60nq3wxmx999cg3";
+    };
+    meta.homepage = "https://github.com/afreakk/unimpaired-which-key.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
