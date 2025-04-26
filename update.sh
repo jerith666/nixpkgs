@@ -35,7 +35,9 @@ for commit in ${PRE_CHERRY:-}; do
     git cherry-pick -x $commit;
 done
 
-git merge origin/nixos-unstable -m "Merge remote-tracking branch 'origin/nixos-unstable'";
+git merge origin/nixos-unstable \
+    -X ignore-space-change \
+    -m "Merge remote-tracking branch 'origin/nixos-unstable'";
 
 for commit in ${POST_REVERT:-}; do
     git revert --no-edit $commit;
