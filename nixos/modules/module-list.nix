@@ -754,6 +754,7 @@
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
+  ./services/matrix/lk-jwt-service.nix
   ./services/matrix/matrix-alertmanager.nix
   ./services/matrix/maubot.nix
   ./services/matrix/mautrix-meta.nix
@@ -1183,6 +1184,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
   ./services/networking/libreswan.nix
+  ./services/networking/livekit.nix
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/lokinet.nix
@@ -1428,6 +1430,7 @@
   ./services/security/nginx-sso.nix
   ./services/security/oauth2-proxy.nix
   ./services/security/oauth2-proxy-nginx.nix
+  ./services/security/openbao.nix
   ./services/security/opensnitch.nix
   ./services/security/paretosecurity.nix
   ./services/security/pass-secret-service.nix
@@ -1606,6 +1609,7 @@
   ./services/web-apps/mediagoblin.nix
   ./services/web-apps/open-web-calendar.nix
   ./services/web-apps/mobilizon.nix
+  ./services/web-apps/olivetin.nix
   ./services/web-apps/openwebrx.nix
   ./services/web-apps/outline.nix
   ./services/web-apps/pds.nix

@@ -24,6 +24,7 @@
   rustc,
   rustfmt,
   xdotool,
+  xdg-user-dirs,
   pipewire,
   cargo-expand,
   yq,
@@ -205,6 +206,10 @@ flutter.buildFlutterApplication rec {
     cp ../res/scalable.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
+  extraWrapProgramArgs = ''
+    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       name = "rustdesk";
@@ -246,7 +251,7 @@ flutter.buildFlutterApplication rec {
     homepage = "https://rustdesk.com";
     changelog = "https://github.com/rustdesk/rustdesk/releases/${version}";
     license = lib.licenses.agpl3Only;
-    maintainers = lib.teams.helsinki-systems.members;
+    teams = [ lib.teams.helsinki-systems ];
     mainProgram = "rustdesk";
     platforms = lib.platforms.linux; # should work on darwin as well but I have no machine to test with
   };

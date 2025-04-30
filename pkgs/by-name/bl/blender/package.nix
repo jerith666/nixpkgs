@@ -59,7 +59,7 @@
   opencolorio,
   openexr,
   openimagedenoise,
-  openimageio,
+  openimageio_2,
   openjpeg,
   openpgl,
   opensubdiv,
@@ -251,7 +251,7 @@ stdenv'.mkDerivation (finalAttrs: {
       libwebp
       opencolorio
       openexr
-      openimageio
+      openimageio_2
       openjpeg
       openpgl
       (opensubdiv.override { inherit cudaSupport; })
@@ -321,7 +321,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.requests
       ps.zstandard
     ]
-    ++ lib.optional openUsdSupport [ pyPkgsOpenusd ];
+    ++ lib.optionals openUsdSupport [ pyPkgsOpenusd ];
 
   blenderExecutable =
     placeholder "out"
