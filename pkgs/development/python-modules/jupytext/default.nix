@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # Tests that use a Jupyter notebook require $HOME to be writable
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwouts/jupytext";
     changelog = "https://github.com/mwouts/jupytext/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
     mainProgram = "jupytext";
   };
 }

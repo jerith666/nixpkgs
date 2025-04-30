@@ -25,17 +25,15 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.10";
+  version = "2.9.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hLdq5AlTaCZ9x/x5VL4Q673th2HnE7haAaOp5zOQdjQ=";
+    hash = "sha256-pu5UEVgys6glBnWCIozj2dubQvnF75KCA6fxeujx/pA=";
   };
-
-  pythonRelaxDeps = [ "aenum" ];
 
   build-system = [ setuptools ];
 

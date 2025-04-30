@@ -13,9 +13,7 @@ let
     eula=true
   '';
 
-  opsFile = pkgs.writeText "ops.json"
-    (builtins.toJSON
-      (lib.mapAttrsToList (n: v: { name = n; uuid = v; level = 4; }) cfg.ops));
+  opsFile = pkgs.writeText "ops.json" (builtins.toJSON cfg.ops);
 
   whitelistFile = pkgs.writeText "whitelist.json" (
     builtins.toJSON (
@@ -30,7 +28,7 @@ let
 
   serverPropertiesFile = pkgs.writeText "server.properties" (
     ''
-    # server.properties managed by NixOS configuration
+      # server.properties managed by NixOS configuration
     ''
     + lib.concatStringsSep "\n" (
       lib.mapAttrsToList (n: v: "${n}=${cfgToString v}") cfg.serverProperties
@@ -122,24 +120,52 @@ in
       };
 
       ops = lib.mkOption {
-        type = let
-          minecraftUUID = lib.types.strMatching
-            "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
-              description = "Minecraft UUID";
-            };
-          in lib.types.attrsOf minecraftUUID;
-        default = {};
+        type =
+          let
+            minecraftUUID =
+              lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+              // {
+                description = "Minecraft UUID";
+              };
+          in
+          lib.types.listOf (
+            lib.types.submodule {
+              options = {
+                name = lib.mkOption {
+                  description = "Minecraft username of the operator";
+                  type = lib.types.str;
+                };
+                uuid = lib.mkOption {
+                  description = "Minecraft uuid of the operator.  You can use https://mcuuid.net/ to get a Minecraft UUID for a username.";
+                  type = minecraftUUID;
+                };
+                level = lib.mkOption {
+                  type = lib.types.ints.between 1 4;
+                  description = "operator level to give the user (1: moderator; 2: gamemaster; 3: admin; 4: owner)";
+                  default = 4;
+                };
+                bypassesPlayerLimit = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = "If true, this user can connect to the server even if max-players (defined in serverProperties) has been reached";
+                };
+              };
+            }
+          );
+        default = [ ];
         description = ''
-          Level 4 operators. Only has an effect when
+          Operators. Only has an effect when
           {option}`services.minecraft-server.declarative` is
-          `true`. This is a mapping from Minecraft usernames
-          to UUIDs. You can use https://mcuuid.net/ to
-          get a Minecraft UUID for a username.
+          `true`.
         '';
         example = lib.literalExpression ''
-          {
-            username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
-            username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+          [
+            {
+              name = "username1";
+              uuid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+              level = 3;
+              bypassesPlayerLimit = true;
+            }
           };
         '';
       };
@@ -150,8 +176,8 @@ in
             minecraftUUID =
               lib.types.strMatching "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
               // {
-              description = "Minecraft UUID";
-            };
+                description = "Minecraft UUID";
+              };
           in
           lib.types.attrsOf minecraftUUID;
         default = { };
@@ -223,11 +249,11 @@ in
   config = lib.mkIf cfg.enable {
 
     users.users.minecraft = {
-      description     = "Minecraft server service user";
-      home            = cfg.dataDir;
-      createHome      = true;
-      isSystemUser    = true;
-      group           = "minecraft";
+      description = "Minecraft server service user";
+      home = cfg.dataDir;
+      createHome = true;
+      isSystemUser = true;
+      group = "minecraft";
     };
     users.groups.minecraft = { };
 
@@ -244,9 +270,9 @@ in
     };
 
     systemd.services.minecraft-server = {
-      description   = "Minecraft Server Service";
-      wantedBy      = [ "multi-user.target" ];
-      requires      = [ "minecraft-server.socket" ];
+      description = "Minecraft Server Service";
+      wantedBy = [ "multi-user.target" ];
+      requires = [ "minecraft-server.socket" ];
       after = [
         "network.target"
         "minecraft-server.socket"
@@ -291,39 +317,39 @@ in
 
       preStart =
         ''
-        ln -sf ${eulaFile} eula.txt
+          ln -sf ${eulaFile} eula.txt
         ''
         + (
           if cfg.declarative then
             ''
 
-        if [ -e .declarative ]; then
+              if [ -e .declarative ]; then
 
-          # Was declarative before, no need to back up anything
-          ln -sf ${whitelistFile} whitelist.json
-          ln -sf ${opsFile} ops.json
-          cp -f ${serverPropertiesFile} server.properties
+                # Was declarative before, no need to back up anything
+                ln -sf ${whitelistFile} whitelist.json
+                ln -sf ${opsFile} ops.json
+                cp -f ${serverPropertiesFile} server.properties
 
-        else
+              else
 
-          # Declarative for the first time, backup stateful files
-          ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
-          ln -sb --suffix=.stateful ${opsFile} ops.json
-          cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
+                # Declarative for the first time, backup stateful files
+                ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
+                ln -sb --suffix=.stateful ${opsFile} ops.json
+                cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
-          # server.properties must have write permissions, because every time
-          # the server starts it first parses the file and then regenerates it..
-          chmod +w server.properties
-          echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
-            > .declarative
+                # server.properties must have write permissions, because every time
+                # the server starts it first parses the file and then regenerates it..
+                chmod +w server.properties
+                echo "Autogenerated file that signifies that this server configuration is managed declaratively by NixOS" \
+                  > .declarative
 
-        fi
+              fi
             ''
           else
             ''
-        if [ -e .declarative ]; then
-          rm .declarative
-        fi
+              if [ -e .declarative ]; then
+                rm .declarative
+              fi
             ''
         );
     };
@@ -331,16 +357,16 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall (
       if cfg.declarative then
         {
-      allowedUDPPorts = [ serverPort ];
+          allowedUDPPorts = [ serverPort ];
           allowedTCPPorts =
             [ serverPort ]
-        ++ lib.optional (queryPort != null) queryPort
-        ++ lib.optional (rconPort != null) rconPort;
+            ++ lib.optional (queryPort != null) queryPort
+            ++ lib.optional (rconPort != null) rconPort;
         }
       else
         {
-      allowedUDPPorts = [ defaultServerPort ];
-      allowedTCPPorts = [ defaultServerPort ];
+          allowedUDPPorts = [ defaultServerPort ];
+          allowedTCPPorts = [ defaultServerPort ];
         }
     );
 

@@ -4,25 +4,26 @@
   cmake,
   fetchFromGitHub,
   tbb_2021_11,
+
   useTBB ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libblake3";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "BLAKE3-team";
     repo = "BLAKE3";
     tag = finalAttrs.version;
-    hash = "sha256-Krh0yVNZKL6Mb0McqWTIMNownsgM3MUEX2IP+F/fu+k=";
+    hash = "sha256-IABVErXWYQFXZcwsFKfQhm3ox7UZUcW5uzVrGwsSp94=";
   };
 
   sourceRoot = finalAttrs.src.name + "/c";
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optionals useTBB [
+  propagatedBuildInputs = lib.optionals useTBB [
     # 2022.0 crashes on macOS at the moment
     tbb_2021_11
   ];

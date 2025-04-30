@@ -12,7 +12,7 @@
   cmake,
   wrapQtAppsHook,
   openimageio,
-  openexr_3,
+  openexr,
   portaudio,
   imath,
   qtwayland,
@@ -27,7 +27,7 @@ let
     version = "2.4.15.0";
     src = (
       old.src.override {
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
       }
     );
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     opencolorio
     openimageio'
     imath
-    openexr_3
+    openexr
     portaudio
     qtwayland
     qtmultimedia

@@ -5,7 +5,7 @@
   intltool,
   pkg-config,
   glib,
-  gtk,
+  gtk3,
   lua,
   libwnck,
 }:
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   version = "0.44";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/devilspie2/devilspie2-${version}.tar.xz";
-    sha256 = "Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib
-    gtk
+    gtk3
     lua
     libwnck
   ];
