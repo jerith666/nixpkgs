@@ -13563,8 +13563,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  around = callPackage ../applications/networking/instant-messengers/around { };
-
   astroid = callPackage ../applications/networking/mailreaders/astroid {
     vim = vim-full.override { features = "normal"; };
     protobuf = protobuf_21;
