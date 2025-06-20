@@ -12,8 +12,7 @@
   whereami,
   lua,
   lz4,
-  Foundation,
-  AppKit,
+  udevCheckHook,
   withGui ? true,
   wrapQtAppsHook,
   qtbase,
@@ -59,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     gcc-arm-embedded
+    udevCheckHook
   ] ++ lib.optional withGui wrapQtAppsHook;
   buildInputs =
     [
@@ -73,11 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optional withGui qtbase
     ++ lib.optional withPython python3
-    ++ lib.optional withBlueshark bluez5
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Foundation
-      AppKit
-    ];
+    ++ lib.optional withBlueshark bluez5;
 
   makeFlags =
     [
@@ -91,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withSmall "PLATFORM_SIZE=256"
     ++ map (x: "SKIP_${x}=1") withoutFunctions;
   enableParallelBuilding = true;
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Client for proxmark3, powerful general purpose RFID tool";

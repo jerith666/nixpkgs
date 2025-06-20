@@ -1,7 +1,6 @@
-import ./make-test-python.nix (
-  { pkgs, ... }:
+{ pkgs, ... }:
 
-  let
+let
     remoteRepository = "/root/restic-backup";
     remoteFromFileRepository = "/root/restic-backup-from-file";
     remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
@@ -40,8 +39,8 @@ import ./make-test-python.nix (
       "--keep-monthly 1"
       "--keep-yearly 99"
     ];
-  in
-  {
+in
+{
     name = "restic";
 
     meta = with pkgs.lib.maintainers; {
@@ -254,5 +253,4 @@ import ./make-test-python.nix (
           5
       )
     '';
-  }
-)
+}

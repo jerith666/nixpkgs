@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   buildPackages,
   fetchFromGitLab,
   python3,
@@ -39,6 +40,7 @@
   gst_all_1,
   ffmpeg,
   fftwFloat,
+  bluezSupport ? stdenv.hostPlatform.isLinux,
   bluez,
   sbc,
   libfreeaptx,
@@ -73,7 +75,6 @@ let
     webrtc-audio-processing
   ];
 
-  bluezSupport = stdenv.hostPlatform.isLinux;
   modemmanagerSupport = lib.meta.availableOn stdenv.hostPlatform modemmanager;
   libcameraSupport = lib.meta.availableOn stdenv.hostPlatform libcamera;
   ldacbtSupport = lib.meta.availableOn stdenv.hostPlatform ldacbt;
@@ -81,7 +82,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.1";
+  version = "1.4.5";
 
   outputs = [
     "out"
@@ -97,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
+    sha256 = "sha256-5fBpthIGsvMYrQyRb6n1uiNtJ3pl2ejAFr1e/UUga8w=";
   };
 
   patches = [
@@ -243,6 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = true;
+  doInstallCheck = true;
 
   postUnpack = ''
     patchShebangs ${finalAttrs.src.name}/doc/*.py
@@ -253,7 +255,12 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "bin/pw-jack" "$jack"
   '';
 
-  passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
+  passthru.tests = {
+    installed-tests = nixosTests.installed-tests.pipewire;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     description = "Server and user space API to deal with multimedia pipelines";
@@ -264,6 +271,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       kranzes
       k900
+    ];
+    pkgConfigModules = [
+      "libpipewire-0.3"
+      "libspa-0.2"
     ];
   };
 })
