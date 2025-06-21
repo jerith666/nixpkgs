@@ -1959,6 +1959,8 @@ self: super:
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
   hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
+  language-ecmascript = doJailbreak super.language-ecmascript;
+
   # Too strict bounds on containers
   # https://github.com/jswebtools/language-ecmascript-analysis/issues/1
   language-ecmascript-analysis = doJailbreak super.language-ecmascript-analysis;
