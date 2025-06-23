@@ -3,13 +3,12 @@ let
   rcon-pass = "foobar";
   rcon-port = 43000;
 in
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  {
+{ lib, pkgs, ... }:
+{
     name = "minecraft-server";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ nequissimus ];
-    };
+  meta.maintainers = with lib.maintainers; [ nequissimus ];
+
+  node.pkgsReadOnly = false;
 
     nodes.server =
       { ... }:
@@ -57,5 +56,4 @@ import ./make-test-python.nix (
       )
       server.succeed("systemctl stop minecraft-server")
     '';
-  }
-)
+}

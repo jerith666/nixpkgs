@@ -12,12 +12,12 @@
   pkgs,
 }:
 let
-  version = "0.0.23";
+  version = "0.0.25-unstable-2025-06-20";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    tag = "v${version}";
-    hash = "sha256-Ud4NkJH7hze5796KjVe5Nj9DzxwQkDQErCJDDiBzAIY=";
+    rev = "060c0de2aa2ef7c9e6e100f3bd8ef92c085d0555";
+    hash = "sha256-g5GVTRy1RiNNYrVIQbHxOu1ihxlQk/kww3DEKJ6hF9Q=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
@@ -73,6 +73,7 @@ vimUtils.buildVimPlugin {
 
   passthru = {
     updateScript = nix-update-script {
+      extraArgs = [ "--version=branch" ];
       attrPath = "vimPlugins.avante-nvim.avante-nvim-lib";
     };
 
@@ -84,6 +85,10 @@ vimUtils.buildVimPlugin {
     # Requires setup with corresponding provider
     "avante.providers.azure"
     "avante.providers.copilot"
+    "avante.providers.gemini"
+    "avante.providers.ollama"
+    "avante.providers.vertex"
+    "avante.providers.vertex_claude"
   ];
 
   meta = {

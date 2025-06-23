@@ -14,14 +14,20 @@ import ./make-test-python.nix {
         enableSubmission = true;
         enableSubmissions = true;
         tlsTrustedAuthorities = "${certs.ca.cert}";
-        sslCert = "${certs.${domain}.cert}";
-        sslKey = "${certs.${domain}.key}";
+        config.smtpd_tls_chain_files = [
+          certs.${domain}.key
+          certs.${domain}.cert
+        ];
         submissionsOptions = {
           smtpd_sasl_auth_enable = "yes";
           smtpd_client_restrictions = "permit";
           milter_macro_daemon_name = "ORIGINATING";
         };
+        config = {
+          smtpd_sasl_auth_enable = "yes";
+        };
       };
+      services.saslauthd.enable = true;
 
       security.pki.certificateFiles = [
         certs.ca.cert
@@ -68,11 +74,22 @@ import ./make-test-python.nix {
               smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test SMTPS\n\nTest data.')
               smtp.quit()
           '';
+
+          auth = pkgs.writeScriptBin "auth" ''
+            #!${pkgs.python3.interpreter}
+            import smtplib
+
+            with smtplib.SMTP('${domain}') as smtp:
+              smtp.ehlo()
+              smtp.login("alice","foobar")
+              smtp.quit()
+          '';
         in
         [
           sendTestMail
           sendTestMailStarttls
           sendTestMailSmtps
+          auth
         ];
     };
 
@@ -81,5 +98,6 @@ import ./make-test-python.nix {
     machine.succeed("send-testmail")
     machine.succeed("send-testmail-starttls")
     machine.succeed("send-testmail-smtps")
+    machine.succeed("auth")
   '';
 }

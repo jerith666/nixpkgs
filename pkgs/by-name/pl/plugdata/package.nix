@@ -23,7 +23,6 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_2_4,
   libGL,
   libjack2,
   lerc,
@@ -80,7 +79,6 @@ stdenv.mkDerivation {
     libxkbcommon
     libdatrie
     libepoxy
-    libsoup_2_4
     lerc
     libjack2
     expat

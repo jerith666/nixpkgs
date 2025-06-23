@@ -23,7 +23,6 @@
   libxkbcommon,
   libdatrie,
   libepoxy,
-  libsoup_2_4,
   lerc,
   sqlite,
   ninja,
@@ -89,7 +88,6 @@ stdenv.mkDerivation {
     libxkbcommon
     libdatrie
     libepoxy
-    libsoup_2_4
     lerc
     freetype
     curl

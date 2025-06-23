@@ -37,6 +37,7 @@
   nest-asyncio,
   pytest-asyncio,
   pytest-mock,
+  pytest-xdist,
   respx,
 
   # optional-dependencies toggle
@@ -46,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.69.0";
+  version = "1.87.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-uU6TvA172qETuiP++v8XEunjlB8VrBSBVpWu9iEBvj4=";
+    hash = "sha256-KXvtAxkALZd/T5mVLkDemO7qQ7E2CLVmRpAg1+cRcdU=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -71,10 +72,8 @@ buildPythonPackage rec {
       distro
       httpx
       jiter
-      numpy
       pydantic
       sniffio
-      sounddevice
       tqdm
       typing-extensions
     ]
@@ -105,14 +104,13 @@ buildPythonPackage rec {
     nest-asyncio
     pytest-asyncio
     pytest-mock
+    pytest-xdist
     respx
   ];
 
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
-    # snapshot mismatches
-    "--inline-snapshot=update"
   ];
 
   disabledTests =

@@ -55,6 +55,9 @@ let
     // lib.optionalAttrs cfg.smtp.authenticate { SMTP_LOGIN = cfg.smtp.user; }
     // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_HOST = cfg.elasticsearch.host; }
     // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PORT = toString cfg.elasticsearch.port; }
+    // lib.optionalAttrs (cfg.elasticsearch.host != null && cfg.elasticsearch.prefix != null) {
+      ES_PREFIX = cfg.elasticsearch.prefix;
+    }
     // lib.optionalAttrs (cfg.elasticsearch.host != null) { ES_PRESET = cfg.elasticsearch.preset; }
     // lib.optionalAttrs (cfg.elasticsearch.user != null) { ES_USER = cfg.elasticsearch.user; }
     // cfg.extraConfig;
@@ -670,6 +673,16 @@ in
           default = 9200;
         };
 
+        prefix = lib.mkOption {
+          description = ''
+            If provided, adds a prefix to indexes in Elasticsearch. This allows to use the same
+            Elasticsearch cluster between different projects or Mastodon servers.
+          '';
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          example = "mastodon";
+        };
+
         preset = lib.mkOption {
           description = ''
             It controls the ElasticSearch indices configuration (number of shards and replica).
@@ -960,7 +973,7 @@ in
             '';
           path = [
             cfg.package
-            config.services.postgresql.package
+            (if databaseActuallyCreateLocally then config.services.postgresql.package else pkgs.postgresql)
           ];
           environment =
             env

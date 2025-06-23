@@ -73,6 +73,7 @@ stdenv.mkDerivation (
     patches =
       [
         ./CVE-2024-56406.patch
+        ./CVE-2025-40909.patch
       ]
       # Do not look in /usr etc. for dependencies.
       ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
@@ -273,6 +274,12 @@ stdenv.mkDerivation (
           --replace "${
             if stdenv.hasCC && stdenv.cc.cc != null then stdenv.cc.cc else "/no-such-path"
           }" /no-such-path \
+          --replace "${
+            if stdenv.hasCC && stdenv.cc.fallback_sdk or null != null then
+              stdenv.cc.fallback_sdk
+            else
+              "/no-such-path"
+          }" /no-such-path \
           --replace "$man" /no-such-path
       ''
       + lib.optionalString crossCompiling ''
@@ -298,12 +305,13 @@ stdenv.mkDerivation (
           "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
       ''; # */
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.perl.org/";
       description = "Standard implementation of the Perl 5 programming language";
-      license = licenses.artistic1;
+      license = lib.licenses.artistic1;
       maintainers = [ ];
-      platforms = platforms.all;
+      teams = [ lib.teams.perl ];
+      platforms = lib.platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
       mainProgram = "perl";
     };

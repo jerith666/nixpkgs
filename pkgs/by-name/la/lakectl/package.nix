@@ -7,18 +7,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "lakectl";
-  version = "1.54.0";
+  version = "1.59.0";
 
   src = fetchFromGitHub {
     owner = "treeverse";
     repo = "lakeFS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fqjVufkmO2JOPyS1/dLx0RIY5BLvvwvKrJFkV1LN53I=";
+    hash = "sha256-ygBpmPQD2gSVMsVL39TkHGpKIjdr0Wg8rjCUjEaQkWI=";
   };
 
   subPackages = [ "cmd/lakectl" ];
   proxyVendor = true;
-  vendorHash = "sha256-vg2x3QRU0RGq6GtqZU/YBtHAvj5shJtmPFrxx1/HppQ=";
+  vendorHash = "sha256-U1V+JmUXtdSUXoIevCwjE3beCqWTl1Rt3jYUSkwvc0A=";
 
   ldflags = [
     "-s"
