@@ -3375,8 +3375,8 @@ self: super:
     amazonkaSrc = pkgs.fetchFromGitHub {
       owner = "brendanhay";
       repo = "amazonka";
-      rev = "f3a7fca02fdbb832cc348e991983b1465225d50c";
-      sha256 = "sha256-u+R+4WeCd16X8H2dkDHzD3nOLsvsTB0lLNUsbRT23aE=";
+      rev = "5bc343d106f1d59250e901effd8461eb02acaacf";
+      sha256 = "sha256-bu39N8y+uQx3YgCNFqGm24HV4dZGECLTvnZoQdF8xyo=";
     };
     setAmazonkaSourceRoot =
       dir: drv:
