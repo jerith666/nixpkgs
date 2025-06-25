@@ -17,6 +17,8 @@ mkKdeDerivation {
 
   patches = [
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
+
+    ../kwin/0005-bigger-thumbnails-in-grid-task-switcher.patch
   ];
 
   postPatch = ''
