@@ -4080,6 +4080,8 @@ self: super: with self; {
 
   djmail = callPackage ../development/python-modules/djmail { };
 
+  djoser = callPackage ../development/python-modules/djoser { };
+
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib { inherit (pkgs) dlib; };
@@ -8492,6 +8494,8 @@ self: super: with self; {
 
   logging-journald = callPackage ../development/python-modules/logging-journald { };
 
+  logging-tree = callPackage ../development/python-modules/logging-tree { };
+
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
   logilab-common = callPackage ../development/python-modules/logilab/common.nix {
@@ -9927,6 +9931,8 @@ self: super: with self; {
   nampa = callPackage ../development/python-modules/nampa { };
 
   nanobind = callPackage ../development/python-modules/nanobind { };
+
+  nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
 
   nanoemoji = callPackage ../development/python-modules/nanoemoji { };
 
@@ -11972,6 +11978,8 @@ self: super: with self; {
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pvo = callPackage ../development/python-modules/pvo { };
+
+  pwdlib = callPackage ../development/python-modules/pwdlib { };
 
   pweave = callPackage ../development/python-modules/pweave { };
 
@@ -16446,6 +16454,8 @@ self: super: with self; {
     callPackage ../development/python-modules/snowflake-connector-python
       { };
 
+  snowflake-core = callPackage ../development/python-modules/snowflake-core { };
+
   snowflake-sqlalchemy = callPackage ../development/python-modules/snowflake-sqlalchemy { };
 
   snowplow-tracker = callPackage ../development/python-modules/snowplow-tracker { };
@@ -16953,6 +16963,9 @@ self: super: with self; {
 
   standard-mailcap =
     if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-mailcap { };
+
+  standard-nntplib =
+    if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-nntplib { };
 
   standard-pipes =
     if pythonAtLeast "3.13" then callPackage ../development/python-modules/standard-pipes { } else null;
@@ -19421,6 +19434,8 @@ self: super: with self; {
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
   wsgitools = callPackage ../development/python-modules/wsgitools { };
+
+  wslink = callPackage ../development/python-modules/wslink { };
 
   wsme = callPackage ../development/python-modules/wsme { };
 
