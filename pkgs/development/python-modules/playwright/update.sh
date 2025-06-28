@@ -39,6 +39,7 @@ update_browser() {
     name="$1"
     platform="$2"
     stripRoot="false"
+    echo "updating browser $1 $2"
     if [ "$platform" = "darwin" ]; then
         if [ "$name" = "webkit" ]; then
             suffix="mac-14"
@@ -102,6 +103,7 @@ update_hash() {
 
     # Formulate download URL
     local download_url="${repo_url_prefix}/v${driver_version}${source_root_path}/package-lock.json"
+    echo "updating hash for $download_url"
     # Download package-lock.json to temporary directory
     curl -fsSL -o "${temp_dir}/package-lock.json" "$download_url"
 
