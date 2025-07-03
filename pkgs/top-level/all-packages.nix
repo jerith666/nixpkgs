@@ -340,10 +340,6 @@ with pkgs;
     ];
   } ../build-support/setup-hooks/gog-unpack.sh;
 
-  buf = callPackage ../by-name/bu/buf/package.nix {
-    buildGoModule = buildGo123Module;
-  };
-
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
   buildEnvTest = callPackage ../build-support/buildenv/test.nix { };
 
@@ -2870,8 +2866,6 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
-  vorta = qt6Packages.callPackage ../applications/backup/vorta { };
-
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
@@ -3016,13 +3010,10 @@ with pkgs;
 
   inherit (callPackages ../tools/filesystems/garage { })
     garage
-    garage_0_8
     garage_0_9
-    garage_0_8_7
     garage_0_9_4
 
     garage_1_2_0
-    garage_1_x
     garage_1
 
     garage_2_0_0
@@ -3069,16 +3060,6 @@ with pkgs;
       gst-plugins-ugly
       gst-libav
       ;
-  };
-
-  gnome-decoder = callPackage ../applications/graphics/gnome-decoder {
-    inherit (gst_all_1)
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      ;
-     gst-plugins-bad = gst_all_1.gst-plugins-bad.override { enableZbar = true; };
   };
 
   gnome-panel-with-modules = callPackage ../by-name/gn/gnome-panel/wrapper.nix { };
@@ -3223,8 +3204,6 @@ with pkgs;
   gssdp_1_6 = callPackage ../development/libraries/gssdp/1.6.nix { };
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
-
-  gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
 
   gup = callPackage ../development/tools/build-managers/gup { };
 
@@ -8409,15 +8388,17 @@ with pkgs;
 
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
-  hunspellDicts = recurseIntoAttrs (
-    callPackages ../development/libraries/hunspell/dictionaries.nix { }
-  );
+  hunspellDicts = recurseIntoAttrs (callPackages ../by-name/hu/hunspell/dictionaries.nix { });
 
   hunspellDictsChromium = recurseIntoAttrs (
-    callPackages ../development/libraries/hunspell/dictionaries-chromium.nix { }
+    callPackages ../by-name/hu/hunspell/dictionaries-chromium.nix { }
   );
 
-  hunspellWithDicts = dicts: callPackage ../by-name/hu/hunspell/wrapper.nix { inherit dicts; };
+  hunspellWithDicts =
+    dicts:
+    lib.warn "hunspellWithDicts is deprecated, please use hunspell.withDicts instead."
+      hunspell.withDicts
+      (_: dicts);
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_29; };
 
@@ -9153,21 +9134,21 @@ with pkgs;
   opencolorio = callPackage ../development/libraries/opencolorio { };
   opencolorio_1 = callPackage ../development/libraries/opencolorio/1.x.nix { };
 
-  openstackclient = with python312Packages; toPythonApplication python-openstackclient;
+  openstackclient = with python313Packages; toPythonApplication python-openstackclient;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  barbicanclient = with python312Packages; toPythonApplication python-barbicanclient;
-  glanceclient = with python312Packages; toPythonApplication python-glanceclient;
-  heatclient = with python312Packages; toPythonApplication python-heatclient;
-  ironicclient = with python312Packages; toPythonApplication python-ironicclient;
-  magnumclient = with python312Packages; toPythonApplication python-magnumclient;
-  manilaclient = with python312Packages; toPythonApplication python-manilaclient;
-  mistralclient = with python312Packages; toPythonApplication python-mistralclient;
-  swiftclient = with python312Packages; toPythonApplication python-swiftclient;
-  troveclient = with python312Packages; toPythonApplication python-troveclient;
-  watcherclient = with python312Packages; toPythonApplication python-watcherclient;
-  zunclient = with python312Packages; toPythonApplication python-zunclient;
+  barbicanclient = with python313Packages; toPythonApplication python-barbicanclient;
+  glanceclient = with python313Packages; toPythonApplication python-glanceclient;
+  heatclient = with python313Packages; toPythonApplication python-heatclient;
+  ironicclient = with python313Packages; toPythonApplication python-ironicclient;
+  magnumclient = with python313Packages; toPythonApplication python-magnumclient;
+  manilaclient = with python313Packages; toPythonApplication python-manilaclient;
+  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
+  swiftclient = with python313Packages; toPythonApplication python-swiftclient;
+  troveclient = with python313Packages; toPythonApplication python-troveclient;
+  watcherclient = with python313Packages; toPythonApplication python-watcherclient;
+  zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
     libressl_3_6
@@ -9260,7 +9241,6 @@ with pkgs;
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
       protobuf_29 = callPackage ../development/libraries/protobuf/29.nix { };
       protobuf_27 = callPackage ../development/libraries/protobuf/27.nix { };
-      protobuf_26 = callPackage ../development/libraries/protobuf/26.nix { };
       protobuf_25 = callPackage ../development/libraries/protobuf/25.nix { };
       protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
       protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
@@ -9271,7 +9251,6 @@ with pkgs;
     protobuf_30
     protobuf_29
     protobuf_27
-    protobuf_26
     protobuf_25
     protobuf_24
     protobuf_21
@@ -10111,8 +10090,6 @@ with pkgs;
     };
 
   ### SERVERS
-
-  adguardhome = callPackage ../servers/adguardhome { };
 
   alerta = callPackage ../servers/monitoring/alerta/client.nix { };
 
@@ -16635,10 +16612,6 @@ with pkgs;
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
 
   inherit (callPackage ../applications/misc/zettlr { }) zettlr;
-
-  zrythm = callPackage ../applications/audio/zrythm {
-    inherit (plasma5Packages) breeze-icons;
-  };
 
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
