@@ -1817,6 +1817,8 @@ self: super: with self; {
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
+  bibtexparser_2 = callPackage ../development/python-modules/bibtexparser/2.nix { };
+
   bidict = callPackage ../development/python-modules/bidict { };
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
@@ -2287,8 +2289,6 @@ self: super: with self; {
       python3Packages = self;
     }
   );
-
-  casbin = callPackage ../development/python-modules/casbin { };
 
   case-converter = callPackage ../development/python-modules/case-converter { };
 
@@ -6375,6 +6375,8 @@ self: super: with self; {
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
+  hawkmoth = callPackage ../development/python-modules/hawkmoth { };
+
   haystack-ai = callPackage ../development/python-modules/haystack-ai { };
 
   hcloud = callPackage ../development/python-modules/hcloud { };
@@ -7009,6 +7011,8 @@ self: super: with self; {
   ipdb = callPackage ../development/python-modules/ipdb { };
 
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
+
+  iplotx = callPackage ../development/python-modules/iplotx { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -10829,6 +10833,8 @@ self: super: with self; {
 
   optuna = callPackage ../development/python-modules/optuna { };
 
+  optype = callPackage ../development/python-modules/optype { };
+
   opuslib = callPackage ../development/python-modules/opuslib { };
 
   opytimark = callPackage ../development/python-modules/opytimark { };
@@ -11701,6 +11707,8 @@ self: super: with self; {
 
   posix-ipc = callPackage ../development/python-modules/posix-ipc { };
 
+  postgrest-py = callPackage ../development/python-modules/postgrest-py { };
+
   posthog = callPackage ../development/python-modules/posthog { };
 
   pot = callPackage ../development/python-modules/pot { };
@@ -11830,6 +11838,8 @@ self: super: with self; {
   prompthub-py = callPackage ../development/python-modules/prompthub-py { };
 
   propcache = callPackage ../development/python-modules/propcache { };
+
+  property-cached = callPackage ../development/python-modules/property-cached { };
 
   property-manager = callPackage ../development/python-modules/property-manager { };
 
@@ -11992,6 +12002,8 @@ self: super: with self; {
   pure-python-adb-homeassistant =
     callPackage ../development/python-modules/pure-python-adb-homeassistant
       { };
+
+  pure-sasl = callPackage ../development/python-modules/pure-sasl { };
 
   puremagic = callPackage ../development/python-modules/puremagic { };
 
@@ -12309,6 +12321,8 @@ self: super: with self; {
   pycares = callPackage ../development/python-modules/pycares { };
 
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
+
+  pycasbin = callPackage ../development/python-modules/pycasbin { };
 
   pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 
@@ -13311,10 +13325,6 @@ self: super: with self; {
   pypblib = callPackage ../development/python-modules/pypblib { };
 
   pypca = callPackage ../development/python-modules/pypca { };
-
-  pypcap = callPackage ../development/python-modules/pypcap {
-    inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
-  };
 
   pypck = callPackage ../development/python-modules/pypck { };
 
@@ -19304,6 +19314,8 @@ self: super: with self; {
   webexpythonsdk = callPackage ../development/python-modules/webexpythonsdk { };
 
   webexteamssdk = callPackage ../development/python-modules/webexteamssdk { };
+
+  webidl = callPackage ../development/python-modules/webidl { };
 
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
 
