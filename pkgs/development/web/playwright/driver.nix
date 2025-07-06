@@ -103,10 +103,8 @@ let
 
     postPatch = ''
       sed -i '/\/\/ Update test runner./,/^\s*$/{d}' utils/build/build.js
-      sed -i '/\/\/ Update bundles./,/^\s*$/{d}' utils/build/build.js
+      sed -i '/^\/\/ Update bundles\./,/^[[:space:]]*}$/d' utils/build/build.js
       sed -i '/execSync/d' ./utils/generate_third_party_notice.js
-      sed -i '/plugins: /d' ./packages/playwright/bundles/utils/build.js
-      sed -i '/plugins: /d' ./packages/playwright-core/bundles/zip/build.js
       chmod +w packages/playwright/bundles/babel
       ln -s ${babel-bundle}/node_modules packages/playwright/bundles/babel/node_modules
       chmod +w packages/playwright/bundles/expect

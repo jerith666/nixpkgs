@@ -829,6 +829,8 @@ self: super: with self; {
 
   aqualogic = callPackage ../development/python-modules/aqualogic { };
 
+  ar = callPackage ../development/python-modules/ar { };
+
   arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
   aranet4 = callPackage ../development/python-modules/aranet4 { };
@@ -2897,6 +2899,8 @@ self: super: with self; {
 
   controku = callPackage ../development/python-modules/controku { };
 
+  control = callPackage ../development/python-modules/control { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   convertertools = callPackage ../development/python-modules/convertertools { };
@@ -3119,6 +3123,8 @@ self: super: with self; {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   curvefitgui = callPackage ../development/python-modules/curvefitgui { };
+
+  custom-json-diff = callPackage ../development/python-modules/custom-json-diff { };
 
   customtkinter = callPackage ../development/python-modules/customtkinter { };
 
@@ -4232,6 +4238,8 @@ self: super: with self; {
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
+  dowhen = callPackage ../development/python-modules/dowhen { };
+
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
   doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };
@@ -4881,6 +4889,8 @@ self: super: with self; {
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
   farama-notifications = callPackage ../development/python-modules/farama-notifications { };
+
+  fast-array-utils = callPackage ../development/python-modules/fast-array-utils { };
 
   fast-histogram = callPackage ../development/python-modules/fast-histogram { };
 
@@ -5673,6 +5683,8 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+  geotorch = callPackage ../development/python-modules/geotorch { };
+
   gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
 
   gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
@@ -6355,9 +6367,15 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-docstring-description =
+    callPackage ../development/python-modules/hatch-docstring-description
+      { };
+
   hatch-fancy-pypi-readme = callPackage ../development/python-modules/hatch-fancy-pypi-readme { };
 
   hatch-jupyter-builder = callPackage ../development/python-modules/hatch-jupyter-builder { };
+
+  hatch-min-requirements = callPackage ../development/python-modules/hatch-min-requirements { };
 
   hatch-nodejs-version = callPackage ../development/python-modules/hatch-nodejs-version { };
 
@@ -7294,6 +7312,8 @@ self: super: with self; {
 
   json-api-doc = callPackage ../development/python-modules/json-api-doc { };
 
+  json-flatten = callPackage ../development/python-modules/json-flatten { };
+
   json-home-client = callPackage ../development/python-modules/json-home-client { };
 
   json-logging = callPackage ../development/python-modules/json-logging { };
@@ -7336,7 +7356,10 @@ self: super: with self; {
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
 
-  jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
+  jsonnet = buildPythonPackage {
+    inherit (pkgs.jsonnet) name src;
+    format = "setuptools";
+  };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
@@ -7589,6 +7612,8 @@ self: super: with self; {
   keras = callPackage ../development/python-modules/keras { };
 
   kerberos = callPackage ../development/python-modules/kerberos { };
+
+  kernels = callPackage ../development/python-modules/kernels { };
 
   kestra = callPackage ../development/python-modules/kestra { };
 
@@ -8452,6 +8477,8 @@ self: super: with self; {
   llm-openrouter = callPackage ../development/python-modules/llm-openrouter { };
 
   llm-pdf-to-images = callPackage ../development/python-modules/llm-pdf-to-images { };
+
+  llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
 
   llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
 
@@ -15845,6 +15872,8 @@ self: super: with self; {
 
   scenedetect = callPackage ../development/python-modules/scenedetect { };
 
+  schedula = callPackage ../development/python-modules/schedula { };
+
   schedule = callPackage ../development/python-modules/schedule { };
 
   scheduler = callPackage ../development/python-modules/scheduler { };
@@ -18956,6 +18985,8 @@ self: super: with self; {
   usbrelay-py = callPackage ../os-specific/linux/usbrelay/python.nix { };
 
   usbtmc = callPackage ../development/python-modules/usbtmc { };
+
+  useful-types = callPackage ../development/python-modules/useful-types { };
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 

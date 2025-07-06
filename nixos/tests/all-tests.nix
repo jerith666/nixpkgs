@@ -347,6 +347,7 @@ in
   containers-unified-hierarchy = runTest ./containers-unified-hierarchy.nix;
   convos = runTest ./convos.nix;
   corerad = handleTest ./corerad.nix { };
+  corteza = runTest ./corteza.nix;
   cosmic = runTest {
     imports = [ ./cosmic.nix ];
     _module.args.testName = "cosmic";
@@ -546,7 +547,7 @@ in
   ft2-clone = runTest ./ft2-clone.nix;
   legit = runTest ./legit.nix;
   mimir = runTest ./mimir.nix;
-  galene = discoverTests (import ./galene.nix);
+  galene = discoverTests (import ./galene.nix { inherit runTest; });
   gancio = runTest ./gancio.nix;
   garage_1 = import ./garage {
     inherit runTest;
@@ -1049,6 +1050,7 @@ in
   overlayfs = runTest ./overlayfs.nix;
   pacemaker = runTest ./pacemaker.nix;
   packagekit = runTest ./packagekit.nix;
+  paisa = runTest ./paisa.nix;
   pam-file-contents = runTest ./pam/pam-file-contents.nix;
   pam-oath-login = runTest ./pam/pam-oath-login.nix;
   pam-u2f = runTest ./pam/pam-u2f.nix;
@@ -1273,7 +1275,6 @@ in
   solanum = runTest ./solanum.nix;
   sonarr = runTest ./sonarr.nix;
   sonic-server = runTest ./sonic-server.nix;
-  sourcehut = handleTest ./sourcehut { };
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
   spiped = runTest ./spiped.nix;

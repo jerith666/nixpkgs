@@ -29,10 +29,6 @@ let
     else
       alias;
 
-  # Disabling distribution prevents top-level aliases for non-recursed package
-  # sets from building on Hydra.
-  removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
-
   transmission3Warning =
     {
       prefix ? "",
@@ -212,10 +208,7 @@ let
     if builtins.hasAttr n super then throw "Alias ${n} is still in all-packages.nix" else alias;
 
   mapAliases =
-    aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
 in
 
 mapAliases {
@@ -1157,6 +1150,10 @@ mapAliases {
   linuxPackages_latest_xen_dom0_hardened = linuxPackages_latest_hardened;
 
   # Added 2021-08-16
+  linuxPackages_6_13_hardened = linuxKernel.packages.linux_6_13_hardened;
+  linux_6_13_hardened = linuxKernel.kernels.linux_6_13_hardened;
+  linuxPackages_6_14_hardened = linuxKernel.packages.linux_6_14_hardened;
+  linux_6_14_hardened = linuxKernel.kernels.linux_6_14_hardened;
   linuxPackages_latest_hardened = throw ''
     The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
     frequently lag behind the upstream kernel. In some cases this meant that this attribute
@@ -1384,6 +1381,7 @@ mapAliases {
     or for all fonts
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
   ''; # Added 2024-11-09
+  networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
   nix-direnv-flakes = nix-direnv;
@@ -1680,6 +1678,7 @@ mapAliases {
   qt515 = qt5; # Added 2022-11-24
   qt5ct = throw "'qt5ct' has been renamed to/replaced by 'libsForQt5.qt5ct'"; # Converted to throw 2024-10-17
   qt6ct = qt6Packages.qt6ct; # Added 2023-03-07
+  qtchan = throw "'qtchan' has been removed due to lack of maintenance upstream"; # Added 2025-07-01
   qtcurve = throw "'qtcurve' has been renamed to/replaced by 'libsForQt5.qtcurve'"; # Converted to throw 2024-10-17
   qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
   quantum-espresso-mpi = quantum-espresso; # Added 2023-11-23
@@ -1846,6 +1845,7 @@ mapAliases {
   source-han-serif-simplified-chinese = source-han-serif;
   source-han-serif-traditional-chinese = source-han-serif;
 
+  sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   solana-validator = throw "'solana-validator' is obsoleted by solana-cli, which also includes the validator binary"; # Added 2024-12-20
   spectral = throw "'spectral' has been renamed to/replaced by 'neochat'"; # Converted to throw 2024-10-17
   # spidermonkey is not ABI upwards-compatible, so only allow this for nix-shell
@@ -1968,6 +1968,7 @@ mapAliases {
   tokyo-night-gtk = tokyonight-gtk-theme; # Added 2024-01-28
   tomcat_connectors = apacheHttpdPackages.mod_jk; # Added 2024-06-07
   ton = throw "'ton' has been removed as there were insufficient maintainer resources to keep up with updates"; # Added 2025-04-27
+  tooling-language-server = deputy; # Added 2025-06-22
   tor-browser-bundle-bin = tor-browser; # Added 2023-09-23
   torrenttools = throw "torrenttools has been removed due to lack of maintanance upstream"; # Added 2025-04-06
   torq = throw "torq has been removed because the project went closed source"; # Added 2024-11-24
@@ -2081,6 +2082,7 @@ mapAliases {
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
+  vulkan-hdr-layer-kwin6 = throw "'vulkan-hdr-layer-kwin6' was removed as it is unnecessary since Mesa 25.1"; # Added 2025-06-30
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
 
