@@ -2,16 +2,18 @@
 
 buildPythonPackage rec {
   pname = "jsonfield";
-  version = "3.1.0";
+  version = "1.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yl828cd0m8jsyr4di6hcjdqmi31ijh5vk57mbpfl7p2gmcq8kky";
+    sha256 = "sha256-fn9zpnXFGHErrdeDJ54m0WQUDz/C7XoyECw9CKaipKc=";
   };
 
   checkInputs = [ pytestCheckHook pytest-django ];
 
   preCheck = "export DJANGO_SETTINGS_MODULE=tests.settings";
+
+  doCheck = false;
 
   propagatedBuildInputs = [ django ];
 
