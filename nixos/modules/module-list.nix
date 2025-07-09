@@ -1598,6 +1598,7 @@
   ./services/web-apps/komga.nix
   ./services/web-apps/lanraragi.nix
   ./services/web-apps/lasuite-docs.nix
+  ./services/web-apps/lasuite-meet.nix
   ./services/web-apps/lemmy.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mainsail.nix
@@ -1661,6 +1662,7 @@
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/sftpgo.nix
+  ./services/web-apps/sharkey.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/silverbullet.nix
   ./services/web-apps/simplesamlphp.nix

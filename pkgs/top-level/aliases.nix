@@ -186,6 +186,9 @@ let
 
     inherit (libsForQt5)
       sddm
+      neochat # added 2025-07-04
+      itinerary # added 2025-07-04
+      libquotient # added 2025-07-04
       ;
   };
 
@@ -370,6 +373,7 @@ mapAliases {
   buildBarebox = throw "buildBarebox has been removed due to lack of interest in maintaining it in nixpkgs"; # Added 2025-04-19
   buildGo122Module = throw "Go 1.22 is end-of-life, and 'buildGo122Module' has been removed. Please use a newer builder version."; # Added 2025-03-28
   buildGoPackage = throw "`buildGoPackage` has been deprecated and removed, see the Go section in the nixpkgs manual for details"; # Added 2024-11-18
+  buildXenPackage = throw "'buildXenPackage' has been removed as a custom Xen build can now be achieved by simply overriding 'xen'."; # Added 2025-05-12
 
   inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
   bwidget = tclPackages.bwidget; # Added 2024-10-02
@@ -708,6 +712,7 @@ mapAliases {
   ftjam = throw "ftjam was removed, as it hasn't been updated since 2007 and fails to build"; # added 2025-01-02
   fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   fuse-common = throw "fuse-common was removed, because the udev rule was early included by systemd-udevd and the config is done by NixOS module `programs.fuse`"; # added 2024-09-29
+  fusee-launcher = throw "'fusee-launcher' was removed as upstream removed the original source repository fearing legal repercussions"; # added 2025-07-05
   futuresql = libsForQt5.futuresql; # added 2023-11-11
   fx_cast_bridge = fx-cast-bridge; # added 2023-07-26
 
@@ -925,6 +930,7 @@ mapAliases {
   inotifyTools = inotify-tools;
   insync-emblem-icons = throw "'insync-emblem-icons' has been removed, use 'insync-nautilus' instead"; # Added 2025-05-14
   inter-ui = throw "'inter-ui' has been renamed to/replaced by 'inter'"; # Converted to throw 2024-10-17
+  ioccheck = throw "ioccheck was dropped since it was unmaintained."; # Added 2025-07-06
   ipfs = kubo; # Added 2022-09-27
   ipfs-migrator-all-fs-repo-migrations = kubo-fs-repo-migrations; # Added 2022-09-27
   ipfs-migrator-unwrapped = kubo-migrator-unwrapped; # Added 2022-09-27
@@ -1052,7 +1058,7 @@ mapAliases {
   libpseudo = throw "'libpseudo' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   libpulseaudio-vanilla = libpulseaudio; # Added 2022-04-20
   libqt5pas = libsForQt5.libqtpas; # Added 2024-12-25
-  libquotient = libsForQt5.libquotient; # Added 2023-11-11
+  libquotient = throw "'libquotient' for qt5 was removed as upstream removed qt5 support. Consider explicitly upgrading to qt6 'libquotient'"; # Converted to throw 2025-07-04
   librarian-puppet-go = throw "'librarian-puppet-go' has been removed, as its upstream is unmaintained"; # Added 2024-06-10
   librdf = throw "'librdf' has been renamed to/replaced by 'lrdf'"; # Converted to throw 2024-10-17
   librdf_raptor = throw "librdf_raptor has been remove due to failing to build and being unmaintained"; # Added 2025-04-14
@@ -2082,7 +2088,6 @@ mapAliases {
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   vuze = throw "'vuze' was removed because it is unmaintained upstream and insecure (CVE-2018-13417). BiglyBT is a maintained fork."; # Added 2024-11-22
-  vulkan-hdr-layer-kwin6 = throw "'vulkan-hdr-layer-kwin6' was removed as it is unnecessary since Mesa 25.1"; # Added 2025-06-30
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   inherit (libsForQt5.mauiPackages) vvave; # added 2022-05-17
 
@@ -2100,6 +2105,7 @@ mapAliases {
     'wayfireApplications-unwrapped.wlroots' has been removed
   ''; # Add 2023-07-29
   waypoint = throw "waypoint has been removed from nixpkgs as the upstream project was archived"; # Added 2024-04-24
+  wcurl = throw "'wcurl' has been removed due to being bundled with 'curl'"; # Added 2025-07-04
   webkitgtk = throw "'webkitgtk' attribute has been removed from nixpkgs, use attribute with ABI version set explicitly"; # Added 2025-06-11
   webmetro = throw "'webmetro' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   wg-bond = throw "'wg-bond' has been removed due to lack of upstream maintenance"; # Added 2025-01-25

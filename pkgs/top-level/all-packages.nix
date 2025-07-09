@@ -5984,10 +5984,10 @@ with pkgs;
 
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
     cargo-pgrx_0_12_0_alpha_1
-    cargo-pgrx_0_12_5
     cargo-pgrx_0_12_6
+    cargo-pgrx_0_14_1
+    cargo-pgrx
     ;
-  cargo-pgrx = cargo-pgrx_0_12_6;
 
   buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix { };
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
@@ -10583,6 +10583,7 @@ with pkgs;
     postgresql_15
     postgresql_16
     postgresql_17
+    postgresql_18
     ;
 
   inherit (postgresqlJitVersions)
@@ -10591,6 +10592,7 @@ with pkgs;
     postgresql_15_jit
     postgresql_16_jit
     postgresql_17_jit
+    postgresql_18_jit
   ;
   postgresql = postgresql_17;
   postgresql_jit = postgresql_17_jit;
@@ -10600,6 +10602,7 @@ with pkgs;
   postgresql15Packages = recurseIntoAttrs postgresql_15.pkgs;
   postgresql16Packages = recurseIntoAttrs postgresql_16.pkgs;
   postgresql17Packages = recurseIntoAttrs postgresql_17.pkgs;
+  postgresql18Packages = recurseIntoAttrs postgresql_18.pkgs;
 
   postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
@@ -10846,6 +10849,7 @@ with pkgs;
     server = server-pgsql;
   };
 
+  zabbix74 = recurseIntoAttrs (zabbixFor "v74");
   zabbix72 = recurseIntoAttrs (zabbixFor "v72");
   zabbix70 = recurseIntoAttrs (zabbixFor "v70");
   zabbix60 = recurseIntoAttrs (zabbixFor "v60");
@@ -11795,8 +11799,6 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
-
   apngasm = callPackage ../applications/graphics/apngasm { };
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
@@ -11900,6 +11902,8 @@ with pkgs;
 
   cdparanoia = cdparanoiaIII;
 
+  cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
+
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
   chuck = callPackage ../applications/audio/chuck {
@@ -11962,6 +11966,10 @@ with pkgs;
     extras:
     callPackage ../tools/networking/dd-agent/integrations-core.nix {
     extraIntegrations = extras;
+  };
+
+  dbeaver-bin = callPackage ../by-name/db/dbeaver-bin/package.nix {
+    inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
@@ -13067,9 +13075,8 @@ with pkgs;
 
   mbrola-voices = callPackage ../applications/audio/mbrola/voices.nix { };
 
-  mediaelch = mediaelch-qt5;
-  mediaelch-qt5 = libsForQt5.callPackage ../applications/misc/mediaelch { };
-  mediaelch-qt6 = qt6Packages.callPackage ../applications/misc/mediaelch { };
+  mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
+  mediaelch-qt6 = mediaelch;
 
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
@@ -14364,8 +14371,6 @@ with pkgs;
           ;
   };
 
-  buildXenPackage = callPackage ../build-support/xen { };
-
   gxneur = callPackage ../applications/misc/gxneur  {
     inherit (gnome2) libglade GConf;
   };
@@ -15543,6 +15548,8 @@ with pkgs;
     coq_8_20
     coqPackages_9_0
     coq_9_0
+    coqPackages_9_1
+    coq_9_1
     coqPackages
     coq
   ;
@@ -15556,6 +15563,8 @@ with pkgs;
     mkRocqPackages
     rocqPackages_9_0
     rocq-core_9_0
+    rocqPackages_9_1
+    rocq-core_9_1
     rocqPackages
     rocq-core
   ;
@@ -16327,6 +16336,8 @@ with pkgs;
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
     ffmpeg = ffmpeg-full;
   };
+
+  py-wacz = with python3Packages; toPythonApplication wacz;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
