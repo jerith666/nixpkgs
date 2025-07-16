@@ -430,12 +430,12 @@ rec {
 
   eclemma = buildEclipseUpdateSite rec {
     name = "eclemma-${version}";
-    version = "2.3.2.201409141915";
+    version = "3.1.10";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclemma/01_EclEmma_Releases/2.3.2/eclemma-2.3.2.zip";
-      sha256 = "0w1kwcjh45p7msv5vpc8i6dsqwrnfmjama6vavpnxlji56jd3c43";
+      url = "https://github.com/eclipse-eclemma/eclemma/releases/download/v${version}/eclemma-${version}.zip";
+      sha256 = "sha256-J7kFgknv9NZxzoSsIf7UrL0DB1RPmBUECaGdmd3Lhqw=";
     };
 
     meta = with lib; {
