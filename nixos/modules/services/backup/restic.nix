@@ -378,8 +378,7 @@ in
       in
       lib.nameValuePair "restic-backups-${name}" (
         {
-          environment =
-            {
+          environment = {
               # not %C, because that wouldn't work in the wrapper script
               RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
@@ -406,8 +405,7 @@ in
           restartIfChanged = false;
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
-          serviceConfig =
-            {
+          serviceConfig = {
               Type = "oneshot";
               ExecStart =
                 (lib.optionals doBackup [

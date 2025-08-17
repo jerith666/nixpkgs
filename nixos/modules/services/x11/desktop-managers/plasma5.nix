@@ -219,8 +219,7 @@ in
         "Plasma 5 has been deprecated and will be removed in NixOS 25.11. Please migrate your configuration to Plasma 6."
       ];
 
-      security.wrappers =
-        {
+      security.wrappers = {
         kwin_wayland = {
           owner = "root";
           group = "root";

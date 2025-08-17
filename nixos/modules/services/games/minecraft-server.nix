@@ -219,7 +219,7 @@ in
           }
         '';
         description = ''
-          Minecraft server properties forthe server.properties file. Only has
+          Minecraft server properties for the server.properties file. Only has
           an effect when {option}`services.minecraft-server.declarative`
           is set to `true`. See
           <https://minecraft.wiki/w/Server.properties#Java_Edition>
@@ -313,8 +313,7 @@ in
         UMask = "0077";
       };
 
-      preStart =
-        ''
+      preStart = ''
           ln -sf ${eulaFile} eula.txt
         ''
         + (
@@ -356,8 +355,9 @@ in
       if cfg.declarative then
         {
           allowedUDPPorts = [ serverPort ];
-          allowedTCPPorts =
-            [ serverPort ]
+          allowedTCPPorts = [
+            serverPort
+          ]
             ++ lib.optional (queryPort != null) queryPort
             ++ lib.optional (rconPort != null) rconPort;
         }
