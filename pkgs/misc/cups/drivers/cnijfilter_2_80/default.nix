@@ -1,6 +1,5 @@
 {
   stdenv,
-  withCFlags,
   lib,
   fetchzip,
   autoconf,
@@ -18,7 +17,7 @@
   file included in the tarball
 */
 
-(withCFlags [ "-std=gnu90" ] stdenv).mkDerivation {
+stdenv.mkDerivation {
   pname = "cnijfilter";
 
   /*
