@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";
-  version = "2.4.62";
+  version = "2.4.65";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    hash = "sha256-Z0GI579EztgtqNtSLalGhJ4iCA1z0WyT9/TfieJXKew=";
+    hash = "sha256-WLi+l9mUDsF/dlbAxrn0G2GKrEaLiUtTQUjjKWxTuLM=";
   };
 
   patches = [
@@ -66,8 +66,7 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
+  buildInputs = [
       perl
       libxcrypt
       zlib
@@ -89,8 +88,7 @@ stdenv.mkDerivation rec {
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
 
-  configureFlags =
-    [
+  configureFlags = [
     "--with-apr=${apr.dev}"
     "--with-apr-util=${aprutil.dev}"
     "--with-z=${zlib.dev}"

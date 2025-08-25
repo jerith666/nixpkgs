@@ -8,6 +8,7 @@
   nix-update-script,
   pkg-config,
   qt6,
+  wrapGAppsHook4,
   testers,
   util-linux,
   xz,
@@ -46,25 +47,25 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     qt6.wrapQtAppsHook
+    wrapGAppsHook4
     util-linux
   ];
 
-  buildInputs =
-    [
-      curl
-      libarchive
-      qt6.qtbase
-      qt6.qtdeclarative
-      qt6.qtsvg
-      qt6.qttools
-      xz
-      gnutls
-      zstd
-      libtasn1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    curl
+    libarchive
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qttools
+    xz
+    gnutls
+    zstd
+    libtasn1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   cmakeFlags =
     # Disable vendoring
@@ -76,6 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_CHECK_VERSION" false)
       (lib.cmakeBool "ENABLE_TELEMETRY" false)
     ];
+
+  qtWrapperArgs = [
+    "--unset QT_QPA_PLATFORMTHEME"
+    "--unset QT_STYLE_OVERRIDE"
+  ];
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     tests.version = testers.testVersion {

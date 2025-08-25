@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "vunnel";
-  version = "0.34.1";
+  version = "0.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
     tag = "v${version}";
-    hash = "sha256-+ZWrFODJNhQeB/Zn+3fwuuH4Huu542/imwcv7qEiZes=";
+    hash = "sha256-x6J0MbwPQvqG1WXrnwMf0uzAu7MDDVxmDRzbDMb+RSk=";
     leaveDotGit = true;
   };
 
@@ -60,14 +60,15 @@ python3.pkgs.buildPythonApplication rec {
     ++ xsdata.optional-dependencies.lxml
     ++ xsdata.optional-dependencies.soap;
 
-  nativeCheckInputs =
-    [ git ]
-    ++ (with python3.pkgs; [
-      jsonschema
-      pytest-mock
-      pytest-unordered
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    jsonschema
+    pytest-mock
+    pytest-unordered
+    pytestCheckHook
+  ]);
 
   pythonImportsCheck = [ "vunnel" ];
 

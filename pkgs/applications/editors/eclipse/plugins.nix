@@ -33,7 +33,8 @@ rec {
 
       passthru = {
         isEclipsePlugin = true;
-      } // passthru;
+        }
+        // passthru;
       }
     );
 

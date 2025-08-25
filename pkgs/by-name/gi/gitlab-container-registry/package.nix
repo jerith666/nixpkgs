@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "gitlab-container-registry";
-  version = "4.23.1";
+  version = "4.26.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,16 @@ buildGoModule rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-eCuSuQXtzd2jLJf9G8DO1KGXdT8bYGe9tcKw6BZNiiI=";
+    hash = "sha256-XACKJW5sRXNM4Q24DXEVtjzhVfxoBd+JWHJr1s01ocA=";
   };
 
-  vendorHash = "sha256-OrdlQp+USRf+Yc7UDjIncDpbuRu5ui6TUoYY2MMc8Ro=";
+  patches = [
+    # https://gitlab.com/gitlab-org/container-registry/-/merge_requests/2447
+    # Can be removed with next released when merged
+    ./fix-broken-urlcache-tests.diff
+  ];
+
+  vendorHash = "sha256-J4p3vXLmDFYl/z6crqanlmG1FB4Dq04HLx9IhC3usQ4=";
 
   checkFlags =
     let

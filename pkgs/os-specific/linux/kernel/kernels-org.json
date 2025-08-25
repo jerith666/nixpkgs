@@ -1,34 +1,38 @@
 {
     "testing": {
-        "version": "6.16-rc3",
-        "hash": "sha256:04inkd3aqpikjarxy3lxzw2v2f45mnfzlq82r8mdsm23lkn68glr"
+        "version": "6.17-rc1",
+        "hash": "sha256:0dilsyjyx06b5f9wln6i58xi6nja2g5pj9p2kclfqqhbrgzxkyfl"
     },
     "6.1": {
-        "version": "6.1.142",
-        "hash": "sha256:1am31xw70sbxzdnvj70fx9l946nadcbrc7qk2yxxssy96nhnxlnw"
+        "version": "6.1.148",
+        "hash": "sha256:18c024bqqc3srzv2gva55p95yghjc6x3p3f54v3hziki4wx3v86r"
     },
     "5.15": {
-        "version": "5.15.186",
-        "hash": "sha256:0anbf7v0m26da0c6d0z925im4x2kf8kswpbv056543amxvbzsklw"
+        "version": "5.15.189",
+        "hash": "sha256:1hshd26ahn6dbw6jnqi0v5afpk672w7p09mk7iri93i7hxdh5l73"
     },
     "5.10": {
-        "version": "5.10.239",
-        "hash": "sha256:1nzhl1y6avfl77fyqwjwy3qc6679gp92k0d3aarscrdydcml5yid"
+        "version": "5.10.240",
+        "hash": "sha256:04sdcf4aqsqchii38anzmk9f9x65wv8q1x3m9dandmi6fabw724d"
     },
     "5.4": {
-        "version": "5.4.295",
-        "hash": "sha256:1adn0pbk8y1zp1yrz83ch6h4wypm2qvbnx4xig3sls2nfgvmi0f4"
+        "version": "5.4.296",
+        "hash": "sha256:0fm73yqzbzclh2achcj8arpg428d412k2wgmlfmyy6xzb1762qrx"
     },
     "6.6": {
-        "version": "6.6.95",
-        "hash": "sha256:11gaczm68mqm72f3mfg656nkiqd9y66kf943hvwghln9lblhlr0q"
+        "version": "6.6.102",
+        "hash": "sha256:0p6yjifwyrqlppn40isgxb0b5vqmljggmnp7w75vlc2c6fvzxll0"
     },
     "6.12": {
-        "version": "6.12.35",
-        "hash": "sha256:0j577lqmzbzx45gxvxirx627pv6cbhq9slzb50rqqmyy3nqf1x05"
+        "version": "6.12.42",
+        "hash": "sha256:1yy17c06sn6l0skz8n1kxqhzldgwxxd0xhs11fd3086d56554128"
     },
     "6.15": {
-        "version": "6.15.4",
-        "hash": "sha256:05psir6p8x5a89d9kxkxlv5iifln67yf803xj5rqvx82nqkxdbqf"
+        "version": "6.15.10",
+        "hash": "sha256:01pxk3cnil1wbysp4s6ybh5djskxzf9llmk1qy7zfr2l4mwnbkd4"
+    },
+    "6.16": {
+        "version": "6.16.1",
+        "hash": "sha256:1fmcl66wzb4qwz60lgqjan8h9rwnrzw5gndjncaf9qdcqwdljhza"
     }
 }
