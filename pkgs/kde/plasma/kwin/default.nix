@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   mkKdeDerivation,
   pkg-config,
   qtquick3d,
@@ -27,6 +28,14 @@ mkKdeDerivation {
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
     ./0005-bigger-thumbnails-in-grid-task-switcher.patch
+
+    # Backport fix for very annoying flickering on AMD GPUs
+    # when animating brightness changes.
+    # FIXME: remove in 6.4.5
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/kwin/-/commit/7d36003cb073ed2ad48b2743883db993106c347a.patch";
+      hash = "sha256-x+GVRU1CIne1TsGJsk2+JbWJi/wuDOFiABXuqgDD9bs=";
+    })
   ];
 
   postPatch = ''

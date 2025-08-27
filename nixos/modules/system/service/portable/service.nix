@@ -1,7 +1,5 @@
 {
   lib,
-  config,
-  options,
   ...
 }:
 let
@@ -12,7 +10,9 @@ in
   # https://nixos.org/manual/nixos/unstable/#modular-services
   _class = "service";
   imports = [
+    ../../../../../modules/generic/meta-maintainers.nix
     ../../../misc/assertions.nix
+    ./config-data.nix
   ];
   options = {
     services = mkOption {
@@ -43,10 +43,6 @@ in
           a shell script or `importas` from `pkgs.execline`.
         '';
       };
-    };
-    # TODO: use https://github.com/NixOS/nixpkgs/pull/431450
-    meta = lib.mkOption {
-      description = "The maintainers of this module. This is currently a placeholder option whose value may not evaluate to anything useful until https://github.com/NixOS/nixpkgs/pull/431450 is available and used here.";
     };
   };
 }
