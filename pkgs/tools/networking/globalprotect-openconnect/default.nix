@@ -4,6 +4,7 @@
   fetchurl,
   cmake,
   qtwebsockets,
+  withWebengine ? false,
   qtwebengine,
   qtkeychain,
   wrapQtAppsHook,
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openconnect
     qtwebsockets
-    qtwebengine
     qtkeychain
-  ];
+  ]
+  ++ lib.optional withWebengine qtwebengine;
 
   patchPhase = ''
     substituteInPlace GPService/gpservice.h \
