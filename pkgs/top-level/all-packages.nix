@@ -4408,9 +4408,7 @@ with pkgs;
 
   inherit (openconnectPackages) openconnect openconnect_openssl;
 
-  globalprotect-openconnect =
-    libsForQt5.callPackage ../tools/networking/globalprotect-openconnect
-      { };
+  globalprotect-openconnect = callPackage ../tools/networking/globalprotect-openconnect { };
 
   sssd = callPackage ../os-specific/linux/sssd {
     # NOTE: freeipa and sssd need to be built with the same version of python

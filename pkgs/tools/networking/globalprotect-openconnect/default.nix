@@ -3,10 +3,7 @@
   lib,
   fetchurl,
   cmake,
-  qtwebsockets,
-  qtwebengine,
-  qtkeychain,
-  wrapQtAppsHook,
+  kdePackages,
   openconnect,
 }:
 
@@ -21,11 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = with kdePackages; [
     openconnect
+    qt5compat
     qtwebsockets
     qtwebengine
     qtkeychain
