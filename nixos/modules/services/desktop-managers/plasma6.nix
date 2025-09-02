@@ -18,6 +18,11 @@ let
     types
     ;
 
+  # note: there was plenty more cache-busting in kde5;
+  # perhaps it's not necessary in kde 6, but in case
+  # of problems, see:
+  # nixos/modules/services/x11/desktop-managers/plasma5.nix
+  # (not in HEAD, must search git history)
   activationScript = ''
     # will be rebuilt automatically
     rm -fv "$HOME/.cache/ksycoca"*
@@ -68,13 +73,6 @@ in
   ];
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = cfg.enable -> !config.services.xserver.desktopManager.plasma5.enable;
-        message = "Cannot enable plasma5 and plasma6 at the same time!";
-      }
-    ];
-
     qt.enable = true;
     programs.xwayland.enable = true;
     environment.systemPackages =
@@ -190,7 +188,7 @@ in
       ++ lib.optionals config.services.desktopManager.plasma6.enableQt5Integration [
         breeze.qt5
         plasma-integration.qt5
-        pkgs.plasma5Packages.kwayland-integration
+        kwayland-integration
         (
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
