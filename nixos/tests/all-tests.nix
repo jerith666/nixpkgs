@@ -210,6 +210,7 @@ in
   amd-sev = runTest ./amd-sev.nix;
   android-translation-layer = runTest ./android-translation-layer.nix;
   angie-api = runTest ./angie-api.nix;
+  angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
   anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
@@ -735,6 +736,7 @@ in
   i3wm = runTest ./i3wm.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
   ifm = runTest ./ifm.nix;
+  ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
@@ -846,6 +848,7 @@ in
   litellm = runTest ./litellm.nix;
   litestream = runTest ./litestream.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
+  llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
@@ -1035,7 +1038,10 @@ in
   nix-config = runTest ./nix-config.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
-  nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
+  nix-upgrade = handleTest ./nix/upgrade.nix {
+    inherit (pkgs) nixVersions;
+    inherit system;
+  };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
@@ -1325,7 +1331,6 @@ in
   scx = runTest ./scx/default.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
-  seafile = runTest ./seafile.nix;
   searx = runTest ./searx.nix;
   seatd = runTest ./seatd.nix;
   send = runTest ./send.nix;

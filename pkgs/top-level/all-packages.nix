@@ -435,8 +435,6 @@ with pkgs;
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
-  docker-sync = callPackage ../tools/misc/docker-sync { };
-
   # Dotnet
 
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet { });
@@ -3142,7 +3140,7 @@ with pkgs;
 
   hdf5-threadsafe = hdf5.override { threadsafe = true; };
 
-  heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack { };
+  heaptrack = kdePackages.callPackage ../development/tools/profiling/heaptrack { };
 
   headscale = callPackage ../servers/headscale { };
 
@@ -3322,12 +3320,6 @@ with pkgs;
   };
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
-
-  krename = libsForQt5.callPackage ../applications/misc/krename { };
-
-  krunner-pass = libsForQt5.callPackage ../tools/security/krunner-pass { };
-
-  krunner-translator = libsForQt5.callPackage ../tools/misc/krunner-translator { };
 
   krunvm = callPackage ../applications/virtualization/krunvm {
     inherit (darwin) sigtool;
@@ -3581,9 +3573,6 @@ with pkgs;
     };
   };
   mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
-  mailpit = callPackage ../servers/mail/mailpit {
-    libtool = if stdenv.hostPlatform.isDarwin then cctools else libtool;
-  };
 
   man = man-db;
 
@@ -3691,8 +3680,6 @@ with pkgs;
 
   libnma-gtk4 = libnma.override { withGtk4 = true; };
 
-  nm-tray = libsForQt5.callPackage ../tools/networking/networkmanager/tray.nix { };
-
   inherit (callPackages ../servers/nextcloud { })
     nextcloud30
     nextcloud31
@@ -3708,8 +3695,6 @@ with pkgs;
     nomad_1_9
     nomad_1_10
     ;
-
-  nomacs-qt6 = nomacs.override { qtVersion = 6; };
 
   nth = with python3Packages; toPythonApplication name-that-hash;
 
@@ -3974,13 +3959,7 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  platformioPackages = dontRecurseIntoAttrs (callPackage ../development/embedded/platformio { });
-  platformio =
-    if stdenv.hostPlatform.isLinux then
-      platformioPackages.platformio-chrootenv
-    else
-      platformioPackages.platformio-core;
-  platformio-core = platformioPackages.platformio-core;
+  platformio = if stdenv.hostPlatform.isLinux then platformio-chrootenv else platformio-core;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
@@ -4052,10 +4031,6 @@ with pkgs;
   };
 
   rocket = libsForQt5.callPackage ../tools/graphics/rocket { };
-
-  rtabmap = callPackage ../by-name/rt/rtabmap/package.nix {
-    pcl = pcl.override { vtk = vtkWithQt5; };
-  };
 
   rtaudio = callPackage ../development/libraries/audio/rtaudio {
     jack = libjack2;
@@ -4349,7 +4324,7 @@ with pkgs;
 
   trytond = with python3Packages; toPythonApplication trytond;
 
-  ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint { };
+  ttfautohint = callPackage ../tools/misc/ttfautohint { };
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   twilight = callPackage ../tools/graphics/twilight {
@@ -4389,8 +4364,6 @@ with pkgs;
   vimpager-latest = callPackage ../tools/misc/vimpager/latest.nix { };
 
   vimwiki-markdown = python3Packages.callPackage ../tools/misc/vimwiki-markdown { };
-
-  visidata = python3Packages.callPackage ../applications/misc/visidata { };
 
   vkbasalt = callPackage ../tools/graphics/vkbasalt {
     vkbasalt32 = pkgsi686Linux.vkbasalt;
@@ -4749,6 +4722,8 @@ with pkgs;
     crystal_1_11
     crystal_1_14
     crystal_1_15
+    crystal_1_16
+    crystal_1_17
     crystal
     ;
 
@@ -5163,10 +5138,10 @@ with pkgs;
 
   # Haskell and GHC
 
-  haskell = callPackage ./haskell-packages.nix { };
+  haskell = recurseIntoAttrs (callPackage ./haskell-packages.nix { });
 
   haskellPackages =
-    dontRecurseIntoAttrs
+    recurseIntoAttrs
     # Prefer native-bignum to avoid linking issues with gmp
     # GHC 9.6 rts can't be built statically with hadrian, so we need to use 9.4
     # until 9.8 is ready
@@ -5182,10 +5157,7 @@ with pkgs;
           haskell.packages.ghc96
         else
           haskell.packages.ghc98
-      )
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+      );
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -5256,9 +5228,6 @@ with pkgs;
   coreboot-toolchain = recurseIntoAttrs (
     callPackage ../development/tools/misc/coreboot-toolchain { }
   );
-
-  spicedb     = callPackage ../servers/spicedb { };
-  spicedb-zed = callPackage ../servers/spicedb/zed.nix { };
 
   tamarin-prover = (
     callPackage ../applications/science/logic/tamarin-prover {
@@ -6453,6 +6422,10 @@ with pkgs;
 
   or1k-newlib = callPackage ../development/misc/or1k/newlib.nix { };
 
+  vcsh = callPackage ../by-name/vc/vcsh/package.nix {
+    automake = automake116x;
+  };
+
   ### DEVELOPMENT / TOOLS
 
   inherit (callPackage ../development/tools/alloy { })
@@ -6582,7 +6555,6 @@ with pkgs;
     inherit (darwin) sigtool;
     buildJdk = jdk21_headless;
     runJdk = jdk21_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv else stdenv;
     bazel_self = bazel_7;
   };
 
@@ -6723,6 +6695,7 @@ with pkgs;
   #     ccacheWrapper = pkgs.ccacheWrapper.override {
   #       extraConfig = ''
   #         export CCACHE_COMPRESS=1
+  #         export CCACHE_SLOPPINESS=random_seed
   #         export CCACHE_DIR=/var/cache/ccache
   #         export CCACHE_UMASK=007
   #       '';
@@ -6918,25 +6891,18 @@ with pkgs;
   m4 = gnum4;
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
-  gradle-packages = import ../development/tools/build-managers/gradle {
-    inherit
-      jdk17
-      jdk21
-      jdk23
-      ;
-  };
-  gradleGen = gradle-packages.gen;
-  wrapGradle = callPackage gradle-packages.wrapGradle { };
 
-  gradle_7-unwrapped = callPackage gradle-packages.gradle_7 { };
-  gradle_8-unwrapped = callPackage gradle-packages.gradle_8 { };
-  gradle_9-unwrapped = callPackage gradle-packages.gradle_9 { };
-  gradle-unwrapped = gradle_8-unwrapped;
+  gradle-packages = callPackage ../development/tools/build-managers/gradle { };
 
-  gradle_7 = wrapGradle gradle_7-unwrapped null;
-  gradle_8 = wrapGradle gradle_8-unwrapped null;
-  gradle_9 = wrapGradle gradle_9-unwrapped null;
-  gradle = wrapGradle gradle-unwrapped "gradle-unwrapped";
+  gradle_7-unwrapped = gradle-packages.gradle_7;
+  gradle_8-unwrapped = gradle-packages.gradle_8;
+  gradle_9-unwrapped = gradle-packages.gradle_9;
+  gradle-unwrapped = gradle-packages.gradle;
+
+  gradle_7 = gradle-packages.gradle_7.wrapped;
+  gradle_8 = gradle-packages.gradle_8.wrapped;
+  gradle_9 = gradle-packages.gradle_9.wrapped;
+  gradle = gradle-packages.gradle.wrapped;
 
   griffe = with python3Packages; toPythonApplication griffe;
 
@@ -7831,7 +7797,7 @@ with pkgs;
 
   #GMP ex-satellite, so better keep it near gmp
   # A GMP fork
-  gns3Packages = dontRecurseIntoAttrs (callPackage ../applications/networking/gns3 { });
+  gns3Packages = recurseIntoAttrs (callPackage ../applications/networking/gns3 { });
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
@@ -8571,6 +8537,7 @@ with pkgs;
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   mpich = callPackage ../development/libraries/mpich {
+    automake = automake116x;
     ch4backend = libfabric;
   };
 
@@ -8711,6 +8678,7 @@ with pkgs;
   magnumclient = with python313Packages; toPythonApplication python-magnumclient;
   manilaclient = with python313Packages; toPythonApplication python-manilaclient;
   mistralclient = with python313Packages; toPythonApplication python-mistralclient;
+  neutronclient = with python313Packages; toPythonApplication python-neutronclient;
   swiftclient = with python313Packages; toPythonApplication python-swiftclient;
   troveclient = with python313Packages; toPythonApplication python-troveclient;
   watcherclient = with python313Packages; toPythonApplication python-watcherclient;
@@ -8868,8 +8836,7 @@ with pkgs;
     }
   );
 
-  libsForQt5 =
-    (recurseIntoAttrs (
+  libsForQt5 = recurseIntoAttrs (
       import ./qt5-packages.nix {
         inherit
           lib
@@ -8880,10 +8847,7 @@ with pkgs;
           pkgsHostTarget
           ;
       }
-    ))
-    // {
-      __recurseIntoDerivationForReleaseJobs = true;
-    };
+  );
 
   # plasma5Packages maps to the Qt5 packages set that is used to build the plasma5 desktop
   plasma5Packages = libsForQt5;
@@ -9824,17 +9788,16 @@ with pkgs;
 
   jetty = jetty_12;
 
-  kanidm_1_5 = callPackage ../by-name/ka/kanidm/1_5.nix {
+  kanidm_1_5 = callPackage ../servers/kanidm/1_5.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_5;
   };
-  kanidm_1_6 = callPackage ../by-name/ka/kanidm/1_6.nix {
+  kanidm_1_6 = callPackage ../servers/kanidm/1_6.nix {
   kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_6;
   };
-  kanidm_1_7 = callPackage ../by-name/ka/kanidm/1_7.nix {
+  kanidm_1_7 = callPackage ../servers/kanidm/1_7.nix {
     kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_7;
   };
 
-  kanidmWithSecretProvisioning = kanidm.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_5 = kanidm_1_5.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_6 = kanidm_1_6.override { enableSecretProvisioning = true; };
   kanidmWithSecretProvisioning_1_7 = kanidm_1_7.override { enableSecretProvisioning = true; };
@@ -10382,9 +10345,12 @@ with pkgs;
     fftw = fftwFloat;
   };
 
+  buildArmTrustedFirmware =
+    callPackage ../misc/arm-trusted-firmware/build-arm-trusted-firmware.nix
+      { };
+
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
-    buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
     armTrustedFirmwareAllwinnerH616
@@ -10514,7 +10480,8 @@ with pkgs;
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
-  libkrun-sev = libkrun.override { sevVariant = true; };
+  libkrun-sev = libkrun.override { variant = "sev"; };
+  libkrun-tdx = libkrun.override { variant = "tdx"; };
 
   linthesia = callPackage ../games/linthesia/default.nix { };
 
@@ -10998,7 +10965,8 @@ with pkgs;
   font-awesome_4 = (callPackage ../data/fonts/font-awesome { }).v4;
   font-awesome_5 = (callPackage ../data/fonts/font-awesome { }).v5;
   font-awesome_6 = (callPackage ../data/fonts/font-awesome { }).v6;
-  font-awesome = font-awesome_6;
+  font-awesome_7 = (callPackage ../data/fonts/font-awesome { }).v7;
+  font-awesome = font-awesome_7;
 
   palenight-theme = callPackage ../data/themes/gtk-theme-framework { theme = "palenight"; };
 
@@ -11179,12 +11147,6 @@ with pkgs;
   xkeyboard_config = xkeyboard-config;
 
   xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
-
-  zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
-  zeal = zeal-qt5;
-  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
-    qtx11extras = null; # Because it does not exist in qt6
-  };
 
   ### APPLICATIONS / GIS
 
@@ -12162,8 +12124,6 @@ with pkgs;
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };
 
-  kbibtex = libsForQt5.callPackage ../applications/office/kbibtex { };
-
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
@@ -12171,10 +12131,8 @@ with pkgs;
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
   klee = callPackage ../applications/science/logic/klee {
-    llvmPackages = llvmPackages_13;
+    llvmPackages = llvmPackages_18;
   };
-
-  kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   alkimia = kdePackages.callPackage ../development/libraries/alkimia { };
   kmymoney = kdePackages.callPackage ../applications/office/kmymoney { };
@@ -12262,7 +12220,7 @@ with pkgs;
 
   libreoffice-qt-fresh = lowPrio (
     callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice {
+      unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
       kdeIntegration = true;
       variant = "fresh";
     };
@@ -12272,36 +12230,13 @@ with pkgs;
 
   libreoffice-qt-still = lowPrio (
     callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = libsForQt5.callPackage ../applications/office/libreoffice {
+      unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
       kdeIntegration = true;
       variant = "still";
     };
     }
   );
   libreoffice-qt-still-unwrapped = libreoffice-qt-still.unwrapped;
-
-  libreoffice-qt6 = hiPrio libreoffice-qt6-still;
-  libreoffice-qt6-unwrapped = libreoffice-qt6.unwrapped;
-
-  libreoffice-qt6-fresh = lowPrio (
-    callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
-      kdeIntegration = true;
-      variant = "fresh";
-    };
-    }
-  );
-  libreoffice-qt6-fresh-unwrapped = libreoffice-qt6-fresh.unwrapped;
-
-  libreoffice-qt6-still = lowPrio (
-    callPackage ../applications/office/libreoffice/wrapper.nix {
-    unwrapped = kdePackages.callPackage ../applications/office/libreoffice {
-      kdeIntegration = true;
-      variant = "still";
-    };
-    }
-  );
-  libreoffice-qt6-still-unwrapped = libreoffice-qt-still.unwrapped;
 
   libreoffice-fresh = lowPrio (
     callPackage ../applications/office/libreoffice/wrapper.nix {
@@ -13079,7 +13014,7 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  skrooge = libsForQt5.callPackage ../applications/office/skrooge { };
+  skrooge = kdePackages.callPackage ../applications/office/skrooge { };
 
   soci = callPackage ../development/libraries/soci { };
 
@@ -13569,9 +13504,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_36;
-  };
+  whalebird = callPackage ../applications/misc/whalebird { };
 
   inherit (windowmaker) dockapps;
 
@@ -14423,17 +14356,10 @@ with pkgs;
 
   ### DESKTOPS/LXDE
 
-  lxde = recurseIntoAttrs (callPackage ../desktops/lxde { });
-  # Backwards compatibility aliases
-  inherit (lxde)
-    lxappearance
-    lxappearance-gtk2
-    lxmenu-data
-    lxpanel
-    lxrandr
-    lxsession
-    lxtask
-  ;
+  lxappearance-gtk2 = callPackage ../by-name/lx/lxappearance/package.nix {
+    gtk2 = gtk2-x11;
+    withGtk3 = false;
+  };
 
   lxqt = recurseIntoAttrs (
     import ../desktops/lxqt {
@@ -14495,72 +14421,7 @@ with pkgs;
 
   siesta-mpi = callPackage ../applications/science/chemistry/siesta { useMpi = true; };
 
-  cp2k =
-    # CP2K requires all dependencies from the Grimme ecosystem to be build with
-    # CMake instead of Meson. Unfortunately most other consumers require meson
-    let
-      grimmeCmake = lib.makeScope pkgs.newScope (self: {
-        mctc-lib = pkgs.mctc-lib.override {
-          buildType = "cmake";
-          inherit (self) jonquil toml-f;
-        };
-
-        toml-f = pkgs.toml-f.override {
-          buildType = "cmake";
-          inherit (self) test-drive;
-        };
-
-        dftd4 = pkgs.dftd4.override {
-          buildType = "cmake";
-          inherit (self) mstore mctc-lib multicharge;
-        };
-
-        jonquil = pkgs.jonquil.override {
-          buildType = "cmake";
-          inherit (self) toml-f test-drive;
-        };
-
-        mstore = pkgs.mstore.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib;
-        };
-
-        multicharge = pkgs.multicharge.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore;
-        };
-
-        test-drive = pkgs.test-drive.override { buildType = "cmake"; };
-
-        simple-dftd3 = pkgs.simple-dftd3.override {
-          buildType = "cmake";
-          inherit (self) mctc-lib mstore toml-f;
-        };
-
-        tblite = pkgs.tblite.override {
-          buildType = "cmake";
-          inherit (self)
-            mctc-lib
-            mstore
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-
-        sirius = pkgs.sirius.override {
-          inherit (self)
-            mctc-lib
-            toml-f
-            multicharge
-            dftd4
-            simple-dftd3
-            ;
-        };
-      });
-    in
-    grimmeCmake.callPackage ../applications/science/chemistry/cp2k/default.nix {
+  cp2k = callPackage ../by-name/cp/cp2k/package.nix {
       libxc = pkgs.libxc_7;
     };
 

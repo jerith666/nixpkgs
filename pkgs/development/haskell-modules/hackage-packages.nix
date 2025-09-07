@@ -114667,8 +114667,6 @@ self: {
        libraryPkgconfigDepends = [ botan ];
        description = "Raw Botan bindings";
        license = lib.licenses.bsd3;
-       hydraPlatforms = lib.platforms.none;
-       broken = true;
     }
   ) { botan = null; };
 
