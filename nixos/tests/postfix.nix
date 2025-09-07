@@ -19,6 +19,19 @@ import ./make-test-python.nix {
             certs.${domain}.key
             certs.${domain}.cert
           ];
+          smtpd_sasl_auth_enable = "yes";
+          cyrus_sasl_config_path =
+            let
+              smtpdConf = pkgs.writeTextFile {
+                name = "smtpd.conf";
+                destination = "/etc/sasl2/smtpd.conf";
+                text = ''
+                  pwcheck_method: saslauthd
+                  mech_list: PLAIN LOGIN
+                '';
+              };
+            in
+            "${smtpdConf}/etc/sasl2";
         };
         submissionsOptions = {
           smtpd_sasl_auth_enable = "yes";
@@ -26,10 +39,17 @@ import ./make-test-python.nix {
           milter_macro_daemon_name = "ORIGINATING";
         };
       };
+      services.saslauthd.enable = true;
 
       security.pki.certificateFiles = [
         certs.ca.cert
       ];
+      security.pam.services = {
+        # note: no 'd' on the end!
+        smtp = {
+          name = "smtp";
+        };
+      };
 
       networking.extraHosts = ''
         127.0.0.1 ${domain}
@@ -72,11 +92,52 @@ import ./make-test-python.nix {
               smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test SMTPS\n\nTest data.')
               smtp.quit()
           '';
+
+          auth = pkgs.writeScriptBin "auth" ''
+            #!${pkgs.python3.interpreter}
+            import smtplib
+
+            with smtplib.SMTP('${domain}') as smtp:
+              smtp.ehlo()
+              smtp.login("alice","foobar")
+              smtp.quit()
+          '';
+
+          authStarttls = pkgs.writeScriptBin "authStarttls" ''
+            #!${pkgs.python3.interpreter}
+            import smtplib
+            import ssl
+
+            ctx = ssl.create_default_context()
+
+            with smtplib.SMTP('${domain}') as smtp:
+              smtp.ehlo()
+              smtp.starttls(context=ctx)
+              smtp.ehlo()
+              smtp.login("alice","foobar")
+              smtp.quit()
+          '';
+
+          authSmtps = pkgs.writeScriptBin "authSmtps" ''
+            #!${pkgs.python3.interpreter}
+            import smtplib
+            import ssl
+
+            ctx = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL('${domain}', context=ctx) as smtp:
+              smtp.ehlo()
+              smtp.login("alice","foobar")
+              smtp.quit()
+          '';
         in
         [
           sendTestMail
           sendTestMailStarttls
           sendTestMailSmtps
+          auth
+          authStarttls
+          authSmtps
         ];
     };
 
@@ -85,5 +146,8 @@ import ./make-test-python.nix {
     machine.succeed("send-testmail")
     machine.succeed("send-testmail-starttls")
     machine.succeed("send-testmail-smtps")
+    machine.succeed("auth")
+    machine.succeed("authStarttls")
+    machine.succeed("authSmtps")
   '';
 }
