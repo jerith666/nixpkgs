@@ -1971,6 +1971,8 @@ self: super: with self; {
 
   blake3 = callPackage ../development/python-modules/blake3 { };
 
+  ble-serial = callPackage ../development/python-modules/ble-serial { };
+
   bleach = callPackage ../development/python-modules/bleach { };
 
   bleach-allowlist = callPackage ../development/python-modules/bleach-allowlist { };
@@ -7723,6 +7725,8 @@ self: super: with self; {
 
   kanidm = callPackage ../development/python-modules/kanidm { };
 
+  kantoku = callPackage ../development/python-modules/kantoku { };
+
   kaptan = callPackage ../development/python-modules/kaptan { };
 
   karton-asciimagic = callPackage ../development/python-modules/karton-asciimagic { };
@@ -8128,6 +8132,12 @@ self: super: with self; {
   libagent = callPackage ../development/python-modules/libagent { };
 
   libais = callPackage ../development/python-modules/libais { };
+
+  libapparmor = toPythonModule (
+    pkgs.libapparmor.override {
+      python3Packages = self;
+    }
+  );
 
   libarchive-c = callPackage ../development/python-modules/libarchive-c {
     inherit (pkgs) libarchive;
@@ -9323,9 +9333,7 @@ self: super: with self; {
 
   minexr = callPackage ../development/python-modules/minexr { };
 
-  miniaudio = callPackage ../development/python-modules/miniaudio {
-    inherit (pkgs) miniaudio;
-  };
+  miniaudio = callPackage ../development/python-modules/miniaudio { };
 
   minichain = callPackage ../development/python-modules/minichain { };
 
@@ -9435,7 +9443,9 @@ self: super: with self; {
 
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
 
-  mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
+  mkdocs-macros-plugin = callPackage ../development/python-modules/mkdocs-macros-plugin { };
+
+  mkdocs-macros-test = callPackage ../development/python-modules/mkdocs-macros-test { };
 
   mkdocs-markmap = callPackage ../development/python-modules/mkdocs-markmap { };
 
@@ -9464,6 +9474,8 @@ self: super: with self; {
   mkdocs-table-reader-plugin =
     callPackage ../development/python-modules/mkdocs-table-reader-plugin
       { };
+
+  mkdocs-test = callPackage ../development/python-modules/mkdocs-test { };
 
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
 
@@ -13155,6 +13167,8 @@ self: super: with self; {
   pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
+
+  pyiceberg-core = callPackage ../development/python-modules/pyiceberg-core { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
@@ -17773,6 +17787,8 @@ self: super: with self; {
   supabase-functions = self.supafunc;
 
   supafunc = callPackage ../development/python-modules/supafunc { };
+
+  super-collections = callPackage ../development/python-modules/super-collections { };
 
   superqt = callPackage ../development/python-modules/superqt { };
 

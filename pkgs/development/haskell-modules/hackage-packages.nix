@@ -16266,7 +16266,6 @@ self: {
       mkDerivation,
       array,
       base,
-      llvm,
     }:
      mkDerivation {
        pname = "GlomeVec";
@@ -16276,11 +16275,10 @@ self: {
         array
         base
       ];
-       libraryPkgconfigDepends = [ llvm ];
        description = "Simple 3D vector library";
        license = "GPL";
     }
-  ) { inherit (self.llvmPackages) llvm; };
+  ) { };
 
   "GlomeView" = callPackage (
     {
@@ -27647,9 +27645,9 @@ self: {
           base,
           bytestring,
           c2hs,
-          clang,
           filepath,
           hashable,
+          libclang,
           mtl,
           ncurses,
           resourcet,
@@ -27676,7 +27674,7 @@ self: {
             transformers-base
             vector
        ];
-       librarySystemDepends = [ clang ];
+          librarySystemDepends = [ libclang ];
        libraryPkgconfigDepends = [ ncurses ];
        libraryToolDepends = [ c2hs ];
        description = "Haskell bindings for libclang (a C++ parsing library)";
@@ -27686,7 +27684,7 @@ self: {
         }
       )
       {
-        inherit (self.llvmPackages) clang;
+        inherit (pkgs) libclang;
         inherit (pkgs) ncurses;
       };
 
@@ -114313,6 +114311,7 @@ self: {
        libraryPkgconfigDepends = [ botan ];
        description = "Raw Botan bindings";
        license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.mikatammi ];
     }
   ) { botan = null; };
 
@@ -114357,6 +114356,7 @@ self: {
        description = "Low-level Botan bindings";
        license = lib.licenses.bsd3;
        hydraPlatforms = lib.platforms.none;
+      maintainers = [ lib.maintainers.mikatammi ];
     }
   ) { };
 
@@ -141306,11 +141306,11 @@ self: {
       base,
       bytestring,
       Cabal,
-      clang,
       containers,
       contravariant,
       inline-c,
       lens,
+      libclang,
       microlens,
       microlens-contra,
       process,
@@ -141344,7 +141344,7 @@ self: {
         template-haskell
         vector
        ];
-       librarySystemDepends = [ clang ];
+      librarySystemDepends = [ libclang ];
       testHaskellDepends = [
         base
         bytestring
@@ -141355,7 +141355,7 @@ self: {
        hydraPlatforms = lib.platforms.none;
        broken = true;
     }
-  ) { inherit (self.llvmPackages) clang; };
+  ) { inherit (pkgs) libclang; };
 
   "clanki" = callPackage (
     {
@@ -267231,7 +267231,7 @@ self: {
       haskell-gi-overloading,
       text,
       transformers,
-      vte_291,
+      vte,
      }:
      mkDerivation {
        pname = "gi-vte";
@@ -267270,12 +267270,12 @@ self: {
         text
         transformers
        ];
-       libraryPkgconfigDepends = [ vte_291 ];
+      libraryPkgconfigDepends = [ vte ];
        description = "Vte bindings";
        license = lib.licenses.lgpl21Only;
        badPlatforms = lib.platforms.darwin;
     }
-  ) { vte_291 = pkgs.vte; };
+  ) { inherit (pkgs) vte; };
 
   "gi-webkit" = callPackage (
     {
@@ -664366,7 +664366,7 @@ self: {
           text,
           transformers,
           unordered-containers,
-          vte_291,
+          vte,
           xml-conduit,
           xml-html-qq,
           yaml,
@@ -664416,7 +664416,7 @@ self: {
           libraryPkgconfigDepends = [
             gtk3
             pcre2
-            vte_291
+            vte
        ];
        executableHaskellDepends = [ base ];
        testHaskellDepends = [
@@ -664436,7 +664436,7 @@ self: {
       {
         inherit (pkgs) gtk3;
         inherit (pkgs) pcre2;
-        vte_291 = pkgs.vte;
+        inherit (pkgs) vte;
       };
 
   "termplot" = callPackage (
