@@ -42,7 +42,10 @@ update-git-commits.txt
 
 # JetBrains IDEA module declaration file
 /nixpkgs.iml
+
+# local nix(os) expressions for bisecting etc.
 vm.nix
+us-dvorak-ctrl-bisect.nix
 
 # Usually used for manual backports
 .worktree/

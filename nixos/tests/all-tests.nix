@@ -210,6 +210,7 @@ in
   amd-sev = runTest ./amd-sev.nix;
   android-translation-layer = runTest ./android-translation-layer.nix;
   angie-api = runTest ./angie-api.nix;
+  angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
   anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
@@ -438,7 +439,7 @@ in
     imports = [ ./discourse.nix ];
     _module.args.package = pkgs.discourseAllPlugins;
   };
-  dnscrypt-proxy2 = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy2.nix;
+  dnscrypt-proxy = runTestOn [ "x86_64-linux" ] ./dnscrypt-proxy.nix;
   dnsdist = import ./dnsdist.nix { inherit pkgs runTest; };
   doas = runTest ./doas.nix;
   docker = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./docker.nix;
@@ -493,7 +494,6 @@ in
   };
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
-  eris-server = runTest ./eris-server.nix;
   esphome = runTest ./esphome.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
@@ -559,10 +559,6 @@ in
   flannel = runTestOn [ "x86_64-linux" ] ./flannel.nix;
   flaresolverr = runTest ./flaresolverr.nix;
   flood = runTest ./flood.nix;
-  floorp = runTest {
-    imports = [ ./firefox.nix ];
-    _module.args.firefoxPackage = pkgs.floorp;
-  };
   fluent-bit = runTest ./fluent-bit.nix;
   fluentd = runTest ./fluentd.nix;
   fluidd = runTest ./fluidd.nix;
@@ -735,6 +731,7 @@ in
   i3wm = runTest ./i3wm.nix;
   icingaweb2 = runTest ./icingaweb2.nix;
   ifm = runTest ./ifm.nix;
+  ifstate = import ./ifstate { inherit runTest; };
   iftop = runTest ./iftop.nix;
   immich = runTest ./web-apps/immich.nix;
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
@@ -846,6 +843,7 @@ in
   litellm = runTest ./litellm.nix;
   litestream = runTest ./litestream.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
+  llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
@@ -910,7 +908,6 @@ in
   metabase = runTest ./metabase.nix;
   mihomo = runTest ./mihomo.nix;
   mindustry = runTest ./mindustry.nix;
-  minecraft = runTest ./minecraft.nix;
   minecraft-server = runTest ./minecraft-server.nix;
   minidlna = runTest ./minidlna.nix;
   miniflux = runTest ./miniflux.nix;
@@ -1035,7 +1032,10 @@ in
   nix-config = runTest ./nix-config.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
-  nix-upgrade = handleTest ./nix/upgrade.nix { inherit (pkgs) nixVersions; };
+  nix-upgrade = handleTest ./nix/upgrade.nix {
+    inherit (pkgs) nixVersions;
+    inherit system;
+  };
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
@@ -1188,6 +1188,7 @@ in
   pict-rs = runTest ./pict-rs.nix;
   pingvin-share = runTest ./pingvin-share.nix;
   pinnwand = runTest ./pinnwand.nix;
+  pihole-ftl = import ./pihole-ftl { inherit runTest; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
   plausible = runTest ./plausible.nix;
@@ -1285,6 +1286,7 @@ in
   redis = handleTest ./redis.nix { };
   redlib = runTest ./redlib.nix;
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix { };
+  refind = runTest ./refind.nix;
   renovate = runTest ./renovate.nix;
   replace-dependencies = handleTest ./replace-dependencies { };
   reposilite = runTest ./reposilite.nix;
@@ -1325,7 +1327,6 @@ in
   scx = runTest ./scx/default.nix;
   sddm = import ./sddm.nix { inherit runTest; };
   sdl3 = runTest ./sdl3.nix;
-  seafile = runTest ./seafile.nix;
   searx = runTest ./searx.nix;
   seatd = runTest ./seatd.nix;
   send = runTest ./send.nix;
@@ -1368,6 +1369,7 @@ in
   sslh = handleTest ./sslh.nix { };
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
   ssh-audit = runTest ./ssh-audit.nix;
+  sshwifty = runTest ./web-apps/sshwifty/default.nix;
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   stalwart-mail = runTest ./stalwart/stalwart-mail.nix;
