@@ -57,17 +57,16 @@ import ./make-test-python.nix {
 
       environment.systemPackages =
         let
-          sendTestMail = pkgs.writeScriptBin "send-testmail" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMail = pkgs.writers.writePython3Bin "send-testmail" { } ''
             import smtplib
 
             with smtplib.SMTP('${domain}') as smtp:
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test\n\nTest data.')
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test\n\nTest data.')
               smtp.quit()
           '';
 
-          sendTestMailStarttls = pkgs.writeScriptBin "send-testmail-starttls" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMailStarttls = pkgs.writers.writePython3Bin "send-testmail-starttls" { } ''
             import smtplib
             import ssl
 
@@ -77,19 +76,55 @@ import ./make-test-python.nix {
               smtp.ehlo()
               smtp.starttls(context=ctx)
               smtp.ehlo()
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test STARTTLS\n\nTest data.')
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test STARTTLS\n\nTest data.')
               smtp.quit()
           '';
 
-          sendTestMailSmtps = pkgs.writeScriptBin "send-testmail-smtps" ''
-            #!${pkgs.python3.interpreter}
+          sendTestMailSmtps = pkgs.writers.writePython3Bin "send-testmail-smtps" { } ''
             import smtplib
             import ssl
 
             ctx = ssl.create_default_context()
 
             with smtplib.SMTP_SSL(host='${domain}', context=ctx) as smtp:
-              smtp.sendmail('root@localhost', 'alice@localhost', 'Subject: Test SMTPS\n\nTest data.')
+                smtp.sendmail('root@localhost', 'alice@localhost',
+                              'Subject: Test SMTPS\n\nTest data.')
+                smtp.quit()
+          '';
+
+          auth = pkgs.writers.writePython3Bin "auth" { } ''
+            import smtplib
+
+            with smtplib.SMTP('${domain}') as smtp:
+                smtp.ehlo()
+                smtp.login("alice", "foobar")
+                smtp.quit()
+          '';
+
+          authStarttls = pkgs.writers.writePython3Bin "authStarttls" { } ''
+            import smtplib
+            import ssl
+
+            ctx = ssl.create_default_context()
+
+            with smtplib.SMTP('${domain}') as smtp:
+                smtp.ehlo()
+                smtp.starttls(context=ctx)
+                smtp.ehlo()
+                smtp.login("alice", "foobar")
+                smtp.quit()
+          '';
+
+          authSmtps = pkgs.writers.writePython3Bin "authSmtps" { } ''
+            import smtplib
+            import ssl
+
+            ctx = ssl.create_default_context()
+
+            with smtplib.SMTP_SSL('${domain}', context=ctx) as smtp:
+                smtp.ehlo()
+                smtp.login("alice", "foobar")
               smtp.quit()
           '';
 
