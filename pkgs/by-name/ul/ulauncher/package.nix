@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   nix-update-script,
   python3Packages,
   gdk-pixbuf,
@@ -80,6 +81,11 @@ python3Packages.buildPythonApplication rec {
   patches = [
     ./fix-path.patch
     ./fix-extensions.patch
+    (fetchpatch {
+      name = "support-gir1.2-webkit2-4.1.patch";
+      url = "https://src.fedoraproject.org/rpms/ulauncher/raw/rawhide/f/support-gir1.2-webkit2-4.1.patch";
+      hash = "sha256-w1c+Yf6SA3fyMrMn1LXzCXf5yuynRYpofkkUqZUKLS8=";
+    })
   ];
 
   postPatch = ''

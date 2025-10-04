@@ -225,6 +225,12 @@
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
   ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -253,7 +259,16 @@
     "release-notes.html#sec-nixpkgs-release-25.11-highlights"
   ],
   "sec-nixpkgs-release-25.11-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities",
+    "index.html#enocache-errors-from-buildbowercomponents",
+    "index.html#ex-bowerGulpFile",
+    "index.html#ex-bowerJson",
+    "index.html#ex-buildBowerComponents",
+    "index.html#ex-buildBowerComponentsDefaultNix",
+    "index.html#sec-bower",
+    "index.html#ssec-bower2nix-troubleshooting",
+    "index.html#ssec-bower2nix-usage",
+    "index.html#ssec-build-bower-components"
   ],
   "sec-nixpkgs-release-25.11-lib": [
     "release-notes.html#sec-nixpkgs-release-25.11-lib"
@@ -627,6 +642,15 @@
   ],
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-possibleCPEs": [
+    "index.html#var-meta-identifiers-possibleCPEs"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -2785,33 +2809,6 @@
   ],
   "elixir---phoenix-project": [
     "index.html#elixir---phoenix-project"
-  ],
-  "sec-bower": [
-    "index.html#sec-bower"
-  ],
-  "ssec-bower2nix-usage": [
-    "index.html#ssec-bower2nix-usage"
-  ],
-  "ex-bowerJson": [
-    "index.html#ex-bowerJson"
-  ],
-  "ssec-build-bower-components": [
-    "index.html#ssec-build-bower-components"
-  ],
-  "ex-buildBowerComponents": [
-    "index.html#ex-buildBowerComponents"
-  ],
-  "ex-bowerGulpFile": [
-    "index.html#ex-bowerGulpFile"
-  ],
-  "ex-buildBowerComponentsDefaultNix": [
-    "index.html#ex-buildBowerComponentsDefaultNix"
-  ],
-  "ssec-bower2nix-troubleshooting": [
-    "index.html#ssec-bower2nix-troubleshooting"
-  ],
-  "enocache-errors-from-buildbowercomponents": [
-    "index.html#enocache-errors-from-buildbowercomponents"
   ],
   "sec-chicken": [
     "index.html#sec-chicken"
