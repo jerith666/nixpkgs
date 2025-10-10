@@ -759,7 +759,6 @@
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix #TODO is this the same?
   ./services/mail/pfix-srsd.nix
-  ./services/mail/postfixadmin.nix
   ./services/mail/postgrey.nix
   ./services/mail/postsrsd.nix
   ./services/mail/protonmail-bridge.nix
