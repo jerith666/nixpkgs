@@ -329,7 +329,7 @@ in
     f b a;
 
   /**
-    Return `maybeValue` if not null, otherwise return `default`.
+    Returns `maybeValue` if not null, otherwise return `default`.
 
     # Inputs
 
@@ -539,7 +539,7 @@ in
   ## Integer operations
 
   /**
-    Return minimum of two numbers.
+    Returns minimum of two numbers.
 
     # Inputs
 
@@ -554,7 +554,7 @@ in
   min = x: y: if x < y then x else y;
 
   /**
-    Return maximum of two numbers.
+    Returns maximum of two numbers.
 
     # Inputs
 

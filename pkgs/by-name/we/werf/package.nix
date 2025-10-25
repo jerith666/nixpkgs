@@ -1,26 +1,26 @@
 {
-  lib,
-  stdenv,
+  btrfs-progs,
   buildGoModule,
   fetchFromGitHub,
-  btrfs-progs,
-  writableTmpDirAsHomeHook,
   installShellFiles,
+  lib,
+  stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.47.5";
+  version = "2.51.0";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rr0jHeAz8gcKj1rUzL8BoDFvuVrZF1+3I7ruKIvt8Rw=";
+    hash = "sha256-ZvEX834FLSQ5va5hbWxDibx0D6r9RZ8y4S6kNhVUEpM=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-dULy4iLpp+wlvk8gdzLQTJ6reRI1YQ8//+EU7/U/Xkw=";
+  vendorHash = "sha256-qy0eDvDSvudNRSmYwl3YUOpZJ/I0GQ6ITUVQCZCG4eU=";
 
   subPackages = [ "cmd/werf" ];
 

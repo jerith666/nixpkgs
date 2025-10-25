@@ -10,6 +10,10 @@ let
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
+  # convert a Nix attribute path to jq object identifier-index:
+  # https://jqlang.org/manual/#object-identifier-index
+  attrPathToIndex = attrPath: "." + lib.concatStringsSep "." attrPath;
+
   commonServiceConfig = {
     Type = "simple";
     Restart = "on-failure";
@@ -145,6 +149,27 @@ in
           };
         }
       );
+    };
+
+    secretSettings = mkOption {
+      default = { };
+      description = ''
+        Secrets to to be added to the JSON file generated from {option}`settings`, read from files.
+      '';
+      example = lib.literalExpression ''
+        {
+          notifications.smtp.transport.password = "/path/to/secret";
+          oauth.clientSecret = "/path/to/other/secret";
+        }
+      '';
+      type =
+        let
+          inherit (types) attrsOf either path;
+          recursiveType = either (attrsOf recursiveType) path // {
+            description = "nested " + (attrsOf path).description;
+          };
+        in
+        recursiveType;
     };
 
     machine-learning = {
@@ -297,15 +322,17 @@ in
           "vector"
           "vchord"
         ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-
-          ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ${lib.optionalString cfg.database.enableVectors "ALTER SCHEMA vectors OWNER TO ${cfg.database.user};"}
-          GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
-
-          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-        '';
+        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
+          ''
+            ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+            ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+            ALTER SCHEMA public OWNER TO ${cfg.database.user};
+          ''
+          + lib.optionalString cfg.database.enableVectors ''
+            ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
+            GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
+          ''
+        );
       in
       [
         ''
@@ -353,7 +380,7 @@ in
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
       }
       // lib.optionalAttrs (cfg.settings != null) {
-        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
+        IMMICH_CONFIG_FILE = "/run/immich/config.json";
       };
 
     services.immich.machine-learning.environment = {
@@ -382,7 +409,24 @@ in
         postgresqlPackage
       ];
 
+      preStart = mkIf (cfg.settings != null) (
+        ''
+          cat '${format.generate "immich-config.json" cfg.settings}' > /run/immich/config.json
+        ''
+        + lib.concatStrings (
+          lib.mapAttrsToListRecursive (attrPath: _: ''
+            tmp="$(mktemp)"
+            ${lib.getExe pkgs.jq} --rawfile secret "$CREDENTIALS_DIRECTORY/${attrPathToIndex attrPath}" \
+              '${attrPathToIndex attrPath} = ($secret | rtrimstr("\n"))' /run/immich/config.json > "$tmp"
+            mv "$tmp" /run/immich/config.json
+          '') cfg.secretSettings
+        )
+      );
+
       serviceConfig = commonServiceConfig // {
+        LoadCredential = lib.mapAttrsToListRecursive (
+          attrPath: file: "${attrPathToIndex attrPath}:${file}"
+        ) cfg.secretSettings;
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";

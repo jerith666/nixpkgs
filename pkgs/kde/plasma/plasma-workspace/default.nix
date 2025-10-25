@@ -2,8 +2,6 @@
   lib,
   mkKdeDerivation,
   replaceVars,
-  fetchpatch,
-  dbus,
   fontconfig,
   xorg,
   lsof,
@@ -25,7 +23,6 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
@@ -35,12 +32,6 @@ mkKdeDerivation {
       QtBinariesDir = null;
     })
     ./kde-lock-screen.patch
-    # Fixes https://github.com/NixOS/nixpkgs/issues/442630, next upstream release should already contain this patch
-    (fetchpatch {
-      name = "fix-media-applet-crash.diff";
-      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/30273fb2afcc6e304951c8895bb17d38255fed39.diff";
-      sha256 = "sha256-1p1CjxRioCDm5ugoI8l6kDlOse5FbDJ71tTAY9LPvRc=";
-    })
   ];
 
   postInstall = ''
