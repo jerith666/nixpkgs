@@ -142305,6 +142305,7 @@ self: {
        testToolDepends = [ hspec-discover ];
        description = "CSS preprocessor as embedded Haskell";
        license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.turion ];
     }
   ) { };
 
@@ -490318,6 +490319,7 @@ self: {
        description = "OpenAPI3 Haskell Client Code Generator";
        license = lib.licenses.mit;
        mainProgram = "openapi3-code-generator-exe";
+      maintainers = [ lib.maintainers.turion ];
     }
   ) { };
 
