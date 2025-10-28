@@ -69,6 +69,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -434,6 +435,15 @@ runTests {
   };
 
   # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") [
@@ -3094,6 +3104,86 @@ runTests {
     };
 
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
+  };
+
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
