@@ -1154,8 +1154,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.14.158";
-          hash = "sha256-c+5CJqjn7dmwDgNcaaDBapi3T8OI+5UnPJj9+t8sWng=";
+          version = "3.14.172";
+          hash = "sha256-bJnGao3RrbjeMSkRkakM6UA9piYGEzwMInoBOev2YeM=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1617,7 +1617,7 @@ let
         };
       };
 
-      ethersync.ethersync = callPackage ./ethersync.ethersync { };
+      teamtype.teamtype = callPackage ./teamtype.teamtype { };
 
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
@@ -1725,8 +1725,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.28.3";
-          hash = "sha256-rRJrzCle1/epqJL+gaUb3QZwrmdaLvagUwxRx1Aq1ZY=";
+          version = "0.29.0";
+          hash = "sha256-eAfWsIVAqRRfBNDZZq4SilqR48daY5IezjGULaU8AzU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
@@ -2350,8 +2350,8 @@ let
         mktplcRef = {
           name = "Ionide-fsharp";
           publisher = "Ionide";
-          version = "7.28.1";
-          hash = "sha256-JDrJAZB1QvLG/dXHOhg6VM8dgwEc1eV6BycoRfEQmuY=";
+          version = "7.28.3";
+          hash = "sha256-MUoYoElDVMZZHsUZ17fhfwZaHNAJ4j50lTqhhRw8EBI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Ionide.Ionide-fsharp/changelog";
@@ -2643,8 +2643,8 @@ let
         mktplcRef = {
           name = "intellij-idea-keybindings";
           publisher = "k--kato";
-          version = "1.7.5";
-          hash = "sha256-DOSe0UhNMj6FRyHylnKYQsyhSLQQFvGfcmOBZSw+nVo=";
+          version = "1.7.6";
+          hash = "sha256-eSt4iT/o4mp17Dasr0gDr3SsQHX3R6jGmW4V/2KymnY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/k--kato.intellij-idea-keybindings/changelog";
@@ -3511,8 +3511,8 @@ let
         mktplcRef = {
           publisher = "mvllow";
           name = "rose-pine";
-          version = "2.14.0";
-          hash = "sha256-bjYumipeZM5tNl/cTHLcm/EyX4FU1AzQU3W53e0cGfc=";
+          version = "2.15.0";
+          hash = "sha256-4l4KzxrLU34dIHI7ycypyN0yi2jzRs8voAD5HE4fgII=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3641,8 +3641,8 @@ let
         mktplcRef = {
           name = "ocaml-platform";
           publisher = "ocamllabs";
-          version = "1.32.3";
-          hash = "sha256-KUzLrt7y3I6szpWVGk0NtBfXncw6ovNAkm1HyHj+MDk=";
+          version = "1.32.4";
+          hash = "sha256-ySJ6SLm+L2LPGbnus/skbk4WUPJ3VMXpCMEins3F8cc=";
         };
       };
 
@@ -3768,8 +3768,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "6.18.0";
-          hash = "sha256-wStFklnjX+UDykxLjl+vDYnvAgjrqFG4ahDuCX2glwI=";
+          version = "6.19.0";
+          hash = "sha256-IeeKk4gYFq+zTYpKHAOgEh3EC2g6bbb0Qcys2m5DeAo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";
@@ -3846,8 +3846,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.46.0";
-          hash = "sha256-i7Nac47aJVdxxRgM8KCCI8zmwTCGxxy0PrejgjOCYXE=";
+          version = "1.47.0";
+          hash = "sha256-zxhNZJWi4mjENzHsO74FjOrztl5uZbVU3aMPO5DwGRo=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4170,8 +4170,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.8.19";
-          hash = "sha256-F87YInLUkPUpB2oifCCq1xWD41LUdqg8cusGw2wEYg0=";
+          version = "0.8.20";
+          hash = "sha256-+dwLuqtEYirQaw/tuG5m5Ugk0crKQQZM43TmslJsBBc=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -4217,8 +4217,8 @@ let
         mktplcRef = {
           name = "signageos-vscode-sops";
           publisher = "signageos";
-          version = "0.9.2";
-          hash = "sha256-qlFD8sMvdKpLkXiYT9UybgCvxUJrbXpAcnmPxk91Tbs=";
+          version = "0.9.3";
+          hash = "sha256-fOSLlszr6yLkRC9gy+MCnL+Y/1TXrmVWAWavpvXHj4U=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/signageos.signageos-vscode-sops/changelog";
@@ -4514,8 +4514,8 @@ let
         mktplcRef = {
           name = "tabnine-vscode";
           publisher = "tabnine";
-          version = "3.320.4";
-          hash = "sha256-ZuJX2ybmBDya0eCvIYx90JcGweHLiWanr72xItQpSXY=";
+          version = "3.321.0";
+          hash = "sha256-GIszVwrS0brC+3jT+48zUa0E2Q+DUau/WuoOfRDobb8=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4735,8 +4735,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.19.0";
-          hash = "sha256-jRwZD4TwLMdwBdV59HonMkF2ds4heXHPtpw1sxq1RsA=";
+          version = "0.20.0";
+          hash = "sha256-1o7v9lncnmYWr9FPEjQmamfNW/Lui9A0V+l7bCjn/hw=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
@@ -5020,8 +5020,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.17.0";
-          hash = "sha256-SZRSSgi4/8cEHGvhoGf9J8hrSIQWn1sFTh4NSsJcMDg=";
+          version = "3.17.1";
+          hash = "sha256-3AGa1S6WN7zVaKxjHVba+CjXhEq8PjTD5HU5WY9pF4c=";
         };
 
         meta = {
@@ -5050,8 +5050,8 @@ let
         mktplcRef = {
           publisher = "vscjava";
           name = "vscode-java-dependency";
-          version = "0.26.2";
-          hash = "sha256-msRaLNS1a5BXY3GN1MmOi9jBbNj6aqJDbZkFc1pLG3I=";
+          version = "0.26.3";
+          hash = "sha256-o7FWpesuG6qS1UFVaSQ97X3sWc/6vOOZPy/iid3nNJs=";
         };
         meta = {
           license = lib.licenses.mit;

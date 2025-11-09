@@ -254,7 +254,7 @@ in
 
     restic.succeed(
         # test that remotebackup runs custom commands and produces a snapshot
-        "timedatectl set-time '2016-12-13 13:45'",
+        "date -s '2016-12-13 13:45'",
         "systemctl start restic-backups-remotebackup.service",
         "rm /root/backupCleanupCommand",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
@@ -262,7 +262,7 @@ in
 
     restic.succeed(
           # test that remotebackup runs custom commands and produces a snapshot
-          "timedatectl set-time '2016-12-13 13:45'",
+        "date -s '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
@@ -304,27 +304,27 @@ in
           "grep 'check.* --some-check-option' /root/fake-restic.log",
 
           # test that we can create four snapshots in remotebackup and rclonebackup
-          "timedatectl set-time '2017-12-13 13:45'",
+        "date -s '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          "timedatectl set-time '2018-12-13 13:45'",
+        "date -s '2018-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          "timedatectl set-time '2018-12-14 13:45'",
+        "date -s '2018-12-14 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          "timedatectl set-time '2018-12-15 13:45'",
+        "date -s '2018-12-15 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          "timedatectl set-time '2018-12-16 13:45'",
+        "date -s '2018-12-16 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",

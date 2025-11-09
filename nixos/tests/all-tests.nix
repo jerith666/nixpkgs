@@ -646,6 +646,7 @@ in
   gns3-server = runTest ./gns3-server.nix;
   gnupg = runTest ./gnupg.nix;
   go-camo = runTest ./go-camo.nix;
+  go-csp-collector = runTest ./go-csp-collector.nix;
   go-httpbin = runTest ./go-httpbin.nix;
   go-neb = runTest ./go-neb.nix;
   goatcounter = runTest ./goatcounter.nix;
@@ -672,7 +673,10 @@ in
   guacamole-server = runTest ./guacamole-server.nix;
   guix = handleTest ./guix { };
   gvisor = runTest ./gvisor.nix;
-  h2o = import ./web-servers/h2o { inherit runTest; };
+  h2o = import ./web-servers/h2o {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   hadoop = import ./hadoop {
     inherit handleTestOn;
     package = pkgs.hadoop;

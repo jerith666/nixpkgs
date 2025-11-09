@@ -65,6 +65,7 @@ mapAliases {
   APScheduler = throw "'APScheduler' has been renamed to/replaced by 'apscheduler'"; # Converted to throw 2025-10-29
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
   astropy-extension-helpers = extension-helpers; # Added 2025-10-15
+  asyauth-bad = throw "'asyauth-bad' has been renamed to/replaced by 'badauth'"; # added 2025-11-06
   async_generator = throw "'async_generator' has been renamed to/replaced by 'async-generator'"; # Converted to throw 2025-10-29
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
@@ -241,6 +242,7 @@ mapAliases {
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
+  lxml-stubs = throw "'lxml-stubs' has been removed as it was broken and unmaintained upstream. Consider using 'types-lxml' instead."; # Converted to throw 2025-11-07
   mac_alias = throw "'mac_alias' has been renamed to/replaced by 'mac-alias'"; # Converted to throw 2025-10-29
   macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   Mako = throw "'Mako' has been renamed to/replaced by 'mako'"; # Converted to throw 2025-10-29
@@ -251,12 +253,14 @@ mapAliases {
   memcached = throw "'memcached' has been renamed to/replaced by 'python-memcached'"; # Converted to throw 2025-10-29
   memory_profiler = throw "'memory_profiler' has been renamed to/replaced by 'memory-profiler'"; # Converted to throw 2025-10-29
   mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
+  minikerberos-bad = throw "'minikerberos-bad' has been renamed to/replaced by 'kerbad'"; # added 2025-11-06
   mir_eval = throw "'mir_eval' has been renamed to/replaced by 'mir-eval'"; # Converted to throw 2025-10-29
   mistune_2_0 = throw "'mistune_2_0' has been renamed to/replaced by 'mistune'"; # Converted to throw 2025-10-29
   mkdocs-awesome-pages-plugin = throw "'mkdocs-awesome-pages-plugin' has been renamed to/replaced by 'mkdocs-awesome-nav'"; # Converted to throw 2025-10-29
   mkdocs-macros = mkdocs-macros-plugin; # added 2025-09-02
   mkdocs-minify = throw "'mkdocs-minify' has been renamed to/replaced by 'mkdocs-minify-plugin'"; # Converted to throw 2025-10-29
   mne-python = throw "'mne-python' has been renamed to/replaced by 'mne'"; # Converted to throw 2025-10-29
+  msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
   net2grid = throw "'net2grid' has been renamed to/replaced by 'gridnet'"; # Converted to throw 2025-10-29
@@ -283,6 +287,7 @@ mapAliases {
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
   pep257 = throw "'pep257' has been renamed to/replaced by 'pydocstyle'"; # Converted to throw 2025-10-29
   percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
+  plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
   postgrest-py = postgrest; # added 2025-08-29
@@ -319,6 +324,7 @@ mapAliases {
   pymelcloud = throw "'pymelcloud' has been renamed to/replaced by 'python-melcloud'"; # Converted to throw 2025-10-29
   PyMVGLive = throw "'PyMVGLive' has been renamed to/replaced by 'pymvglive'"; # Converted to throw 2025-10-29
   pymyq = throw "'pymyq' has been renamed to/replaced by 'python-myq'"; # Converted to throw 2025-10-29
+  pyownet = throw "pyownet was removed because Home Assistant switched to aio-ownet"; # added 2025-10-31
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt5_sip = throw "'pyqt5_sip' has been renamed to/replaced by 'pyqt5-sip'"; # Converted to throw 2025-10-29
