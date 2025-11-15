@@ -569,6 +569,7 @@
   ./services/desktops/gnome/gnome-online-miners.nix
   ./services/desktops/gnome/gnome-remote-desktop.nix
   ./services/desktops/gnome/gnome-settings-daemon.nix
+  ./services/desktops/gnome/gnome-software.nix
   ./services/desktops/gnome/gnome-user-share.nix
   ./services/desktops/gnome/localsearch.nix
   ./services/desktops/gnome/rygel.nix
@@ -904,7 +905,6 @@
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
-  ./services/misc/parsoid.nix
   ./services/misc/persistent-evdev.nix
   ./services/misc/pghero.nix
   ./services/misc/pinchflat.nix
@@ -1270,6 +1270,7 @@
   ./services/networking/ncdns.nix
   ./services/networking/ncps.nix
   ./services/networking/ndppd.nix
+  ./services/networking/nebula-lighthouse-service.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
   ./services/networking/netbird/server.nix
@@ -1322,7 +1323,6 @@
   ./services/networking/pyload.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
-  ./services/networking/quorum.nix
   ./services/networking/r53-ddns.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix

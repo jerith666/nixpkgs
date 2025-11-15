@@ -5307,6 +5307,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  floaterm = buildVimPlugin {
+    pname = "floaterm";
+    version = "2025-09-23";
+    src = fetchFromGitHub {
+      owner = "nvzone";
+      repo = "floaterm";
+      rev = "34e14f0b5e2687fd31a93fe75982ec84e5145856";
+      sha256 = "0g0wf1f049sayj9d11xjjz37ssvp7g9q39b5dwimf3i6fn80b42k";
+    };
+    meta.homepage = "https://github.com/nvzone/floaterm/";
+    meta.hydraPlatforms = [ ];
+  };
+
   floating-input-nvim = buildVimPlugin {
     pname = "floating-input.nvim";
     version = "2025-05-28";
@@ -5448,19 +5461,6 @@ final: prev: {
       sha256 = "08q7vs7p4grav819b6hl5y9zla8bbb461b6m1w0mjz6n6rqjjc0p";
     };
     meta.homepage = "https://github.com/rafamadriz/friendly-snippets/";
-    meta.hydraPlatforms = [ ];
-  };
-
-  fruzzy = buildVimPlugin {
-    pname = "fruzzy";
-    version = "2020-08-31";
-    src = fetchFromGitHub {
-      owner = "raghur";
-      repo = "fruzzy";
-      rev = "4cdfee7b828a5cace22bfd93cf23fee0b2b233c4";
-      sha256 = "1dmxz283ypz1klcmdf4jk699aifr3dywkh9y8v8v8vyflampqwwp";
-    };
-    meta.homepage = "https://github.com/raghur/fruzzy/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5617,6 +5617,19 @@ final: prev: {
       sha256 = "0g7vri04fvsn97ifkzp783mxzsq15xhbhq3bdax2vqdkzpn5nxps";
     };
     meta.homepage = "https://github.com/gbprod/nord.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  gdscript-extended-lsp-nvim = buildVimPlugin {
+    pname = "gdscript-extended-lsp.nvim";
+    version = "2025-10-28";
+    src = fetchFromGitHub {
+      owner = "Teatek";
+      repo = "gdscript-extended-lsp.nvim";
+      rev = "27eab5f4979b759368a7760d6955fb93f147e97e";
+      sha256 = "1jilxsz49w720ai41zksvap6bsib347bz9xh0x8b0izcpmsdjc80";
+    };
+    meta.homepage = "https://github.com/Teatek/gdscript-extended-lsp.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -5825,6 +5838,19 @@ final: prev: {
       sha256 = "000gg83j6fcx6iwp39m3dljfpg0f5vna8pkvwp1b13jf4hjyzcff";
     };
     meta.homepage = "https://github.com/ruifm/gitlinker.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  gitportal-nvim = buildVimPlugin {
+    pname = "gitportal.nvim";
+    version = "2025-11-11";
+    src = fetchFromGitHub {
+      owner = "trevorhauter";
+      repo = "gitportal.nvim";
+      rev = "3abb1b87a48a8c07f042eb8c570dfe325ebf8702";
+      sha256 = "04f8yls7498v8ccs472zl1phr1c5p5nf37r05dpv4kr1wqlkmdq4";
+    };
+    meta.homepage = "https://github.com/trevorhauter/gitportal.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

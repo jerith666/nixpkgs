@@ -7,6 +7,7 @@
   python313,
   replaceVars,
   ffmpeg-headless,
+  ffmpeg_7-headless,
   inetutils,
   nixosTests,
   home-assistant,
@@ -85,7 +86,7 @@ let
         ];
       });
 
-      av = super.av.overridePythonAttrs rec {
+      av = (super.av.override { ffmpeg-headless = ffmpeg_7-headless; }).overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -299,7 +300,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.0";
+  hassVersion = "2025.11.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -320,13 +321,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-+syn/y2ukZKsnCniZxodRWVcCE3AcvUKt80L2XslKKI=";
+    hash = "sha256-39OY9lKlqnv3QdIdJ698cMTBrF41SxbqQfz6N32mD5s=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-JSWr+yGvpXYc6Bw3B+xVLpYokVM11dsJZBWYy+W4bH4=";
+    hash = "sha256-W9xuWfz9lCQXaPg+O313mzMxvBfY64CrU7vwNjra/3k=";
   };
 
   build-system = with python.pkgs; [

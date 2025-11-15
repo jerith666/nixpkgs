@@ -14,12 +14,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.0.35";
+  version = "1.0.45";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0IFlFWMPu9ynrpu/bYJK2xOgZc+lCSQOSV2WfD0KY3w=";
+    hash = "sha256-59nsauILNEvQ4Q8ATHKtgTViIWMaFnUyBf7CN6qrtdk=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -86,6 +86,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # NOTE: Skip npm pack commands in build.ts since packages are already in node_modules
     ./skip-npm-pack.patch
   ];
+
+  postPatch = ''
+    # don't require a specifc bun version
+    substituteInPlace packages/script/src/index.ts \
+      --replace-fail "if (process.versions.bun !== expectedBunVersion)" "if (false)"
+  '';
 
   configurePhase = ''
     runHook preConfigure
