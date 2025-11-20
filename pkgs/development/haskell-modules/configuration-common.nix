@@ -3955,7 +3955,8 @@ with haskellLib;
       src = src + "/cachix-api";
     } super.cachix-api;
 
-    cachix = lib.pipe super.cachix [
+    cachix = lib.pipe super.cachix (
+      [
       (overrideSrc {
         inherit version;
         src = src + "/cachix";
@@ -3970,6 +3971,9 @@ with haskellLib;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
         }
       )
-    ];
+      ]
+      # https://github.com/NixOS/nixpkgs/issues/461651
+      ++ lib.optional pkgs.stdenv.isDarwin dontCheck
+    );
   }
 )
