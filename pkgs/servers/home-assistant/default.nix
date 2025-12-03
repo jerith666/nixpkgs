@@ -263,18 +263,6 @@ let
         };
       };
 
-      # xmltodict>=1.0 not compatible with georss-client and aio-georss-client
-      # https://github.com/exxamalte/python-aio-georss-client/issues/63
-      xmltodict = super.xmltodict.overridePythonAttrs rec {
-        version = "0.15.1";
-        src = fetchFromGitHub {
-          owner = "martinblech";
-          repo = "xmltodict";
-          tag = "v${version}";
-          hash = "sha256-j3shoXjAoAWFd+7k+0w6eoNygS2wkbhDkIq7QG+TmSM=";
-        };
-      };
-
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
@@ -305,7 +293,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.11.2";
+  hassVersion = "2025.11.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -326,13 +314,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-o4rpdnO/TslJWRj7HwTyWOS0NBVOfAeDfWiYvlx/jhw=";
+    hash = "sha256-Wd+q2ooNguJMKnQ1uzLJtglAyBFXjBSj5hjEgY4bgzY=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-j10a2GSnFau6KYMpFrFCrCTqsmy/D5p6BwQMvlOEe+w=";
+    hash = "sha256-KxpjOPlusEHT+bRtgs/9EsIksTd4pRMKsXb7e5q+b2Q=";
   };
 
   build-system = with python.pkgs; [
@@ -373,10 +361,13 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "setuptools==78.1.1" setuptools
   '';
 
+  pythonRemoveDeps = [
+    "uv"
+  ];
+
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
-    aiofiles
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver
@@ -396,28 +387,20 @@ python.pkgs.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
-    ha-ffmpeg
     hass-nabucasa
-    hassil
     home-assistant-bluetooth
-    home-assistant-intents
     httpx
     ifaddr
     jinja2
     lru-dict
-    mutagen
-    numpy
     orjson
     packaging
     pillow
     propcache
     psutil-home-assistant
     pyjwt
-    pymicro-vad
     pyopenssl
-    pyspeex-noise
     python-slugify
-    pyturbojpeg
     pyyaml
     requests
     securetar
@@ -427,7 +410,6 @@ python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -444,31 +426,36 @@ python.pkgs.buildPythonApplication rec {
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
 
+  requirementsTest = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    pytest-asyncio
+    pytest-aiohttp
+    pytest-freezer
+    pytest-socket
+    pytest-timeout
+    pytest-unordered
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    syrupy
+  ];
+
   nativeCheckInputs =
-    with python.pkgs;
-    [
-      # test infrastructure (selectively from requirement_test.txt)
-      freezegun
-      pytest-asyncio
-      pytest-aiohttp
-      pytest-freezer
-      pytest-socket
-      pytest-timeout
-      pytest-unordered
-      pytest-xdist
-      pytestCheckHook
-      requests-mock
-      respx
-      syrupy
+    requirementsTest
+    ++ (with python.pkgs; [
       # Used in tests/non_packaged_scripts/test_alexa_locales.py
       beautifulsoup4
       # Used in tests/scripts/test_check_config.py
       colorlog
-    ]
+    ])
     ++ lib.concatMap (component: getPackages component python.pkgs) [
       # some components are needed even if tests in tests/components are disabled
-      "default_config"
+      "assist_pipeline"
+      "frontend"
       "hue"
+      "mobile_app"
     ];
 
   pytestFlags = [

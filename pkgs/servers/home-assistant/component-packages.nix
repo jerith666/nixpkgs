@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.11.2";
+  version = "2025.11.3";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -1457,7 +1457,8 @@
       ];
     "ekeybionyx" =
       ps: with ps; [
-      ]; # missing inputs: ekey-bionyxpy
+        ekey-bionyxpy
+      ];
     "electrasmart" =
       ps: with ps; [
         pyelectra
@@ -4733,7 +4734,8 @@
       ];
     "prowl" =
       ps: with ps; [
-      ]; # missing inputs: prowlpy
+        prowlpy
+      ];
     "proximity" =
       ps: with ps; [
       ];
@@ -7241,6 +7243,7 @@
     "efergy"
     "eheimdigital"
     "eight_sleep"
+    "ekeybionyx"
     "electrasmart"
     "electric_kiwi"
     "elevenlabs"
@@ -7713,6 +7716,7 @@
     "progettihwsw"
     "prometheus"
     "prosegur"
+    "prowl"
     "proximity"
     "prusalink"
     "ps4"
