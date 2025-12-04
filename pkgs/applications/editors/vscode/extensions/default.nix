@@ -1900,8 +1900,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.0";
-          hash = "sha256-D5Khohd1oV8c7uHT6zgiZsigtafAWdXinV2NTUF0EaM=";
+          version = "1.18.3";
+          hash = "sha256-NcCVpRbFdfRaV7nwQgMNOJWvhrFZ/FCJpcVoivS+jVI=";
         };
 
         meta = {
@@ -4533,6 +4533,8 @@ let
           maintainers = [ lib.maintainers.ratsclub ];
         };
       };
+
+      sysdig.sysdig-vscode-ext = callPackage ./sysdig.sysdig-vscode-ext { };
 
       tabnine.tabnine-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
