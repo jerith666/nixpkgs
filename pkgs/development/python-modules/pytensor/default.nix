@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -15,13 +16,13 @@
   filelock,
   logical-unification,
   minikanren,
+  numba,
   numpy,
   scipy,
 
   # tests
   jax,
   jaxlib,
-  numba,
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
@@ -33,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.35.1";
+  version = "2.36.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,8 +44,17 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-5+yMZysK69g+3uYrP12WK3ngpAYn8XrHoVjLqjvbobg=";
+    hash = "sha256-rXLtrkuwmEe5+64Aao490VqD96LJ37/mxekWOzWRMlw=";
   };
+
+  patches = [
+    # https://github.com/pymc-devs/pytensor/pull/1805
+    (fetchpatch {
+      name = "fix-test-tri-nonconcrete-jax-compatibility.patch";
+      url = "https://github.com/pymc-devs/pytensor/commit/86310f074267e24d1b3b99ecf3d9cc0b593b170d.patch";
+      hash = "sha256-KRywJLixmdDJ1GGYsd5Twjiwgce0ZFxUidhTgM6Obmg=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -58,6 +68,7 @@ buildPythonPackage rec {
     filelock
     logical-unification
     minikanren
+    numba
     numpy
     scipy
   ];
@@ -159,7 +170,6 @@ buildPythonPackage rec {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sparse/sandbox/"
   ];
 
   passthru.updateScript = nix-update-script {
@@ -177,7 +187,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      ferrine
     ];
   };
 }

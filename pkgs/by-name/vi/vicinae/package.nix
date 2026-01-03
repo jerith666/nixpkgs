@@ -2,8 +2,10 @@
   abseil-cpp,
   cmake,
   cmark-gfm,
+  coreutils,
   fetchFromGitHub,
   fetchNpmDeps,
+  glaze,
   kdePackages,
   lib,
   libqalculate,
@@ -14,35 +16,36 @@
   pkg-config,
   protobuf,
   qt6,
-  rapidfuzz-cpp,
-  stdenv,
+  gcc15Stdenv,
   wayland,
+  libxml2,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.16.10";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4t0AscBe+TMhQ5SuzkBSgKrMXGs/2BvlRv8ke3pg+yo=";
+    hash = "sha256-xKEfWYf3gJ5wEYd8krT5w70rr0QYEu+7rqJ/IZmCHeQ=";
   };
 
   apiDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/api";
-    hash = "sha256-4OgVCnw5th2TcXszVY5G9ENr3/Y/eR2Kd45DbUhQRNk=";
+    hash = "sha256-UsTpMR23UQBRseRo33nbT6z/UCjZByryWfn2AQSgm6U=";
   };
 
   extensionManagerDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/typescript/extension-manager";
-    hash = "sha256-krDFHTG8irgVk4a79LMz148drLgy2oxEoHCKRpur1R4=";
+    hash = "sha256-wl8FDFB6Vl1zD0/s2EbU6l1KX4rwUW6dOZof4ebMMO8=";
   };
 
   cmakeFlags = lib.mapAttrsToList lib.cmakeFeature {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
+    "USE_SYSTEM_GLAZE" = "ON";
     "CMAKE_INSTALL_PREFIX" = placeholder "out";
     "CMAKE_INSTALL_DATAROOTDIR" = "share";
     "CMAKE_INSTALL_BINDIR" = "bin";
@@ -63,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     abseil-cpp
     cmark-gfm
+    glaze
     kdePackages.layer-shell-qt
     kdePackages.qtkeychain
     libqalculate
@@ -72,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
-    rapidfuzz-cpp
     wayland
+    libxml2
   ];
 
   postPatch = ''
@@ -92,10 +96,15 @@ stdenv.mkDerivation (finalAttrs: {
     }"
   ];
 
+  postFixup = ''
+    substituteInPlace $out/share/systemd/user/vicinae.service \
+      --replace-fail "/bin/kill" "${lib.getExe' coreutils "kill"}"
+  '';
+
   passthru.updateScript = ./update.sh;
 
   meta = {
-    description = "A focused launcher for your desktop — native, fast, extensible";
+    description = "Native, fast, extensible launcher for the desktop";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [

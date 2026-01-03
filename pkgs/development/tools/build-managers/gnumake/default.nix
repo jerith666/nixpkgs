@@ -15,12 +15,12 @@ let
   guileEnabled = guileSupport && !inBootstrap;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnumake";
   version = "4.4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/make/make-${version}.tar.gz";
+    url = "mirror://gnu/make/make-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
@@ -35,7 +35,9 @@ stdenv.mkDerivation rec {
   # TODO: stdenv’s setup.sh should be aware of patch directories. It’s very
   # convenient to keep them in a separate directory but we can defer listing the
   # directory until derivation realization to avoid unnecessary Nix evaluations.
-  patches = lib.filesystem.listFilesRecursive ./patches;
+  patches =
+    lib.filesystem.listFilesRecursive ./patches
+    ++ lib.optionals stdenv.hostPlatform.isMusl (lib.filesystem.listFilesRecursive ./musl-patches);
 
   nativeBuildInputs = [
     autoreconfHook
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     gnumakeWithGuile = gnumake.override { guileSupport = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to control the generation of non-source files from sources";
     longDescription = ''
       Make is a tool which controls the generation of executables and
@@ -70,10 +72,9 @@ stdenv.mkDerivation rec {
       to build and install the program.
     '';
     homepage = "https://www.gnu.org/software/make/";
-
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mdaniels5757 ];
     mainProgram = "make";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

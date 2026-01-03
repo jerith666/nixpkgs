@@ -17,12 +17,14 @@
   ncurses,
   clangStdenv,
   nixpkgs-review,
+  nixpkgs-reviewFull,
   nix-direnv,
   nix-fast-build,
   haskell,
   nix-serve-ng,
   colmena,
   nix-update,
+  nix-init,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -106,6 +108,14 @@ let
             nix = self.lix;
           };
 
+          # surprisingly nixpkgs-reviewFull.override { nix = self.lix; }
+          # doesn't work, as the way nix-reviewFull is defined uses callPackage
+          # which does it's own makeOverridable and hides the .override
+          # from the derivation.
+          nixpkgs-reviewFull = nixpkgs-reviewFull.override {
+            nixpkgs-review = self.nixpkgs-review;
+          };
+
           nix-direnv = nix-direnv.override {
             nix = self.lix;
           };
@@ -135,6 +145,10 @@ let
           nix-update = nix-update.override {
             nix = self.lix;
             inherit (self) nixpkgs-review;
+          };
+
+          nix-init = nix-init.override {
+            nix = self.lix;
           };
         };
     };

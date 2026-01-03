@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prmt";
-  version = "0.1.7";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     repo = "prmt";
     owner = "3axap4eHko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CLSBthofkVdNE/ayecTRLtFDxtGesDuEGw1/Jutpu+c=";
+    hash = "sha256-n5Tq6fnImE744/QaQzkqrRsqk76YNrQUp8/cOEly06I=";
   };
 
-  cargoHash = "sha256-0TYjXpR3VyRdI+3ZIPnoaM1Mod0rXOinpByeOduKSdk=";
+  cargoHash = "sha256-6meuA7D5JoSvG9aAGy+rglt66qckvJBn0FhmYFAiTdA=";
 
   # Fail to run in sandbox environment
   checkFlags = map (t: "--skip ${t}") [
@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
