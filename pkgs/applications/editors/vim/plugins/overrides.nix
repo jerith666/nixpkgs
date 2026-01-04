@@ -301,6 +301,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  blink-cmp-nixpkgs-maintainers = super.blink-cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
+  };
+
   blink-cmp-npm-nvim = super.blink-cmp-npm-nvim.overrideAttrs {
     nvimSkipModules = [
       # Test files
@@ -3604,6 +3608,10 @@ assertNoAdditions {
       # Optional integration
       "tokyonight.extra.fzf"
     ];
+  };
+
+  treesitter-modules-nvim = super.treesitter-modules-nvim.overrideAttrs {
+    dependencies = [ self.nvim-treesitter ];
   };
 
   triptych-nvim = super.triptych-nvim.overrideAttrs {
