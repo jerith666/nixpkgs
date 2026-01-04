@@ -14050,8 +14050,6 @@ with pkgs;
     nix-prefetch-scripts
     ;
 
-  nix-top = callPackage ../tools/package-management/nix-top { };
-
   nix-tree = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-tree);
 
   nix-serve-ng =
