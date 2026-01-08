@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iamdata";
-  version = "0.1.202601011";
+  version = "0.1.202601061";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cloud-copilot";
     repo = "iam-data-python";
-    tag = "v${version}";
-    hash = "sha256-tDGY7d8rmD4vKyoFmDAYppuF56aHcb5Ry3nMxOv6PRs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h3+HGFHpmc5nIf/8tFm2xNiismIF3l7Hbzdvz6trvDI=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for utilizing AWS IAM data for Services, Actions, Resources, and Condition Keys";
     homepage = "https://github.com/cloud-copilot/iam-data-python";
-    changelog = "https://github.com/cloud-copilot/iam-data-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/cloud-copilot/iam-data-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

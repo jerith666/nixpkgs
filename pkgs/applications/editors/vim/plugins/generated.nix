@@ -12050,6 +12050,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  nvim-treesitter-locals = buildVimPlugin {
+    pname = "nvim-treesitter-locals";
+    version = "0-unstable-2025-11-28";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "nvim-treesitter-locals";
+      rev = "76d9ea45e860fb42b92ac4926ea869239fc638d0";
+      hash = "sha256-FLZ6h1M3Kc/YjOfKhn8nKLyVTySMMpsOL2MzIoAMEes=";
+    };
+    meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-locals/";
+    meta.hydraPlatforms = [ ];
+  };
+
   nvim-treesitter-pairs = buildVimPlugin {
     pname = "nvim-treesitter-pairs";
     version = "0-unstable-2023-07-23";
@@ -12104,12 +12117,12 @@ final: prev: {
 
   nvim-treesitter-textobjects = buildVimPlugin {
     pname = "nvim-treesitter-textobjects";
-    version = "0-unstable-2025-10-31";
+    version = "0-unstable-2025-12-27";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-textobjects";
-      rev = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef";
-      hash = "sha256-lf+AwSu96iKO1vWWU2D7jWHGfjXkbX9R2CX3gMZaD4M=";
+      rev = "ecd03f5811eb5c66d2fa420b79121b866feecd82";
+      hash = "sha256-mMxCAkrGqTstEgaf/vwQMEF7D8swH3oyUJtaxuXzpcs=";
     };
     meta.homepage = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects/";
     meta.hydraPlatforms = [ ];
@@ -15242,6 +15255,19 @@ final: prev: {
       hash = "sha256-6H4afMXtaZn066oBq3z8vvR7WH7WhqZkvziyOXlsNVg=";
     };
     meta.homepage = "https://github.com/alduraibi/telescope-glyph.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  telescope-hierarchy-nvim = buildVimPlugin {
+    pname = "telescope-hierarchy.nvim";
+    version = "0-unstable-2025-12-19";
+    src = fetchFromGitHub {
+      owner = "jmacadie";
+      repo = "telescope-hierarchy.nvim";
+      rev = "85fb67112daf99f3918531558ee85a36c1891f91";
+      hash = "sha256-Ck7xM+m8sRkkviXdXpeDYrxr3MNpavkW4/UCih0Ohc8=";
+    };
+    meta.homepage = "https://github.com/jmacadie/telescope-hierarchy.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
