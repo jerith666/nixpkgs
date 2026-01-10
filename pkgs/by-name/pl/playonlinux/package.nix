@@ -2,7 +2,6 @@
   lib,
   stdenv_32bit,
   makeWrapper,
-  fetchpatch,
   fetchFromGitHub,
   cabextract,
   gettext,
@@ -73,10 +72,10 @@ let
 
   python = python3.withPackages (
     ps: with ps; [
-    wxpython
-    setuptools
-    natsort
-    pyasyncore
+      wxpython
+      setuptools
+      natsort
+      pyasyncore
     ]
   );
 
@@ -94,13 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-fix-locale.patch
-
-    # Remove unused import of deprecated Python asyncore.dispatcher
-    # https://github.com/PlayOnLinux/POL-POM-4/pull/73
-    (fetchpatch {
-      url = "https://github.com/PlayOnLinux/POL-POM-4/commit/79c513fa8a1938e55be0a239121176f1415049fc.patch";
-      hash = "sha256-hYm2l7mL10Ppz5I0M3eMtqzadpf62elh4WgLl1XdEgY=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -149,12 +141,12 @@ stdenv.mkDerivation (finalAttrs: {
     ${
       if stdenv.hostPlatform.system == "x86_64-linux" then
         ''
-      bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
-      patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
+          bunzip2 $out/share/playonlinux/bin/check_dd_amd64.bz2
+          patchelf --set-interpreter $(cat ${ld64}) --set-rpath ${libs pkgs} $out/share/playonlinux/bin/check_dd_amd64
         ''
       else
         ''
-      rm $out/share/playonlinux/bin/check_dd_amd64.bz2
+          rm $out/share/playonlinux/bin/check_dd_amd64.bz2
         ''
     }
     for f in $out/share/playonlinux/bin/*; do
