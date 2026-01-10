@@ -14,7 +14,6 @@
   pynacl,
   pyspx,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -22,14 +21,17 @@ buildPythonPackage rec {
   version = "1.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "secure-systems-lab";
     repo = "securesystemslib";
     tag = "v${version}";
     hash = "sha256-ERFRLNHD3OhbMEGBEnDLkRYGv4f+bYg9MStS5IarcPA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"hatchling==1.27.0"' '"hatchling"'
+  '';
 
   build-system = [ hatchling ];
 
@@ -77,11 +79,11 @@ buildPythonPackage rec {
     "securesystemslib/_vendor/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic and general-purpose routines";
     homepage = "https://github.com/secure-systems-lab/securesystemslib";
     changelog = "https://github.com/secure-systems-lab/securesystemslib/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

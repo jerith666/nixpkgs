@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
     libXrandr
     libXrender
   ];
+
+  postPatch = ''
+    substituteInPlace modules/libsamplerate/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1..3.18)" "cmake_minimum_required(VERSION 3.18)"
+    substituteInPlace modules/{json,RTNeural}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   # JUCE loads most dependencies at runtime:
   runtimeDependencies = map lib.getLib buildInputs;
 
@@ -66,11 +74,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Guitar amp and pedal capture plugin using neural networks";
     homepage = "https://github.com/GuitarML/Proteus";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "Proteus";
   };

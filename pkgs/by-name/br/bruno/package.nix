@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
+  nodejs_22,
   electron,
   makeWrapper,
   copyDesktopItems,
@@ -20,18 +21,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.15.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-rHum5wQFQ3MuPCelJYzPo5ce4vlHA34ARgSQ6uJTE60=";
+    hash = "sha256-REK3rJ+Svf6bLIfLwizlLa3rIBgnhQHbhzTTe8VPoc4=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
+
+  nodejs = nodejs_22;
 
   npmDepsHash = "sha256-CXXXyDaaoAoZhUo1YNP3PUEGzlmIaDnA+JhrCqBY1H4=";
   npmFlags = [ "--legacy-peer-deps" ];

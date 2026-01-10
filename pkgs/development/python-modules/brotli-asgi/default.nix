@@ -14,7 +14,7 @@
 }:
 let
   pname = "brotli-asgi";
-  version = "1.5.0";
+  version = "1.6.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage {
     owner = "fullonic";
     repo = "brotli-asgi";
     rev = "v${version}";
-    hash = "sha256-jOow5xrRvuBdg/dVEzAUgs1SxNLZqEItyW9OcvniTSY=";
+    hash = "sha256-cF7A3mnkQmvtc9DgHiwqYEQQ6QagjoBGTmcBzUm6vvs=";
   };
 
   propagatedBuildInputs = [
@@ -43,10 +43,10 @@ buildPythonPackage {
     brotlipy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Compression AGSI middleware using brotli";
     homepage = "https://github.com/fullonic/brotli-asgi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

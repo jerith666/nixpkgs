@@ -6,17 +6,19 @@
   nix-update-script,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "qui";
-  version = "1.8.1";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1cIKbP+c2Tqs4uoBWvfAQGDBLqmXh17rFZDuGRYWrYA=";
+    hash = "sha256-j0d8aJ9qcK3+/g+qNBsH84U5zQho6bl5TdzHQRQsabs=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -25,21 +27,23 @@ buildGoModule (finalAttrs: {
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
       typescript
     ];
 
     sourceRoot = "${finalAttrs.src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs')
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-4adyjeQI2+deJPgwA81FmYZCY0QEEUjVP2lF/BeXr4Q=";
+      hash = "sha256-3TAB5StrKBmgit02J7GiMfk6EDl8oiLvcOAnCJ9ian4=";
     };
 
     postBuild = ''
@@ -51,7 +55,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-GaLilaRnVEIItb0yIdnf7F6KCDRPc7Gy3mgtuMwf7j4=";
+  vendorHash = "sha256-hdgTC/oA2ZUc7mqA3v1vunXcu+aeKGw2fEUBBeerCeg=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -80,7 +84,10 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/autobrr/qui";
     changelog = "https://github.com/autobrr/qui/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ pta2002 ];
+    maintainers = with lib.maintainers; [
+      pta2002
+      tmarkus
+    ];
     mainProgram = "qui";
     platforms = lib.platforms.unix;
   };

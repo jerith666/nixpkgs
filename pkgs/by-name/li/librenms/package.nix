@@ -36,7 +36,7 @@ phpPackage.buildComposerProject2 rec {
     hash = "sha256-SzDSeWTnsXy274H2mkGIHOsW26EoL7aony7Xcb+e+h4=";
   };
 
-  vendorHash = "sha256-OYQsgwbxsXsOM+sn0mJcABtyXVQAKBa6/ghfbZR1jX4=";
+  vendorHash = "sha256-lCDBz0+VUTlvH371WRCPBh8NFWn6BTVS6BPMQM621dE=";
 
   php = phpPackage;
 
@@ -123,12 +123,12 @@ phpPackage.buildComposerProject2 rec {
     tests.librenms = nixosTests.librenms;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ];
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ netali ];
+    teams = [ lib.teams.wdz ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -10,22 +10,19 @@
   pyhumps,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   warrant-lite,
 }:
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.19.0";
+  version = "1.19.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     tag = "v${version}";
-    hash = "sha256-Iur39lUkHBd0VaP5YB36o04D8aY371BeSZ07iN7A9Wk=";
+    hash = "sha256-h7PGtcpBcYGlqdi4grbz7KG65zZO3x8Hf/J7n271sDs=";
   };
 
   build-system = [ hatchling ];
@@ -46,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyoverkiz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with the Somfy TaHoma API or other OverKiz APIs";
     homepage = "https://github.com/iMicknl/python-overkiz-api";
     changelog = "https://github.com/iMicknl/python-overkiz-api/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

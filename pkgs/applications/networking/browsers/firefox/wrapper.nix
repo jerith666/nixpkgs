@@ -44,9 +44,12 @@ let
     # original mozilla signature (like 1Password) won't work with signatures
     # stripped, at least the wrapped browser will launch.
     if isDarwin then
-      browser_.overrideAttrs (oldAttrs: {
-        dontFixup = false;
-      })
+      browser_.overrideAttrs (
+        oldAttrs:
+        lib.optionalAttrs (oldAttrs.dontFixup or false) {
+          dontFixup = false;
+        }
+      )
     else
       browser_;
   wrapper =
@@ -86,7 +89,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (

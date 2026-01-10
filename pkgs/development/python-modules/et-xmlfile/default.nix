@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+  fetchpatch,
   lxml,
   pytestCheckHook,
   pythonOlder,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     hash = "sha256-JZ1fJ9o4/Z+9uSlaoq+pNpLSwl5Yv6BJCI1G7GOaQ1I=";
   };
 
+  patches = [
+    (fetchpatch {
+      # python 3.14 compat
+      url = "https://foss.heptapod.net/openpyxl/et_xmlfile/-/commit/73172a7ce6d819ce13e6706f9a1c6d50f1646dde.patch";
+      hash = "sha256-PMtzIGtXJ/vp0VRmBodvyaG/Ptn2DwrTTC1EyLSChHU=";
+    })
+  ];
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
@@ -32,7 +41,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "et_xmlfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of lxml.xmlfile for the standard library";
     longDescription = ''
       et_xmlfile is a low memory library for creating large XML files.
@@ -43,7 +52,7 @@ buildPythonPackage rec {
       but is now a standalone module.
     '';
     homepage = "https://foss.heptapod.net/openpyxl/et_xmlfile";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
