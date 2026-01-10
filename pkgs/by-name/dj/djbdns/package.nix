@@ -38,6 +38,10 @@ stdenv.mkDerivation {
     ./fix-warnings.patch
   ];
 
+  # opt out of GCC 15's stricter C standards
+  # https://github.com/NixOS/nixpkgs/issues/475479
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu17" ];
+
   postPatch = ''
     echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
     echo $out > conf-home
