@@ -1,9 +1,9 @@
 /*
   This file defines the composition for CPAN (Perl) packages.  It has
-   been factored out of all-packages.nix because there are so many of
-   them.  Also, because most Nix expressions for CPAN packages are
-   trivial, most are actually defined here.  I.e. there's no function
-   for each package in a separate file: the call to the function would
+  been factored out of all-packages.nix because there are so many of
+  them.  Also, because most Nix expressions for CPAN packages are
+  trivial, most are actually defined here.  I.e. there's no function
+  for each package in a separate file: the call to the function would
   be almost as much code as the function itself.
 */
 
@@ -43,7 +43,7 @@ with self;
   requiredPerlModules =
     drvs:
     let
-    modules = lib.filter hasPerlModule drvs;
+      modules = lib.filter hasPerlModule drvs;
     in
     lib.unique ([ perl ] ++ modules ++ lib.concatLists (lib.catAttrs "requiredPerlModules" modules));
 
@@ -67,29 +67,29 @@ with self;
       {
         # In case of cross-compilation, generated ./Build have host perl shebang, not build one
         # so run it with build perl explicitly
-      buildPhase = ''
-        runHook preBuild
+        buildPhase = ''
+          runHook preBuild
           perl Build.PL --prefix=$out;
           perl ./Build build
-        runHook postBuild
-      '';
-      installPhase = ''
-        runHook preInstall
+          runHook postBuild
+        '';
+        installPhase = ''
+          runHook preInstall
           perl ./Build install
-        runHook postInstall
-      '';
-      checkPhase = ''
-        runHook preCheck
+          runHook postInstall
+        '';
+        checkPhase = ''
+          runHook preCheck
           perl ./Build test
-        runHook postCheck
-      '';
+          runHook postCheck
+        '';
       }
       // args
       // {
-      preConfigure = ''
-        touch Makefile.PL
-        ${args.preConfigure or ""}
-      '';
+        preConfigure = ''
+          touch Makefile.PL
+          ${args.preConfigure or ""}
+        '';
         buildInputs = (args.buildInputs or [ ]) ++ [ ModuleBuild ];
       }
     );
@@ -97,20 +97,20 @@ with self;
   /*
     Construct a perl search path (such as $PERL5LIB)
 
-     Example:
-       pkgs = import <nixpkgs> { }
-       makePerlPath [ pkgs.perlPackages.libnet ]
-       => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
+    Example:
+      pkgs = import <nixpkgs> { }
+      makePerlPath [ pkgs.perlPackages.libnet ]
+      => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = lib.makeSearchPathOutput "lib" perl.libPrefix;
 
   /*
     Construct a perl search path recursively including all dependencies (such as $PERL5LIB)
 
-     Example:
-       pkgs = import <nixpkgs> { }
-       makeFullPerlPath [ pkgs.perlPackages.CGI ]
-       => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
+    Example:
+      pkgs = import <nixpkgs> { }
+      makeFullPerlPath [ pkgs.perlPackages.CGI ]
+      => "/nix/store/fddivfrdc1xql02h9q500fpnqy12c74n-perl-CGI-4.38/lib/perl5/site_perl:/nix/store/8hsvdalmsxqkjg0c5ifigpf31vc4vsy2-perl-HTML-Parser-3.72/lib/perl5/site_perl:/nix/store/zhc7wh0xl8hz3y3f71nhlw1559iyvzld-perl-HTML-Tagset-3.20/lib/perl5/site_perl"
   */
   makeFullPerlPath = deps: makePerlPath (lib.misc.closePropagation deps);
 
@@ -1319,7 +1319,7 @@ with self;
     };
   };
 
-  AppPackager =  buildPerlPackage {
+  AppPackager = buildPerlPackage {
     pname = "App-Packager";
     version = "1.440";
     src = fetchurl {
@@ -1473,8 +1473,8 @@ with self;
       hash = "sha256-wCoW9n5MNXaQpUODGYQxSf1wDCIxKPn/6+yrKEnFi7g=";
     };
     postInstall = ''
-        ($out/bin/st --help || true) | grep Usage
-      '';
+      ($out/bin/st --help || true) | grep Usage
+    '';
     meta = {
       description = "Simple Statistics";
       homepage = "https://github.com/nferraz/st";
@@ -4671,11 +4671,11 @@ with self;
     nativeBuildInputs = [ pkgs.pkg-config ];
     env.NIX_CFLAGS_COMPILE = toString (
       [
-      "-I${pkgs.pcsclite.dev}/include/PCSC"
+        "-I${pkgs.pcsclite.dev}/include/PCSC"
       ]
       ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=implicit-int"
-      "-Wno-error=int-conversion"
+        "-Wno-error=implicit-int"
+        "-Wno-error=int-conversion"
       ]
     );
     postPatch = ''
@@ -9807,7 +9807,7 @@ with self;
 
     doCheck = false; # require running database
 
-  #  makeMakerFlags = "MYSQL_HOME=${mysql}";
+    #  makeMakerFlags = "MYSQL_HOME=${mysql}";
     meta = {
       description = "MySQL driver for the Perl5 Database Interface (DBI)";
       license = with lib.licenses; [
@@ -12071,9 +12071,9 @@ with self;
     preCheck =
       if stdenv.hostPlatform.isCygwin then
         ''
-      sed -i -e "s@plan tests => 13@plan tests => 10@" t/env.t
-      sed -i -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
-      sed -i -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
+          sed -i -e "s@plan tests => 13@plan tests => 10@" t/env.t
+          sed -i -e "s@ok(env(\"\\\x@#ok(env(\"\\\x@" t/env.t
+          sed -i -e "s@ok(\$ENV{\"\\\x@#ok(\$ENV{\"\\\x@" t/env.t
         ''
       else
         null;
@@ -13761,9 +13761,9 @@ with self;
     };
     patches = [
       (fetchpatch {
-      name = "missing-pidfile.patch";
-      url = "https://sources.debian.org/data/main/libf/libfile-pid-perl/1.01-2/debian/patches/missing-pidfile.patch";
-      hash = "sha256-VBsIYyCnjcZLYQ2Uq2MKPK3kF2wiMKvnq0m727DoavM=";
+        name = "missing-pidfile.patch";
+        url = "https://sources.debian.org/data/main/libf/libfile-pid-perl/1.01-2/debian/patches/missing-pidfile.patch";
+        hash = "sha256-VBsIYyCnjcZLYQ2Uq2MKPK3kF2wiMKvnq0m727DoavM=";
       })
     ];
     propagatedBuildInputs = [ ClassAccessor ];
@@ -17746,7 +17746,7 @@ with self;
     postPatch = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       sed -i '/use IO::File/d' Makefile.PL
     '';
-    doCheck = !stdenv.hostPlatform.isDarwin;  # openpty fails in the sandbox
+    doCheck = !stdenv.hostPlatform.isDarwin; # openpty fails in the sandbox
     meta = {
       homepage = "https://github.com/toddr/IO-Tty";
       description = "Low-level allocate a pseudo-Tty, import constants";
@@ -18495,10 +18495,10 @@ with self;
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
-      '';
+    '';
     preBuild = ''
       substituteInPlace apreq2-config --replace "dirname" "${pkgs.coreutils}/bin/dirname"
-      '';
+    '';
     installPhase = ''
       mkdir $out
 
@@ -20165,7 +20165,7 @@ with self;
       ExtUtilsMakeMaker
       FileShareDirInstall
     ];
-    doCheck = false;  # uses actual DNS at runtime
+    doCheck = false; # uses actual DNS at runtime
     checkInputs = [
       XMLSAX
       XMLValidatorSchema
@@ -26033,8 +26033,8 @@ with self;
       ../development/perl-modules/net-snmp-add-sha-algorithms.patch
     ];
     preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
-        export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
-      '';
+      export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols
+    '';
     nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkgs.libredirect.hook ];
     propagatedBuildInputs = [
       CryptDES
@@ -26703,8 +26703,8 @@ with self;
     # https://github.com/NixOS/nixpkgs/pull/104889#issuecomment-737144513
     preCheck = ''
       rm t/35_log.t
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm t/30_connect.t
       rm t/45_class.t
     '';
@@ -27436,9 +27436,9 @@ with self;
       hash = "sha256-9uoJTs6EXJUqAsJ4kzJXk1TejUEKcH+bcEW9JBIGSH0=";
     };
     preConfigure = ''
-        substituteInPlace lib/Path/Tiny.pm --replace 'use File::Spec 3.40' \
-          'use File::Spec 3.39'
-      '';
+      substituteInPlace lib/Path/Tiny.pm --replace 'use File::Spec 3.40' \
+        'use File::Spec 3.39'
+    '';
     # This appears to be currently failing tests, though I don't know why.
     # -- ocharles
     doCheck = false;
@@ -27539,17 +27539,17 @@ with self;
     ];
 
     buildInputs = [
-        DevelChecklib
-        TestDeep
-        TestException
-        TestWarn
-      ]
-      ++ (with pkgs; [
-        gsl
-        libglut
-        xorg.libXmu
-        xorg.libXi
-      ]);
+      DevelChecklib
+      TestDeep
+      TestException
+      TestWarn
+    ]
+    ++ (with pkgs; [
+      gsl
+      libglut
+      xorg.libXmu
+      xorg.libXi
+    ]);
 
     propagatedBuildInputs = [
       AstroFITSHeader
@@ -27980,12 +27980,12 @@ with self;
     doCheck = false;
 
     preConfigure = ''
-        pushd ..
-        chmod -R +rwX .
-        ./configure --with-perl
-        make perl-quantum-sources
-        popd
-      '';
+      pushd ..
+      chmod -R +rwX .
+      ./configure --with-perl
+      make perl-quantum-sources
+      popd
+    '';
     meta = {
       description = "Objected-oriented Perl interface to ImageMagick. Use it to read, manipulate, or write an image or image sequence from within a Perl script";
       license = with lib.licenses; [ imagemagick ];
@@ -29625,8 +29625,8 @@ with self;
         gpl1Plus
       ];
       broken = stdenv.hostPlatform.isMusl; # Broken for Musl at 2023-01-14, reports:
-               # Nixpkgs: https://github.com/NixOS/nixpkgs/issues/210749
-               # Upstream: https://github.com/kazeburo/POSIX-strftime-Compiler/issues/8
+      # Nixpkgs: https://github.com/NixOS/nixpkgs/issues/210749
+      # Upstream: https://github.com/kazeburo/POSIX-strftime-Compiler/issues/8
     };
   };
 
@@ -30097,7 +30097,7 @@ with self;
     };
   };
 
-    RPM2 = buildPerlModule {
+  RPM2 = buildPerlModule {
     pname = "RPM2";
     version = "1.4";
     src = fetchurl {
@@ -32135,7 +32135,7 @@ with self;
       url = "mirror://cpan/authors/id/C/CH/CHORNY/Switch-2.17.tar.gz";
       hash = "sha256-MTVJdRQP5iNawTChCUlkka0z3UL5xiGJ4j9J91+TbXU=";
     };
-    doCheck = false;                             # FIXME: 2/293 test failures
+    doCheck = false; # FIXME: 2/293 test failures
     meta = {
       description = "Switch statement for Perl, do not use if you can use given/when";
       license = with lib.licenses; [
@@ -32615,7 +32615,7 @@ with self;
       pkgs.tcl
       pkgs.tclPackages.tix
       pkgs.tk
-      ];
+    ];
     makeMakerFlags = lib.optionals stdenv.hostPlatform.isLinux [
       "--tclsh=${pkgs.tcl}/bin/tclsh"
       "--nousestubs"
@@ -32649,8 +32649,8 @@ with self;
       mkdir -p $out/lib/perl5/site_perl
       mv $out/lib/perl5/Tcl $out/lib/perl5/site_perl/
       mv $out/lib/perl5/auto $out/lib/perl5/site_perl/
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mv $out/lib/perl5/darwin-thread-multi-2level $out/lib/perl5/site_perl/
     '';
     meta = {
@@ -32915,41 +32915,41 @@ with self;
 
   TermReadKey =
     let
-    cross = stdenv.hostPlatform != stdenv.buildPlatform;
+      cross = stdenv.hostPlatform != stdenv.buildPlatform;
     in
     buildPerlPackage {
-    pname = "TermReadKey";
-    version = "2.38";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.38.tar.gz";
-      hash = "sha256-WmRYeNxXCsM2YVgfuwkP8k684X1D6lP9IuEFqFakcpA=";
-    };
+      pname = "TermReadKey";
+      version = "2.38";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.38.tar.gz";
+        hash = "sha256-WmRYeNxXCsM2YVgfuwkP8k684X1D6lP9IuEFqFakcpA=";
+      };
 
-    # use native libraries from the host when running build commands
+      # use native libraries from the host when running build commands
       postConfigure = lib.optionalString cross (
         let
-      host_perl = perl.perlOnBuild;
-      host_self = perl.perlOnBuild.pkgs.TermReadKey;
-      perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
-      self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
+          host_perl = perl.perlOnBuild;
+          host_self = perl.perlOnBuild.pkgs.TermReadKey;
+          perl_lib = "${host_perl}/lib/perl5/${host_perl.version}";
+          self_lib = "${host_self}/lib/perl5/site_perl/${host_perl.version}";
         in
         ''
-      sed -i -e 's|"-I$(INST_ARCHLIB)"|"-I${perl_lib}" "-I${self_lib}"|g' Makefile
+          sed -i -e 's|"-I$(INST_ARCHLIB)"|"-I${perl_lib}" "-I${self_lib}"|g' Makefile
         ''
       );
 
-    # TermReadKey uses itself in the build process
-    nativeBuildInputs = lib.optionals cross [
-      perl.perlOnBuild.pkgs.TermReadKey
-    ];
-    meta = {
-      description = "Perl module for simple terminal control";
+      # TermReadKey uses itself in the build process
+      nativeBuildInputs = lib.optionals cross [
+        perl.perlOnBuild.pkgs.TermReadKey
+      ];
+      meta = {
+        description = "Perl module for simple terminal control";
         license = with lib.licenses; [
           artistic1
           gpl1Plus
         ];
+      };
     };
-  };
 
   TermReadLineGnu = buildPerlPackage {
     pname = "Term-ReadLine-Gnu";
@@ -32970,9 +32970,9 @@ with self;
 
     # Makefile.PL looks for ncurses in Glibc's prefix.
     preConfigure = ''
-        substituteInPlace Makefile.PL --replace '$Config{libpth}' \
-          "'${pkgs.ncurses.out}/lib'"
-      '';
+      substituteInPlace Makefile.PL --replace '$Config{libpth}' \
+        "'${pkgs.ncurses.out}/lib'"
+    '';
 
     # Tests don't work because they require /dev/tty.
     doCheck = false;
@@ -37083,7 +37083,7 @@ with self;
         "-std=gnu17"
       ];
     };
-    doCheck = false;            # Expects working X11.
+    doCheck = false; # Expects working X11.
     meta = {
       description = "Tk - a Graphical User Interface Toolkit";
       license = with lib.licenses; [ tcltk ];
@@ -37102,7 +37102,7 @@ with self;
       "X11LIB=${pkgs.xorg.libX11.out}/lib"
     ];
     buildInputs = [ Tk ];
-    doCheck = false;            # Expects working X11.
+    doCheck = false; # Expects working X11.
     meta = {
       description = "Toolbar widget for Perl/Tk";
       license = with lib.licenses; [
@@ -37697,11 +37697,11 @@ with self;
           stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isRiscV64
         )
         ''
-      # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
-      # printf SYS_getrandom | gcc -include sys/syscall.h -E -
-      substituteInPlace lib/UUID4/Tiny.pm \
-        --replace "syscall( 318" "syscall( 278"
-    '';
+          # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
+          # printf SYS_getrandom | gcc -include sys/syscall.h -E -
+          substituteInPlace lib/UUID4/Tiny.pm \
+            --replace "syscall( 318" "syscall( 278"
+        '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [
@@ -37907,8 +37907,8 @@ with self;
           inherit debianRevision pname version;
           patch = "curl_8.13.0.patch";
           hash = "sha256-VTp0CtVakGti23DvRJwnuP3//eS4BzV5/n+A2zg/a+k=";
-      })
-    ];
+        })
+      ];
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
     buildInputs = [ pkgs.curl ];
     doCheck = false; # performs network access
@@ -38534,16 +38534,16 @@ with self;
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [
-        AlienBuild
-        AlienLibxml2
+      AlienBuild
+      AlienLibxml2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with pkgs;
+      [
+        libiconv
+        zlib
       ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin (
-        with pkgs;
-        [
-          libiconv
-          zlib
-        ]
-      );
+    );
     patches = [
       # https://github.com/shlomif/perl-XML-LibXML/pull/87
       ../development/perl-modules/XML-LibXML-fix-tests-libxml-2.13.0.patch
@@ -38637,11 +38637,11 @@ with self;
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
     postPatch =
       lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
+        substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
       ''
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
-      sed -i -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
-    '';
+        sed -i -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
+      '';
     makeMakerFlags = [
       "EXPATLIBPATH=${pkgs.expat.out}/lib"
       "EXPATINCPATH=${pkgs.expat.dev}/include"
@@ -38790,7 +38790,7 @@ with self;
     postPatch = ''
       substituteInPlace Makefile.PL \
         --replace-fail "\$(PERL)" "${lib.getExe perl.perlOnBuild}"
-      '';
+    '';
     meta = {
       description = "Simple API for XML";
       license = with lib.licenses; [
@@ -38941,7 +38941,7 @@ with self;
       cp tools/xml_grep/xml_grep $out/bin
     '';
     propagatedBuildInputs = [ XMLParser ];
-    doCheck = false;  # requires lots of extra packages
+    doCheck = false; # requires lots of extra packages
     meta = {
       description = "Perl module for processing huge XML documents in tree mode";
       license = with lib.licenses; [
