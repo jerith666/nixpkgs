@@ -17,6 +17,7 @@
   pipewire,
   krunner,
   python3,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kwin";
@@ -27,6 +28,12 @@ mkKdeDerivation {
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
     ./0005-bigger-thumbnails-in-grid-task-switcher.patch
+
+    # backport crash fix recommended by upstream
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/kwin/-/commit/ef4504320de2c3a7c7aebcf083d75db361f802ae.diff";
+      hash = "sha256-aYUXlpnvtzWd5bJ3Y9NKDBqAg0x+4enaUTnyZiZCB48=";
+    })
   ];
 
   postPatch = ''

@@ -9,17 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2025-11-28";
+  version = "0-unstable-2026-01-04";
   src = fetchFromGitHub {
-    owner = "sst";
+    owner = "anomalyco";
     repo = "models.dev";
-    rev = "48358b91b776d0bd34cbbc4c70e7ac5ce827b916";
-    hash = "sha256-Pvtc32s/p19Pg8JACSEmxj6Ldc5vl8ZOXiPbJ3ZAUqQ=";
-    postFetch = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
-      # NOTE: Normalize case-sensitive directory names that cause issues on case-insensitive filesystems
-      cp -r "$out/providers/poe/models/openai"/* "$out/providers/poe/models/openAi/"
-      rm -rf "$out/providers/poe/models/openai"
-    '';
+    rev = "65b43b44c1aefb37483a03f1859f10f6718b7b31";
+    hash = "sha256-yh1OeKZ1JBR6Z1+ebCvdssjy2bBGgo1KNQFmVkycM7E=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -117,7 +112,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Comprehensive open-source database of AI model specifications, pricing, and capabilities";
-    homepage = "https://github.com/sst/models-dev";
+    homepage = "https://github.com/anomalyco/models-dev";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];

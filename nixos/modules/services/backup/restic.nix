@@ -506,7 +506,7 @@ in
               ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
             ''}
             ${lib.optionalString fileBackup ''
-              rm ${filesFromTmpFile}
+              rm -f ${filesFromTmpFile}
             ''}
           '';
         }

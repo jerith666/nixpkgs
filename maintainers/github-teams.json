@@ -49,19 +49,17 @@
       "ethercrow": 222467,
       "groodt": 343415,
       "kalbasit": 87115,
-      "mboes": 51356,
-      "uri-canva": 33242106
+      "mboes": 51356
     },
     "name": "Bazel"
   },
   "beam": {
     "description": "Maintain BEAM-related packages and modules.",
-    "id": 4502493,
+    "id": 15530553,
     "maintainers": {
       "happysalada": 5317234
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "DianaOlympos": 15774340,
       "adamcstephens": 2071575,
       "ankhers": 750786,
@@ -141,12 +139,11 @@
   },
   "crystal-lang": {
     "description": "The Crystal Lang eco-system",
-    "id": 3806663,
+    "id": 15530580,
     "maintainers": {
       "peterhoeg": 722550
     },
     "members": {
-      "Br1ght0ne": 12615679,
       "manveru": 3507
     },
     "name": "crystal-lang"
@@ -156,11 +153,12 @@
     "id": 5704451,
     "maintainers": {
       "ConnorBaker": 3880346,
+      "GaetanLepage": 33058747,
       "SomeoneSerge": 9720532,
+      "YorikSar": 428074,
       "samuela": 226872
     },
     "members": {
-      "GaetanLepage": 33058747,
       "prusnak": 42201
     },
     "name": "cuda-maintainers"
@@ -261,7 +259,6 @@
       "thefloweringash": 42933,
       "tricktron": 16036882,
       "uncenter": 47499684,
-      "uri-canva": 33242106,
       "usertam": 22500027,
       "veprbl": 245573,
       "viraptor": 188063,
@@ -487,6 +484,7 @@
       "wrmilling": 6162814
     },
     "members": {
+      "azey7f": 41077433,
       "frederictobiasc": 26125115,
       "heywoodlh": 18178614,
       "rorosen": 76747196
@@ -501,7 +499,6 @@
     },
     "members": {
       "cpages": 411324,
-      "edwtjo": 54799,
       "minijackson": 1200507,
       "peterhoeg": 722550,
       "sephalon": 893474
@@ -529,7 +526,6 @@
     "members": {
       "K900": 386765,
       "Ma27": 6025220,
-      "NeQuissimus": 628342,
       "TredwellGit": 61860346
     },
     "name": "Linux kernel"
@@ -570,7 +566,6 @@
     },
     "members": {
       "Ericson2314": 1055245,
-      "dtzWill": 817330,
       "emilazy": 18535642,
       "lovek323": 265084,
       "rrbutani": 7833358,
@@ -586,6 +581,7 @@
     },
     "members": {
       "Cryolitia": 23723294,
+      "Moraxyc": 69713071,
       "darkyzhou": 7220778,
       "dramforever": 2818072,
       "wegank": 9713184
@@ -731,14 +727,12 @@
     "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
-      "philiptaron": 43863,
-      "wolfgangwalther": 9132420
-    },
-    "members": {
       "MattSturgeon": 5046562,
       "Mic92": 96200,
+      "philiptaron": 43863,
       "zowoq": 59103226
     },
+    "members": {},
     "name": "Nixpkgs CI"
   },
   "nixpkgs-core": {
@@ -898,9 +892,7 @@
       "winterqt": 78392041,
       "zowoq": 59103226
     },
-    "members": {
-      "tjni": 3806110
-    },
+    "members": {},
     "name": "rust"
   },
   "scala": {
@@ -941,7 +933,6 @@
       "alyssais": 2768870,
       "basvandijk": 576355,
       "cdepillabout": 64804,
-      "dtzWill": 817330,
       "lorenzleutgeb": 542154,
       "matthewbauer": 19036,
       "r-burns": 52847440,

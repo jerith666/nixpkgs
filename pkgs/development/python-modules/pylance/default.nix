@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonAtLeast,
 
   # nativeBuildInputs
   pkg-config,
@@ -33,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.39.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-e0ZpuC0ezk+ZwmCrWkdD2MnCvnjHVVPsN01JWUNyPf4=";
+    hash = "sha256-S/zVpsfoQG9NYnJyAJm+a0LllVE/lfaCua+NA9DGIsw=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -52,7 +53,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-bvnmlUSnZolwesGtIrWve0a8yQXeYDuaP7mCh3KDd5U=";
+    hash = "sha256-5ngkyjzxQ2NVxst3t7U18hdZ5zHNo0gjv0dif9HlyhU=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +102,11 @@ buildPythonPackage rec {
     cd python/tests
   '';
 
+  pytestFlags = lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
+  ];
+
   disabledTests = [
     # Hangs indefinitely
     "test_all_permutations"
@@ -143,6 +149,8 @@ buildPythonPackage rec {
     # Build hangs after all the tests are run due to a torch subprocess not exiting
     "test_multiprocess_loading"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python wrapper for Lance columnar format";

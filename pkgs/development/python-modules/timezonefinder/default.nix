@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "timezonefinder";
-  version = "8.1.0";
+  version = "8.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jannikmi";
     repo = "timezonefinder";
     tag = version;
-    hash = "sha256-jIsS8RcbMNhj5Z/AYbNyVsbQOozbk75tXSLRqhez9Ug=";
+    hash = "sha256-VIC+cLRDSaXLEz1Vpu6opoU5D0Q1xWaVq4OqzRBTiDw=";
   };
 
   build-system = [ setuptools ];
@@ -64,12 +64,12 @@ buildPythonPackage rec {
     "tests/utils_test.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for finding the timezone of any point on earth (coordinates) offline";
     homepage = "https://github.com/MrMinimal64/timezonefinder";
     changelog = "https://github.com/jannikmi/timezonefinder/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "timezonefinder";
   };
 }

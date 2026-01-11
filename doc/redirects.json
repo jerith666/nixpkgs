@@ -788,6 +788,9 @@
   "var-stdenv-depsTargetTargetPropagated": [
     "index.html#var-stdenv-depsTargetTargetPropagated"
   ],
+  "var-stdenv-strictDeps": [
+    "index.html#var-stdenv-strictDeps"
+  ],
   "ssec-stdenv-attributes": [
     "index.html#ssec-stdenv-attributes"
   ],
@@ -4395,6 +4398,9 @@
   "sec-linux-kernel-developing-modules": [
     "index.html#sec-linux-kernel-developing-modules"
   ],
+  "sec-linux-new-kernels": [
+    "index.html#sec-linux-new-kernels"
+  ],
   "ex-edit-compile-run-kernel-modules": [
     "index.html#ex-edit-compile-run-kernel-modules"
   ],
@@ -4663,12 +4669,8 @@
     "index.html#reviewing-contributions--merging-pull-requests"
   ],
   "chap-contributing": [
-    "index.html#chap-contributing"
-  ],
-  "sec-contributing-devmode": [
-    "index.html#sec-contributing-devmode"
-  ],
-  "sec-contributing-markup": [
+    "index.html#chap-contributing",
+    "index.html#sec-contributing-devmode",
     "index.html#sec-contributing-markup"
   ],
   "part-interoperability": [

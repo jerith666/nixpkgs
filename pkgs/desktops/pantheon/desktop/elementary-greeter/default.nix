@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     tag = version;
-    hash = "sha256-eoZ4WkIUesWTFipC6ji1QdU0dy9iMGCbQSkI74c0VRA=";
+    hash = "sha256-PIhvSY+p66B/dYmgmAioVbVLEUQgoMKNnKGE4HSquI4=";
   };
 
   patches = [
@@ -120,12 +120,12 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "LightDM Greeter for Pantheon";
     homepage = "https://github.com/elementary/greeter";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.greeter";
   };
 }

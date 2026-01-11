@@ -14,7 +14,9 @@
   lark,
   numpy,
   pymongo,
+  pymongo-search-utils,
 
+  # test
   freezegun,
   httpx,
   langchain-community,
@@ -33,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mongodb";
-  version = "0.8.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${version}";
-    hash = "sha256-TpEiTQe4nZEhb7yWdm73oKaHGr58Ej3cNeD1sP5pAxA=";
+    hash = "sha256-g2FEowzGvP7a/zx/qn8EUxj5s6j/miMlzkRJEE64G0k=";
   };
 
   sourceRoot = "${src.name}/libs/langchain-mongodb";
@@ -61,6 +63,7 @@ buildPythonPackage rec {
     langchain-text-splitters
     numpy
     pymongo
+    pymongo-search-utils
   ];
 
   nativeCheckInputs = [
@@ -83,6 +86,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Expects a MongoDB cluster and are very slow
     "tests/unit_tests/test_index.py"
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "langchain_mongodb" ];

@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "5.10.12";
+  version = "5.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = version;
-    hash = "sha256-XbBdBef3+kt26XP5GDH5rgHYGh8xIjHUUVOcdeVICLs=";
+    hash = "sha256-/y5fFRqnlxrPrg5WAUfTQnuyShiqnqXrAZfShQnGvgc=";
   };
 
   pythonRelaxDeps = [
@@ -68,12 +68,12 @@ buildPythonPackage rec {
     "testTooManySPFVoidDNSLookups"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser for SPF and DMARC DNS records";
     homepage = "https://github.com/domainaware/checkdmarc";
     changelog = "https://github.com/domainaware/checkdmarc/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "checkdmarc";
   };
 }

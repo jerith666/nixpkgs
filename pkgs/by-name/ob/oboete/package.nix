@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  just,
   libcosmicAppHook,
   sqlite,
   nix-update-script,
@@ -9,20 +11,35 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oboete";
-  version = "0.1.13";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "mariinkys";
     repo = "oboete";
     tag = finalAttrs.version;
-    hash = "sha256-C6ymeI1t0UaX9EzUEz/5mQNEU8vfHueU7kuu9waXV5k=";
+    hash = "sha256-MBWqAQekGdJHQhyObjnR8AUV+yjM++R11ALpE5BuUHc=";
   };
 
-  cargoHash = "sha256-QMcB3+KCefffbmyvkDoO6UvwwQgiDPwvae/jg4/XSO0=";
+  cargoHash = "sha256-deQeX1hVwJvzwCmtACiugEpRbzVP4Z2OBi2y2PPLVCM=";
 
-  nativeBuildInputs = [ libcosmicAppHook ];
+  nativeBuildInputs = [
+    libcosmicAppHook
+    just
+  ];
 
   buildInputs = [ sqlite ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

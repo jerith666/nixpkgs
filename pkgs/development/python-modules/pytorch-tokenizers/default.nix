@@ -45,6 +45,8 @@ buildPythonPackage rec {
     (replaceVars ./dont-fetch-pybind11.patch {
       pybind11 = pybind11-src;
     })
+    # error: ‘uint32_t’ does not name a type
+    ./add-missing-cstdint-sentencepiece.patch
   ];
 
   postPatch = ''
@@ -90,10 +92,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/meta-pytorch/tokenizers";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
-    badPlatforms = [
-      # sentencepiece 0.21.0 segfaults when initialized on Darwin
-      # See https://github.com/NixOS/nixpkgs/issues/466092
-      lib.systems.inspect.patterns.isDarwin
-    ];
   };
 }

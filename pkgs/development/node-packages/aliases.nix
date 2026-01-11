@@ -73,6 +73,7 @@ mapAliases {
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
   inherit (pkgs) aws-azure-login; # added 2023-09-30
+  aws-cdk = pkgs.aws-cdk-cli; # Added 2025-12-23
   awesome-lint = throw "'awesome-lint' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   balanceofsatoshis = pkgs.balanceofsatoshis; # added 2023-07-31
   inherit (pkgs) bash-language-server; # added 2024-06-07
@@ -157,6 +158,7 @@ mapAliases {
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
+  elasticdump = throw "'elasticdump' has been removed because it was unmaintained in nixpkgs"; # Added 2025-12-26
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs.elmPackages) elm-review;
   elm-oracle = throw "'elm-oracle' has been removed, since it doesn't work with modern versions of Elm."; # Added 2025-11-07
@@ -191,6 +193,7 @@ mapAliases {
   inherit (pkgs) graphite-cli; # added 2024-01-25
   inherit (pkgs) graphql-language-service-cli; # added 2025-03-17
   inherit (pkgs) graphqurl; # added 2023-08-19
+  inherit (pkgs) grunt-cli; # added 2025-12-29
   gtop = pkgs.gtop; # added 2023-07-31
   gulp = self.gulp-cli; # Added 2025-11-04
   he = throw "'he' has been removed because it was unmaintained upstream"; # Added 2025-11-14
@@ -213,6 +216,7 @@ mapAliases {
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   inherit (pkgs) js-beautify; # Added 2025-11-06
+  inherit (pkgs) jsdoc; # Added 2025-11-29
   inherit (pkgs) jshint; # Added 2025-11-06
   json = throw "'json' has been removed because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) json-diff; # Added 2025-11-07
@@ -225,6 +229,7 @@ mapAliases {
   karma = pkgs.karma-runner; # added 2023-07-29
   inherit (pkgs) katex; # Added 2025-11-08
   keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
+  lcov-result-merger = throw "'lcov-result-merger' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-25
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
@@ -241,6 +246,7 @@ mapAliases {
   inherit (pkgs) markdown-link-check; # added 2024-06-28
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
+  inherit (pkgs) mathjax; # Added 2025-11-28
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
@@ -280,11 +286,18 @@ mapAliases {
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   poor-mans-t-sql-formatter-cli = throw "'poor-mans-t-sql-formatter-cli' has been removed because it was unmaintained upstream"; # Added 2025-11-14
+  inherit (pkgs) postcss; # Added 2025-12-24
   postcss-cli = throw "postcss-cli has been removed because it was broken"; # added 2025-03-24
+  prebuild-install = throw "prebuild-install was removed because it appeared to be unmaintained upstream. See upstream's recommendations for alternatives here: https://github.com/prebuild/prebuild-install#note"; # Added 2025-12-14
   inherit (pkgs) prettier; # added 2025-05-31
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
   prettier-plugin-toml = throw "prettier-plugin-toml was removed because it provides no executable"; # added 2025-03-23
   inherit (pkgs) prisma; # added 2024-08-31
+  pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-07
+  pulp = throw "'pulp' has been removed because it was unmaintained upstream"; # Added 2025-12-07
+  purescript-language-server = throw "'purescript-language-server' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
+  purescript-psa = throw "'purescript-psa' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
+  purs-tidy = throw "'purs-tidy' has been removed because it was unmaintained within nixpkgs"; # Added 2025-12-12
   purty = throw "'purty' has been remved because it was unmaintained upstream"; # Added 2025-11-14
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
@@ -391,6 +404,7 @@ mapAliases {
   inherit (pkgs) ungit; # added 2023-08-20
   unified-language-server = throw "unified-language-server was removed as it is a library that should be imported within a Javascript project, not an end-user tool"; # added 2025-10-02
   inherit (pkgs) uppy-companion; # Added 2025-11-01
+  inherit (pkgs) vega-cli; # Added 2025-12-18
   inherit (pkgs) vega-lite; # Added 2025-11-04
   inherit (pkgs) vim-language-server; # added 2024-06-25
   vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09

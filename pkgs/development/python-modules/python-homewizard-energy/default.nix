@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "9.3.0";
+  version = "10.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${version}";
-    hash = "sha256-qDLYvFl2gAPNAHJ4uwy0TqzkMUxx9hJ96QwyhbMaLqQ=";
+    hash = "sha256-nrQI3yuIetcM7/Abwvxr4ffZb91N2Hhti/YBaI11uKc=";
   };
 
   postPatch = ''
@@ -61,11 +61,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "homewizard_energy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to communicate with HomeWizard Energy devices";
     homepage = "https://github.com/homewizard/python-homewizard-energy";
     changelog = "https://github.com/homewizard/python-homewizard-energy/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

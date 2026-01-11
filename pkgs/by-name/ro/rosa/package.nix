@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.57";
+  version = "1.2.59";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-oRW5CUQzepQialxi7lHoskNm6ZXLiPWGatKo61GEVLQ=";
+    hash = "sha256-/5J0R8LMNnKv2jMgMg9O1IBU84/bAznra5uXt5HvsUY=";
   };
   vendorHash = null;
 
@@ -58,10 +58,10 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Red Hat OpenShift Service on AWS";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/openshift/rosa";
-    maintainers = with maintainers; [ jfchevrette ];
+    maintainers = with lib.maintainers; [ jfchevrette ];
   };
 }

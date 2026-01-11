@@ -16,7 +16,7 @@
   w3lib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "extruct";
   version = "0.18.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "extruct";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hUSlIlWxrsxGLCE8/DAGSqxx9+7TEkynmXrVnXGjDQ8=";
   };
 
@@ -56,12 +56,12 @@ buildPythonPackage rec {
     "test_umicroformat"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Extract embedded metadata from HTML markup";
     mainProgram = "extruct";
     homepage = "https://github.com/scrapinghub/extruct";
-    changelog = "https://github.com/scrapinghub/extruct/blob/v${version}/HISTORY.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/scrapinghub/extruct/blob/v${finalAttrs.version}/HISTORY.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

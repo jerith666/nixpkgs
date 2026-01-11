@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  fetchpatch,
   pythonOlder,
   replaceVars,
 
@@ -43,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.2.8";
+  version = "5.2.9";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-ruzQ3CUNqHa0RmxCDBVXbtetkMvz+G/D4/LB/2aBc8I=";
+    hash = "sha256-9URe8hB15WP92AU1YgGGFfZhVxn59gfBRrORZ04L+F0=";
   };
 
   patches = [
@@ -63,6 +63,18 @@ buildPythonPackage rec {
     ./django_5_tests_pythonpath.patch
     # disable test that expects timezone issues
     ./django_5_disable_failing_tests.patch
+
+    # 3.14.1/3.13.10 comapt
+    (fetchpatch {
+      # https://github.com/django/django/pull/20390
+      url = "https://github.com/django/django/commit/5ca0f62213911a77dd4a62e843db7e420cc98b78.patch";
+      hash = "sha256-SpVdbS4S5wqvrrUOoZJ7d2cIbtmgI0mvxwwCveSA068=";
+    })
+    (fetchpatch {
+      # https://github.com/django/django/pull/20392
+      url = "https://github.com/django/django/commit/9cc231e8243091519f5d627cd02ee40bbb853ced.patch";
+      hash = "sha256-/aimmqxurMCCntraxOtybEq8qNgZgQWLD5Gxs/3pkIU=";
+    })
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./django_5_set_geos_gdal_lib.patch {
@@ -134,11 +146,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

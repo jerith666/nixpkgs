@@ -13,7 +13,6 @@
   callPackage,
   desktopToDarwinBundle,
   typescript,
-  useKeytar ? true,
   # command line arguments which are always set
   commandLineArgs ? "",
 }:
@@ -23,9 +22,6 @@ let
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
   electron = electron_38;
-  keytar = callPackage ./keytar {
-    inherit electron;
-  };
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (
@@ -90,9 +86,6 @@ stdenv.mkDerivation (
       yarn --offline run i18n:sort
       yarn --offline run build:res
 
-      chmod -R a+w node_modules/keytar-forked
-      rm -rf node_modules/matrix-seshat node_modules/keytar-forked
-      ${lib.optionalString useKeytar "ln -s ${keytar} node_modules/keytar-forked"}
       ln -s $seshat node_modules/matrix-seshat
 
       runHook postBuild
@@ -158,25 +151,14 @@ stdenv.mkDerivation (
     passthru = {
       # run with: nix-shell ./maintainers/scripts/update.nix --argstr package element-desktop
       updateScript = ./update.sh;
-
-      # TL;DR: keytar is optional while seshat isn't.
-      #
-      # This prevents building keytar when `useKeytar` is set to `false`, because
-      # if libsecret is unavailable (e.g. set to `null` or fails to build), then
-      # this package wouldn't even considered for building because
-      # "one of the dependencies failed to build",
-      # although the dependency wouldn't even be used.
-      #
-      # It needs to be `passthru` anyways because other packages do depend on it.
-      inherit keytar;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Feature-rich client for Matrix.org";
       homepage = "https://element.io/";
       changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
-      license = licenses.asl20;
-      teams = [ teams.matrix ];
+      license = lib.licenses.asl20;
+      teams = [ lib.teams.matrix ];
       platforms = electron.meta.platforms ++ lib.platforms.darwin;
       mainProgram = "element-desktop";
     };

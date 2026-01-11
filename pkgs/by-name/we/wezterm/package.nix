@@ -28,14 +28,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "0-unstable-2025-10-14";
+  version = "0-unstable-2025-10-23";
 
   src = fetchFromGitHub {
     owner = "wezterm";
     repo = "wezterm";
-    rev = "64f2907c635b7bab407ac300b2261c77a85c1c8e";
+    rev = "b6e75fd7c8f9c9ad5af4efbba1d28df0969f6b17";
     fetchSubmodules = true;
-    hash = "sha256-o/SSN18DmoN5LsB9RvWuAw7voGevOR5DqPBheqmq7AI=";
+    hash = "sha256-t99sVnRzfJUa6b6h55nFy/Xpkeeeph5ugZBl98N0jEg=";
   };
 
   postPatch = ''
@@ -154,12 +154,12 @@ rustPlatform.buildRustPackage rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezterm.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wezterm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mimame
       SuperSandro2000
     ];

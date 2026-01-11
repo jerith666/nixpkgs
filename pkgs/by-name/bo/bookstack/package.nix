@@ -8,16 +8,16 @@
 
 php83.buildComposerProject2 (finalAttrs: {
   pname = "bookstack";
-  version = "25.11.4";
+  version = "25.12.1";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = "bookstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hyob7OF9AOsu4AjS6qu8A93AsumSXiyWPDKWGAz6mJ0=";
+    hash = "sha256-lp2qC2K2RnWgI0g/67WNPtatbLCTUau37PcLqG6dQlw=";
   };
 
-  vendorHash = "sha256-srlqwp0/Gfs6hWO9IGSCwR3yTxz+euYgoVkU+UnaLio=";
+  vendorHash = "sha256-kbyFPDg9ev0IjvqtFoTiiYyza2oriAhMLbAU7Js9Dyc=";
 
   passthru = {
     phpPackage = php83;
