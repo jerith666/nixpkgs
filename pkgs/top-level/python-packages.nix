@@ -438,6 +438,8 @@ self: super: with self; {
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
+  aiopulsegrow = callPackage ../development/python-modules/aiopulsegrow { };
+
   aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
 
   aiopvapi = callPackage ../development/python-modules/aiopvapi { };
@@ -8990,6 +8992,8 @@ self: super: with self; {
 
   llm-llama-server = callPackage ../development/python-modules/llm-llama-server { };
 
+  llm-lmstudio = callPackage ../development/python-modules/llm-lmstudio { };
+
   llm-mistral = callPackage ../development/python-modules/llm-mistral { };
 
   llm-ollama = callPackage ../development/python-modules/llm-ollama { };
@@ -9381,7 +9385,7 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage pythonOlder;
+    inherit buildPythonPackage;
     inherit (self)
       pyface
       pygments
@@ -12810,6 +12814,12 @@ self: super: with self; {
 
   py-improv-ble-client = callPackage ../development/python-modules/py-improv-ble-client { };
 
+  py-key-value-aio = callPackage ../development/python-modules/py-key-value-aio { };
+
+  py-key-value-shared = callPackage ../development/python-modules/py-key-value-shared { };
+
+  py-key-value-shared-test = callPackage ../development/python-modules/py-key-value-shared-test { };
+
   py-libnuma = callPackage ../development/python-modules/py-libnuma { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
@@ -13268,6 +13278,8 @@ self: super: with self; {
   pydmd = callPackage ../development/python-modules/pydmd { };
 
   pydo = callPackage ../development/python-modules/pydo { };
+
+  pydocket = callPackage ../development/python-modules/pydocket { };
 
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
@@ -14298,7 +14310,6 @@ self: super: with self; {
       pyqt5
       pyqt-builder
       python
-      pythonOlder
       setuptools
       sip
       ;
@@ -14341,7 +14352,6 @@ self: super: with self; {
       pyqt5
       pyqt-builder
       python
-      pythonOlder
       setuptools
       sip
       ;
@@ -14357,7 +14367,6 @@ self: super: with self; {
           pyqt5
           pyqt-builder
           python
-          pythonOlder
           setuptools
           sip
           ;
@@ -16601,6 +16610,8 @@ self: super: with self; {
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot { };
 
   rocketchat-api = callPackage ../development/python-modules/rocketchat-api { };
+
+  rocksdict = callPackage ../development/python-modules/rocksdict { };
 
   roku = callPackage ../development/python-modules/roku { };
 
