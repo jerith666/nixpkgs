@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
@@ -314,7 +320,8 @@
     "release-notes.html#sec-nixpkgs-release-26.05-lib-breaking"
   ],
   "sec-nixpkgs-release-26.05-lib-deprecations": [
-    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations"
+    "release-notes.html#sec-nixpkgs-release-26.05-lib-deprecations",
+    "index.html#fetchfromsavannah"
   ],
   "sec-nixpkgs-release-26.05-lib-additions-improvements": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib-additions-improvements"
@@ -1778,9 +1785,6 @@
   ],
   "fetchfrombitbucket": [
     "index.html#fetchfrombitbucket"
-  ],
-  "fetchfromsavannah": [
-    "index.html#fetchfromsavannah"
   ],
   "fetchfromrepoorcz": [
     "index.html#fetchfromrepoorcz"

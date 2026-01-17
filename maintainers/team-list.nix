@@ -177,31 +177,8 @@ with lib.maintainers;
     shortName = "Cosmopolitan";
   };
 
-  ctrl-os = {
-    # Existing members may approve additions.
-    members = [
-      blitz
-      messemar
-      flyfloh
-    ];
-
-    scope = "Team of Cyberus Technology employees that maintain packages relevant to CTRL-OS";
-    shortName = "CTRL-OS";
-  };
-
   cuda = {
     github = "cuda-maintainers";
-  };
-
-  cyberus = {
-    # Verify additions by approval of an already existing member of the team.
-    members = [
-      xanderio
-      snu
-      e1mo
-    ];
-    scope = "Team for Cyberus Technology employees who collectively maintain packages.";
-    shortName = "Cyberus Technology employees";
   };
 
   danklinux = {
@@ -846,16 +823,6 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
-  };
-
-  wdz = {
-    members = [
-      n0emis
-      johannwagner
-      yuka
-    ];
-    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
-    shortName = "WDZ GmbH";
   };
 
   windows = {

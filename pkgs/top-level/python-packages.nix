@@ -156,6 +156,8 @@ self: super: with self; {
 
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
+  ai-edge-litert = callPackage ../development/python-modules/ai-edge-litert { };
+
   aigpy = callPackage ../development/python-modules/aigpy { };
 
   ailment = callPackage ../development/python-modules/ailment { };
@@ -1715,7 +1717,7 @@ self: super: with self; {
   backoff = callPackage ../development/python-modules/backoff { };
 
   backports-asyncio-runner =
-    if pythonAtLeast "3.11" then
+    if pythonAtLeast "3.12" then
       null
     else
       callPackage ../development/python-modules/backports-asyncio-runner { };
@@ -1730,7 +1732,11 @@ self: super: with self; {
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
-  backports-strenum = callPackage ../development/python-modules/backports-strenum { };
+  backports-strenum =
+    if pythonAtLeast "3.11" then
+      null
+    else
+      callPackage ../development/python-modules/backports-strenum { };
 
   backports-tarfile = callPackage ../development/python-modules/backports-tarfile { };
 
@@ -1749,6 +1755,8 @@ self: super: with self; {
   bacpypes = callPackage ../development/python-modules/bacpypes { };
 
   badauth = callPackage ../development/python-modules/badauth { };
+
+  badges = callPackage ../development/python-modules/badges { };
 
   badldap = callPackage ../development/python-modules/badldap { };
 
@@ -2228,6 +2236,8 @@ self: super: with self; {
   braintree = callPackage ../development/python-modules/braintree { };
 
   branca = callPackage ../development/python-modules/branca { };
+
+  braq = callPackage ../development/python-modules/braq { };
 
   bravado-core = callPackage ../development/python-modules/bravado-core { };
 
@@ -2993,6 +3003,8 @@ self: super: with self; {
   colormath = callPackage ../development/python-modules/colormath { };
 
   colormath2 = callPackage ../development/python-modules/colormath2 { };
+
+  colorscript = callPackage ../development/python-modules/colorscript { };
 
   colorspacious = callPackage ../development/python-modules/colorspacious { };
 
@@ -4769,7 +4781,7 @@ self: super: with self; {
   eccodes = toPythonModule (
     pkgs.eccodes.override {
       enablePython = true;
-      pythonPackages = self;
+      python3Packages = self;
     }
   );
 
@@ -6077,6 +6089,8 @@ self: super: with self; {
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
 
+  getch = callPackage ../development/python-modules/getch { };
+
   getjump = callPackage ../development/python-modules/getjump { };
 
   getkey = callPackage ../development/python-modules/getkey { };
@@ -6104,6 +6118,8 @@ self: super: with self; {
   gfsubsets = callPackage ../development/python-modules/gfsubsets { };
 
   gftools = callPackage ../development/python-modules/gftools { };
+
+  ggml-python = callPackage ../development/python-modules/ggml-python { };
 
   gguf = callPackage ../development/python-modules/gguf { };
 
@@ -6752,6 +6768,8 @@ self: super: with self; {
   hass-splunk = callPackage ../development/python-modules/hass-splunk { };
 
   hassil = callPackage ../development/python-modules/hassil { };
+
+  hatasm = callPackage ../development/python-modules/hatasm { };
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
@@ -8184,6 +8202,8 @@ self: super: with self; {
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
   kuzu = callPackage ../development/python-modules/kuzu { };
+
+  kvf = callPackage ../development/python-modules/kvf { };
 
   l18n = callPackage ../development/python-modules/l18n { };
 
@@ -10110,8 +10130,6 @@ self: super: with self; {
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
-  mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
-
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
@@ -11062,6 +11080,8 @@ self: super: with self; {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  nvdlfw-inspect = callPackage ../development/python-modules/nvdlfw-inspect { };
+
   nvdlib = callPackage ../development/python-modules/nvdlib { };
 
   nvidia-dlprof-pytorch-nvtx =
@@ -11784,6 +11804,8 @@ self: super: with self; {
 
   para = callPackage ../development/python-modules/para { };
 
+  paradict = callPackage ../development/python-modules/paradict { };
+
   paragraphs = callPackage ../development/python-modules/paragraphs { };
 
   parallel-ssh = callPackage ../development/python-modules/parallel-ssh { };
@@ -12054,6 +12076,8 @@ self: super: with self; {
   pettingzoo = callPackage ../development/python-modules/pettingzoo { };
 
   pex = callPackage ../development/python-modules/pex { };
+
+  pex-entysec = callPackage ../development/python-modules/pex-entysec { };
 
   pexif = callPackage ../development/python-modules/pexif { };
 
@@ -12540,6 +12564,8 @@ self: super: with self; {
   prisma = callPackage ../development/python-modules/prisma { };
 
   prison = callPackage ../development/python-modules/prison { };
+
+  probed = callPackage ../development/python-modules/probed { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
 
@@ -13359,7 +13385,7 @@ self: super: with self; {
 
   pyemvue = callPackage ../development/python-modules/pyemvue { };
 
-  pyenchant = callPackage ../development/python-modules/pyenchant { inherit (pkgs) enchant2; };
+  pyenchant = callPackage ../development/python-modules/pyenchant { inherit (pkgs) enchant_2; };
 
   pyenphase = callPackage ../development/python-modules/pyenphase { };
 
@@ -13626,6 +13652,8 @@ self: super: with self; {
   pyindego = callPackage ../development/python-modules/pyindego { };
 
   pyinfra = callPackage ../development/python-modules/pyinfra { };
+
+  pyinfra-testgen = callPackage ../development/python-modules/pyinfra-testgen { };
 
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
@@ -15519,8 +15547,6 @@ self: super: with self; {
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
-  python-qt = toPythonModule (pkgs.python-qt.override { python3 = self.python; });
-
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
@@ -17184,6 +17210,8 @@ self: super: with self; {
   shapely = callPackage ../development/python-modules/shapely { };
 
   shaperglot = callPackage ../development/python-modules/shaperglot { };
+
+  shared = callPackage ../development/python-modules/shared { };
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 

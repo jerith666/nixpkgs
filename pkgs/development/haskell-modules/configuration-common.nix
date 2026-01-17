@@ -610,7 +610,7 @@ with haskellLib;
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
-      rev = "refs/tags/" + super.git-annex.version;
+        tag = super.git-annex.version;
         sha256 = "sha256-+OLFMrqpf1Ooy7CQ9S+N/H5R5+aHQtbO1pYwDF4ln8A=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
@@ -3828,13 +3828,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.9.1";
+    version = "1.10.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
+      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
     };
   in
   {

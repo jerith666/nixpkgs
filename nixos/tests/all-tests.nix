@@ -118,7 +118,7 @@ let
       findTests =
         tree:
         if tree ? recurseForDerivations && tree.recurseForDerivations then
-          mapAttrs (k: findTests) (builtins.removeAttrs tree [ "recurseForDerivations" ])
+          mapAttrs (k: findTests) (removeAttrs tree [ "recurseForDerivations" ])
         else
           callTest tree;
 
@@ -502,7 +502,6 @@ in
   ec2-image = runTest ./ec2-image.nix;
   ec2-nixops = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-nixops or { };
   echoip = runTest ./echoip.nix;
-  ecryptfs = runTest ./ecryptfs.nix;
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   emacs-daemon = runTest ./emacs-daemon.nix;
@@ -1175,7 +1174,7 @@ in
   opentelemetry-collector = runTest ./opentelemetry-collector.nix;
   openvscode-server = runTest ./openvscode-server.nix;
   openvswitch = runTest ./openvswitch.nix;
-  optee = handleTestOn [ "aarch64-linux" ] ./optee.nix { };
+  optee = runTestOn [ "aarch64-linux" ] ./optee.nix;
   orangefs = runTest ./orangefs.nix;
   orthanc = runTest ./orthanc.nix;
   os-prober = handleTestOn [ "x86_64-linux" ] ./os-prober.nix { };
@@ -1419,7 +1418,7 @@ in
   sharkey = runTest ./web-apps/sharkey.nix;
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
   shiori = runTest ./shiori.nix;
-  shoko = runTest ./shoko.nix;
+  shoko = import ./shoko.nix { inherit runTest; };
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
   simple = runTest ./simple.nix;

@@ -71,7 +71,7 @@ let
   airflow-src = fetchFromGitHub {
     owner = "apache";
     repo = "airflow";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Download using the git protocol rather than using tarballs, because the
     # GitHub archive tarballs don't appear to include tests
     forceFetchGit = true;
@@ -346,8 +346,6 @@ buildPythonPackage rec {
     changelog = "https://airflow.apache.org/docs/apache-airflow/${version}/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      gbpdt
-      ingenieroariel
       taranarmo
     ];
   };
