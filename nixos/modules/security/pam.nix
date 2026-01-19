@@ -2227,6 +2227,10 @@ in
     security.pam.enableFscrypt = lib.mkEnableOption ''
       fscrypt, to automatically unlock directories with the user's login password.
 
+      Most users should enable {option}`security.fscrypt` instead, which enables
+      this and also manages {file}`/etc/fscrypt.conf` and {file}`/.fscrypt/`
+      declaratively.
+
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you
       use something other than pam_unix to verify user passwords, please remember to

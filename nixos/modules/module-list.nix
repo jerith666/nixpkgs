@@ -391,6 +391,7 @@
   ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
+  ./security/fscrypt.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
   ./security/isolate.nix
