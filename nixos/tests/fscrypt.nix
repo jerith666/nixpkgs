@@ -6,7 +6,16 @@
     { pkgs, ... }:
     {
       imports = [ ./common/user-account.nix ];
-      security.pam.enableFscrypt = true;
+      security.fscrypt = {
+        enable = true;
+        enabledFileSystems = [ "/tmp" ];
+        hashCosts = {
+          time = 1;
+          memory = 8;
+          parallelism = 1;
+          truncation_fixed = true;
+        };
+      };
     };
 
   testScript = ''
@@ -15,7 +24,7 @@
         machine.send_chars("alice\n")
         machine.wait_until_tty_matches("1", "Password: ")
         machine.send_chars("foobar\n")
-        machine.wait_until_tty_matches("1", "alice\@machine")
+        machine.wait_until_tty_matches("1", "alice@machine")
 
 
     def logout():
@@ -27,11 +36,12 @@
 
     with subtest("Enable fscrypt on filesystem"):
         machine.succeed("tune2fs -O encrypt /dev/vda")
-        machine.succeed("fscrypt setup --quiet --force --time=1ms")
+        machine.succeed("if [ -d /.fscrypt ]; then true; else echo /.fscrypt was not set up; exit 1; fi")
+        machine.succeed("if [ -d /tmp/.fscrypt ]; then true; else echo /tmp/.fscrypt was not set up; exit 1; fi")
 
     with subtest("Set up alice with an fscrypt-enabled home directory"):
         machine.succeed("(echo foobar; echo foobar) | passwd alice")
-        machine.succeed("chown -R alice.users ~alice")
+        machine.succeed("chown -R alice:users ~alice")
         machine.succeed("echo foobar | fscrypt encrypt --skip-unlock --source=pam_passphrase --user=alice /home/alice")
 
     with subtest("Create file as alice"):
