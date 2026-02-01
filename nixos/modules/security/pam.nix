@@ -965,7 +965,8 @@ let
                   (
                     (cfg.unixAuth || config.services.homed.enable)
                     && (
-                      config.security.pam.enableFscrypt
+                      config.security.pam.enableEcryptfs
+                      || config.security.pam.enableFscrypt
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
@@ -993,6 +994,15 @@ let
                         nullok = cfg.allowNullPassword;
                         inherit (cfg) nodelay;
                         likeauth = true;
+                      };
+                    }
+                    {
+                      name = "ecryptfs";
+                      enable = config.security.pam.enableEcryptfs;
+                      control = "optional";
+                      modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so";
+                      settings = {
+                        unwrap = true;
                       };
                     }
                     {
@@ -1182,6 +1192,12 @@ let
                 };
               }
               {
+                name = "ecryptfs";
+                enable = config.security.pam.enableEcryptfs;
+                control = "optional";
+                modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so";
+              }
+              {
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
@@ -1314,6 +1330,12 @@ let
                 settings = {
                   silent = true;
                 };
+              }
+              {
+                name = "ecryptfs";
+                enable = config.security.pam.enableEcryptfs;
+                control = "optional";
+                modulePath = "${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so";
               }
               # Work around https://github.com/systemd/systemd/issues/8598
               # Skips the pam_fscrypt module for systemd-user sessions which do not have a password
@@ -2201,6 +2223,7 @@ in
 
     security.pam.enableUMask = lib.mkEnableOption "umask PAM module";
 
+    security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
     security.pam.enableFscrypt = lib.mkEnableOption ''
       fscrypt, to automatically unlock directories with the user's login password.
 
@@ -2304,6 +2327,8 @@ in
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
       ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
+
+    boot.supportedFilesystems = lib.mkIf config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
     security.wrappers = {
       unix_chkpwd = {

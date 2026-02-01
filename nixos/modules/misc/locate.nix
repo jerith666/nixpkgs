@@ -89,6 +89,7 @@ in
         "devfs"
         "devpts"
         "devtmpfs"
+        "ecryptfs"
         "eventpollfs"
         "exofs"
         "futexfs"
