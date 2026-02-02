@@ -332,7 +332,7 @@ in
       services.power-profiles-daemon.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
-      services.gnome.gnome-keyring.enable = true;
+      services.gnome.gnome-keyring.enable = mkDefault true;
       services.gnome.gcr-ssh-agent.enable = mkDefault true;
       services.gnome.gnome-online-accounts.enable = mkDefault true;
       services.gnome.localsearch.enable = mkDefault true;
@@ -390,6 +390,10 @@ in
       systemd.packages = [
         pkgs.gnome-session
         pkgs.gnome-shell
+      ]
+      ++ removeExcluded [
+        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
       ];
 
       services.udev.packages = [

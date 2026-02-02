@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.tar.gz";
-      hash = "sha256-YVGFYobqVG64r5rrAldyzua9VxNPRUlKgY6NogqGkcY=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.tar.gz";
+      hash = "sha256-+4A+rTMwiXjKuBI2dUf90F9KUFaGlB2xgO+BX09WnWw=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2025.3-aarch64.tar.gz";
-      hash = "sha256-xTDdS8x6B1oEC2SFnss0FCyPwDmWJcWhOuLXqPWXQ0A=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.tar.gz";
+      hash = "sha256-zGPly+ELyQYGrq5eoOqeujDptL7aIOY0KK5FVaSFZ8k=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3.dmg";
-      hash = "sha256-4d9PELFYx3iHNlWWZiROmUUApA21sIZh4mkTV9Jp2/Q=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1.dmg";
+      hash = "sha256-xZeuUIyqPUoOPWzuwuCS0nkasvuwLSc43tcSSGZrHS0=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2025.3-aarch64.dmg";
-      hash = "sha256-1O4gtcPfYVHTZtbMmwa5FUmf8MHrEYSqtToBB4kI7Ik=";
+      url = "https://download.jetbrains.com/go/goland-2025.3.1.1-aarch64.dmg";
+      hash = "sha256-vV8TxLG/KEUuAcN1lsCKT6v4tg6UmbUU7U5OCJ8rhXQ=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ in
   product = "Goland";
 
   # update-script-start: version
-  version = "2025.3";
-  buildNumber = "253.28294.337";
+  version = "2025.3.1.1";
+  buildNumber = "253.29346.379";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
@@ -53,12 +53,14 @@ in
     libgcc
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/go/";
     description = "Go IDE from JetBrains";
-    longDescription = "Goland is the codename for a new commercial IDE by JetBrains aimed at providing an ergonomic environment for Go development.
-          The new IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language";
+    longDescription = ''
+      Goland is a commercial IDE by JetBrains aimed at providing an ergonomic environment for Go development.
+      The IDE extends the IntelliJ platform with the coding assistance and tool integrations specific for the Go language.
+    '';
     maintainers = with lib.maintainers; [ tymscar ];
     license = lib.licenses.unfree;
     sourceProvenance =

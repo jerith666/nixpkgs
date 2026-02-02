@@ -22,13 +22,13 @@
 }:
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.18.2";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OPBgcM2ZzbVEUS6lwRpJo2JBfiRK8TmYVSmZImEW2gA=";
+    hash = "sha256-x/WIhul+slaDhW8PvcHpa/FElraGCWfFvgT7Xgw1Hbo=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -45,6 +45,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     "VICINAE_GIT_TAG" = "v${finalAttrs.version}";
     "VICINAE_PROVENANCE" = "nix";
     "INSTALL_NODE_MODULES" = "OFF";
+    "INSTALL_BROWSER_NATIVE_HOST" = "OFF";
     "USE_SYSTEM_GLAZE" = "ON";
     "CMAKE_INSTALL_PREFIX" = placeholder "out";
     "CMAKE_INSTALL_DATAROOTDIR" = "share";
@@ -108,7 +109,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      dawnofmidnight
+      whispersofthedawn
       zstg
     ];
     platforms = lib.platforms.linux;

@@ -21,7 +21,7 @@
   nixosTests,
   openssh,
   sqliteSupport ? true,
-  xorg,
+  lndir,
   runCommand,
   stdenv,
   fetchFromGitea,
@@ -114,6 +114,9 @@ buildGoModule rec {
     getGoDirs() {
       make show-backend-tests
     }
+
+    # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
+    git init
   '';
 
   checkFlags =
@@ -164,7 +167,7 @@ buildGoModule rec {
         {
           nativeBuildInputs = [
             brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''

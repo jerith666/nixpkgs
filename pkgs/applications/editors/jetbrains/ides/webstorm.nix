@@ -12,20 +12,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.1.tar.gz";
-      hash = "sha256-CKhR0ha3QcSeu2hG4Xj7gj0yn+e5gkohNLaMj9Jboq4=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2.tar.gz";
+      hash = "sha256-qkDuuP8QU+Ptcafw12LFD2n4s6tClg40uHVqZx2+hII=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-/Yuz7nDFSRZdkQJDe8oD6Ff8FHKBwdc4IknUaQwx3Yc=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2-aarch64.tar.gz";
+      hash = "sha256-k8FX/hn+U8XppVopB/ArvupH4CH+5cJlbBtjSaIarLA=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.1.dmg";
-      hash = "sha256-psuQZWL5WzfpweNMm9lWHeplOnJsldAr+pV6y+kJuI0=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2.dmg";
+      hash = "sha256-GsOQE3NLqIifQ9mXWRT0M7hJeN+fdzSqn7pwjWf8Vcw=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.1-aarch64.dmg";
-      hash = "sha256-HCGZDO4ru//dj2yQ6AcbwD7H/lo2YuUZMcFSItS3zLI=";
+      url = "https://download.jetbrains.com/webstorm/WebStorm-2025.3.2-aarch64.dmg";
+      hash = "sha256-Pc3+hlKpCIOgJLxWMOn0Uw+7cIzLD4iayaNsWYoB4mo=";
     };
   };
   # update-script-end: urls
@@ -39,8 +39,8 @@ mkJetBrainsProduct {
   product = "WebStorm";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.143";
+  version = "2025.3.2";
+  buildNumber = "253.30387.83";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
@@ -49,7 +49,7 @@ mkJetBrainsProduct {
     musl
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/webstorm/";
     description = "Web IDE from JetBrains";

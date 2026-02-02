@@ -13,20 +13,20 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1.tar.gz";
-      hash = "sha256-kz/ULXzCp2rUuiP5ESKU5N8BP6TDNiQ1oeM2gFHAc5E=";
+      url = "https://download.jetbrains.com/python/pycharm-2025.3.2.tar.gz";
+      hash = "sha256-YLXO+YhulYfkOSR6fjZKuppmPa+uLqvP/E4NxAm7o8Q=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.tar.gz";
-      hash = "sha256-K29aQwEydz6nyvMEb3dj6noDHb+rbhvnK9yG88x6dYs=";
+      url = "https://download.jetbrains.com/python/pycharm-2025.3.2-aarch64.tar.gz";
+      hash = "sha256-kphcT6a7JV72FqcTq7iuvAcolSgWdFvObn/o0jZP69g=";
     };
     x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1.dmg";
-      hash = "sha256-WGye7WfaYJ/B5WWov8NusVWyPlSD1dxunc+LVUD0f6U=";
+      url = "https://download.jetbrains.com/python/pycharm-2025.3.2.dmg";
+      hash = "sha256-Lxyp1g0KYapesVJ+LkRFslzIGrp2KPMrXP9nFx/CTYI=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/pycharm-2025.3.1-aarch64.dmg";
-      hash = "sha256-7I6XhW8A2pAgIMcrDwecwQmD3mu0Q4KS6l+qHlsMuTU=";
+      url = "https://download.jetbrains.com/python/pycharm-2025.3.2-aarch64.dmg";
+      hash = "sha256-lWH6M5lOjUYwzx2AqEv53V7J+5PEF9+KMZKfqbivUeY=";
     };
   };
   # update-script-end: urls
@@ -38,11 +38,10 @@ in
 
   wmClass = "jetbrains-pycharm";
   product = "PyCharm";
-  productShort = "PyCharm";
 
   # update-script-start: version
-  version = "2025.3.1";
-  buildNumber = "253.29346.142";
+  version = "2025.3.2";
+  buildNumber = "253.30387.127";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
@@ -51,13 +50,16 @@ in
     musl
   ];
 
-  # NOTE: meta attrs are currently used by the desktop entry, so changing them may cause rebuilds (see TODO in README)
+  # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
     homepage = "https://www.jetbrains.com/pycharm/";
     description = "Python IDE from JetBrains";
-    longDescription = "Python IDE with complete set of tools for productive development with Python programming language. In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine. It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing, powerful all-singing all-dancing Debugger and entire customization. PyCharm is developer driven IDE. It was developed with the aim of providing you almost everything you need for your comfortable and productive development!";
+    longDescription = ''
+      Python IDE with complete set of tools for productive development with Python programming language.
+      In addition, the IDE provides high-class capabilities for professional Web development with Django framework and Google App Engine.
+      It has powerful coding assistance, navigation, a lot of refactoring features, tight integration with various Version Control Systems, Unit testing and powerful Debugger.
+    '';
     maintainers = with lib.maintainers; [
-      genericnerdyusername
       tymscar
     ];
     license = lib.licenses.unfree;

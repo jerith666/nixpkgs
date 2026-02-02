@@ -98,7 +98,7 @@ let
 
         # we call vimrcContent without 'packages' to avoid the init.vim generation
         neovimRcContent' = lib.concatStringsSep "\n" (
-          vimPackageInfo.userPluginLua ++ lib.optional (neovimRcContent != null) neovimRcContent
+          vimPackageInfo.userPluginViml ++ lib.optional (neovimRcContent != null) neovimRcContent
         );
 
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;
@@ -197,6 +197,8 @@ let
         name = "${pname}-${version}${extraName}";
         inherit pname version;
         inherit plugins;
+
+        strictDeps = true;
 
         __structuredAttrs = true;
         dontUnpack = true;
@@ -338,8 +340,7 @@ let
           unwrapped = neovim-unwrapped;
           initRc = neovimRcContent';
 
-          tests = callPackage ./tests {
-          };
+          tests = callPackage ./tests { };
         };
 
         meta = {

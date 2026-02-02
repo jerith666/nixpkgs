@@ -6,15 +6,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "json-fortran";
-  version = "9.1.0";
+  version = "9.2.0";
 
   src = fetchFromGitHub {
     owner = "jacobwilliams";
     repo = "json-fortran";
-    rev = version;
-    hash = "sha256-MumYG9kfbtIMT0BQzHF2jZRT1yAUkfbQ/I0/LqRKnKk=";
+    rev = finalAttrs.version;
+    hash = "sha256-DjNBB1qYXZcUSvjcWqunFeI275F3YojRDCRf61pIkYs=";
   };
 
   nativeBuildInputs = [
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

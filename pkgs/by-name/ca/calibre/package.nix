@@ -25,24 +25,30 @@
   pkg-config,
   podofo_0_10,
   poppler-utils,
-  python3Packages,
+  python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
   xdg-utils,
   wrapGAppsHook3,
   popplerSupport ? true,
-  speechSupport ? true,
+  speechSupport ? false, # piper-tts doesn't build with python 3.14
   unrarSupport ? false,
 }:
 
+let
+  # added during 8.x -> 9.x update; remove once nixpkgs default
+  # python version catches up
+  python3Packages = python314Packages;
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.16.2";
+  version = "9.1.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AYfQQ1T1PMB0EUHaAml37jCnfvoMN7GDm94FiCIsHGw=";
+    hash = "sha256-D5fsl7UEnnMu0f5eRkwBOBSdzhyyPR2l9jKOnUoqoPM=";
   };
 
   patches =

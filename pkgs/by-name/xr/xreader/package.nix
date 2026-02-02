@@ -35,15 +35,15 @@
   ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
-    rev = version;
-    hash = "sha256-LUpP4gBxe5kxH3OdCFWPx3APMqVMfJy/r3FGHrGxPqI=";
+    rev = finalAttrs.version;
+    hash = "sha256-lVJFNOiayAai/Lg4tl8lNaK5fdTlZ0ptzstUzciH1mA=";
   };
 
   nativeBuildInputs = [
@@ -93,4 +93,4 @@ document formats like PDF and Postscript";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cinnamon ];
   };
-}
+})

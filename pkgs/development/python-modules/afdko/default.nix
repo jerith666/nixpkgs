@@ -15,21 +15,21 @@
   mutatormath,
   ninja,
   pytestCheckHook,
-  pythonOlder,
   runAllTests ? false,
   scikit-build,
   setuptools-scm,
   tqdm,
   ufonormalizer,
   ufoprocessor,
+
+  # passthru
+  afdko,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "afdko";
   version = "4.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
@@ -142,7 +142,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   passthru.tests = {
-    fullTestsuite = finalAttrs.finalPackage.override { runAllTests = true; };
+    fullTestsuite = afdko.override { runAllTests = true; };
   };
 
   meta = {

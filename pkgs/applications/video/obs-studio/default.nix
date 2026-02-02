@@ -26,7 +26,7 @@
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -196,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
@@ -214,7 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
       ]

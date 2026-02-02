@@ -6,23 +6,21 @@
   openssl,
   gzip,
   gitMinimal,
-  deno,
   nix-update-script,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.1.70";
+  version = "0.1.97";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lr5tMzEuUJJjsixji3H1Ms9of7JZD47kH8bJoOt2niw=";
+    hash = "sha256-iXa+hMXPIsRYaTUTBE3hWx08NG0igRFew6OaEpFDUjg=";
   };
 
-  cargoHash = "sha256-OJwyckBWBPBcQL3f0wTDrNeyhwEXCzQesEiwTxt9uco=";
-
-  passthru.updateScript = nix-update-script { };
+  cargoHash = "sha256-I7/M1wo3s+6M1AKc4JReMb9tHuLuzQlHIXVPdigCvFQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,27 +29,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     gitMinimal
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
   ];
 
-  # Tests create a local http server to check update functionality
-  __darwinAllowLocalNetworking = true;
-
-  # Due to issues with incorrect import paths with the actual app, I have disabled the checks below. Need to report upstream.
-  checkFlags = [
-    "--skip=e2e::"
-  ];
-  cargoTestFlags = [
-    "--lib"
-    "--bins"
-  ];
-
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = deno.librusty_v8;
   preBuild = ''
     mkdir -p $out/share/fresh-editor/plugins/
   '';
@@ -59,6 +43,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     rm -rf $out/bin/fresh.dSYM
   '';
+
+  # Tests create a local http server to check update functionality
+  __darwinAllowLocalNetworking = true;
+
+  # Due to issues with incorrect import paths with the actual app, I have disabled the checks below. Need to report upstream.
+  checkFlags = [
+    "--skip=e2e::"
+    "--skip=services::plugins::embedded::tests::test_extract_plugins"
+  ];
+  cargoTestFlags = [
+    "--lib"
+    "--bins"
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal-based text editor with LSP support and TypeScript plugins";
@@ -68,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       chillcicada
       dwt
+      randoneering
     ];
     mainProgram = "fresh";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

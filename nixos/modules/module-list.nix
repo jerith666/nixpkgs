@@ -238,6 +238,7 @@
   ./programs/htop.nix
   ./programs/i3lock.nix
   ./programs/iay.nix
+  ./programs/idescriptor.nix
   ./programs/iftop.nix
   ./programs/iio-hyprland.nix
   ./programs/immersed.nix
@@ -391,6 +392,7 @@
   ./security/dhparams.nix
   ./security/doas.nix
   ./security/duosec.nix
+  ./security/fscrypt.nix
   ./security/google_oslogin.nix
   ./security/ipa.nix
   ./security/isolate.nix
@@ -558,6 +560,7 @@
   ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
   ./services/desktops/dleyna.nix
+  ./services/desktops/dunst.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
   ./services/desktops/geoclue2.nix
@@ -612,6 +615,7 @@
   ./services/display-managers/default.nix
   ./services/display-managers/dms-greeter.nix
   ./services/display-managers/gdm.nix
+  ./services/display-managers/generic.nix
   ./services/display-managers/greetd.nix
   ./services/display-managers/lemurs.nix
   ./services/display-managers/ly.nix
@@ -881,6 +885,7 @@
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
   ./services/misc/lifecycled.nix
+  ./services/misc/linux-enable-ir-emitter.nix
   ./services/misc/litellm.nix
   ./services/misc/llama-cpp.nix
   ./services/misc/local-content-share.nix
@@ -1130,7 +1135,6 @@
   ./services/networking/cato-client.nix
   ./services/networking/centrifugo.nix
   ./services/networking/cgit.nix
-  ./services/networking/charybdis.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/clatd.nix
@@ -1353,7 +1357,7 @@
   ./services/networking/routinator.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
-  ./services/networking/sabnzbd.nix
+  ./services/networking/sabnzbd
   ./services/networking/scion/scion-control.nix
   ./services/networking/scion/scion-daemon.nix
   ./services/networking/scion/scion-dispatcher.nix
@@ -1395,6 +1399,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/tailscale-auth.nix
   ./services/networking/tailscale-derper.nix
+  ./services/networking/tailscale-serve.nix
   ./services/networking/tailscale.nix
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
@@ -1492,6 +1497,7 @@
   ./services/security/hockeypuck.nix
   ./services/security/hologram-agent.nix
   ./services/security/hologram-server.nix
+  ./services/security/howdy
   ./services/security/infnoise.nix
   ./services/security/intune.nix
   ./services/security/jitterentropy-rngd.nix
@@ -1555,6 +1561,8 @@
   ./services/torrent/opentracker.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/qbittorrent.nix
+  ./services/torrent/qui.nix
+  ./services/torrent/rqbit.nix
   ./services/torrent/rtorrent.nix
   ./services/torrent/torrentstream.nix
   ./services/torrent/transmission.nix
@@ -1600,6 +1608,7 @@
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/dashy.nix
   ./services/web-apps/davis.nix
+  ./services/web-apps/dawarich.nix
   ./services/web-apps/dependency-track.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
@@ -1931,7 +1940,6 @@
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/ntfs.nix
   ./tasks/filesystems/overlayfs.nix
-  ./tasks/filesystems/reiserfs.nix
   ./tasks/filesystems/squashfs.nix
   ./tasks/filesystems/sshfs.nix
   ./tasks/filesystems/unionfs-fuse.nix

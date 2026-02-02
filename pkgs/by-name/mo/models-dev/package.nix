@@ -9,12 +9,12 @@
 }:
 let
   pname = "models-dev";
-  version = "0-unstable-2026-01-04";
+  version = "0-unstable-2026-01-24";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "65b43b44c1aefb37483a03f1859f10f6718b7b31";
-    hash = "sha256-yh1OeKZ1JBR6Z1+ebCvdssjy2bBGgo1KNQFmVkycM7E=";
+    rev = "545bf83089a0d0bc4001b14c485270e10161cdd8";
+    hash = "sha256-iby02kRswqBqBP1pQS7vMMsRTY7VLiccdd7aoanOURw=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -36,15 +36,12 @@ let
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
-
-       bun install \
-         --filter=./packages/web \
-         --force \
-         --frozen-lockfile \
-         --ignore-scripts \
-         --no-progress \
-         --production
+      bun install \
+        --cpu="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress \
+        --os="*"
 
       runHook postBuild
     '';
@@ -61,7 +58,7 @@ let
     # NOTE: Required else we get errors that our fixed-output derivation references store paths
     dontFixup = true;
 
-    outputHash = "sha256-E6QV2ruzEmglBZaQMKtAdKdVpxOiwDX7bMQM8jRsiqs=";
+    outputHash = "sha256-E78Hb4ByMfYL/IZG911dX6XRRKNJ0UbQUWMSv0dclFo=";
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
@@ -116,5 +113,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ delafthi ];
+    badPlatforms = [
+      # error: Invalid DNS result order
+      "x86_64-darwin"
+    ];
   };
 })

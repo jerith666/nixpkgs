@@ -322,6 +322,28 @@ let
           '';
         };
 
+        howdy = {
+          enable = lib.mkOption {
+            default = config.security.pam.howdy.enable;
+            defaultText = lib.literalExpression "config.security.pam.howdy.enable";
+            type = lib.types.bool;
+            description = ''
+              Whether to enable the Howdy PAM module.
+
+              If set, users can be authenticated using Howdy, the Windows
+              Hello™-style facial authentication service.
+            '';
+          };
+          control = lib.mkOption {
+            default = config.security.pam.howdy.control;
+            defaultText = lib.literalExpression "config.security.pam.howdy.control";
+            type = lib.types.str;
+            description = ''
+              This option sets the PAM "control" used for this module.
+            '';
+          };
+        };
+
         oathAuth = lib.mkOption {
           default = config.security.pam.oath.enable;
           defaultText = lib.literalExpression "config.security.pam.oath.enable";
@@ -581,6 +603,13 @@ let
             not match their keyring password, Gnome Keyring will prompt separately
             after login.
           '';
+        };
+
+        enableUMask = lib.mkOption {
+          default = config.security.pam.enableUMask;
+          defaultText = lib.literalExpression "config.security.pam.enableUMask";
+          type = lib.types.bool;
+          description = "If enabled, the pam_umask module will be loaded.";
         };
 
         failDelay = {
@@ -944,6 +973,12 @@ let
                   control = "sufficient";
                   modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
                 }
+                {
+                  name = "howdy";
+                  enable = cfg.howdy.enable;
+                  control = cfg.howdy.control;
+                  modulePath = "${config.services.howdy.package}/lib/security/pam_howdy.so";
+                }
               ]
               ++
                 # Modules in this block require having the password set in PAM_AUTHTOK.
@@ -1002,7 +1037,7 @@ let
                       name = "fscrypt";
                       enable = config.security.pam.enableFscrypt;
                       control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                      modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
                     }
                     {
                       name = "zfs_key";
@@ -1194,7 +1229,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key";
@@ -1293,6 +1328,12 @@ let
                 };
               }
               {
+                name = "umask";
+                enable = cfg.enableUMask;
+                control = "optional";
+                modulePath = "${package}/lib/security/pam_umask.so";
+              }
+              {
                 name = "systemd_home";
                 enable = config.services.homed.enable;
                 control = "required";
@@ -1343,7 +1384,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key-skip-systemd";
@@ -1427,7 +1468,7 @@ let
                 control = "optional";
                 modulePath = "${package}/lib/security/pam_xauth.so";
                 settings = {
-                  xauthpath = "${pkgs.xorg.xauth}/bin/xauth";
+                  xauthpath = "${pkgs.xauth}/bin/xauth";
                   systemuser = 99;
                 };
               }
@@ -1802,6 +1843,28 @@ in
         description = ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
+        '';
+      };
+    };
+
+    security.pam.howdy = {
+      enable = lib.mkOption {
+        default = config.services.howdy.enable;
+        defaultText = lib.literalExpression "config.services.howdy.enable";
+        type = lib.types.bool;
+        description = ''
+          Whether to enable the Howdy PAM module.
+
+          If set, users can be authenticated using Howdy, the Windows
+          Hello™-style facial authentication service.
+        '';
+      };
+      control = lib.mkOption {
+        default = config.services.howdy.control;
+        defaultText = lib.literalExpression "config.services.howdy.control";
+        type = lib.types.str;
+        description = ''
+          This option sets the PAM "control" used for this module.
         '';
       };
     };
@@ -2208,9 +2271,15 @@ in
       };
     };
 
+    security.pam.enableUMask = lib.mkEnableOption "umask PAM module";
+
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
     security.pam.enableFscrypt = lib.mkEnableOption ''
       fscrypt, to automatically unlock directories with the user's login password.
+
+      Most users should enable {option}`security.fscrypt` instead, which enables
+      this and also manages {file}`/etc/fscrypt.conf` and {file}`/.fscrypt/`
+      declaratively.
 
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you
@@ -2306,7 +2375,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     boot.supportedFilesystems = lib.mkIf config.security.pam.enableEcryptfs [ "ecryptfs" ];
