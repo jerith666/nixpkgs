@@ -10,7 +10,7 @@
 let
   python = python3.override {
     packageOverrides = final: prev: {
-      django = prev.django_5_2;
+      django = prev.django_5;
     };
   };
 in
@@ -91,7 +91,7 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
     platforms = lib.platforms.linux;
   };
 }

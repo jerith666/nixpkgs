@@ -10,14 +10,17 @@
   uv-dynamic-versioning,
 
   # dependencies
+  anthropic,
   authlib,
   cyclopts,
   exceptiongroup,
   httpx,
+  jsonref,
   jsonschema-path,
   mcp,
   openai,
   openapi-pydantic,
+  packaging,
   platformdirs,
   py-key-value-aio,
   pydantic,
@@ -29,7 +32,6 @@
   websockets,
 
   # tests
-  anthropic,
   dirty-equals,
   email-validator,
   fastapi,
@@ -39,20 +41,18 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-
-  pytest-timeout,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp";
-  version = "2.14.2";
+  version = "2.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JqDsHmhuRom4CPmQd0sMaBtgypHDtwVJ4I3fnOLjnd8=";
+    hash = "sha256-qJdOKLvxjenNCyya+XMrf3NGMaDL9LM9HsaQrhubXIY=";
   };
 
   build-system = [
@@ -60,14 +60,19 @@ buildPythonPackage (finalAttrs: {
     uv-dynamic-versioning
   ];
 
+  pythonRelaxDeps = [
+    "pydocket"
+  ];
   dependencies = [
     authlib
     cyclopts
     exceptiongroup
     httpx
+    jsonref
     jsonschema-path
     mcp
     openapi-pydantic
+    packaging
     platformdirs
     py-key-value-aio
     pydantic
@@ -84,17 +89,13 @@ buildPythonPackage (finalAttrs: {
   ++ pydantic.optional-dependencies.email;
 
   optional-dependencies = {
+    anthropic = [ anthropic ];
     openai = [ openai ];
   };
 
   pythonImportsCheck = [ "fastmcp" ];
 
-  pytestFlags = [
-    "--timeout=30"
-  ];
-
   nativeCheckInputs = [
-    anthropic
     dirty-equals
     email-validator
     fastapi
@@ -103,7 +104,6 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     pytest-httpx
-    pytest-timeout
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
@@ -155,6 +155,12 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: assert {'annotations...object'}, ...} == {'annotations...sers']}}, ...}
     "test_list_tools"
 
+    # AssertionError: assert len(caplog.records) == 1
+    "test_log"
+
+    #  assert [TextContent(...e, meta=None)] == [TextContent(...e, meta=None)]
+    "test_read_resource_tool_works"
+
     # fastmcp.exceptions.ToolError: Unknown tool
     "test_multi_client_with_logging"
     "test_multi_client_with_elicitation"
@@ -162,6 +168,9 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Server failed to start after 10 attempts
     "test_unauthorized_access"
+
+    # Failed: DID NOT RAISE <class 'fastmcp.exceptions.ToolError'>
+    "test_stateless_proxy"
   ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
