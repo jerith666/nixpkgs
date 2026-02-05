@@ -2014,6 +2014,8 @@ self: super: with self; {
 
   binsync = callPackage ../development/python-modules/binsync { };
 
+  binwalk3 = callPackage ../development/python-modules/binwalk3 { };
+
   biocframe = callPackage ../development/python-modules/biocframe { };
 
   biocutils = callPackage ../development/python-modules/biocutils { };
@@ -2415,8 +2417,6 @@ self: super: with self; {
   calver = callPackage ../development/python-modules/calver { };
 
   calysto = callPackage ../development/python-modules/calysto { };
-
-  calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
 
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
@@ -3599,8 +3599,6 @@ self: super: with self; {
 
   datashaper = callPackage ../development/python-modules/datashaper { };
 
-  datatable = callPackage ../development/python-modules/datatable { };
-
   datauri = callPackage ../development/python-modules/datauri { };
 
   datefinder = callPackage ../development/python-modules/datefinder { };
@@ -4570,7 +4568,7 @@ self: super: with self; {
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
 
-  doxmlparser = callPackage ../development/tools/documentation/doxygen/doxmlparser.nix { };
+  doxmlparser = callPackage ../development/python-modules/doxmlparser { };
 
   dparse = callPackage ../development/python-modules/dparse { };
 
@@ -4970,6 +4968,8 @@ self: super: with self; {
   environs = callPackage ../development/python-modules/environs { };
 
   envisage = callPackage ../development/python-modules/envisage { };
+
+  envoy-data-plane = callPackage ../development/python-modules/envoy-data-plane { };
 
   envoy-reader = callPackage ../development/python-modules/envoy-reader { };
 
@@ -6494,6 +6494,8 @@ self: super: with self; {
 
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
+  gpiodevice = callPackage ../development/python-modules/gpiodevice { };
+
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
   gprof2dot = callPackage ../development/python-modules/gprof2dot { inherit (pkgs) graphviz; };
@@ -7407,6 +7409,8 @@ self: super: with self; {
   inkbird-ble = callPackage ../development/python-modules/inkbird-ble { };
 
   inkex = callPackage ../development/python-modules/inkex { };
+
+  inky = callPackage ../development/python-modules/inky { };
 
   inline-snapshot = callPackage ../development/python-modules/inline-snapshot { };
 
@@ -9175,6 +9179,8 @@ self: super: with self; {
   lox = callPackage ../development/python-modules/lox { };
 
   lpc-checksum = callPackage ../development/python-modules/lpc-checksum { };
+
+  lpips = callPackage ../development/python-modules/lpips { };
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
 
@@ -13346,6 +13352,8 @@ self: super: with self; {
 
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
+  pydivsufsort = callPackage ../development/python-modules/pydivsufsort { };
+
   pydle = callPackage ../development/python-modules/pydle { };
 
   pydmd = callPackage ../development/python-modules/pydmd { };
@@ -15103,6 +15111,8 @@ self: super: with self; {
   pytest-pook = callPackage ../development/python-modules/pytest-pook { };
 
   pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
+
+  pytest-pretty = callPackage ../development/python-modules/pytest-pretty { };
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
@@ -17491,8 +17501,6 @@ self: super: with self; {
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slapd = callPackage ../development/python-modules/slapd { };
-
-  sleekxmpp = callPackage ../development/python-modules/sleekxmpp { };
 
   sleekxmppfs = callPackage ../development/python-modules/sleekxmppfs { };
 
@@ -20004,8 +20012,6 @@ self: super: with self; {
     inherit (pkgs) typesense curl;
   };
 
-  typesentry = callPackage ../development/python-modules/typesentry { };
-
   typeshed-client = callPackage ../development/python-modules/typeshed-client { };
 
   typing = null;
@@ -20063,6 +20069,8 @@ self: super: with self; {
   ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
 
   ufmt = callPackage ../development/python-modules/ufmt { };
+
+  ufo-extractor = callPackage ../development/python-modules/ufo-extractor { };
 
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
 
@@ -21058,8 +21066,6 @@ self: super: with self; {
 
   yarl = callPackage ../development/python-modules/yarl { };
 
-  yasi = callPackage ../development/python-modules/yasi { };
-
   yaspin = callPackage ../development/python-modules/yaspin { };
 
   yaswfp = callPackage ../development/python-modules/yaswfp { };
@@ -21177,8 +21183,6 @@ self: super: with self; {
   zerorpc = callPackage ../development/python-modules/zerorpc { };
 
   zeversolar = callPackage ../development/python-modules/zeversolar { };
-
-  zeversolarlocal = callPackage ../development/python-modules/zeversolarlocal { };
 
   zfec = callPackage ../development/python-modules/zfec { };
 

@@ -2271,7 +2271,7 @@ in
       };
     };
 
-    security.pam.enableUMask = lib.mkEnableOption "umask PAM module";
+    security.pam.enableUMask = lib.mkEnableOption "the umask PAM module";
 
     security.pam.enableEcryptfs = lib.mkEnableOption "eCryptfs PAM module (mounting ecryptfs home directory on login)";
     security.pam.enableFscrypt = lib.mkEnableOption ''
