@@ -20,7 +20,7 @@ rec {
   # to be used when building more advanced builders.
   buildEclipsePluginBase =
     {
-      name,
+      name ? "eclipse-plugin-${attrs.pname}-${attrs.version}",
       buildInputs ? [ ],
       passthru ? { },
       ...
@@ -28,7 +28,7 @@ rec {
     stdenv.mkDerivation (
       attrs
       // {
-      name = "eclipse-plugin-" + name;
+        inherit name;
 
       buildInputs = buildInputs ++ [ unzip ];
 
@@ -43,7 +43,7 @@ rec {
   # plugin JARs.
   buildEclipsePlugin =
     {
-      name,
+      name ? "eclipse-plugin-${attrs.pname}-${attrs.version}",
       srcFeature,
       srcPlugin ? null,
       srcPlugins ? [ ],
@@ -82,7 +82,10 @@ rec {
   # `features` and `plugins`. All features and plugins inside these
   # directories will be installed.
   buildEclipseUpdateSite =
-    { name, ... }@attrs:
+    {
+      name ? "eclipse-plugin-${attrs.pname}-${attrs.version}",
+      ...
+    }@attrs:
     buildEclipsePluginBase (
       attrs
       // {
@@ -126,7 +129,7 @@ rec {
     );
 
   acejump = buildEclipsePlugin rec {
-    name = "acejump-${version}";
+    pname = "acejump";
     version = "1.0.0.201610261941";
 
     srcFeature = fetchurl {
@@ -149,7 +152,7 @@ rec {
   };
 
   ansi-econsole = buildEclipsePlugin rec {
-    name = "ansi-econsole-${version}";
+    pname = "ansi-econsole";
     version = "1.3.5.201612301822";
 
     srcFeature = fetchurl {
@@ -172,17 +175,18 @@ rec {
   };
 
   antlr-runtime_4_5 = buildEclipsePluginBase rec {
-    name = "antlr-runtime-4.5.3";
+    pname = "antlr-runtime";
+    version = "4.5.3";
 
     src = fetchurl {
-      url = "https://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${pname}-${version}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
 
     buildCommand = ''
       dropinDir="$out/eclipse/dropins/"
       mkdir -p $dropinDir
-      cp -v $src $dropinDir/${name}.jar
+      cp -v $src $dropinDir/${pname}-${version}.jar
     '';
 
     meta = {
@@ -195,17 +199,18 @@ rec {
   };
 
   antlr-runtime_4_7 = buildEclipsePluginBase rec {
-    name = "antlr-runtime-4.7.1";
+    pname = "antlr-runtime";
+    version = "4.7.1";
 
     src = fetchurl {
-      url = "https://www.antlr.org/download/${name}.jar";
+      url = "https://www.antlr.org/download/${pname}-${version}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
 
     buildCommand = ''
       dropinDir="$out/eclipse/dropins/"
       mkdir -p $dropinDir
-      cp -v $src $dropinDir/${name}.jar
+      cp -v $src $dropinDir/${pname}-${version}.jar
     '';
 
     meta = {
@@ -218,7 +223,7 @@ rec {
   };
 
   anyedittools = buildEclipsePlugin rec {
-    name = "anyedit-${version}";
+    pname = "anyedit";
     version = "2.7.3.202502241151";
 
     srcFeature = fetchurl {
@@ -241,7 +246,7 @@ rec {
   };
 
   autodetect-encoding = buildEclipsePlugin rec {
-    name = "autodetect-encoding-${version}";
+    pname = "autodetect-encoding";
     version = "1.8.5.201801191359";
 
     srcFeature = fetchurl {
@@ -264,13 +269,13 @@ rec {
   };
 
   cdt = buildEclipseUpdateSite rec {
-    name = "cdt-${version}";
+    pname = "cdt";
     # find current version at https://github.com/eclipse-cdt/cdt/releases
     version = "11.4.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${name}/${name}.zip";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/${lib.versions.majorMinor version}/${pname}-${version}/${pname}-${version}.zip";
       hash = "sha256-39AoB5cKRQMFpRaOlrTEsyEKZYVqdTp1tMtlaDjjZ84=";
     };
 
@@ -285,7 +290,7 @@ rec {
   };
 
   checkstyle = buildEclipseUpdateSite rec {
-    name = "checkstyle-${version}";
+    pname = "checkstyle";
     version = "8.7.0.201801131309";
 
     src = fetchzip {
@@ -305,7 +310,7 @@ rec {
   };
 
   color-theme = buildEclipsePlugin rec {
-    name = "color-theme-${version}";
+    pname = "color-theme";
     version = "1.0.0.201410260308";
 
     srcFeature = fetchurl {
@@ -328,7 +333,7 @@ rec {
   };
 
   cup = buildEclipsePlugin rec {
-    name = "cup-${version}";
+    pname = "cup";
     version = "1.1.0.201604221613";
     version_ = "1.0.0.201604221613";
 
@@ -361,7 +366,7 @@ rec {
   };
 
   drools = buildEclipseUpdateSite rec {
-    name = "drools-${version}";
+    pname = "drools";
     version = "7.47.0.Final";
 
     srcUrl = "https://download.jboss.org/drools/release/${version}/droolsjbpm-tools-distribution-${version}.zip";
@@ -408,7 +413,7 @@ rec {
   };
 
   eclemma = buildEclipseUpdateSite rec {
-    name = "eclemma-${version}";
+    pname = "eclemma";
     version = "3.1.10";
 
     src = fetchzip {
@@ -427,7 +432,7 @@ rec {
   };
 
   findbugs = buildEclipsePlugin rec {
-    name = "findbugs-${version}";
+    pname = "findbugs";
     version = "3.0.1.20150306-5afe4d1";
 
     srcFeature = fetchurl {
@@ -450,7 +455,7 @@ rec {
   };
 
   freemarker = buildEclipseUpdateSite rec {
-    name = "freemarker-${version}";
+    pname = "freemarker";
     version = "1.5.305";
 
     src = fetchzip {
@@ -467,7 +472,7 @@ rec {
   };
 
   embed-cdt = buildEclipseUpdateSite rec {
-    name = "embed-cdt-${version}";
+    pname = "embed-cdt";
     version = "6.3.1";
 
     src = fetchzip {
@@ -488,7 +493,7 @@ rec {
   gnuarmeclipse = embed-cdt; # backward compat alias, added 2022-11-04
 
   jsonedit = buildEclipsePlugin rec {
-    name = "jsonedit-${version}";
+    pname = "jsonedit";
     version = "1.1.1";
 
     srcFeature = fetchurl {
@@ -548,7 +553,7 @@ rec {
   };
 
   jdt-codemining = buildEclipsePlugin rec {
-    name = "jdt-codemining-${version}";
+    pname = "jdt-codemining";
     version = "1.0.0.201806221018";
 
     srcFeature = fetchurl {
@@ -590,7 +595,7 @@ rec {
   };
 
   rustdt = buildEclipseUpdateSite rec {
-    name = "rustdt-${version}";
+    pname = "rustdt";
     version = "0.6.2";
     owner = "RustDT";
     repo = "rustdt.github.io";
@@ -649,7 +654,7 @@ rec {
   };
 
   spotbugs = buildEclipseUpdateSite rec {
-    name = "spotbugs-${version}";
+    pname = "spotbugs";
     version = "3.1.11";
 
     src = fetchzip {
@@ -668,7 +673,7 @@ rec {
   };
 
   testng = buildEclipsePlugin rec {
-    name = "testng-${version}";
+    pname = "testng";
     version = "6.9.13.201609291640";
 
     srcFeature = fetchurl {
@@ -691,7 +696,7 @@ rec {
   };
 
   vrapper = buildEclipseUpdateSite rec {
-    name = "vrapper-${version}";
+    pname = "vrapper";
     version = "0.72.0";
     owner = "vrapper";
     repo = "vrapper";
@@ -714,7 +719,7 @@ rec {
   };
 
   yedit = buildEclipsePlugin rec {
-    name = "yedit-${version}";
+    pname = "yedit";
     version = "1.0.20.201509041456";
 
     srcFeature = fetchurl {
@@ -737,11 +742,11 @@ rec {
   };
 
   zest = buildEclipseUpdateSite rec {
-    name = "zest-${version}";
+    pname = "zest";
     version = "3.9.101";
 
     src = fetchurl {
-      url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${name}.zip";
+      url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${pname}-${version}.zip";
       sha256 = "01scn7cmcrjcp387spjm8ifgwrwwi77ypildandbisfvhj3qqs7m";
     };
 
