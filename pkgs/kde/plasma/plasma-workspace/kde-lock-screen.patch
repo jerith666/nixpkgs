@@ -1,12 +1,11 @@
---- a/lookandfeel/components/WallpaperFader.qml   2025-02-25 11:08:27.000000000 -0500
-+++ b/lookandfeel/components/WallpaperFader.qml   2025-03-06 21:44:44.489704493 -0500
-@@ -87,7 +87,7 @@
-             }
+--- a/lookandfeel/components/WallpaperFader.qml	2026-02-12 05:09:47.000000000 -0500
++++ b/lookandfeel/components/WallpaperFader.qml	2026-02-21 12:04:04.574913541 -0500
+@@ -79,7 +79,7 @@
              PropertyChanges {
-                 target: wallpaperFader
--                factor: 1
-+                factor: 0
+                 mainStack.opacity: 1
+                 footer.opacity: 1
+-                wallpaperFader.factor: 1
++                wallpaperFader.factor: 0
+                 clock.shadow.opacity: 0
+                 clock.opacity: 1
              }
-         },
-         State {
-
