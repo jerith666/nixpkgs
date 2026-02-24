@@ -184,6 +184,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    export QMAKE="${qt6.qtbase}/bin/qmake"
+
     python setup.py install --root=$out \
       --prefix=$out \
       --libdir=$out/lib \
