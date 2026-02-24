@@ -84,6 +84,9 @@ stdenv.mkDerivation rec {
         sed -i 's/& / \&/g;s/\*\*/\0 /g;s/^\(.\)  /\1\t/' "$out"
       '';
     })
+    # unfortunately the archlinux patch does not apply cleanly
+    # source: https://gitlab.archlinux.org/archlinux/packaging/packages/openscad/-/raw/ecc27e16ae6fee51c6806690d76f9ba326af79c1/boost-1.89.patch
+    ./boost-1.89.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ref. https://github.com/openscad/openscad/pull/4013 merged upstream
