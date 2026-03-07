@@ -3,7 +3,6 @@
   stdenv,
   fetchgit,
   buildPackages,
-  autoconf,
   ncurses,
   tcl,
   openssl,
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
-    autoconf
     ncurses
     tcl
     openssl
@@ -38,14 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   hardeningDisable = [ "format" ];
-
-  patches = [
-    # gcc 14 causes the qsort test program in configure.ac to fail to compile,
-    # leading configure to deduce the wrong argument type for qsort
-    ./qsort-arg-type.patch
-  ];
-
-  preConfigure = "autoconf";
 
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
