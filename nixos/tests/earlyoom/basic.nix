@@ -15,6 +15,7 @@
 
       services.earlyoom = {
         enable = true;
+        enableNotifications = true;
         # Use SIGKILL, or `tail` will catch SIGTERM and exit successfully.
         freeMemKillThreshold = 90;
       };
@@ -36,5 +37,7 @@
         assert machine.get_unit_info("testbloat.service")["Result"] == "signal"
         output = machine.succeed('journalctl -u earlyoom.service -b0')
         assert 'low memory! at or below SIGKILL limits' in output
+        # we are able to exec dbus-send
+        assert 'dbus-send failed' not in output
   '';
 }
