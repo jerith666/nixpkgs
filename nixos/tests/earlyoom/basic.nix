@@ -1,9 +1,11 @@
 { lib, ... }:
 {
   name = "earlyoom";
-  meta.maintainers = with lib.maintainers; [
-    oxalica
-  ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      oxalica
+    ];
+  };
 
   nodes.machine =
     { pkgs, ... }:
@@ -20,6 +22,7 @@
       systemd.services.testbloat = {
         description = "Create a lot of memory pressure";
         serviceConfig = {
+          OOMScoreAdjust = 1000;
           ExecStart = "${pkgs.coreutils}/bin/tail /dev/zero";
         };
       };
