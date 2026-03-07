@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://lamdera.com";
-    license = lib.licenses.unfree;
+    license = lib.licenses.bsd3;
     description = "Delightful platform for full-stack web apps";
     platforms = [
       "aarch64-linux"

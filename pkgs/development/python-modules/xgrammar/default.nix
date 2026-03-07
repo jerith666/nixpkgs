@@ -70,10 +70,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
-    "-ffat-lto-objects"
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_CFLAGS_COMPILE = toString [
+      # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+      "-ffat-lto-objects"
+    ];
+  };
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -92,6 +94,11 @@ buildPythonPackage rec {
 
     # AssertionError
     "test_json_schema_converter"
+  ];
+
+  disabledTestPaths = [
+    # Requires internet access
+    "tests/python/test_structural_tag_converter.py"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];

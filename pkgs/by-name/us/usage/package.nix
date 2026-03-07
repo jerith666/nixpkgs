@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.16.2";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1vcJKCtDZtbL0cRAEQ6MgWlESRpOchi6uYMyZi0U9zM=";
+    hash = "sha256-vypgdu9G+6soLl9QrlRiA1U/2ijFUEqwPS6XrV9Ubek=";
   };
 
-  cargoHash = "sha256-rhx09WclXiZtPGsmBCG9ShfWgo7YFKFSPHQpqy9wbtE=";
+  cargoHash = "sha256-CnrBFH1dnFOL8dwyFioj6FO2MPqpl169y9YMgQpPi5Y=";
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \

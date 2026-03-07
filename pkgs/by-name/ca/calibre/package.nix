@@ -40,27 +40,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.3.1";
+  version = "9.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6deH4CdDgIzDoTSrDMFJLTiiKhwR+6BH3SAwBDSRqjU=";
+    hash = "sha256-3anPEeVB5C7RuS5ZCFMvow5WhkIopgCpxpmcstsIgX4=";
   };
 
   patches =
     let
       debian-source = "ds+_0.10.5-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
       #  allow for plugin update check, but no calibre version check
       (fetchpatch {
-        name = "0001-only-plugin-update.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
-        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
       })
       (fetchpatch {
-        name = "0007-Hardening-Qt-code.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
         hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
       })
     ]
@@ -184,6 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    # Work around #493843 until #493988 lands on master.
     export QMAKE="${qt6.qtbase}/bin/qmake"
 
     python setup.py install --root=$out \

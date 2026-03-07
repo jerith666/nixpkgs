@@ -11,6 +11,7 @@
   pillow,
   pytest-regressions,
   dirty-equals,
+  setuptools,
 }:
 let
   pname = "srctools";
@@ -24,6 +25,11 @@ buildPythonPackage {
     inherit pname version;
     hash = "sha256-c+NmrTntpNTEI782aoC4bNpoKpWe4cqSAkxpYS5HH30=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python == 0.18.0" "meson-python >= 0.18.0"
+  '';
 
   build-system = [
     meson
@@ -41,7 +47,17 @@ buildPythonPackage {
     pillow
     pytest-regressions
     dirty-equals
+    setuptools # required for pythoncapi-compat tests
   ];
+
+  # pythoncpai-comat tests are incompatible with pytest so we run their tests manually
+  # see https://github.com/python/pythoncapi-compat/pull/169
+  disabledTestPaths = [
+    "src/pythoncapi-compat"
+  ];
+  postCheck = ''
+    python3 src/pythoncapi-compat/runtests.py --current
+  '';
 
   pythonImportsCheck = [ "srctools" ];
 

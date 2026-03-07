@@ -4,7 +4,7 @@
   callPackage,
   cacert,
   curlMinimal,
-  dart,
+  dart-bin,
   debug ? false,
   fetchurl,
   gn,
@@ -126,7 +126,7 @@ let
         cp --recursive sdk $out
       '';
 in
-dart.overrideAttrs (oldAttrs: {
+dart-bin.overrideAttrs (oldAttrs: {
   inherit version src;
 
   nativeBuildInputs = [
@@ -172,7 +172,7 @@ dart.overrideAttrs (oldAttrs: {
     export PATH=$PWD/.bin-tools:$PATH
   ''
   + ''
-    ln --symbolic ${buildPackages.dart} tools/sdks/dart-sdk
+    ln --symbolic ${buildPackages.dart-bin} tools/sdks/dart-sdk
     ln --symbolic --force ${lib.getExe buildPackages.gn} buildtools/gn
     mkdir --parents buildtools/ninja
     ln --symbolic --force ${lib.getExe buildPackages.samurai} buildtools/ninja/ninja
@@ -247,9 +247,11 @@ dart.overrideAttrs (oldAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = writeShellScript "update-dart" ''
-    ${lib.getExe nix-update} --version=$(${lib.getExe curlMinimal} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${lib.getExe jq} --raw-output .version)
-  '';
+  passthru = oldAttrs.passthru // {
+    updateScript = writeShellScript "update-dart" ''
+      ${lib.getExe nix-update} --version=$(${lib.getExe curlMinimal} --fail --location --silent https://storage.googleapis.com/dart-archive/channels/stable/release/latest/VERSION | ${lib.getExe jq} --raw-output .version)
+    '';
+  };
 
   meta = oldAttrs.meta // {
     platforms = [

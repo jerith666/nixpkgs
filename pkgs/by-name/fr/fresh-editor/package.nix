@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fresh";
-  version = "0.2.5";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "sinelaw";
     repo = "fresh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JbjTHMvncM5wCiPa3Tmv/HJbg7sKgmOXhmu9He6Tzhk=";
+    hash = "sha256-mx/cf7vy5x2+N6KfS8y7ub62H/+mwONLm4TKeik5T0s=";
   };
 
-  cargoHash = "sha256-1b9v7K+EUOtHF3J3vOv1YyFxqnGZ5SbzyUBPCQ5i90U=";
+  cargoHash = "sha256-JcoVml5UAQm2RbMn6ZBKEcZFaedeX0rjh+RZEPC0gqU=";
 
   nativeBuildInputs = [
     gzip

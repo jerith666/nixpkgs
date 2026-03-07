@@ -896,7 +896,7 @@ let
             downloadPage = "https://marketplace.visualstudio.com/items?itemName=Catppuccin.catppuccin-vsc-icons";
             homepage = "https://github.com/catppuccin/vscode-icons";
             license = lib.licenses.mit;
-            maintainers = [ lib.maintainers.laurent-f1z1 ];
+            maintainers = [ ];
           };
         };
       };
@@ -3863,8 +3863,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.19.1";
-          hash = "sha256-ZLuGtB7DjIVrcYomcwptwJxGmIjz0Vu1fCFqYb2XLk4=";
+          version = "1.21.0";
+          hash = "sha256-55PBCTV6NJL+JVH+19vIoA5GKMDD8uB7z9OCOb+GjZM=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";
@@ -3913,8 +3913,8 @@ let
         mktplcRef = {
           name = "liveserver";
           publisher = "ritwickdey";
-          version = "5.7.9";
-          hash = "sha256-w0CYSEOdltwMFzm5ZhOxSrxqQ1y4+gLfB8L+EFFgzDc=";
+          version = "5.7.10";
+          hash = "sha256-D474GdTCAH8b+zuO+1M+cnluKfBv7mAMdtH7F777W5U=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4149,7 +4149,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=seatonjiang.gitmoji-vscode";
           homepage = "https://github.com/seatonjiang/gitmoji-vscode/";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.laurent-f1z1 ];
+          maintainers = [ ];
         };
       };
 
@@ -4322,8 +4322,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.43.0";
-          hash = "sha256-cpd8+fbp57l+XYBuDnz95lmKzJ8IUHu937KWHsLXrPk=";
+          version = "4.44.0";
+          hash = "sha256-6P29hCcOpEWNXSArnMPiWVwbbyhzlS1LCh3uSDWEfJo=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4495,8 +4495,8 @@ let
         mktplcRef = {
           name = "svelte-vscode";
           publisher = "svelte";
-          version = "109.13.0";
-          hash = "sha256-8eHnAuQArNTOxewNWcPJRekXUyYGc6LnR66rHe5j9u0=";
+          version = "109.14.2";
+          hash = "sha256-yY1iVbTz4Yq6ZgNVaSpukxnKLlg2XccEPWzuGoGMkmM=";
         };
         meta = {
           changelog = "https://github.com/sveltejs/language-tools/releases";
@@ -4752,8 +4752,8 @@ let
         mktplcRef = {
           name = "opa";
           publisher = "tsandall";
-          version = "0.21.0";
-          hash = "sha256-1k+yq8QYTpiePX4Q8o+iUmpqcWONCOZkMrNZjp2Rlss=";
+          version = "0.22.1";
+          hash = "sha256-Ov2vJIZXrq5m9VNPOX4KJvLcvHuLJPTv0CU6479CyOI=";
         };
         meta = {
           changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";

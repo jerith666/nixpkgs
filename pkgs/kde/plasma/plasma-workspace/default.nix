@@ -15,6 +15,7 @@
   qtlocation,
   qtpositioning,
   qtsvg,
+  qtvirtualkeyboard,
   qtwayland,
   libcanberra,
   libqalculate,
@@ -71,6 +72,10 @@ mkKdeDerivation {
     libxft
 
     gpsd
+  ];
+
+  extraPropagatedBuildInputs = [
+    qtvirtualkeyboard
   ];
 
   qtWrapperArgs = [ "--inherit-argv0" ];

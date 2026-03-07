@@ -14,7 +14,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "12.3.0";
+  version = "12.3.2";
 
   minimalOCamlVersion = "5.1";
 
@@ -22,7 +22,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-PEeZcSlXkWLo0hZHOsmuvcQoxeAXxqNfTR9sUJQG40g=";
+    hash = "sha256-d7c72jXadwBtUqarfdGnEDo9yFwCAeEX0GGVqCe70Ak=";
   };
 
   # Compatibility with nottui ≥ 0.4

@@ -133,9 +133,11 @@ mapAliases {
   configshell = throw "'configshell' has been renamed to/replaced by 'configshell-fb'"; # Converted to throw 2025-10-29
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
+  dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
+  deepsearch-glm = throw "'deepsearch-glm' has been removed due to lack of upstream maintenance"; # Added 2025-03-04
   dictpath = throw "'dictpath' has been renamed to/replaced by 'pathable'"; # Converted to throw 2025-10-29
   diff_cover = throw "'diff_cover' has been renamed to/replaced by 'diff-cover'"; # Converted to throw 2025-10-29
   digital-ocean = throw "'digital-ocean' has been renamed to/replaced by 'python-digitalocean'"; # Converted to throw 2025-10-29
@@ -145,6 +147,7 @@ mapAliases {
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
+  django-modelsearch = modelsearch; # added 2026-03-02
   django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_5_1 = throw "Django 5.1 has reached it's EOL in 2025-12 and has therefore been removed."; # added 2025-11-30"
   django_5_2 = django_5; # added 2026-01-18
@@ -234,6 +237,7 @@ mapAliases {
   heif-image-plugin = throw "heif-image-plugin has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   hglib = throw "'hglib' has been renamed to/replaced by 'python-hglib'"; # Converted to throw 2025-10-29
   hijri-converter = hijridate; # added 2025-08-07
+  holistic-trace-analysis = throw "'holistic-trace-analysis' was removed because there is no such package on PyPI"; # added 2026-02-28
   homeassistant-bring-api = throw "'homeassistant-bring-api' has been renamed to/replaced by 'bring-api'"; # Converted to throw 2025-10-29
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
   IMAPClient = throw "'IMAPClient' has been renamed to/replaced by 'imapclient'"; # Converted to throw 2025-10-29
@@ -342,6 +346,7 @@ mapAliases {
   pillow-avif-plugin = throw "'pillow-avif-plugin' has been removed because 'pillow' has native avif support since 11.3"; # added 2025-11-26
   pizzapi = throw "pizzapi was removed because it no longer works"; # added 2025-12-03
   pkuseg = throw "'pkuseg' has been removed because it was not supported on newer versions of Python"; # added 2026-01-20
+  ploomber-extension = throw "'ploomber-extension' has been removed since the upstream repo was archived"; # added 2026-02-16
   plumlightpad = throw "plumlightpad has been removed because the API was shut down"; # added 2025-11-04
   Polygon3 = throw "'Polygon3' has been renamed to/replaced by 'polygon3'"; # Converted to throw 2025-10-29
   posix_ipc = throw "'posix_ipc' has been renamed to/replaced by 'posix-ipc'"; # Converted to throw 2025-10-29
@@ -452,6 +457,7 @@ mapAliases {
   PyVirtualDisplay = throw "'PyVirtualDisplay' has been renamed to/replaced by 'pyvirtualdisplay'"; # Converted to throw 2025-10-29
   pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   pywal = pywal16; # added 2026-02-01
+  pywlroots = throw "pywlroots has been removed because it was no longer used by anything"; # added 2026-02-25
   qds_sdk = throw "'qds_sdk' has been renamed to/replaced by 'qds-sdk'"; # Converted to throw 2025-10-29
   qiskit-ibmq-provider = throw "qiskit-imbq-provider has been removed, since it was deprecated upstream"; # added 2025-09-13
   qiskit-ignis = throw "qiskit-ignis has been removed, since it was deprecated upstream"; # added 2025-09-13

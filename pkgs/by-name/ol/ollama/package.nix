@@ -137,16 +137,17 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.15.6";
+  version = "0.17.6";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-II9ffgkMj2yx7Sek5PuAgRnUIS1Kf1UeK71+DwAgBRE=";
+    hash = "sha256-Hd2U6FoYwtDPOt+AZhsYloWSF2/QE+fsXRcC6OKKJXA=";
   };
 
-  vendorHash = "sha256-r7bSHOYAB5f3fRz7lKLejx6thPx0dR4UXoXu0XD7kVM=";
+  vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";
+  proxyVendor = true;
 
   env =
     lib.optionalAttrs enableRocm {
@@ -192,7 +193,6 @@ goBuild (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm ml/backend/ggml/ggml_test.go
     rm ml/nn/pooling/pooling_test.go
-    rm model/models/qwen3next/checkpoints_test.go
   '';
 
   overrideModAttrs = (
@@ -297,7 +297,6 @@ goBuild (finalAttrs: {
       if (rocmRequested || cudaRequested || vulkanRequested) then platforms.linux else platforms.unix;
     mainProgram = "ollama";
     maintainers = with maintainers; [
-      abysssol
       dit7ya
       prusnak
     ];

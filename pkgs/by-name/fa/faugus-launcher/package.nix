@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "faugus-launcher";
-  version = "1.15.1";
+  version = "1.15.10";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Faugus";
     repo = "faugus-launcher";
     tag = finalAttrs.version;
-    hash = "sha256-bqXmYR1+Df2JXR5SUtFMSo9J3/54lQ1f40KotsJ/vuQ=";
+    hash = "sha256-lt9pdGtWCZoiH6/dNtfEtt84qT0xcqumP19IxcyMoEw=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    filelock
     pillow
     psutil
     pygobject3

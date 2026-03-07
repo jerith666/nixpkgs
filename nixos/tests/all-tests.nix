@@ -1051,6 +1051,10 @@ in
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
   };
   ncps-ha-pg-redis = runTest ./ncps-ha-pg-redis.nix;
+  ncps-ha-pg-redis-cdc = runTest {
+    imports = [ ./ncps-ha-pg-redis.nix ];
+    defaults.services.ncps.cache.cdc.enabled = true;
+  };
   ndppd = runTest ./ndppd.nix;
   nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   nebula.connectivity = runTest ./nebula/connectivity.nix;
@@ -1100,6 +1104,7 @@ in
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nix-config = runTest ./nix-config.nix;
   nix-daemon-firewall = runTest ./nix-daemon-firewall.nix;
+  nix-daemon-unprivileged = runTest ./nix-daemon-unprivileged.nix;
   nix-ld = runTest ./nix-ld.nix;
   nix-misc = handleTest ./nix/misc.nix { };
   nix-required-mounts = runTest ./nix-required-mounts;
@@ -1214,6 +1219,7 @@ in
   owi = runTest ./owi.nix;
   owncast = runTest ./owncast.nix;
   oxidized = handleTest ./oxidized.nix { };
+  oxwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./oxwm.nix;
   pacemaker = runTest ./pacemaker.nix;
   packagekit = runTest ./packagekit.nix;
   pairdrop = runTest ./web-apps/pairdrop.nix;
@@ -1244,6 +1250,7 @@ in
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
+  perses = runTest ./perses.nix;
   pgadmin4 = runTest ./pgadmin4.nix;
   pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = runTest ./pgbouncer.nix;
@@ -1382,8 +1389,10 @@ in
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
   rauc = runTest ./rauc.nix;
-  reaction = runTest ./reaction.nix;
-  reaction-firewall = runTest ./reaction-firewall.nix;
+  reaction = import ./reaction {
+    inherit (pkgs) lib;
+    inherit runTest;
+  };
   readarr = runTest ./readarr.nix;
   readeck = runTest ./readeck.nix;
   realm = runTest ./realm.nix;
@@ -1394,6 +1403,7 @@ in
   refind = runTest ./refind.nix;
   remark42 = runTest ./remark42.nix;
   renovate = runTest ./renovate.nix;
+  repath-studio = runTest ./repath-studio.nix;
   replace-dependencies = handleTest ./replace-dependencies { };
   reposilite = runTest ./reposilite.nix;
   restartByActivationScript = runTest ./restart-by-activation-script.nix;
@@ -1484,7 +1494,9 @@ in
   sonic-server = runTest ./sonic-server.nix;
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
+  speedtest-tracker = runTest ./speedtest-tracker.nix;
   spiped = runTest ./spiped.nix;
+  spire = runTest ./spire.nix;
   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;
   squid = runTest ./squid.nix;
   ssh-agent-auth = runTest ./ssh-agent-auth.nix;
@@ -1638,7 +1650,7 @@ in
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
-  tpm2 = runTest ./tpm2.nix;
+  tpm2 = import ./tpm2 { inherit runTest; };
   traccar = runTest ./traccar.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };

@@ -78,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Needed on Darwin.
-  NIX_CFLAGS_LINK = "-logg -lvorbis";
+  env.NIX_CFLAGS_LINK = toString [
+    "-logg"
+    "-lvorbis"
+  ];
 
   # Broken with libopus >= 1.6.0
   doCheck = false;
@@ -111,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libsndfile.github.io/libsndfile/";
     changelog = "https://github.com/libsndfile/libsndfile/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
 
     longDescription = ''
