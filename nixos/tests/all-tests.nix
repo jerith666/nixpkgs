@@ -503,7 +503,15 @@ in
   dublin-traceroute = runTest ./dublin-traceroute.nix;
   dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
   early-mount-options = runTest ./early-mount-options.nix;
-  earlyoom = runTestOn [ "x86_64-linux" ] ./earlyoom.nix;
+  earlyoom.basic = runTestOn ["x86_64-linux"] ./earlyoom/basic.nix;
+  earlyoom.notify-dbus = runTestOn ["x86_64-linux"] {
+    imports = [ ./earlyoom/notify.nix ];
+    defaults.services.dbus.implementation = "dbus";
+  };
+  earlyoom.notify-broker = runTestOn ["x86_64-linux"] {
+    imports = [ ./earlyoom/notify.nix ];
+    defaults.services.dbus.implementation = "broker";
+  };
   easytier = runTest ./easytier.nix;
   ec2-config = (handleTestOn [ "x86_64-linux" ] ./ec2.nix { }).boot-ec2-config or { };
   ec2-image = runTest ./ec2-image.nix;

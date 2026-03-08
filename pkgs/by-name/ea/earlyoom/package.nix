@@ -8,6 +8,7 @@
   # output which is pulled in on-demand. There is no need to disabled it unless
   # pandoc is hard to build on your platform.
   withManpage ? true,
+  dbus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optionals withManpage [ "man" ];
 
-  patches = [ ./0000-fix-dbus-path.patch ];
+  postPatch = ''
+    substituteInPlace kill.c --replace-fail "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
+  '';
 
   nativeBuildInputs = lib.optionals withManpage [ pandoc ];
 
