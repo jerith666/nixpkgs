@@ -288,7 +288,7 @@ with pkgs;
     name = "update-autotools-gnu-config-scripts-hook";
     substitutions = {
       gnu_config = gnu-config.override {
-        runtimeShell = targetPackages.stdenv.shell;
+        runtimeShell = if stdenv.buildPlatform == stdenv.hostPlatform then stdenv.shell else runtimeShell;
       };
     };
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
@@ -1673,7 +1673,13 @@ with pkgs;
     plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
   };
 
-  dino = callPackage ../applications/networking/instant-messengers/dino { };
+  dino = callPackage ../applications/networking/instant-messengers/dino {
+    inherit (gst_all_1)
+      gstreamer
+      gst-plugins-base
+      ;
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  };
 
   inherit (ocamlPackages) dot-merlin-reader;
 
@@ -2150,6 +2156,7 @@ with pkgs;
     cudaPackages_12_9
     cudaPackages_13_0
     cudaPackages_13_1
+    cudaPackages_13_2
     ;
 
   cudaPackages_12 = cudaPackages_12_8;
@@ -2233,8 +2240,11 @@ with pkgs;
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
-  tracy-glfw = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
-  tracy-wayland = callPackage ../by-name/tr/tracy/package.nix { withWayland = true; };
+  inherit (callPackages ../by-name/tr/tracy/package-versions.nix { })
+    tracy_0_11
+    tracy_0_12
+    tracy_0_13
+    ;
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
@@ -3250,6 +3260,7 @@ with pkgs;
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
     pnpm_9
+    pnpm_10_29_2
     pnpm_10
     ;
   pnpm = pnpm_10;
@@ -3401,10 +3412,6 @@ with pkgs;
   spire-server = spire.server;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
-
-  stirling-pdf = callPackage ../by-name/st/stirling-pdf/package.nix {
-    isDesktopVariant = false;
-  };
 
   stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
     isDesktopVariant = true;
@@ -4683,6 +4690,7 @@ with pkgs;
     cargo-pgrx_0_12_6
     cargo-pgrx_0_16_0
     cargo-pgrx_0_16_1
+    cargo-pgrx_0_17_0
     cargo-pgrx
     ;
 
@@ -5989,8 +5997,6 @@ with pkgs;
   inherit (regclient) regbot regctl regsync;
 
   reno = with python312Packages; toPythonApplication reno;
-
-  replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
 
   inherit (callPackage ../development/tools/replay-io { })
     replay-io
@@ -8663,8 +8669,6 @@ with pkgs;
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;
   linux_zen = linuxPackages_zen.kernel;
-  linuxPackages_lqx = linuxKernel.packages.linux_lqx;
-  linux_lqx = linuxPackages_lqx.kernel;
 
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
@@ -9729,7 +9733,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/libraries/wlroots { })
-    wlroots_0_17
     wlroots_0_18
     wlroots_0_19
     ;
@@ -9878,7 +9881,7 @@ with pkgs;
     k3s_1_34
     k3s_1_35
     ;
-  k3s = k3s_1_34;
+  k3s = k3s_1_35;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -10324,10 +10327,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin) sigtool;
-  };
-
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
@@ -10344,9 +10343,7 @@ with pkgs;
     userOnly = true;
   };
 
-  canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
-
-  wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
+  wrapQemuBinfmtP = callPackage ../by-name/qe/qemu/binfmt-p-wrapper.nix { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
@@ -10414,10 +10411,6 @@ with pkgs;
     tag = "-xine-full";
     withGstreamerBackend = false;
     withXineBackend = true;
-  };
-
-  rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftwSinglePrec;
   };
 
   reaper = callPackage ../applications/audio/reaper {
@@ -11392,6 +11385,8 @@ with pkgs;
     xonotic-data
     xonotic
     ;
+
+  xash-dedicated = callPackage ../by-name/xa/xash3d-fwgs/package.nix { buildServer = true; };
 
   xonotic-glx =
     (callPackage ../games/xonotic {

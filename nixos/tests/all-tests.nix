@@ -527,7 +527,14 @@ in
   enlightenment = runTest ./enlightenment.nix;
   ente = runTest ./ente;
   env = runTest ./env.nix;
-  envfs = runTest ./envfs.nix;
+  envfs = runTest {
+    imports = [ ./envfs.nix ];
+    _module.args.systemdStage1 = false;
+  };
+  envfs-systemd-stage-1 = runTest {
+    imports = [ ./envfs.nix ];
+    _module.args.systemdStage1 = true;
+  };
   envoy = runTest {
     imports = [ ./envoy.nix ];
     _module.args.envoyPackage = pkgs.envoy;
@@ -799,6 +806,7 @@ in
   installer = handleTest ./installer.nix { };
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix { };
   intune = runTest ./intune.nix;
+  inventree = runTest ./inventree.nix;
   invidious = runTest ./invidious.nix;
   invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
@@ -1681,6 +1689,7 @@ in
   tuliprox = runTest ./tuliprox.nix;
   tuned = runTest ./tuned.nix;
   tuptime = runTest ./tuptime.nix;
+  turborepo-remote-cache = runTest ./turborepo-remote-cache.nix;
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
   turn-rs = runTest ./turn-rs.nix;
   tusd = runTest ./tusd/default.nix;
