@@ -1,4 +1,4 @@
-{ lib }:
+{ fetchpatch, lib }:
 
 {
 
@@ -106,12 +106,15 @@
   };
 
   beancount = {
-    version = "2.5.0";
+    version = "2.5.1";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
+    hash = "sha256-UJ8bswQJB7UYspNKLWaEXMOR4XlKVHfd7rvV5iaA5Tw=";
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/polarmutex/tree-sitter-beancount/pull/137>.
+    excludeBrokenTreeSitterJson = true;
   };
 
   bibtex = {
@@ -414,6 +417,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+    patches = [
+      (fetchpatch {
+        name = "Fix invalid `tree-sitter.json`";
+        url = "https://github.com/UserNobody14/tree-sitter-dart/commit/81638dbbdb76a0e88ea8c31b95ec76b9625ddb84.diff";
+        hash = "sha256-oaxuKQPN/gprO4OFWYItkj5dqd2xlq3SV6qr4YkSFjM=";
+      })
+    ];
   };
 
   dbml = {
@@ -714,10 +724,10 @@
   };
 
   fsharp = {
-    version = "0.1.0-unstable-2025-07-05";
+    version = "0.2.2-unstable-2026-03-29";
     url = "github:ionide/tree-sitter-fsharp";
-    rev = "5141851c278a99958469eb1736c7afc4ec738e47";
-    hash = "sha256-cJpbO9PjGtJu4RCDsmQ0qjys765/z397y/wbfGxTY9Y=";
+    rev = "594c500ecace8618db32dd1144307897277db067";
+    hash = "sha256-e66aAsmNJWMcElqFIxSiHZgyQsq8NT7zU9y/fpbqJF4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -863,6 +873,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/ember-tooling/tree-sitter-glimmer/pull/189>
+    excludeBrokenTreeSitterJson = true;
   };
 
   glsl = {
@@ -1207,6 +1220,9 @@
     meta = {
       license = lib.licenses.cc0;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/sogaiu/tree-sitter-janet-simple/pull/7>
+    excludeBrokenTreeSitterJson = true;
   };
 
   java = {
@@ -1313,12 +1329,15 @@
   };
 
   just = {
-    version = "0-unstable-2025-01-05";
-    url = "github:IndianBoy42/tree-sitter-just";
-    rev = "bb0c898a80644de438e6efe5d88d30bf092935cd";
-    hash = "sha256-FwEuH/2R745jsuFaVGNeUTv65xW+MPjbcakRNcAWfZU=";
+    version = "0-unstable-2026-03-15";
+    url = "github:casey/tree-sitter-just";
+    rev = "d9da862c156020c1a83d3c6ccdda32be6d8a5d4a";
+    hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
     meta = {
       license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
     };
   };
 
@@ -1635,6 +1654,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/Norgate-AV/tree-sitter-netlinx/pull/82>
+    excludeBrokenTreeSitterJson = true;
   };
 
   nginx = {
@@ -1660,10 +1682,10 @@
   };
 
   nim = {
-    version = "0.6.2-unstable-2026-01-11";
+    version = "0.6.2-unstable-2026-03-21";
     url = "github:alaviss/tree-sitter-nim";
-    rev = "9b4ede21a6ca866d29263f6b66c070961bc622b4";
-    hash = "sha256-3BHcQrLNcXe1RMkV7ECCMzzEukgTlARH3+DDo2M5b0w=";
+    rev = "3878440d9398515ae053c6f6024986e69868bb74";
+    hash = "sha256-mdAT1jTFeVP8TYi4H36sjd826KmxHQ1EZ+8gd37NGfY=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
@@ -2635,8 +2657,14 @@
   };
 
   tlaplus = rec {
-    # FIXME: remove language override after release is available that includes
+    # FIXME: remove patch after release is available that includes
     # https://github.com/tlaplus-community/tree-sitter-tlaplus/pull/138
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/tlaplus-community/tree-sitter-tlaplus/commit/2d831940c782850f64dabf5b7b17e9e51f7f0ebb.diff";
+        hash = "sha256-ski2aYo25kHXz3T+Z2Coitdywot3tUiEbDY7gH7mTHE=";
+      })
+    ];
     version = "1.5.0";
     url = "github:tlaplus-community/tree-sitter-tlaplus?ref=${version}";
     hash = "sha256-k34gkAd0ueXEAww/Hc1mtBfn0Kp1pIBQtjDZ9GQeB4Q=";
@@ -2831,10 +2859,10 @@
   };
 
   vhdl = {
-    version = "1.3.1-unstable-2026-02-21";
+    version = "1.4.0-unstable-2026-03-29";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "7e0d014691c1b8c25e8fe8f30cc3ac4649df3f57";
-    hash = "sha256-r3fMnexbbIniZA75ZIJ+ay39/JCCb3b3J5F6bYMK4YY=";
+    rev = "497a47c441902030b916f8d5bc6f0f5291f135f3";
+    hash = "sha256-8rkklfXroaaJIFgkB1V82Bhx8QwJmMcGMz72i994ukA=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

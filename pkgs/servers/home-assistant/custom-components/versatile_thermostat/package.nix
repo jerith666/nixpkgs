@@ -10,13 +10,13 @@
 buildHomeAssistantComponent rec {
   owner = "jmcollin78";
   domain = "versatile_thermostat";
-  version = "9.0.3";
+  version = "9.3.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = version;
-    hash = "sha256-nPGxC+U2NeZ6xKNJVsTkiDZ/dMenQq0BPBfGzjVchBo=";
+    hash = "sha256-BdGMF4f6OfG+y6RrN7r7/GjY8OD+4eQM9syuxGI0IiI=";
   };
 
   dependencies = [

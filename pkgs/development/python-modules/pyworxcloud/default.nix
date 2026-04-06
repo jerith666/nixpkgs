@@ -11,16 +11,16 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyworxcloud";
-  version = "6.0.5";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MTrab";
     repo = "pyworxcloud";
-    tag = "v${version}";
-    hash = "sha256-BqRdR202mF+aosAf1GRu8xcMSTkUrgxRVSgHyCg4wjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z2X0Sj+D9OcrL6tkqNo7pS6wqcmskf4IZENins9c+g4=";
   };
 
   pythonRelaxDeps = [ "awsiotsdk" ];
@@ -44,11 +44,11 @@ buildPythonPackage rec {
   meta = {
     description = "Module for integrating with Worx Cloud devices";
     homepage = "https://github.com/MTrab/pyworxcloud";
-    changelog = "https://github.com/MTrab/pyworxcloud/releases/tag/${src.tag}";
+    changelog = "https://github.com/MTrab/pyworxcloud/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

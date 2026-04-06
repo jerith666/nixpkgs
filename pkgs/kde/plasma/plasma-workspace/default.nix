@@ -37,7 +37,18 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
+
+    # stop accidentally duplicating fontconfig configs
+    ./fontconfig.patch
+
     ./kde-lock-screen.patch
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "devtools"
+    "sessions"
   ];
 
   postInstall = ''
@@ -84,6 +95,9 @@ mkKdeDerivation {
   postFixup = ''
     mkdir -p $out/nix-support
     echo "${lsof} ${xmessage} ${xrdb}" > $out/nix-support/depends
+
+    moveToOutput share/xsessions $sessions
+    moveToOutput share/wayland-sessions $sessions
   '';
 
   passthru.providedSessions = [

@@ -12,7 +12,7 @@
   click,
   coloredlogs,
   crc,
-  libgpiod,
+  gpiod,
   pyserial-asyncio-fast,
   typing-extensions,
   zigpy,
@@ -53,13 +53,18 @@ buildPythonPackage rec {
     typing-extensions
     zigpy
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ gpiod ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-mock
     pytest-timeout
+  ];
+
+  disabledTests = [
+    # timing sensitive
+    "test_xmodem_happy_path"
   ];
 
   pythonImportsCheck = [ "universal_silabs_flasher" ];

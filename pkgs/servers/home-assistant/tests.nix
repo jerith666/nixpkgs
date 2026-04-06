@@ -75,6 +75,7 @@ let
     hyperion = getComponentDeps "camera";
     ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     image_processing = getComponentDeps "conversation";
+    intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
@@ -100,6 +101,7 @@ let
       av
     ];
     number = getComponentDeps "conversation";
+    ntfy = getComponentDeps "camera" ++ getComponentDeps "tts";
     octoprint = getComponentDeps "camera";
     ollama = getComponentDeps "ai_task";
     onboarding = getComponentDeps "tts" ++ [
@@ -132,6 +134,7 @@ let
     songpal = [
       isal
     ];
+    sonos = getComponentDeps "frontend";
     swiss_public_transport = getComponentDeps "cookidoo";
     switch = getComponentDeps "camera" ++ getComponentDeps "conversation";
     switch_as_x = getComponentDeps "camera" ++ getComponentDeps "conversation";
@@ -160,10 +163,15 @@ let
     yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
+    zoneminder = getComponentDeps "camera";
     zwave_js = getComponentDeps "frontend";
   };
 
   extraDisabledTestPaths = {
+    hypontech = [
+      # outdated snapshot
+      "tests/components/hypontech/test_sensor.py::test_sensors"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
@@ -195,6 +203,15 @@ let
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    trane = [
+      # TraneConfigFlow doesn't support step reauth
+      "tests/components/trane/test_init.py::test_setup_auth_error"
+    ];
+    tuya = [
+      # entity ordering in diagnostics is non-deterministic; fixed upstream in
+      # https://github.com/home-assistant/core/pull/164819 (landing in HA 2026.4)
+      "tests/components/tuya/test_diagnostics.py"
     ];
     youtube = [
       # outdated snapshot
@@ -228,6 +245,12 @@ let
     shell_command = [
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
+    ];
+    tuya = [
+      # snapshot mismatches: PyPI sdist translations differ from strings.json
+      # ("Power-on behavior" vs "Power on behavior"); expected to resolve in HA 2026.4
+      "test_device_diagnostics[tdq_9htyiowaf5rtdhrv]"
+      "test_platform_setup_and_discovery"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox

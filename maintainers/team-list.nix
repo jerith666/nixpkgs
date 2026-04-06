@@ -295,7 +295,6 @@ with lib.maintainers;
 
   gcc = {
     members = [
-      synthetica
       vcunat
       ericson2314
     ];
@@ -686,6 +685,10 @@ with lib.maintainers;
     scope = "Maintain the R programming language and related packages.";
     shortName = "R";
     enableFeatureFreezePing = true;
+  };
+
+  radicle = {
+    github = "radicle";
   };
 
   rocm = {
