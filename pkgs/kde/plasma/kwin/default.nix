@@ -29,13 +29,6 @@ mkKdeDerivation {
     ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
 
     ./0005-bigger-thumbnails-in-grid-task-switcher.patch
-
-    # backport fix for AMDGPU display corruption
-    # FIXME: remove in next update
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma/kwin/-/commit/bc2efa2f0e848ff0a621377cfe1141294c91b1bf.diff";
-      hash = "sha256-eLrwHCKRgFimUMhIibQPEv5NAOo0GlSxY7TbtIa2/eY=";
-    })
   ];
 
   postPatch = ''
