@@ -332,6 +332,48 @@ rec {
     };
   };
 
+  copilot = buildEclipseUpdateSite rec {
+    pname = "copilot";
+    version = "0.16.0";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://github.com/microsoft/copilot-for-eclipse/releases/download/${version}/GithubCopilotForEclipse.zip";
+      sha256 = "sha256-i+CusKH8GDPMioh52DqWk0LwUFOurWwTEhWq7iIO7RI=";
+    };
+
+    # the copilot plugin includes the 'copilot-language-server' native binary
+    # as well as a few others; this ensures they have their (pretty minimal)
+    # dependencies available from the nix store
+    buildInputs = [
+      # provides libstdc++.so.6 and libgcc_s.so.1
+      (lib.getLib stdenv.cc.cc)
+    ];
+    nativeBuildInputs = [ autoPatchelfHook ];
+
+    # we must extract the plugin jar files containing the above-mentioned
+    # native binaries, so that autoPatchelfHook can find and patch them.
+    # (eclipse is able to work with extracted plugins as well as jar files.)
+    postInstall = ''
+      pluginDir="$out/eclipse/dropins/$name/plugins"
+
+      for pluginJar in "$pluginDir"/*.jar; do
+        pluginDirName=''${pluginJar%.jar}
+        mkdir -p "$pluginDirName"
+        echo unzipping "$pluginJar" to "$pluginDirName"
+        unzip -q "$pluginJar" -d "$pluginDirName"
+        rm "$pluginJar"
+      done
+    '';
+
+    meta = {
+      homepage = "https://github.com/microsoft/copilot-for-eclipse/";
+      description = "GitHub Copilot plugin for Eclipse";
+      license = lib.licenses.mit;
+      platforms = lib.platforms.all;
+    };
+  };
+
   cup = buildEclipsePlugin rec {
     pname = "cup";
     version = "1.1.0.201604221613";
