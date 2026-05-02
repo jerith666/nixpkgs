@@ -2665,6 +2665,13 @@ in
           (lib.concatMap lib.attrValues)
           (lib.concatMap lib.attrValues)
           (lib.filter (rule: rule.enable))
+          (lib.filter (
+            rule:
+            !builtins.elem rule.control [
+              "include"
+              "substack"
+            ]
+          ))
           (lib.catAttrs "modulePath")
           (map (
             modulePath:
