@@ -2001,9 +2001,9 @@
   };
 
   plank = {
-    version = "0.1.0";
+    version = "0.1.1";
     url = "github:plankevm/plank-monorepo";
-    hash = "sha256-B2UmV5i2ELlmzyrR8iFIOQcSpHeRQl4I6lxakMskolg=";
+    hash = "sha256-4r/hYPlVIKzq1/50mivs6CJjObAS5Iq1inwRe1bFlzE=";
     location = "plank-tree-sitter";
     meta = {
       license = lib.licenses.mit;
@@ -2237,9 +2237,9 @@
   };
 
   regex = {
-    version = "0.25.0";
+    version = "1.0.0";
     url = "github:tree-sitter/tree-sitter-regex";
-    hash = "sha256-bR0K6SR19QuQwDUic+CJ69VQTSGqry5a5IOpPTVJFlo=";
+    hash = "sha256-3D+LOWRUamAdbegVfWD5yFcCjBucthPogOL/zWR78PY=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2256,10 +2256,10 @@
   };
 
   rescript = {
-    version = "6.0.0-unstable-2026-04-26";
+    version = "0-unstable-2026-05-02";
     url = "github:rescript-lang/tree-sitter-rescript";
-    rev = "5b90cd4e4138b1231a67977303bda47eb608480a";
-    hash = "sha256-f5/z566/Ez8+jzQSXoWkEK3LJGYjWupQw+BFPDyOxsE=";
+    rev = "5c71bebe716dc89ca84b816f9646456dd85666cc";
+    hash = "sha256-45wPsR0ipBrd6R6SbL65EpIadAG0alQHzIXZhKJ9BkA=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

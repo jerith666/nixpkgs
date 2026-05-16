@@ -287,6 +287,7 @@
   ./programs/noisetorch.nix
   ./programs/npm.nix
   ./programs/ns-usbloader.nix
+  ./programs/nxdumpclient.nix
   ./programs/oblogout.nix
   ./programs/obs-studio.nix
   ./programs/oddjobd.nix
@@ -296,7 +297,6 @@
   ./programs/pay-respects.nix
   ./programs/plotinus.nix
   ./programs/pmount.nix
-  ./programs/pqos-wrapper.nix
   ./programs/projecteur.nix
   ./programs/proxychains.nix
   ./programs/pulseview.nix
@@ -689,6 +689,7 @@
   ./services/hardware/lcd.nix
   ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
+  ./services/hardware/logiops.nix
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/nvidia-optimus.nix
@@ -1120,7 +1121,6 @@
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/webdav-server-rs.nix
   ./services/network-filesystems/webdav.nix
-  ./services/network-filesystems/xtreemfs.nix
   ./services/network-filesystems/yandex-disk.nix
   ./services/networking/3proxy.nix
   ./services/networking/acme-dns.nix
@@ -1772,6 +1772,7 @@
   ./services/web-apps/rimgo.nix
   ./services/web-apps/rss-bridge.nix
   ./services/web-apps/rsshub.nix
+  ./services/web-apps/rustical.nix
   ./services/web-apps/rutorrent.nix
   ./services/web-apps/screego.nix
   ./services/web-apps/selfoss.nix

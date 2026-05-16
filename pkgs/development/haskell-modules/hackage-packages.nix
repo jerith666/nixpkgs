@@ -12647,7 +12647,6 @@ self: {
        librarySystemDepends = [ ftgl ];
        description = "Portable TrueType font rendering for OpenGL using the Freetype2 library";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) ftgl; };
 
@@ -39157,7 +39156,6 @@ self: {
        librarySystemDepends = [ SDL_mixer ];
        description = "Binding to libSDL_mixer";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) SDL_mixer; };
 
@@ -39180,7 +39178,6 @@ self: {
        librarySystemDepends = [ smpeg ];
        description = "Binding to the SMPEG library";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) smpeg; };
 
@@ -46378,8 +46375,7 @@ self: {
        badPlatforms = [
         "i686-linux"
         "armv7l-linux"
-      ]
-      ++ lib.platforms.darwin;
+      ];
     }
   ) { };
 
@@ -106984,7 +106980,6 @@ self: {
        libraryPkgconfigDepends = [ sane-backends ];
        description = "FFI bindings to libsane";
        license = lib.licenses.lgpl3Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) sane-backends; };
 
@@ -168010,7 +168005,6 @@ self: {
       ];
        description = "Binding for the cpuid machine instruction on x86 compatible processors";
       license = lib.meta.getLicenseFromSpdxId "GPL-2.0-only";
-       platforms = lib.platforms.x86;
     }
   ) { };
 
@@ -168090,7 +168084,6 @@ self: {
        testPkgconfigDepends = [ python3 ];
        description = "Bindings for libpython";
        license = lib.licenses.gpl3Only;
-       platforms = lib.platforms.x86;
        maintainers = [ lib.maintainers.sheepforce ];
     }
   ) { inherit (pkgs) python3; };
@@ -169368,7 +169361,6 @@ self: {
        ];
        description = "crc32c";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-       platforms = lib.platforms.x86;
     }
   ) { };
 
@@ -268293,7 +268285,6 @@ self: {
       sha256 = "081w3234jramsmafnl86v37lwbckr2vc93gr9pdwc31yzni9kbml";
        description = "base library for GHCJS";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-       platforms = [ "javascript-ghcjs" ];
        maintainers = [ lib.maintainers.alexfmpe ];
     }
   ) { };
@@ -268425,7 +268416,6 @@ self: {
        sha256 = "1k62w5czg544ias8q2kvhp8qnlafzisgx1p0gq8d2kh662w99kcg";
        description = "DOM library using JSFFI and GHCJS";
       license = lib.meta.getLicenseFromSpdxId "MIT";
-       platforms = [ "javascript-ghcjs" ];
        maintainers = [ lib.maintainers.alexfmpe ];
     }
   ) { };
@@ -269237,7 +269227,6 @@ self: {
        libraryPkgconfigDepends = [ libadwaita ];
        description = "Adwaita bindings";
        license = lib.licenses.lgpl21Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) libadwaita; };
 
@@ -269730,7 +269719,6 @@ self: {
        libraryPkgconfigDepends = [ libdbusmenu ];
        description = "Dbusmenu bindings";
        license = lib.licenses.lgpl21Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) libdbusmenu; };
 
@@ -269797,7 +269785,6 @@ self: {
        ];
        description = "DbusmenuGtk bindings";
        license = lib.licenses.lgpl21Only;
-       badPlatforms = lib.platforms.darwin;
         }
       )
       {
@@ -270279,7 +270266,6 @@ self: {
        libraryPkgconfigDepends = [ libgit2-glib ];
        description = "libgit2-glib bindings";
        license = lib.licenses.lgpl21Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) libgit2-glib; };
 
@@ -272720,7 +272706,6 @@ self: {
       libraryPkgconfigDepends = [ vte ];
        description = "Vte bindings";
        license = lib.licenses.lgpl21Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) vte; };
 
@@ -277451,7 +277436,6 @@ self: {
        librarySystemDepends = [ libGL ];
        description = "Complete OpenGL raw bindings";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) libGL; };
 
@@ -280411,7 +280395,6 @@ self: {
        libraryToolDepends = [ c2hs ];
        description = "Bindings for libgnome-keyring";
        license = lib.licenses.gpl3Only;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) libgnome-keyring; };
 
@@ -289742,7 +289725,6 @@ self: {
        description = "Game engine for Prototyping on a Grid";
        license = lib.licenses.bsd3;
        badPlatforms = lib.platforms.darwin;
-       hydraPlatforms = lib.platforms.none;
     }
   ) { };
 
@@ -293638,7 +293620,6 @@ self: {
        ];
        description = "Raylib bindings for Haskell";
           license = lib.meta.getLicenseFromSpdxId "Apache-2.0";
-       badPlatforms = lib.platforms.darwin;
         }
       )
       {
@@ -426727,7 +426708,6 @@ self: {
        librarySystemDepends = [ modbus ];
        description = "Haskell bindings to the C modbus library";
        license = lib.licenses.bsd2;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { modbus = null; };
 
@@ -461408,7 +461388,6 @@ self: {
        isExecutable = true;
       description = "A tasty Haskell front-end web framework";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-      platforms = [ "javascript-ghcjs" ];
     }
   ) { };
 
@@ -472639,7 +472618,7 @@ self: {
        testPkgconfigDepends = [ ompi ];
        description = "MPI bindings for Haskell";
        license = lib.licenses.asl20;
-       badPlatforms = [ "aarch64-linux" ] ++ lib.platforms.darwin;
+      badPlatforms = [ "aarch64-linux" ];
        maintainers = [ lib.maintainers.sheepforce ];
     }
   ) { ompi = null; };
@@ -472673,7 +472652,7 @@ self: {
        testHaskellDepends = [ base ];
        description = "MPI bindings for Haskell";
        license = lib.licenses.asl20;
-       badPlatforms = [ "aarch64-linux" ] ++ lib.platforms.darwin;
+      badPlatforms = [ "aarch64-linux" ];
        maintainers = [ lib.maintainers.sheepforce ];
     }
   ) { };
@@ -472707,7 +472686,7 @@ self: {
        testHaskellDepends = [ base ];
        description = "MPI bindings for Haskell";
        license = lib.licenses.asl20;
-       badPlatforms = [ "aarch64-linux" ] ++ lib.platforms.darwin;
+      badPlatforms = [ "aarch64-linux" ];
        maintainers = [ lib.maintainers.sheepforce ];
     }
   ) { };
@@ -494179,7 +494158,6 @@ self: {
         tuple
        ];
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
        hydraPlatforms = lib.platforms.none;
        mainProgram = "notifications-tray-icon";
        broken = true;
@@ -512384,7 +512362,6 @@ self: {
        libraryToolDepends = [ c2hs ];
        description = "Haskell binding for C PAM API";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) pam; };
 
@@ -596281,7 +596258,6 @@ self: {
        libraryToolDepends = [ c2hs ];
        description = "Bindings to librtlsdr";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
     }
   ) { inherit (pkgs) rtl-sdr; };
 
@@ -607047,9 +607023,6 @@ self: {
        executablePkgconfigDepends = [ SDL2_mixer ];
        description = "Haskell bindings to SDL2_mixer";
       license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
-       badPlatforms = lib.platforms.darwin;
-       hydraPlatforms = lib.platforms.none;
-       broken = true;
     }
   ) { inherit (pkgs) SDL2_mixer; };
 
@@ -607127,7 +607100,6 @@ self: {
           ];
        description = "Bindings to SDL2_ttf";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
         }
       )
       {
@@ -609928,7 +609900,6 @@ self: {
        testToolDepends = [ hspec-discover ];
        description = "Automatically run Hspec tests on file modifications";
        license = lib.licenses.mit;
-       badPlatforms = lib.platforms.darwin;
        maintainers = [ lib.maintainers.libjared ];
     }
   ) { };
@@ -642408,7 +642379,6 @@ self: {
        description = "A simple programming and debugging environment";
       license = lib.meta.getLicenseFromSpdxId "GPL-3.0-only";
        badPlatforms = lib.platforms.darwin;
-       hydraPlatforms = lib.platforms.none;
        mainProgram = "spade";
     }
   ) { };
@@ -734321,7 +734291,6 @@ self: {
           ];
        description = "Bindings to VRPN";
        license = lib.licenses.mit;
-       badPlatforms = lib.platforms.darwin;
        mainProgram = "test-vrpn";
         }
       )
@@ -734988,8 +734957,7 @@ self: {
        badPlatforms = [
         "i686-linux"
         "armv7l-linux"
-      ]
-      ++ lib.platforms.darwin;
+      ];
     }
   ) { inherit (pkgs) vulkan-loader; };
 
@@ -735063,9 +735031,6 @@ self: {
        ];
        description = "Utils for the vulkan package";
        license = lib.licenses.bsd3;
-       badPlatforms = lib.platforms.darwin;
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
@@ -754994,11 +754959,8 @@ self: {
        badPlatforms = [
         "aarch64-linux"
         "armv7l-linux"
-      ]
-      ++ lib.platforms.darwin;
-      hydraPlatforms = lib.platforms.none;
+      ];
        mainProgram = "xgb-agaricus";
-      broken = true;
     }
   ) { inherit (pkgs) xgboost; };
 
