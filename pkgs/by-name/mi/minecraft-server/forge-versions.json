@@ -1,0 +1,26 @@
+{
+    "26.1": {
+        "version": "26.1.2-64.0.8",
+        "installerJarHash": "1xh8z565ph2by9vza01jnf1n77h9sps4skzhinv80977vfkx1s3z",
+        "installerResultHash": "sha256-UF/RN5yu0veKf0SU3gsxI987YzfeaHAsmI79M1T8hvU=",
+        "javaVersion": 17
+    },
+    "1.21": {
+        "version": "1.21.11-61.1.8",
+        "installerJarHash": "1wcaakirjflxmy750c7akpsqr8qh8rbvi047accxcrn6fywqmyva",
+        "installerResultHash": "sha256-pAioagBXjuNlhwwIwY03uYkDdUlfT9Gp/m2Yf0FIj3U=",
+        "javaVersion": 17
+    },
+    "1.20": {
+        "version": "1.20.6-50.2.8",
+        "installerJarHash": "0r4vxhcfrbph4h9h8mgrvad3bia9ijvw8bnypvqq9g9ibw0x1r37",
+        "installerResultHash": "sha256-GWLrH/9wIwG3HoVpkpqSuQtZGPxq1bfDgMrzRtFUUb0=",
+        "javaVersion": 17
+    },
+    "1.19": {
+        "version": "1.19.4-45.4.3",
+        "installerJarHash": "0fm5fk69qg493a50wx2hk7s6gwkmk430wpfcfk6xlbpfxqrgahsw",
+        "installerResultHash": "sha256-LBHnBpQ+AkOPNDTmENX0Vq0pzN07/4HTXD+QgFyvz1M=",
+        "javaVersion": 17
+    }
+}
