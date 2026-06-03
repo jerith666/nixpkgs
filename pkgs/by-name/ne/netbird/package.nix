@@ -14,6 +14,7 @@
   libxxf86vm,
   versionCheckHook,
   netbird-management,
+  netbird-proxy,
   netbird-relay,
   netbird-signal,
   netbird-ui,
@@ -62,18 +63,23 @@ let
       binaryName = "netbird-relay";
       license = lib.licenses.agpl3Only;
     };
+    proxy = {
+      module = "proxy/cmd/proxy";
+      binaryName = "netbird-proxy";
+      license = lib.licenses.agpl3Only;
+    };
   };
   component = availableComponents.${componentName};
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.71.3";
+  version = "0.71.4";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1doOf/rgGbD/YtMY0+j1VM7933zR+G+Vyq6bF5fyuMg=";
+    hash = "sha256-e/fe4wEjz7apA5RZ4nGIaunp0+5NVH4yMHK/l/MfcWI=";
   };
 
   vendorHash = "sha256-NeZuj9o2yu5di+6jbNqCnAw0fI55GA5Otmr77c08QFc=";
@@ -93,7 +99,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/netbirdio/netbird/version.version=${finalAttrs.version}"
+    "-X github.com/netbirdio/netbird/version.version=v${finalAttrs.version}"
     "-X main.builtBy=nix"
   ];
 
@@ -149,6 +155,7 @@ buildGoModule (finalAttrs: {
         netbird-signal
         netbird-ui
         netbird-upload
+        netbird-proxy
         ;
     };
     updateScript = nix-update-script { };

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.5.3";
+  version = "2026.5.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -868,7 +868,7 @@
       ];
     "caldav" =
       ps: with ps; [
-        caldav
+        caldav_2
         icalendar
         vobject
       ];

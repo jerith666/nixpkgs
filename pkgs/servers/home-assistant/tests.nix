@@ -5,11 +5,11 @@
 }:
 
 let
-  getComponentDeps = component: home-assistant.getPackages component home-assistant.python.pkgs;
+  getComponentDeps = component: home-assistant.getPackages component home-assistant.python3Packages;
   inherit (lib) concatMap;
 
   # some components' tests have additional dependencies
-  extraCheckInputs = with home-assistant.python.pkgs; {
+  extraCheckInputs = with home-assistant.python3Packages; {
     alexa = concatMap getComponentDeps [
       "cloud"
       "frontend"
@@ -142,6 +142,11 @@ let
       # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.honeywell_string_lights.config.abort.no_compatible_transmitters"
       "test_no_compatible_transmitters"
     ];
+    lutron_caseta = [
+      # [2026.5.4] creates binary_sensor.basement_bedroom_left_shade_battery
+      #            expects binary_sensor.basement_bedroom_basement_bedroom_left_shade_battery
+      "test_battery_sensor_handles_bridge_response_error"
+    ];
     novy_cooker_hood = [
       # [2026.5.2] Failed: Description not found for placeholder `modulation` in component.novy_cooker_hood.config.abort.no_compatible_transmitters
       "test_no_compatible_transmitters"
@@ -180,7 +185,7 @@ lib.listToAttrs (
 
         nativeCheckInputs =
           old.requirementsTest
-          ++ home-assistant.getPackages component home-assistant.python.pkgs
+          ++ home-assistant.getPackages component home-assistant.python3Packages
           ++ extraCheckInputs.${component} or [ ];
 
         disabledTests = extraDisabledTests.${component} or [ ];
