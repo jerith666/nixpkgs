@@ -1805,6 +1805,55 @@ with haskellLib;
   #   https://github.com/noinia/hgeometry/commit/a6abecb1ce4a7fd96b25cc1a5c65cd4257ecde7a#commitcomment-49282301
   hgeometry-combinatorial = dontCheck (doJailbreak super.hgeometry-combinatorial);
 
+  language-ecmascript = appendPatches (map
+    (
+      { rev, hash }:
+      fetchpatch {
+        name = "language-ecmascript-${lib.substring 0 7 rev}.patch";
+        url = "https://github.com/jswebtools/language-ecmascript/commit/${rev}.patch";
+        inherit hash;
+      }
+    )
+    [
+      # https://github.com/jswebtools/language-ecmascript/pull/90
+      # adds support for GHC 9.6
+      {
+        rev = "bd39c6fd0f1e5adeb3ac5ae4b4d94c15617c7a44";
+        hash = "sha256-9H2Jlv9rTkgjLUiBOUQA+jWvhFHK0+cR3hbHxiIjie4=";
+      }
+      {
+        rev = "f9be061ff7fde939081283c57cee8b0b37d5462a";
+        hash = "sha256-3Wyw5xz5W2Bt5JBYXfqB+JcwEBQ1oYIUzxZLtVybTIw=";
+      }
+      {
+        rev = "b945b33e957d3ba51608be0b05fe53d65fcf4667";
+        hash = "sha256-bnUc4sILdyIbgXVieKam+VAvlXAk7F/YSPdz4YlwR68=";
+      }
+      {
+        rev = "419df9dd1e9c80b63b664ab40e4228737f79e48e";
+        hash = "sha256-qIvBaYuqSF7tIRDMiP8nco7XAtIEnD7Yc1CE5kxRWoY=";
+      }
+      {
+        rev = "089a6b0ea90f6eb5a428829fa1ee944f97258ac5";
+        hash = "sha256-0DJb6mdvQvQ3XGewD6dGD1kwNpKCkMdQpo9SdJRLRoo=";
+      }
+      {
+        rev = "3bd43dbe781934ebb69d01b48ccdf52d953cf37f";
+        hash = "sha256-N6MrWhbI8tT/a0WAEM96cCIvu7VxfexRcq7sBTTB8bY=";
+      }
+      # https://github.com/jswebtools/language-ecmascript/pull/93
+      # adds support for GHC 9.8
+      {
+        rev = "a8afb9046c0a235ad9130c7ecb0497d07d133267";
+        hash = "sha256-HtD2AUEZKFf+pN15vOQYnGIvbGg/HLfY1z0THx125Cs=";
+      }
+      {
+        rev = "13094125fe9029cf235edfe28078ab78c3fcb134";
+        hash = "sha256-GaZg1PoZxmRKbPSSNCdJDOUZyrtsy9PcXrdnL9Ohk8o=";
+      }
+    ]
+  ) (doJailbreak super.language-ecmascript);
+
   cli-git = addBuildTool pkgs.git super.cli-git;
 
   cli-nix = addBuildTools [
