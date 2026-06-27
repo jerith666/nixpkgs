@@ -4,6 +4,7 @@
   pkgs,
   stdenv,
   config,
+  nix-update-script,
 }:
 
 let
@@ -45,6 +46,8 @@ let
 
             strictDeps = true;
             __structuredAttrs = true;
+
+            passthru.updateScript = nix-update-script { };
 
             inherit
               pluginName
@@ -235,12 +238,12 @@ in
 
   dracula = mkTmuxPlugin rec {
     pluginName = "dracula";
-    version = "3.2.0";
+    version = "3.3.0";
     src = fetchFromGitHub {
       owner = "dracula";
       repo = "tmux";
       tag = "v${version}";
-      hash = "sha256-emR4G1P80OqxDO4DUrAd495SGLI+avpjpOYUYuoSoNU=";
+      hash = "sha256-KHvBT8HjFZFwnpbWjW3LzXWUNOGbDgZTPncYvtIliD0=";
     };
     meta = {
       homepage = "https://draculatheme.com/tmux";
@@ -521,7 +524,7 @@ in
     rtpFilePath = "minimal.tmux";
     version = "0-unstable-2025-06-04";
     src = fetchFromGitHub {
-      owner = "niksingh710";
+      owner = "semi710";
       repo = "minimal-tmux-status";
       rev = "de2bb049a743e0f05c08531a0461f7f81da0fc72";
       hash = "sha256-0gXtFVan+Urb79AjFOjHdjl3Q73m8M3wFSo3ZhjxcBA=";
@@ -534,10 +537,10 @@ in
         quickly identify the prefix state. Designed to be minimal in appearance and dependencies, it is ideal for users
         who want essential information without clutter.
       '';
-      homepage = "https://github.com/niksingh710/minimal-tmux-status.git";
+      homepage = "https://github.com/semi710/minimal-tmux-status.git";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
-        niksingh710
+        semi710
       ];
       platforms = lib.platforms.unix;
     };

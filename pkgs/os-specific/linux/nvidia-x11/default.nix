@@ -71,12 +71,12 @@ rec {
   bleeding_edge = selectHighestVersion latest beta;
 
   production = generic {
-    version = "595.80";
-    sha256_64bit = "sha256-PVTIP+B/01c/8M66hXTAYTLg9T2Hy9u1gq43K7TF1Hg=";
-    sha256_aarch64 = "sha256-62uqbRsF+dizUqvXhBfmVFeV2gg4BH6f7kOta+uMMuk=";
-    openSha256 = "sha256-nonwYYPItHeMC/5Ox/TlWhjiddMPu4PLqNhgIg+bfW8=";
-    settingsSha256 = "sha256-AtzYTz7kbmj3vxmBQTC0eAjM3b2I259y1tdxq90n9YU=";
-    persistencedSha256 = "sha256-WL57kKFWeRW0oPktp6afkUb5Om9MCGAvKWctk5yiyIA=";
+    version = "595.84";
+    sha256_64bit = "sha256-mcQE5SExvye8ptoCaNzOPr7cenOrF0BxqZXPGmxeugY=";
+    sha256_aarch64 = "sha256-GloNdDFfmXFVu4FAlNNk2qzqLOuw2N5CKatKkcSrQxk=";
+    openSha256 = "sha256-pEmA2tUcOKwUPKy6N0QvS49Pdut4/7Phs/JhjdyBcNY=";
+    settingsSha256 = "sha256-QrnBM+sdWO4GanO62rxpHmRrjYkYpl5RD6fIiHq4C4A=";
+    persistencedSha256 = "sha256-50xYdgx7EEThbaMp4QS8GADbxj0mhBXh8QQN0tWMwRg=";
   };
 
   new_feature = generic {
@@ -180,8 +180,8 @@ rec {
       # Source corresponding to https://aur.archlinux.org/packages/nvidia-470xx-dkms
       aurPatches = fetchgit {
         url = "https://aur.archlinux.org/nvidia-470xx-utils.git";
-        rev = "7c1c2c124147d960a6c7114eb26a4eadae9b9f3d";
-        hash = "sha256-sNW+I4dkPSudfORLEp1RNGHyQKWBYnBEeGrfJU7SYTs=";
+        rev = "7abbeeb510742be09e1eb806c14bab2833a25783";
+        hash = "sha256-hRBws0o4DWI5fvZRn0OwitXRSR9HCkRkgnvnkiZI6Ko=";
       };
     in
     generic {
@@ -202,6 +202,9 @@ rec {
         "nvidia-470xx-fix-linux-6.14.patch"
         "nvidia-470xx-fix-linux-6.15.patch"
         "nvidia-470xx-fix-linux-6.17.patch"
+        "nvidia-470xx-fix-linux-6.19-part1.patch"
+        "nvidia-470xx-fix-linux-6.19-part2.patch"
+        "nvidia-470xx-fix-linux-7.0.patch"
       ];
       patchFlags = [
         "-p1"

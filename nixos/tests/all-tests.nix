@@ -330,8 +330,16 @@ in
   };
   castopod = runTest ./castopod.nix;
   centrifugo = runTest ./centrifugo.nix;
-  ceph-multi-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-multi-node.nix;
-  ceph-single-node = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./ceph-single-node.nix;
+  ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
+    import ./ceph-multi-node-bluestore.nix { }
+  );
+  ceph-multi-node-bluestore-cephfs = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
+    import ./ceph-multi-node-bluestore.nix { withCephfs = true; }
+  );
+  ceph-multi-node-deprecated-filestore = runTestOn [
+    "aarch64-linux"
+    "x86_64-linux"
+  ] ./ceph-multi-node-deprecated-filestore.nix;
   ceph-single-node-bluestore = runTestOn [
     "aarch64-linux"
     "x86_64-linux"
@@ -340,6 +348,10 @@ in
     "aarch64-linux"
     "x86_64-linux"
   ] ./ceph-single-node-bluestore-dmcrypt.nix;
+  ceph-single-node-deprecated-filestore = runTestOn [
+    "aarch64-linux"
+    "x86_64-linux"
+  ] ./ceph-single-node-deprecated-filestore.nix;
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
@@ -364,6 +376,7 @@ in
   };
   cloud-init = runTest ./cloud-init.nix;
   cloud-init-hostname = runTest ./cloud-init-hostname.nix;
+  cloudcompare = import ./cloudcompare.nix { inherit pkgs runTest; };
   cloudlog = runTest ./cloudlog.nix;
   cntr = import ./cntr.nix {
     inherit (pkgs) lib;
@@ -408,25 +421,25 @@ in
   corerad = runTest ./corerad.nix;
   corteza = runTest ./corteza.nix;
   cosmic = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic";
     _module.args.enableAutologin = false;
     _module.args.enableXWayland = true;
   };
   cosmic-autologin = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-autologin";
     _module.args.enableAutologin = true;
     _module.args.enableXWayland = true;
   };
   cosmic-autologin-noxwayland = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-autologin-noxwayland";
     _module.args.enableAutologin = true;
     _module.args.enableXWayland = false;
   };
   cosmic-noxwayland = runTest {
-    imports = [ ./cosmic.nix ];
+    imports = [ ./cosmic ];
     _module.args.testName = "cosmic-noxwayland";
     _module.args.enableAutologin = false;
     _module.args.enableXWayland = false;
@@ -495,7 +508,7 @@ in
   drupal = runTest ./drupal.nix;
   dublin-traceroute = runTest ./dublin-traceroute.nix;
   dwl = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./dwl.nix;
-  e57inspector = runTest ./e57inspector.nix;
+  e57inspector = import ./e57inspector.nix { inherit pkgs runTest; };
   early-mount-options = runTest ./early-mount-options.nix;
   earlyoom.basic = runTestOn ["x86_64-linux"] ./earlyoom/basic.nix;
   earlyoom.notify-dbus = runTestOn ["x86_64-linux"] {
@@ -760,6 +773,7 @@ in
   hitch = handleTest ./hitch { };
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
+  holo-daemon-modular-service = runTest ./holo-daemon-modular.nix;
   home-assistant = runTest ./home-assistant.nix;
   homebox = runTest ./homebox.nix;
   homebridge = runTest ./homebridge.nix;
@@ -853,7 +867,7 @@ in
   kbd-setfont-decompress = runTest ./kbd-setfont-decompress.nix;
   kbd-update-search-paths-patch = runTest ./kbd-update-search-paths-patch.nix;
   kea = runTest ./kea.nix;
-  keepalived = runTest ./keepalived.nix;
+  keepalived = discoverTests (import ./keepalived.nix);
   keepassxc = runTest ./keepassxc.nix;
   kerberos = handleTest ./kerberos/default.nix { };
   kernel-generic = handleTest ./kernel-generic { };
@@ -935,6 +949,7 @@ in
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  login-nosuid = runTest ./login-nosuid.nix;
   logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
@@ -1056,6 +1071,7 @@ in
   mysql-autobackup = handleTest ./mysql/mysql-autobackup.nix { };
   mysql-backup = handleTest ./mysql/mysql-backup.nix { };
   mysql-replication = handleTest ./mysql/mysql-replication.nix { };
+  mysql-secure-root = handleTest ./mysql/mysql-secure-root.nix { };
   n8n = runTest ./n8n.nix;
   nagios = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./nagios.nix;
   nar-serve = runTest ./nar-serve.nix;
@@ -1107,6 +1123,7 @@ in
   nextflow = runTestOn [ "x86_64-linux" ] ./nextflow.nix;
   nextjs-ollama-llm-ui = runTest ./web-apps/nextjs-ollama-llm-ui.nix;
   nexus = runTest ./nexus.nix;
+  nezha = runTest ./nezha.nix;
   # TODO: Test nfsv3 + Kerberos
   nfs3 = handleTest ./nfs { version = 3; };
   nfs4 = handleTest ./nfs { version = 4; };
@@ -1335,7 +1352,7 @@ in
   pixelfed = import ./web-apps/pixelfed { inherit runTestOn; };
   plantuml-server = runTest ./plantuml-server.nix;
   plasma6 = runTest ./plasma6.nix;
-  plausible = runTest ./plausible.nix;
+  plausible = import ./plausible.nix { inherit runTest; };
   playwright-python = runTest ./playwright-python.nix;
   please = runTest ./please.nix;
   pleroma = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./pleroma.nix { };
@@ -1573,6 +1590,7 @@ in
   strichliste = runTest ./web-apps/strichliste.nix;
   strongswan-swanctl = runTest ./strongswan-swanctl.nix;
   stub-ld = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./stub-ld.nix { };
+  stump = runTest ./web-apps/stump.nix;
   stunnel = import ./stunnel.nix { inherit runTest; };
   sudo = runTest ./sudo.nix;
   sudo-rs = runTest ./sudo-rs.nix;
@@ -1637,6 +1655,7 @@ in
     "i686-linux"
   ] ./initrd-network-openvpn { systemdStage1 = true; };
   systemd-initrd-networkd-ssh = runTest ./systemd-initrd-networkd-ssh.nix;
+  systemd-initrd-non-nixos = runTest ./systemd-initrd-non-nixos.nix;
   systemd-initrd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];
     _module.args.systemdStage1 = true;
@@ -1761,6 +1780,7 @@ in
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
   unit-php = runTest ./web-servers/unit-php.nix;
+  unpackerr = runTest ./unpackerr.nix;
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = runTest ./uptermd.nix;
