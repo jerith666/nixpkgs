@@ -3,8 +3,9 @@
   makeBinaryWrapper,
   removeReferencesTo,
   srcOnly,
+  fetchpatch,
   python3,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -22,21 +23,21 @@ let
   nodejs = nodejs_24;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pds";
-  version = "0.4.5006";
+  version = "0.4.5009";
 
   src = fetchFromGitHub {
     owner = "bluesky-social";
     repo = "pds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jb2qAB6P5KlRu4L99fcK/v0/Fspr8IFaFXuYg+PBxhM=";
+    hash = "sha256-3IEbVn7ThiVL7E2fXMHzsRSLT7Tm1eiX8bPQ88rJCvs=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/service";
+  # sourceRoot = "${finalAttrs.src.name}/service";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -54,14 +55,22 @@ stdenv.mkDerivation (finalAttrs: {
   # Required for `sharp` npm dependency
   buildInputs = [ vips ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/bluesky-social/pds/commit/c8b38f49498da1f5f040ae0dbe4461ef8561912b.patch";
+      hash = "sha256-QdyxjmZKyXzy2zruYA8EE03mNUtnuKiWp08FqBNC/KQ=";
+    })
+  ];
+
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      sourceRoot
+      # sourceRoot
       ;
     inherit pnpm;
+    sourceRoot = "${finalAttrs.src.name}/service";
     fetcherVersion = 4;
     hash = "sha256-YfwoUkTJJ2qANqwtSWKDGfFmahAtIDNyYFwCUE72oB0=";
   };
