@@ -5895,12 +5895,12 @@ with self;
 
     preConfigure = ''
       cat > config.in <<EOF
-        BUILD_ZLIB   = False
+        BUILD_ZLIB    = False
         ZLIB_INCLUDE  = ${pkgs.zlib.dev}/include
         ZLIB_LIB      = ${pkgs.zlib.out}/lib
-        OLD_ZLIB     = False
-        GZIP_OS_CODE = AUTO_DETECT
-        USE_ZLIB_NG  = False
+        OLD_ZLIB      = False
+        GZIP_OS_CODE  = AUTO_DETECT
+        USE_ZLIB_NG   = False
       EOF
     '';
 
