@@ -26,7 +26,7 @@ let
         recurseForDerivations = false;
       };
 
-      metaFetch = import ../build-support/coq/meta-fetch/default.nix {
+      metaFetch = import ../build-support/rocq/meta-fetch/default.nix {
         inherit
           lib
           stdenv
@@ -62,6 +62,7 @@ let
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
+      rocqnavi = callPackage ../development/rocq-modules/rocqnavi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
       stdpp = callPackage ../development/rocq-modules/stdpp { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };

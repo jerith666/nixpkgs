@@ -33,13 +33,13 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "scantpaper";
-  version = "3.0.9";
+  version = "3.0.11";
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
     tag = "v${version}";
-    hash = "sha256-4YHC77Hgvl2A15klilJx0JdP9VWSpqBSj9q//faMNM8=";
+    hash = "sha256-6zjIEwDHdOIAIucV4T/zY10F80nQNOgnRkA+i2n7Sng=";
   };
 
   pyproject = true;
@@ -103,6 +103,16 @@ python3.pkgs.buildPythonApplication rec {
     ":"
     (lib.makeBinPath runtimeExecDeps)
   ];
+
+  postInstall = ''
+    install -Dm644 \
+      icons/hicolor/scalable/apps/scantpaper.svg \
+      $out/share/icons/hicolor/scalable/apps/scantpaper.svg
+
+    install -Dm444 \
+      org.scantpaper.desktop \
+      $out/share/applications/org.scantpaper.desktop
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/carygravel/scantpaper/blob/${src.tag}/changelog.md";

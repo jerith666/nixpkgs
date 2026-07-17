@@ -85,8 +85,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # version 2 breaks dataset and thus androguard
-      sqlalchemy = prev.sqlalchemy_1_4;
       # version 4 or newer would log the following error but tests currently don't fail because radare2 is disabled
       # ValueError: argument TNULL is not a TLSH hex string
       tlsh = prev.tlsh.overridePythonAttrs (
@@ -109,12 +107,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "322";
+  version = "324";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-dina2JdbLL/jfo4eMuUo62KggST95w0b7oonY86zjgk=";
+    hash = "sha256-+OsGilo9bgNWbg/Jl6/CGAdLXlA8fzfh4HrIN1VMxOE=";
   };
 
   outputs = [
@@ -124,10 +122,6 @@ python.pkgs.buildPythonApplication rec {
 
   patches = [
     ./ignore_links.patch
-    # Remove flags output from an OCaml test's diff, as it's Debian-specific
-    ./remove-flags-from-ocaml-diff.patch
-    # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/166
-    ./fix-tests-with-zipdetails-4.006.patch
   ];
 
   postPatch = ''

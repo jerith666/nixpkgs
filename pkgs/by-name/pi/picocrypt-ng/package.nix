@@ -12,23 +12,24 @@
   pkg-config,
   wrapGAppsHook3,
   writableTmpDirAsHomeHook,
+  llvmPackages,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "picocrypt-ng";
-  version = "2.17";
+  version = "2.18";
 
   src = fetchFromGitHub {
     owner = "Picocrypt-NG";
     repo = "Picocrypt-NG";
     # Rewritten git history many times
-    rev = "424db6105588e9fe6b929b6731ace4556a12f172";
-    hash = "sha256-Bj0LK6si1ocGriRJf5GHZ/Z2xVhtyCIiv7H5+h8Dong=";
+    rev = "3261587f8b10471a6ed3c5ad132ada0f7c06e4cf";
+    hash = "sha256-wjoYh6XWV4lJpSr9GQwPnlKGkbFH0YJOp1xVZJb5uOY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-KaTatNjSUnQC44UsV3LFOlkad8WqLfTPFFff8Dn13DA=";
+  vendorHash = "sha256-pbldRarOQ44bE4FPUSHvk2Qk4WQ0zKU0Hd75E717mLI=";
 
   ldflags = [
     "-s"
@@ -49,7 +50,9 @@ buildGoModule (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     writableTmpDirAsHomeHook
-  ];
+  ]
+  # TODO: Remove once #536365 reaches this branch
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.lld;
 
   # git ls-files doesn't work as source is not a git repo
   checkFlags =
@@ -61,7 +64,13 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  env.CGO_ENABLED = 1;
+  env = {
+    CGO_ENABLED = 1;
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # TODO: Remove once #536365 reaches this branch
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
+  };
 
   postInstall = ''
     mv $out/bin/picocrypt $out/bin/picocrypt-ng-gui

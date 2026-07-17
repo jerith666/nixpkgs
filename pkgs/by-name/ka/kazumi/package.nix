@@ -18,13 +18,13 @@
 }:
 
 let
-  version = "2.1.6";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-J3lpzCVbw5syvErfVTntgY6dvMj6ITT+3CMPZRaAUk8=";
+    hash = "sha256-xAXhESIGk3St2TgqLtUl6je7DlS4j4vD338T5t99OAE=";
   };
 in
 flutter.buildFlutterApplication {
@@ -91,7 +91,6 @@ flutter.buildFlutterApplication {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-vaapi
     gst_all_1.gstreamer
     libayatana-appindicator
     mpv-unwrapped
