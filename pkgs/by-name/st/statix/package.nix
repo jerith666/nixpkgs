@@ -8,16 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "statix";
-  version = "0.5.8-unstable-2026-06-13";
+  version = "0.5.8-unstable-2026-07-10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "molybdenumsoftware";
     repo = "statix";
-    rev = "127a42f761909e5caa79f616a353e9b6e1a0587f";
-    hash = "sha256-epwk3oW5A0ttTKSO2zgC50PkD9mTFjLtDlofTIeOdf8=";
+    rev = "7cbd82249a0154836db6118bec97da06ab447013";
+    hash = "sha256-3n3hDc52+hAj1TWr3TFAeWzyDkaprsHafZVAlcS2WAM=";
   };
 
-  cargoHash = "sha256-bsy8p8zbfQ7EjXCDwFbVaq4qN8aEsp27Jcn9zfW2eXw=";
+  cargoHash = "sha256-Ed0eSGhx0D1oZS44ObS3j1TuM3A1HnDKzDjDVYlX1jM=";
 
   buildFeatures = lib.optional withJson "json";
 

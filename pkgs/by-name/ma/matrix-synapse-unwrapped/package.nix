@@ -14,19 +14,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.154.0";
+  version = "1.156.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-4US6PPJAI0UUOmy12thjXKX3IRUCH9w/zkRD3ivQ9BE=";
+    hash = "sha256-x3EVmNPqcxtvt6ZaPsDCCcr7Z0LIO257s2gO3HCNmKA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Cu5bXS6BprXr/dwkNXDjcP9hOfqQddoC5BxOus4rteM=";
+    hash = "sha256-N/JWRFz9OKcxigjp86AVVZGK63MdZmEzwHhBgBuWZcY=";
   };
 
   build-system =
@@ -157,7 +157,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
+    tests = { inherit (nixosTests) matrix-synapse; };
     plugins = python3Packages.callPackage ./plugins { };
     inherit (python3Packages) python;
     updateScript = nix-update-script { };

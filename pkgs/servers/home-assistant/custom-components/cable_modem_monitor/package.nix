@@ -17,12 +17,12 @@
   requests,
 }:
 let
-  version = "3.14.0-beta.10";
+  version = "3.14.0-beta.13";
   src = fetchFromGitHub {
     owner = "solentlabs";
     repo = "cable_modem_monitor";
     tag = "v${version}";
-    hash = "sha256-Tl5MQVaitq1I5CeajVrgwKvs6HT4WEKejPjz2IcfTqw=";
+    hash = "sha256-biQVMq2IoOdbpdP+zDfLXdl91++aKmN3EPQfvzEACyU=";
     fetchLFS = true;
   };
 

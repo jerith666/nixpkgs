@@ -310,6 +310,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    buddy = {
+      spdxId = "Buddy";
+      fullName = "Buddy License";
+    };
+
     bzip2 = {
       spdxId = "bzip2-1.0.6";
       fullName = "bzip2 and libbzip2 License v1.0.6";
@@ -1052,6 +1057,11 @@ lib.mapAttrs mkLicense (
       fullName = "MIT License";
     };
 
+    mit-click = {
+      spdxId = "MIT-Click";
+      fullName = "MIT Click License";
+    };
+
     mit-cmu = {
       spdxId = "MIT-CMU";
       fullName = "CMU License";
@@ -1166,6 +1176,11 @@ lib.mapAttrs mkLicense (
     ngpl = {
       spdxId = "NGPL";
       fullName = "Nethack General Public License";
+    };
+
+    ngrep = {
+      spdxId = "ngrep";
+      fullName = "ngrep License";
     };
 
     nistSoftware = {
@@ -1321,6 +1336,17 @@ lib.mapAttrs mkLicense (
     qwtException = {
       spdxId = "Qwt-exception-1.0";
       fullName = "Qwt exception 1.0";
+    };
+
+    reticulum = {
+      # The Reticulum License restricts certain fields of use, notably systems
+      # intended to harm human beings and AI/ML training datasets. Such usage
+      # restrictions are incompatible with the Open Source Definition
+      # (https://opensource.org/osd), in particular "No Discrimination Against
+      # Fields of Endeavor".
+      free = false;
+      fullName = "Reticulum License";
+      url = "https://reticulum.network/license";
     };
 
     ruby = {
@@ -1588,6 +1614,11 @@ lib.mapAttrs mkLicense (
     wadalab = {
       fullName = "Wadalab Font License";
       url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
+    };
+
+    wordnet = {
+      spdxId = "WordNet";
+      fullName = "WordNet License";
     };
 
     wtfpl = {

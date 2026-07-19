@@ -6,16 +6,16 @@
 
 pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.32.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZMp1ZMuHdTcJ7iORq9a62pGQo5cGRueuAQy+AjSOY5g=";
+    hash = "sha256-laGQWJbke+q0dAdqR8opXw4oQm6wdJJT0/t/A9c7d9s=";
   };
 
-  cargoHash = "sha256-ZXPG429qgiAaxZxnDNiMIXiP1d0pkdWEblZuRU8+BSU=";
+  cargoHash = "sha256-+T9aGsewRHdmKMtZisXv4st+9kBTNtEZnPraLz8S4e8=";
 
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -33,6 +33,11 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_preserve_settings_dir_7777_preserves_special_bits"
     "--skip=test_preserve_settings_file_7777_preserves_special_bits"
     "--skip=test_preserve_settings_none_strips_special_bits_on_directories"
+    "--skip=no_setid_clears_bits_for_unchanged_owner_rule"
+    "--skip=no_setid_clears_existing_bits_for_unrelated_mode"
+    "--skip=no_setid_dry_run_reports_but_does_not_clear_bits"
+    "--skip=no_setid_respects_filter_and_per_type_scope"
+    "--skip=no_setid_retains_sticky_and_clears_setgid_on_directory"
     # this test expects overwrite behavior that doesn't work in a sandbox
     "--skip=test_overwrite_behavior"
     # these tests require network access to determine local IP address
@@ -41,6 +46,17 @@ pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=version::tests::test_current_version"
     "--skip=test_protocol_version_has_git_info"
     "--skip=test_rcpd_protocol_version_has_git_info"
+    # these tests shell out to `getent` to resolve real user/group names, which isn't available in the sandbox
+    "--skip=chmod::tests::getent_real_resolves_root"
+    "--skip=chmod::tests::getent_real_option_like_name_fails_closed_no_injection"
+    "--skip=rejects_unknown_group"
+    # these tests change ownership and set setuid/setgid bits (fchown / chmod / chgrp),
+    # which the unprivileged sandbox build user isn't permitted to do (EPERM)
+    "--skip=safedir::tests::set_dir_metadata_fd_applies"
+    "--skip=safedir::tests::set_file_metadata_fd_ordering_preserves_setuid"
+    "--skip=applies_per_type_modes_recursively"
+    "--skip=group_change_preserves_setgid_across_chgrp"
+    "--skip=preserves_setgid_through_mode_change"
   ];
 
   meta = {

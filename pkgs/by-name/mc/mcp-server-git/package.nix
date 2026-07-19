@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-server-git";
-  version = "2026.6.3";
+  version = "2026.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";
     repo = "servers";
     tag = finalAttrs.version;
-    hash = "sha256-C5wE5ChDI1w4fh5LC1gV9WFuKMVfwvSnS18Fi2s+t+s=";
+    hash = "sha256-rBdJoTC1wOEMbAAeSccFqaHL7lacf2SFfxZ/pp2Lx90=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src/git/";

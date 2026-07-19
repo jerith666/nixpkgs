@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk";
-  version = "0.56.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "max-sixty";
     repo = "worktrunk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6Soz41fyieWczJBNiv50UGUVMsvVej/1pMX3iPnvXg8=";
+    hash = "sha256-GKXTEzCya5aOh02O3yoEdA4RS/GibiHZu+wXq7rrOV0=";
   };
 
-  cargoHash = "sha256-NKjbn8RVtHWv/DqcQ/HqvvhKr9jAyisElD0OYyYbVAg=";
+  cargoHash = "sha256-MjRi4WK+afrShCLXEp7pWhDiAyjKPbtqHjVIOtI3LVI=";
 
   cargoBuildFlags = [ "--package=worktrunk" ];
 
@@ -39,7 +39,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd wt \
       --bash <($out/bin/wt config shell completions bash) \
       --fish <($out/bin/wt config shell completions fish) \
-      --zsh  <($out/bin/wt config shell completions zsh)
+      --nushell <($out/bin/wt config shell completions nu) \
+      --zsh <($out/bin/wt config shell completions zsh)
+
+    # -L dereferences symlinks (e.g. skills/worktrunk/reference/README.md → repo
+    # root), so no dangling symlinks end up in $out.
+    cp -RL ${finalAttrs.src}/skills $out/
   '';
 
   nativeCheckInputs = [ gitMinimal ];

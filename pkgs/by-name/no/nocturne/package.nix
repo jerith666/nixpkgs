@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.2.2";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-2UtlOdxXFdWoGeEwb89qI5Xp8FES2I3Eno8DIbhkBhI=";
+    hash = "sha256-uXsl438K0Ew0fdrKtGf28VkHQ76loDWKLJkounzqhEQ=";
   };
 
   __structuredAttrs = true;

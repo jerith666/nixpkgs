@@ -5,19 +5,19 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lsh";
-  version = "1.6.1";
+  version = "1.6.3";
   src = fetchFromGitHub {
     owner = "latitudesh";
-    repo = "lsh";
+    repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Pyl8DSXMV13GYJn2kwCyr2Ds7+PaGiTnTyvdAxtCg2Y=";
+    sha256 = "sha256-A0uZLcwFIuimSgwItDSfDCcDLZqI+q6C5iPyJgyUelQ=";
   };
-  vendorHash = "sha256-WAgD6vZ9xK+vvpchbcNq5Eqe4po1YJJ8jIAf2Q9HhCY=";
+  vendorHash = "sha256-MlpNAEbdl8AHu0uKhW/p0NTBROdGHKN+ODrcRCs9t4s=";
   subPackages = [ "." ];
   meta = {
-    changelog = "https://github.com/latitudesh/lsh/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/latitudesh/cli/releases/tag/v${finalAttrs.version}";
     description = "Command-Line Interface for Latitude.sh";
-    homepage = "https://github.com/latitudesh/lsh";
+    homepage = "https://github.com/latitudesh/cli";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dzmitry-lahoda ];
   };

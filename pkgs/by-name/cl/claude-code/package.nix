@@ -1,6 +1,6 @@
 # NOTE: Use the following command to update the package
 # ```sh
-# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# nix-shell maintainers/scripts/update.nix --arg commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["vscode-extensions" "anthropic" "claude-code"]])'
 # ```
 {
   lib,
@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];

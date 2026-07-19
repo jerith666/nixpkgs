@@ -12,12 +12,12 @@ let
 in
 python.pkgs.buildPythonPackage (finalAttrs: {
   pname = "pdfding";
-  version = "1.8.0";
+  version = "1.10.0";
   src = fetchFromGitHub {
     owner = "mrmn2";
     repo = "PdfDing";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ITOsKABToGMJDdCiWH3+nTuuTW5ZuMXcQYv0QyMb19I=";
+    hash = "sha256-C1osj8V9+z3ahl4+zUtyI22GMtSgNLzfdGttL7gPDvY=";
   };
   pyproject = true;
 
@@ -132,12 +132,11 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   '';
 
   pythonRelaxDeps = [
-    "django-allauth"
+    "django"
     "gunicorn"
     "huey"
     "nh3"
     "psycopg2-binary"
-    "pypdf"
     "pypdfium2"
   ];
 

@@ -20,7 +20,7 @@ let
     with pkgs;
     [
       cosmic-applets
-      cosmic-applibrary
+      cosmic-app-library
       cosmic-bg
       cosmic-comp
       cosmic-files
@@ -84,6 +84,7 @@ in
           alsa-utils
           cosmic-edit
           cosmic-icons
+          cosmic-monitor
           cosmic-player
           cosmic-randr
           cosmic-reader
@@ -124,16 +125,7 @@ in
       };
     };
 
-    systemd = {
-      packages = [ pkgs.cosmic-session ];
-      user.targets = {
-        # TODO: remove when upstream has XDG autostart support
-        cosmic-session = {
-          wants = [ "xdg-desktop-autostart.target" ];
-          before = [ "xdg-desktop-autostart.target" ];
-        };
-      };
-    };
+    systemd.packages = [ pkgs.cosmic-session ];
 
     fonts.packages = with pkgs; [
       fira

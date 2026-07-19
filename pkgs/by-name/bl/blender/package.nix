@@ -116,12 +116,12 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.1.1";
+  version = "5.1.2";
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-iJolR8iS2go0doO96ibyseCeMunFL+XPoQ25NbX6oOA=";
+    hash = "sha256-FnReSNsP8U1/4jSgZN3cMQV2qkP7OZPh0f/9JA1lAxs=";
   };
 
   patches = [
@@ -453,7 +453,6 @@ stdenv'.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [

@@ -6,6 +6,7 @@
   stdenv,
   zig_0_15,
   emacs,
+  xcbuild,
 }:
 
 let
@@ -13,13 +14,13 @@ let
 
   pname = "ghostel";
 
-  version = "0.34.0-unstable-2026-06-08";
+  version = "0.41.0-unstable-2026-07-06";
 
   src = fetchFromGitHub {
     owner = "dakra";
     repo = "ghostel";
-    rev = "f7800f6430b6ab85dbfc2db2129625e8a28ac17e";
-    hash = "sha256-o9EQFA6xunwt/chdA5z8bqadr9V3COBPjRqiAY3jkp0=";
+    rev = "eb806d158df4ff302aee68e91caf257f11d66320";
+    hash = "sha256-Xz3Sy0iR/g5SoEzqJTZo2ymfMPYQ0NvnAOEoXiXhQFE=";
   };
 
   module = stdenv.mkDerivation (finalAttrs: {
@@ -28,10 +29,10 @@ let
     deps = zig.fetchDeps {
       inherit (finalAttrs) src pname version;
       fetchAll = true;
-      hash = "sha256-CTsG3dXu3DECDbklBAtr2fYou82WNvQ1Q3JET0TmuyM=";
+      hash = "sha256-lFU0ywNyP1q2NL9MkIfWciH03VAA/Act5dGYAV4V7EY=";
     };
 
-    nativeBuildInputs = [ zig ];
+    nativeBuildInputs = [ zig ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     env.EMACS_INCLUDE_DIR = "${emacs}/include";
 
@@ -59,11 +60,12 @@ melpaBuild {
   inherit pname version src;
 
   files = ''
-    (:defaults "etc" "ghostel-module${libExt}")
+    (:defaults "etc" "ghostel-module${libExt}" "ghostel-module.version")
   '';
 
   preBuild = ''
-    install ${module}/lib/libghostel-module${libExt} ghostel-module${libExt}
+    install ${module}/ghostel-module${libExt} ghostel-module${libExt}
+    install --mode=444 ${module}/ghostel-module.version ghostel-module.version
   '';
 
   passthru = {
@@ -75,7 +77,10 @@ melpaBuild {
   meta = {
     homepage = "https://github.com/dakra/ghostel";
     description = "Terminal emulator powered by libghostty";
-    maintainers = with lib.maintainers; [ vonfry ];
+    maintainers = with lib.maintainers; [
+      rohan-datar
+      vonfry
+    ];
     license = lib.licenses.gpl3Plus;
   };
 }
