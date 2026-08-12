@@ -13,7 +13,7 @@ in
       (fetchpatch {
         name = "fix-gdal-3.13-const-conversion.patch";
         url = "https://github.com/Kitware/VTK/commit/2395603fdddc40c29efc64c632ae98225ca2a58e.patch";
-        sha256 = "sha256-Gcnt1JXWPkhfNLhtk9SXYqx/0cLkjO4xiRfR8YiaY8I=";
+        hash = "sha256-Gcnt1JXWPkhfNLhtk9SXYqx/0cLkjO4xiRfR8YiaY8I=";
       })
     ];
   };
@@ -25,7 +25,7 @@ in
       (fetchpatch {
         name = "fix-gdal-3.13-const-conversion.patch";
         url = "https://github.com/Kitware/VTK/commit/2395603fdddc40c29efc64c632ae98225ca2a58e.patch";
-        sha256 = "sha256-Gcnt1JXWPkhfNLhtk9SXYqx/0cLkjO4xiRfR8YiaY8I=";
+        hash = "sha256-Gcnt1JXWPkhfNLhtk9SXYqx/0cLkjO4xiRfR8YiaY8I=";
       })
     ];
   };

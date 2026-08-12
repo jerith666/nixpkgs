@@ -8,12 +8,12 @@
 }:
 let
   pname = "models-dev";
-  version = "sdk-v0.0.5-unstable-2026-07-07";
+  version = "sdk-v0.0.5-unstable-2026-08-04";
   src = fetchFromGitHub {
     owner = "anomalyco";
     repo = "models.dev";
-    rev = "f1a9be19f62c24474d27947d5236067504dd755a";
-    hash = "sha256-ty8l1jURV2uf245Xqm+I95qZ8gU9IjTGqR7+yLGxBUs=";
+    rev = "183bea88e4c0e9922c81eddb3987d9edb3a640ed";
+    hash = "sha256-h7GsDMuZFOzFVR0Yp3C0fEJAqQi0XLrC/hohMUKE6/8=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -85,6 +85,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     cd packages/web
     bun run ./script/build.ts
+    bun ${./generate-schema.ts} ./dist/_api.json ./dist/model-schema.json
 
     runHook postBuild
   '';
@@ -98,12 +99,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version=branch"
-      "--subpackage"
-      "node_modules"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=branch"
+        "--subpackage"
+        "node_modules"
+      ];
+    };
+    jsonschema = "${finalAttrs.finalPackage}/dist/model-schema.json";
   };
 
   meta = {
