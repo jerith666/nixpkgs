@@ -324,14 +324,14 @@ in
 
               # Was declarative before, no need to back up anything
               ln -sf ${whitelistFile} whitelist.json
-                ln -sf ${opsFile} ops.json
+              ln -sf ${opsFile} ops.json
               cp -f ${serverPropertiesFile} server.properties
 
             else
 
               # Declarative for the first time, backup stateful files
               ln -sb --suffix=.stateful ${whitelistFile} whitelist.json
-                ln -sb --suffix=.stateful ${opsFile} ops.json
+              ln -sb --suffix=.stateful ${opsFile} ops.json
               cp -b --suffix=.stateful ${serverPropertiesFile} server.properties
 
               # server.properties must have write permissions, because every time

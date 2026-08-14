@@ -342,8 +342,8 @@ in
         "systemctl start restic-backups-remoteprune.service",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
-          # test that custom unit config is present
-          "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written"
+        # test that custom unit config is present
+        "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written"
 
         # test that remoteprune brings us back to 1 snapshot in remotebackup
         "systemctl start restic-backups-remoteprune.service",

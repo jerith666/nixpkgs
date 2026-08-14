@@ -212,7 +212,7 @@ in
                 description = ''
                   Credential file as created by 'cloudflared tunnel login && cloudflared tunnel create <tunnel-name>'.
 
-                      See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
+                  See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
                 '';
                 example = ''
                   {
