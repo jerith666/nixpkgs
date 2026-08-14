@@ -199,13 +199,13 @@ in
             pruneOpts = [ "--keep-last 1" ];
             checkOpts = [ "--some-check-option" ];
           };
-            customUnitConfig = {
-              inherit passwordFile paths;
-              repository = remoteRepository;
-              unitConfig = {
-                documentation = [ "custom-unit-config-was-written" ];
-              };
+          customUnitConfig = {
+            inherit passwordFile paths;
+            repository = remoteRepository;
+            unitConfig = {
+              documentation = [ "custom-unit-config-was-written" ];
             };
+          };
         };
 
         environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";

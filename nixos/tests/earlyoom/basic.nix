@@ -3,8 +3,8 @@
   name = "earlyoom";
   meta = {
     maintainers = with lib.maintainers; [
-    oxalica
-  ];
+      oxalica
+    ];
   };
 
   nodes.machine =

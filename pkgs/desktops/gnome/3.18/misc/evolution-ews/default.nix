@@ -1,4 +1,18 @@
-{ stdenv, fetchgit, gnome3, glib, intltool, pkgconfig, gtk_doc, libtool, gtk3, libsoup, sqlite, webkitgtk24x, libmspack } :
+{
+  stdenv,
+  fetchgit,
+  gnome3,
+  glib,
+  intltool,
+  pkgconfig,
+  gtk_doc,
+  libtool,
+  gtk3,
+  libsoup,
+  sqlite,
+  webkitgtk24x,
+  libmspack,
+}:
 
 let
   version = "3.18.4";
@@ -14,8 +28,21 @@ stdenv.mkDerivation {
     sha256 = "1hi6n9mii98s4dbzilpq59hcbj20mcpzy3wwxj3sh0njjks68l8r";
   };
 
-  buildInputs = [ gnome3.gnome_common gnome3.evolution_data_server gnome3.evolution
-                  glib intltool pkgconfig gtk_doc libtool gtk3 libsoup sqlite webkitgtk24x libmspack ];
+  buildInputs = [
+    gnome3.gnome_common
+    gnome3.evolution_data_server
+    gnome3.evolution
+    glib
+    intltool
+    pkgconfig
+    gtk_doc
+    libtool
+    gtk3
+    libsoup
+    sqlite
+    webkitgtk24x
+    libmspack
+  ];
 
   patches = [ ./lib-install.patch ];
 

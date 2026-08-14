@@ -210,17 +210,17 @@ in
               credentialsFile = lib.mkOption {
                 type = lib.types.path;
                 description = ''
-              Credential file as created by 'cloudflared tunnel login && cloudflared tunnel create <tunnel-name>'.
+                  Credential file as created by 'cloudflared tunnel login && cloudflared tunnel create <tunnel-name>'.
 
-                  See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
+                      See [Credentials file](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#credentials-file).
                 '';
-            example = ''
-              {
-                "AccountTag": "...",
-                "TunnelSecret": "...",
-                "TunnelID": "..."
-              }
-            '';
+                example = ''
+                  {
+                    "AccountTag": "...",
+                    "TunnelSecret": "...",
+                    "TunnelID": "..."
+                  }
+                '';
               };
 
               warp-routing = {
@@ -384,7 +384,7 @@ in
           credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
           warp-routing = filterConfig tunnel.warp-routing;
           originRequest = filterConfig tunnel.originRequest;
-              origincert = cfg.originCertPath;
+          origincert = cfg.originCertPath;
           ingress =
             (map (
               key:

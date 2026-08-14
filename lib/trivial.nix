@@ -512,18 +512,20 @@ in
     Returns the current nixpkgs version suffix as string.
   */
   versionSuffix =
-    /* let suffixFile = ../.version-suffix;
-    in if pathExists suffixFile
-    then lib.strings.fileContents suffixFile
-    else */ shortRevisionWithDefault "pre-git";
+    /*
+      let suffixFile = ../.version-suffix;
+      in if pathExists suffixFile
+      then lib.strings.fileContents suffixFile
+      else
+    */
+    shortRevisionWithDefault "pre-git";
 
   shortRevisionWithDefault =
     default:
     let
       fullRev = revisionWithDefault default;
-    in if fullRev == default
-       then default
-       else ".git." + (builtins.substring 0 10 fullRev);
+    in
+    if fullRev == default then default else ".git." + (builtins.substring 0 10 fullRev);
 
   /**
     Attempts to return the the current revision of nixpkgs and

@@ -21,8 +21,7 @@
 #
 # @example
 #     project = pkgs.buildMaven ./project-info.json
-src:
-infoFile:
+src: infoFile:
 let
   info = lib.importJSON infoFile;
 

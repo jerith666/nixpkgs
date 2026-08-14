@@ -10971,9 +10971,11 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
-  globalprotect-openconnect_2_withGui = callPackage ../by-name/gl/globalprotect-openconnect_2/package.nix {
-    includeUnfreeGui = true;
-  };
+  globalprotect-openconnect_2_withGui =
+    callPackage ../by-name/gl/globalprotect-openconnect_2/package.nix
+      {
+        includeUnfreeGui = true;
+      };
 
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;

@@ -1755,7 +1755,7 @@ with haskellLib;
 
   # Break out of overspecified constraint on QuickCheck.
   # Fixed by https://github.com/haskell-servant/servant/commit/08579ca0039410e04d6c36c975ddc20165819db6
-  universe-base       = doJailbreak super.universe-base;
+  universe-base = doJailbreak super.universe-base;
 
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-supercollider = dontCheck super.vivid-supercollider;

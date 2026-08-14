@@ -99,16 +99,15 @@ rustPlatform.buildRustPackage {
       substituteInPlace crates/gpapi/src/lib.rs ${replacements-string}
     '';
 
-  postInstall =
-    ''
-      mkdir -p $out/share/
-      ln -s ${desktop}/share/applications/ $out/share/applications
-    ''
-    + (lib.strings.optionalString includeUnfreeGui ''
-      ln -s ${gpgui}/bin/gpgui $out/bin/
-      ln -s ${gpgui}/share/icons/ $out/share/
-      ln -s ${gpgui}/share/polkit-1/ $out/share/
-    '');
+  postInstall = ''
+    mkdir -p $out/share/
+    ln -s ${desktop}/share/applications/ $out/share/applications
+  ''
+  + (lib.strings.optionalString includeUnfreeGui ''
+    ln -s ${gpgui}/bin/gpgui $out/bin/
+    ln -s ${gpgui}/share/icons/ $out/share/
+    ln -s ${gpgui}/share/polkit-1/ $out/share/
+  '');
 
   meta = {
     mainProgram = "gpclient";

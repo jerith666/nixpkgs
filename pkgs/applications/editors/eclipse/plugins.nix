@@ -11,7 +11,7 @@
   libXext,
   libXrender,
   libXtst,
-  alsa-lib
+  alsa-lib,
 }:
 
 rec {
@@ -629,7 +629,7 @@ rec {
     };
 
     meta = with lib; {
-      homepage = https://www.eclipse.org/mat/;
+      homepage = "https://www.eclipse.org/mat/";
       description = "The Eclipse Memory Analyzer is a fast and feature-rich Java heap analyzer that helps you find memory leaks and reduce memory consumption";
       license = licenses.epl10;
       platforms = platforms.all;
