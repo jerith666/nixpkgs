@@ -127,44 +127,6 @@ import ./make-test-python.nix {
                 smtp.login("alice", "foobar")
                 smtp.quit()
           '';
-
-          auth = pkgs.writeScriptBin "auth" ''
-            #!${pkgs.python3.interpreter}
-            import smtplib
-
-            with smtplib.SMTP('${domain}') as smtp:
-              smtp.ehlo()
-              smtp.login("alice","foobar")
-              smtp.quit()
-          '';
-
-          authStarttls = pkgs.writeScriptBin "authStarttls" ''
-            #!${pkgs.python3.interpreter}
-            import smtplib
-            import ssl
-
-            ctx = ssl.create_default_context()
-
-            with smtplib.SMTP('${domain}') as smtp:
-              smtp.ehlo()
-              smtp.starttls(context=ctx)
-              smtp.ehlo()
-              smtp.login("alice","foobar")
-              smtp.quit()
-          '';
-
-          authSmtps = pkgs.writeScriptBin "authSmtps" ''
-            #!${pkgs.python3.interpreter}
-            import smtplib
-            import ssl
-
-            ctx = ssl.create_default_context()
-
-            with smtplib.SMTP_SSL('${domain}', context=ctx) as smtp:
-              smtp.ehlo()
-              smtp.login("alice","foobar")
-              smtp.quit()
-          '';
         in
         [
           sendTestMail
