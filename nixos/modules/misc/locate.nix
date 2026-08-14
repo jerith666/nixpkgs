@@ -252,11 +252,11 @@ in
       description = "Update Locate Database";
 
       serviceConfig = {
-      # mlocate's updatedb takes flags via a configuration file or
-      # on the command line, but not by environment variable.
+        # mlocate's updatedb takes flags via a configuration file or
+        # on the command line, but not by environment variable.
         ExecStart =
-        let
-          toFlags =
+          let
+            toFlags =
               x:
               lib.optionals (cfg.${x} != [ ]) [
                 "--${lib.toLower x}"
@@ -267,7 +267,7 @@ in
               "pruneNames"
               "prunePaths"
             ];
-        in
+          in
           utils.escapeSystemdExecArgs (
             [
               (lib.getExe' cfg.package "updatedb")

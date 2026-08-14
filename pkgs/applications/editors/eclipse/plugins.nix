@@ -30,10 +30,10 @@ rec {
       // {
         inherit name;
 
-      buildInputs = buildInputs ++ [ unzip ];
+        buildInputs = buildInputs ++ [ unzip ];
 
-      passthru = {
-        isEclipsePlugin = true;
+        passthru = {
+          isEclipsePlugin = true;
         }
         // passthru;
       }
@@ -52,28 +52,28 @@ rec {
     assert srcPlugin == null -> srcPlugins != [ ];
     assert srcPlugin != null -> srcPlugins == [ ];
 
-      let
+    let
 
-        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+      pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
 
-      in
+    in
 
     buildEclipsePluginBase (
       attrs
       // {
-          srcs = [ srcFeature ] ++ pSrcs;
+        srcs = [ srcFeature ] ++ pSrcs;
 
-          buildCommand = ''
-            dropinDir="$out/eclipse/dropins/${name}"
+        buildCommand = ''
+          dropinDir="$out/eclipse/dropins/${name}"
 
-            mkdir -p $dropinDir/features
-            unzip ${srcFeature} -d $dropinDir/features/
+          mkdir -p $dropinDir/features
+          unzip ${srcFeature} -d $dropinDir/features/
 
-            mkdir -p $dropinDir/plugins
-            for plugin in ${toString pSrcs}; do
-              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
-            done
-          '';
+          mkdir -p $dropinDir/plugins
+          for plugin in ${toString pSrcs}; do
+            cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+          done
+        '';
       }
     );
 
@@ -89,42 +89,42 @@ rec {
     buildEclipsePluginBase (
       attrs
       // {
-      dontBuild = true;
-      doCheck = false;
+        dontBuild = true;
+        doCheck = false;
 
-      installPhase = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+        installPhase = ''
+          dropinDir="$out/eclipse/dropins/${name}"
 
-        # Install features.
-        cd features
-        for feature in *.jar; do
-          featureName=''${feature%.jar}
-          mkdir -p $dropinDir/features/$featureName
-          unzip $feature -d $dropinDir/features/$featureName
-        done
-        cd ..
+          # Install features.
+          cd features
+          for feature in *.jar; do
+            featureName=''${feature%.jar}
+            mkdir -p $dropinDir/features/$featureName
+            unzip $feature -d $dropinDir/features/$featureName
+          done
+          cd ..
 
-        # Install plugins.
-        mkdir -p $dropinDir/plugins
+          # Install plugins.
+          mkdir -p $dropinDir/plugins
 
-        # A bundle should be unpacked if the manifest matches this
-        # pattern.
-        unpackPat="Eclipse-BundleShape:\\s*dir"
+          # A bundle should be unpacked if the manifest matches this
+          # pattern.
+          unpackPat="Eclipse-BundleShape:\\s*dir"
 
-        cd plugins
-        for plugin in *.jar ; do
-          pluginName=''${plugin%.jar}
-          manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
+          cd plugins
+          for plugin in *.jar ; do
+            pluginName=''${plugin%.jar}
+            manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
 
-          if [[ $manifest =~ $unpackPat ]] ; then
-            mkdir $dropinDir/plugins/$pluginName
-            unzip $plugin -d $dropinDir/plugins/$pluginName
-          else
-            cp -v $plugin $dropinDir/plugins/
-          fi
-        done
-        cd ..
-      '';
+            if [[ $manifest =~ $unpackPat ]] ; then
+              mkdir $dropinDir/plugins/$pluginName
+              unzip $plugin -d $dropinDir/plugins/$pluginName
+            else
+              cp -v $plugin $dropinDir/plugins/
+            fi
+          done
+          cd ..
+        '';
       }
     );
 
@@ -552,7 +552,7 @@ rec {
             sha256 = h;
           };
       in
-        map fetch [
+      map fetch [
         {
           n = "core";
           h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq";
@@ -581,7 +581,7 @@ rec {
           n = "text";
           h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2";
         }
-        ];
+      ];
 
     propagatedBuildInputs = [ antlr-runtime_4_7 ];
 
@@ -648,8 +648,8 @@ rec {
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
       postFetch = ''
-          mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
-        '';
+        mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
+      '';
     };
 
     meta = {

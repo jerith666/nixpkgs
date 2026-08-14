@@ -244,17 +244,17 @@ let
 
         u2f = {
           enable = lib.mkOption {
-          default = config.security.pam.u2f.enable;
-          defaultText = lib.literalExpression "config.security.pam.u2f.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-            {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-            not set) are able to log in with the associated U2F key. Path can be
-            changed using {option}`security.pam.u2f.authFile` option.
-          '';
-        };
+            default = config.security.pam.u2f.enable;
+            defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+            type = lib.types.bool;
+            description = ''
+              If set, users listed in
+              {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+              {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+              not set) are able to log in with the associated U2F key. Path can be
+              changed using {option}`security.pam.u2f.authFile` option.
+            '';
+          };
 
           control = lib.mkOption {
             default = config.security.pam.u2f.control;
@@ -601,10 +601,10 @@ let
 
         lastlog = {
           enable = lib.mkOption {
-          default = false;
-          type = lib.types.bool;
-          description = "Whether to update {file}`/var/log/wtmp`.";
-        };
+            default = false;
+            type = lib.types.bool;
+            description = "Whether to update {file}`/var/log/wtmp`.";
+          };
 
           silent = lib.mkOption {
             default = true;
@@ -915,7 +915,7 @@ let
               concatStringsSep "\n" (
                 map
                   (
-                  rule:
+                    rule:
                     "${type} ${rule.control} ${rule.modulePath}${
                       if rule.args == [ ] then "" else " " + concatStringsSep " " (map formatModuleArgument rule.args)
                     } # ${rule.name} (order ${toString rule.order})"
@@ -2780,8 +2780,8 @@ in
           rules = concatMap attrValues types;
 
           isDirect = flip elem [
-              "include"
-              "substack"
+            "include"
+            "substack"
           ];
           activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
 

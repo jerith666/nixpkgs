@@ -492,12 +492,12 @@ in
   isInOldestRelease =
     lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2411)
       "lib.isInOldestRelease is deprecated. Use lib.oldestSupportedReleaseIsAtLeast instead."
-    lib.oldestSupportedReleaseIsAtLeast;
+      lib.oldestSupportedReleaseIsAtLeast;
 
   /**
     Alias for `isInOldestRelease` introduced in 24.11.
     Use `isInOldestRelease` in expressions outside of Nixpkgs for greater compatibility.
-   */
+  */
   oldestSupportedReleaseIsAtLeast = release: release <= lib.trivial.oldestSupportedRelease;
 
   /**
@@ -545,7 +545,7 @@ in
     default:
     let
       revisionFile = "${toString ./..}/.git-revision";
-      gitRepo      = "${toString ./..}/.git";
+      gitRepo = "${toString ./..}/.git";
     in
     if lib.pathIsGitRepo gitRepo then
       lib.commitIdFromGitRepo gitRepo
@@ -884,10 +884,10 @@ in
           "yes"
         ];
       in
-        # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
-        msg: v:
-          # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
-          assert isString msg;
+      # Do not eta reduce v, so that we have the same strictness as `builtins.warn`.
+      msg: v:
+      # `builtins.warn` requires a string message, so we enforce that in our implementation, so that callers aren't accidentally incompatible with newer Nix versions.
+      assert isString msg;
       if mustAbort then
         builtins.trace "[1;31mevaluation warning:[0m ${msg}" (
           abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors."
@@ -1090,9 +1090,9 @@ in
   */
   setFunctionArgs = f: args: {
     # TODO: Should we add call-time "type" checking like built in?
-      __functor = self: f;
-      __functionArgs = args;
-    };
+    __functor = self: f;
+    __functionArgs = args;
+  };
 
   /**
     Extract the expected function arguments from a function.
@@ -1243,7 +1243,7 @@ in
   */
   fromHexString =
     str:
-  let
+    let
       match = builtins.match "(0x)?([0-7]?[0-9A-Fa-f]{1,15})" str;
     in
     if match != null then
@@ -1253,9 +1253,9 @@ in
       assert lib.warn "fromHexString: ${
         lib.generators.toPretty { } str
       } is not a valid input and will be rejected in 26.05" true;
-    let
+      let
         noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
-    in
+      in
       (fromTOML "v=0x${noPrefix}").v;
 
   /**
@@ -1283,14 +1283,14 @@ in
   */
   toHexString =
     let
-    hexDigits = {
-      "10" = "A";
-      "11" = "B";
-      "12" = "C";
-      "13" = "D";
-      "14" = "E";
-      "15" = "F";
-    };
+      hexDigits = {
+        "10" = "A";
+        "11" = "B";
+        "12" = "C";
+        "13" = "D";
+        "14" = "E";
+        "15" = "F";
+      };
       toHexDigit = d: if d < 10 then toString d else hexDigits.${toString d};
     in
     i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
@@ -1342,9 +1342,9 @@ in
           in
           go q ++ [ r ];
     in
-      assert (isInt base);
-      assert (isInt i);
-      assert (base >= 2);
-      assert (i >= 0);
+    assert (isInt base);
+    assert (isInt i);
+    assert (base >= 2);
+    assert (i >= 0);
     go i;
 }

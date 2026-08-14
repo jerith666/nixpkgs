@@ -5,28 +5,28 @@ let
 in
 { lib, pkgs, ... }:
 {
-    name = "minecraft-server";
+  name = "minecraft-server";
 
   node.pkgsReadOnly = false;
 
-    nodes.server =
-      { ... }:
-      {
-        environment.systemPackages = [ pkgs.mcrcon ];
+  nodes.server =
+    { ... }:
+    {
+      environment.systemPackages = [ pkgs.mcrcon ];
 
-        services.minecraft-server = {
-          declarative = true;
-          enable = true;
-          eula = true;
-          serverProperties = {
-            enable-rcon = true;
-            level-seed = seed;
-            level-type = "flat";
-            generate-structures = false;
-            online-mode = false;
-            "rcon.password" = rcon-pass;
-            "rcon.port" = rcon-port;
-          };
+      services.minecraft-server = {
+        declarative = true;
+        enable = true;
+        eula = true;
+        serverProperties = {
+          enable-rcon = true;
+          level-seed = seed;
+          level-type = "flat";
+          generate-structures = false;
+          online-mode = false;
+          "rcon.password" = rcon-pass;
+          "rcon.port" = rcon-port;
+        };
           ops = [
             # not real users, just random UUIDs
             {
@@ -40,17 +40,17 @@ in
               uuid = "c95bf5db-6181-4787-a44c-cbd23598f262";
             }
           ];
-        };
-
-        virtualisation.memorySize = 2047;
       };
 
-    testScript = ''
-      server.wait_for_unit("minecraft-server")
-      server.wait_for_open_port(${toString rcon-port})
-      assert "${seed}" in server.succeed(
-          "mcrcon -H localhost -P ${toString rcon-port} -p '${rcon-pass}' -c 'seed'"
-      )
-      server.succeed("systemctl stop minecraft-server")
-    '';
+      virtualisation.memorySize = 2047;
+    };
+
+  testScript = ''
+    server.wait_for_unit("minecraft-server")
+    server.wait_for_open_port(${toString rcon-port})
+    assert "${seed}" in server.succeed(
+        "mcrcon -H localhost -P ${toString rcon-port} -p '${rcon-pass}' -c 'seed'"
+    )
+    server.succeed("systemctl stop minecraft-server")
+  '';
 }

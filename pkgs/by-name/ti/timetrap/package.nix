@@ -9,7 +9,7 @@
 }:
 
 let
-    pname = "timetrap";
+  pname = "timetrap";
 
   ttBundlerApp = (bundlerApp.override { ruby = ruby_3_4; }) {
     inherit pname;
@@ -54,7 +54,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple command line time tracker written in ruby";
-    homepage    = "https://github.com/samg/timetrap";
+    homepage = "https://github.com/samg/timetrap";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jerith666

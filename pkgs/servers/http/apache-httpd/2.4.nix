@@ -68,17 +68,17 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-      perl
-      libxcrypt
-      zlib
-    ]
-    ++ lib.optional brotliSupport brotli
-    ++ lib.optional sslSupport openssl
-    ++ lib.optional ldapSupport openldap
-    # there is no --with-ldap flag
-    ++ lib.optional libxml2Support libxml2
-    ++ lib.optional http2Support nghttp2
-    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+    perl
+    libxcrypt
+    zlib
+  ]
+  ++ lib.optional brotliSupport brotli
+  ++ lib.optional sslSupport openssl
+  ++ lib.optional ldapSupport openldap
+  # there is no --with-ldap flag
+  ++ lib.optional libxml2Support libxml2
+  ++ lib.optional http2Support nghttp2
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -117,8 +117,8 @@ stdenv.mkDerivation rec {
 
     (lib.enableFeature luaSupport "lua")
     (lib.withFeatureAs luaSupport "lua" lua5)
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # skip bad config check when cross compiling
     # https://gitlab.com/buildroot.org/buildroot/-/blob/5dae8cddeecf16c791f3c138542ec51c4e627d75/package/apache/apache.mk#L23
     "ap_cv_void_ptr_lt_long=no"
@@ -162,7 +162,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Apache HTTPD, the world's most popular web server";
-    homepage    = "https://httpd.apache.org/";
+    homepage = "https://httpd.apache.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ arcayr ];

@@ -5,46 +5,46 @@ let
     snakeOilEd25519PublicKey
     ;
 
-    remoteRepository = "/root/restic-backup";
-    remoteFromFileRepository = "/root/restic-backup-from-file";
+  remoteRepository = "/root/restic-backup";
+  remoteFromFileRepository = "/root/restic-backup-from-file";
   remoteFromCommandRepository = "/root/restic-backup-from-command";
-    remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
-    remoteNoInitRepository = "/root/restic-backup-no-init";
-    rcloneRepository = "rclone:local:/root/restic-rclone-backup";
+  remoteInhibitTestRepository = "/root/restic-backup-inhibit-test";
+  remoteNoInitRepository = "/root/restic-backup-no-init";
+  rcloneRepository = "rclone:local:/root/restic-rclone-backup";
   sftpRepository = "sftp:alice@sftp:backups/test";
 
-    backupPrepareCommand = ''
-      touch /root/backupPrepareCommand
-      test ! -e /root/backupCleanupCommand
+  backupPrepareCommand = ''
+    touch /root/backupPrepareCommand
+    test ! -e /root/backupCleanupCommand
+  '';
+
+  backupCleanupCommand = ''
+    rm /root/backupPrepareCommand
+    touch /root/backupCleanupCommand
+  '';
+
+  testDir = pkgs.stdenvNoCC.mkDerivation {
+    name = "test-files-to-backup";
+    unpackPhase = "true";
+    installPhase = ''
+      mkdir $out
+      echo some_file > $out/some_file
+      echo some_other_file > $out/some_other_file
+      mkdir $out/a_dir
+      echo a_file > $out/a_dir/a_file
+      echo a_file_2 > $out/a_dir/a_file_2
     '';
+  };
 
-    backupCleanupCommand = ''
-      rm /root/backupPrepareCommand
-      touch /root/backupCleanupCommand
-    '';
-
-    testDir = pkgs.stdenvNoCC.mkDerivation {
-      name = "test-files-to-backup";
-      unpackPhase = "true";
-      installPhase = ''
-        mkdir $out
-        echo some_file > $out/some_file
-        echo some_other_file > $out/some_other_file
-        mkdir $out/a_dir
-        echo a_file > $out/a_dir/a_file
-        echo a_file_2 > $out/a_dir/a_file_2
-      '';
-    };
-
-    passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
-    paths = [ "/opt" ];
-    exclude = [ "/opt/excluded_file_*" ];
-    pruneOpts = [
-      "--keep-daily 2"
-      "--keep-weekly 1"
-      "--keep-monthly 1"
-      "--keep-yearly 99"
-    ];
+  passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
+  paths = [ "/opt" ];
+  exclude = [ "/opt/excluded_file_*" ];
+  pruneOpts = [
+    "--keep-daily 2"
+    "--keep-weekly 1"
+    "--keep-monthly 1"
+    "--keep-yearly 99"
+  ];
   commandString = "testing";
   command = [
     "echo"
@@ -53,16 +53,16 @@ let
   ];
 in
 {
-    name = "restic";
+  name = "restic";
 
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        bbigras
-        i077
-      ];
-    };
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [
+      bbigras
+      i077
+    ];
+  };
 
-    nodes = {
+  nodes = {
     sftp =
       # Copied from openssh.nix
       { pkgs, ... }:
@@ -91,22 +91,22 @@ in
       };
 
     restic =
-        { pkgs, ... }:
-        {
-          services.restic.backups = {
-            remotebackup = {
-              inherit
-                passwordFile
-                paths
-                exclude
-                pruneOpts
-                backupPrepareCommand
-                backupCleanupCommand
-                ;
-              repository = remoteRepository;
-              initialize = true;
-              timerConfig = null; # has no effect here, just checking that it doesn't break the service
-            };
+      { pkgs, ... }:
+      {
+        services.restic.backups = {
+          remotebackup = {
+            inherit
+              passwordFile
+              paths
+              exclude
+              pruneOpts
+              backupPrepareCommand
+              backupCleanupCommand
+              ;
+            repository = remoteRepository;
+            initialize = true;
+            timerConfig = null; # has no effect here, just checking that it doesn't break the service
+          };
           remote-sftp = {
             inherit
               passwordFile
@@ -121,19 +121,19 @@ in
               "sftp.command='ssh alice@sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -s sftp'"
             ];
           };
-            remote-from-file-backup = {
+          remote-from-file-backup = {
             inherit passwordFile pruneOpts;
-              initialize = true;
-              repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
-              paths = [
-                "/opt/a_dir/a_file"
-                "/opt/a_dir/a_file_2"
-              ];
-              dynamicFilesFrom = ''
+            initialize = true;
+            repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
+            paths = [
+              "/opt/a_dir/a_file"
+              "/opt/a_dir/a_file_2"
+            ];
+            dynamicFilesFrom = ''
               # all files in /opt except for a_dir and excluded_file_*
               find /opt -mindepth 1 -maxdepth 1 ! -name a_dir ! -name excluded_file_*
-              '';
-            };
+            '';
+          };
           remote-from-command-backup = {
             inherit
               passwordFile
@@ -143,62 +143,62 @@ in
             initialize = true;
             repository = remoteFromCommandRepository;
           };
-            inhibit-test = {
-              inherit
-                passwordFile
-                paths
-                exclude
-                pruneOpts
-                ;
-              repository = remoteInhibitTestRepository;
-              initialize = true;
-              inhibitsSleep = true;
+          inhibit-test = {
+            inherit
+              passwordFile
+              paths
+              exclude
+              pruneOpts
+              ;
+            repository = remoteInhibitTestRepository;
+            initialize = true;
+            inhibitsSleep = true;
+          };
+          remote-noinit-backup = {
+            inherit
+              passwordFile
+              exclude
+              pruneOpts
+              paths
+              ;
+            initialize = false;
+            repository = remoteNoInitRepository;
+          };
+          rclonebackup = {
+            inherit
+              passwordFile
+              paths
+              exclude
+              pruneOpts
+              ;
+            initialize = true;
+            repository = rcloneRepository;
+            rcloneConfig = {
+              type = "local";
+              one_file_system = true;
             };
-            remote-noinit-backup = {
-              inherit
-                passwordFile
-                exclude
-                pruneOpts
-                paths
-                ;
-              initialize = false;
-              repository = remoteNoInitRepository;
-            };
-            rclonebackup = {
-              inherit
-                passwordFile
-                paths
-                exclude
-                pruneOpts
-                ;
-              initialize = true;
-              repository = rcloneRepository;
-              rcloneConfig = {
-                type = "local";
-                one_file_system = true;
-              };
 
-              # This gets overridden by rcloneConfig.type
-              rcloneConfigFile = pkgs.writeText "rclone.conf" ''
-                [local]
-                type=ftp
-              '';
-            };
-            remoteprune = {
-              inherit passwordFile;
-              repository = remoteRepository;
-              pruneOpts = [ "--keep-last 1" ];
-            };
-            custompackage = {
-              inherit passwordFile paths;
-              repository = "some-fake-repository";
-              package = pkgs.writeShellScriptBin "restic" ''
-                echo "$@" >> /root/fake-restic.log;
-              '';
+            # This gets overridden by rcloneConfig.type
+            rcloneConfigFile = pkgs.writeText "rclone.conf" ''
+              [local]
+              type=ftp
+            '';
+          };
+          remoteprune = {
+            inherit passwordFile;
+            repository = remoteRepository;
+            pruneOpts = [ "--keep-last 1" ];
+          };
+          custompackage = {
+            inherit passwordFile paths;
+            repository = "some-fake-repository";
+            package = pkgs.writeShellScriptBin "restic" ''
+              echo "$@" >> /root/fake-restic.log;
+            '';
 
-              pruneOpts = [ "--keep-last 1" ];
-              checkOpts = [ "--some-check-option" ];
-            };
+            pruneOpts = [ "--keep-last 1" ];
+            checkOpts = [ "--some-check-option" ];
+          };
             customUnitConfig = {
               inherit passwordFile paths;
               repository = remoteRepository;
@@ -206,13 +206,13 @@ in
                 documentation = [ "custom-unit-config-was-written" ];
               };
             };
-          };
-
-          environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
         };
-    };
 
-    testScript = ''
+        environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
+      };
+  };
+
+  testScript = ''
     restic.start()
     sftp.start()
     restic.wait_for_unit("dbus.socket")
@@ -234,24 +234,24 @@ in
     )
 
     restic.fail(
-          "restic-remotebackup snapshots",
+        "restic-remotebackup snapshots",
         "restic-remote-sftp snapshots",
-          'restic-remote-from-file-backup snapshots"',
-          "restic-rclonebackup snapshots",
-          "grep 'backup.* /opt' /root/fake-restic.log",
-      )
+        'restic-remote-from-file-backup snapshots"',
+        "restic-rclonebackup snapshots",
+        "grep 'backup.* /opt' /root/fake-restic.log",
+    )
     restic.succeed(
-          # set up
-          "cp -rT ${testDir} /opt",
-          "touch /opt/excluded_file_1 /opt/excluded_file_2",
-          "mkdir -p /root/restic-rclone-backup",
-      )
+        # set up
+        "cp -rT ${testDir} /opt",
+        "touch /opt/excluded_file_1 /opt/excluded_file_2",
+        "mkdir -p /root/restic-rclone-backup",
+    )
 
     restic.fail(
-          # test that noinit backup in fact does not initialize the repository
-          # and thus fails without a pre-initialized repository
-          "systemctl start restic-backups-remote-noinit-backup.service",
-      )
+        # test that noinit backup in fact does not initialize the repository
+        # and thus fails without a pre-initialized repository
+        "systemctl start restic-backups-remote-noinit-backup.service",
+    )
 
     restic.succeed(
         # test that remotebackup runs custom commands and produces a snapshot
@@ -262,85 +262,85 @@ in
     )
 
     restic.succeed(
-          # test that remotebackup runs custom commands and produces a snapshot
+        # test that remotebackup runs custom commands and produces a snapshot
         "date -s '2016-12-13 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
-          # test that restoring that snapshot produces the same directory
-          "mkdir /tmp/restore-1",
-          "restic-remotebackup restore latest -t /tmp/restore-1",
-          "diff -ru ${testDir} /tmp/restore-1/opt",
+        # test that restoring that snapshot produces the same directory
+        "mkdir /tmp/restore-1",
+        "restic-remotebackup restore latest -t /tmp/restore-1",
+        "diff -ru ${testDir} /tmp/restore-1/opt",
 
-          # test that remote-from-file-backup produces a snapshot
-          "systemctl start restic-backups-remote-from-file-backup.service",
-          'restic-remote-from-file-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
-          "mkdir /tmp/restore-2",
-          "restic-remote-from-file-backup restore latest -t /tmp/restore-2",
-          "diff -ru ${testDir} /tmp/restore-2/opt",
+        # test that remote-from-file-backup produces a snapshot
+        "systemctl start restic-backups-remote-from-file-backup.service",
+        'restic-remote-from-file-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        "mkdir /tmp/restore-2",
+        "restic-remote-from-file-backup restore latest -t /tmp/restore-2",
+        "diff -ru ${testDir} /tmp/restore-2/opt",
 
-          # test that remote-noinit-backup produces a snapshot once initialized
-          "restic-remote-noinit-backup init",
-          "systemctl start restic-backups-remote-noinit-backup.service",
-          'restic-remote-noinit-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        # test that remote-noinit-backup produces a snapshot once initialized
+        "restic-remote-noinit-backup init",
+        "systemctl start restic-backups-remote-noinit-backup.service",
+        'restic-remote-noinit-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
-          # test that restoring that snapshot produces the same directory
-          "mkdir /tmp/restore-3",
-          "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-3",
-          "diff -ru ${testDir} /tmp/restore-3/opt",
+        # test that restoring that snapshot produces the same directory
+        "mkdir /tmp/restore-3",
+        "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-3",
+        "diff -ru ${testDir} /tmp/restore-3/opt",
 
         # test that remote-from-command-backup produces a snapshot, with the expected contents
         "systemctl start restic-backups-remote-from-command-backup.service",
         'restic-remote-from-command-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
         '[[ $(restic-remote-from-command-backup dump --path /stdin latest stdin) == ${commandString} ]]',
 
-          # test that rclonebackup produces a snapshot
-          "systemctl start restic-backups-rclonebackup.service",
-          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        # test that rclonebackup produces a snapshot
+        "systemctl start restic-backups-rclonebackup.service",
+        'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
-          # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
-          "systemctl start restic-backups-custompackage.service",
-          "grep 'backup' /root/fake-restic.log",
-          "grep 'check.* --some-check-option' /root/fake-restic.log",
+        # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
+        "systemctl start restic-backups-custompackage.service",
+        "grep 'backup' /root/fake-restic.log",
+        "grep 'check.* --some-check-option' /root/fake-restic.log",
 
-          # test that we can create four snapshots in remotebackup and rclonebackup
+        # test that we can create four snapshots in remotebackup and rclonebackup
         "date -s '2017-12-13 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          "systemctl start restic-backups-rclonebackup.service",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        "systemctl start restic-backups-rclonebackup.service",
 
         "date -s '2018-12-13 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          "systemctl start restic-backups-rclonebackup.service",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        "systemctl start restic-backups-rclonebackup.service",
 
         "date -s '2018-12-14 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          "systemctl start restic-backups-rclonebackup.service",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        "systemctl start restic-backups-rclonebackup.service",
 
         "date -s '2018-12-15 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          "systemctl start restic-backups-rclonebackup.service",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        "systemctl start restic-backups-rclonebackup.service",
 
         "date -s '2018-12-16 13:45'",
-          "systemctl start restic-backups-remotebackup.service",
-          "rm /root/backupCleanupCommand",
-          "systemctl start restic-backups-rclonebackup.service",
+        "systemctl start restic-backups-remotebackup.service",
+        "rm /root/backupCleanupCommand",
+        "systemctl start restic-backups-rclonebackup.service",
 
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
-          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+        'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+        'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
 
         # test that SFTP backup works by copying from the remotebackup
         'restic-remote-sftp init --from-repo ${remoteRepository} --from-password-file ${passwordFile} --copy-chunker-params',
         'restic-remote-sftp copy --from-repo ${remoteRepository} --from-password-file ${passwordFile}',
         'restic-remote-sftp snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
 
-          # test that remoteprune brings us back to 1 snapshot in remotebackup
-          "systemctl start restic-backups-remoteprune.service",
-          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+        # test that remoteprune brings us back to 1 snapshot in remotebackup
+        "systemctl start restic-backups-remoteprune.service",
+        'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that custom unit config is present
           "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written"
@@ -348,9 +348,9 @@ in
         # test that remoteprune brings us back to 1 snapshot in remotebackup
         "systemctl start restic-backups-remoteprune.service",
         'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
-      )
+    )
 
-      # test that the inhibit option is working
+    # test that the inhibit option is working
     restic.systemctl("start --no-block restic-backups-inhibit-test.service")
     restic.wait_until_succeeds(
         "systemd-inhibit --no-legend --no-pager | grep -q restic",
@@ -359,8 +359,8 @@ in
     # test that the inhibit option is working
     restic.systemctl("start --no-block restic-backups-inhibit-test.service")
     restic.wait_until_succeeds(
-          "systemd-inhibit --no-legend --no-pager | grep -q restic",
-          5
-      )
-    '';
+        "systemd-inhibit --no-legend --no-pager | grep -q restic",
+        5
+    )
+  '';
 }
