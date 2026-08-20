@@ -3593,6 +3593,8 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
+  connectrpc = callPackage ../development/python-modules/connectrpc { };
+
   connexion = callPackage ../development/python-modules/connexion { };
 
   connio = callPackage ../development/python-modules/connio { };
@@ -8856,6 +8858,8 @@ self: super: with self; {
 
   jupyter-book = callPackage ../development/python-modules/jupyter-book { };
 
+  jupyter-builder = callPackage ../development/python-modules/jupyter-builder { };
+
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
   jupyter-cache = callPackage ../development/python-modules/jupyter-cache { };
@@ -11820,6 +11824,8 @@ self: super: with self; {
 
   nebula3-python = callPackage ../development/python-modules/nebula3-python { };
 
+  nemo-relay = callPackage ../development/python-modules/nemo-relay { };
+
   nemosis = callPackage ../development/python-modules/nemosis { };
 
   nengo = callPackage ../development/python-modules/nengo { };
@@ -12974,6 +12980,8 @@ self: super: with self; {
 
   ovoenergy = callPackage ../development/python-modules/ovoenergy { };
 
+  owlrl = callPackage ../development/python-modules/owlrl { };
+
   owslib = callPackage ../development/python-modules/owslib { };
 
   oyaml = callPackage ../development/python-modules/oyaml { };
@@ -13966,6 +13974,10 @@ self: super: with self; {
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
   protobuf = protobuf7;
 
+  protobuf-py = callPackage ../development/python-modules/protobuf-py { };
+
+  protobuf-py-ext = callPackage ../development/python-modules/protobuf-py-ext { };
+
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
   # Protobuf 4.x
@@ -14744,6 +14756,8 @@ self: super: with self; {
 
   pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
 
+  pyduktape2 = callPackage ../development/python-modules/pyduktape2 { };
+
   pyduotecno = callPackage ../development/python-modules/pyduotecno { };
 
   pydy = callPackage ../development/python-modules/pydy { };
@@ -15428,6 +15442,8 @@ self: super: with self; {
 
   pymorphy3-dicts-uk = callPackage ../development/python-modules/pymorphy3-dicts-uk { };
 
+  pymp4 = callPackage ../development/python-modules/pymp4 { };
+
   pympler = callPackage ../development/python-modules/pympler { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
@@ -15866,6 +15882,8 @@ self: super: with self; {
 
   pyqvrpro = callPackage ../development/python-modules/pyqvrpro { };
 
+  pyqwest = callPackage ../development/python-modules/pyqwest { };
+
   pyqwikswitch = callPackage ../development/python-modules/pyqwikswitch { };
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
@@ -16076,6 +16094,8 @@ self: super: with self; {
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
+  pyshacl = callPackage ../development/python-modules/pyshacl { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pyshp = callPackage ../development/python-modules/pyshp { };
@@ -16098,6 +16118,10 @@ self: super: with self; {
 
   pysigma = callPackage ../development/python-modules/pysigma { };
 
+  pysigma-backend-crowdstrike =
+    callPackage ../development/python-modules/pysigma-backend-crowdstrike
+      { };
+
   pysigma-backend-elasticsearch =
     callPackage ../development/python-modules/pysigma-backend-elasticsearch
       { };
@@ -16117,10 +16141,6 @@ self: super: with self; {
   pysigma-backend-splunk = callPackage ../development/python-modules/pysigma-backend-splunk { };
 
   pysigma-backend-sqlite = callPackage ../development/python-modules/pysigma-backend-sqlite { };
-
-  pysigma-pipeline-crowdstrike =
-    callPackage ../development/python-modules/pysigma-pipeline-crowdstrike
-      { };
 
   pysigma-pipeline-sysmon = callPackage ../development/python-modules/pysigma-pipeline-sysmon { };
 
@@ -18420,6 +18440,8 @@ self: super: with self; {
 
   sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
+  sanic-cors = callPackage ../development/python-modules/sanic-cors { };
+
   sanic-ext = callPackage ../development/python-modules/sanic-ext { };
 
   sanic-routing = callPackage ../development/python-modules/sanic-routing { };
@@ -18785,6 +18807,8 @@ self: super: with self; {
   sgp4 = callPackage ../development/python-modules/sgp4 { };
 
   sh = callPackage ../development/python-modules/sh { };
+
+  shacl2code = callPackage ../development/python-modules/shacl2code { };
 
   shamir-mnemonic = callPackage ../development/python-modules/shamir-mnemonic { };
 
@@ -19354,6 +19378,8 @@ self: super: with self; {
   spdx = callPackage ../development/python-modules/spdx { };
 
   spdx-license-list = callPackage ../development/python-modules/spdx-license-list { };
+
+  spdx-python-model = callPackage ../development/python-modules/spdx-python-model { };
 
   spdx-tools = callPackage ../development/python-modules/spdx-tools { };
 
@@ -21622,6 +21648,8 @@ self: super: with self; {
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
   types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
+
+  types-jsonschema = callPackage ../development/python-modules/types-jsonschema { };
 
   types-lxml = callPackage ../development/python-modules/types-lxml { };
 

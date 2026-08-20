@@ -333,7 +333,6 @@ mapAliases {
   appthreat-depscan = throw "'appthreat-depscan' has been renamed to/replaced by 'dep-scan'"; # Converted to throw 2025-10-27
   arangodb = throw "arangodb has been removed, as it was unmaintained and the packaged version does not build with supported GCC versions"; # Added 2025-08-12
   arc-browser = throw "arc-browser was removed due to being unmaintained"; # Added 2025-09-03
-  arc-theme = throw "'arc-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   arc_unpacker = throw "'arc_unpacker' has been moved to 'arc-unpacker'"; # Added 2026-07-28
   archi = throw "'archi' has been removed, since its upstream maintainers do not want it packaged"; # Added 2025-11-18
   archipelago-minecraft = throw "archipelago-minecraft has been removed, as upstream no longer ships minecraft as a default APWorld."; # Added 2025-07-15
@@ -829,12 +828,14 @@ mapAliases {
   firefox-wayland = throw "'firefox-wayland' has been renamed to/replaced by 'firefox'"; # Converted to throw 2025-10-27
   firmwareLinuxNonfree = throw "'firmwareLinuxNonfree' has been renamed to/replaced by 'linux-firmware'"; # Converted to throw 2025-10-27
   fishfight = throw "'fishfight' has been renamed to/replaced by 'jumpy'"; # Converted to throw 2025-10-27
+  fishy = throw "'fishy' has been removed because it was unmaintained upstream"; # Added 2026-08-18
   fit-trackee = throw "'fit-trackee' has been renamed to/replaced by 'fittrackee'"; # Converted to throw 2025-10-27
   fixup_yarn_lock = throw "`fixup_yarn_lock` has been removed, please use `fixup-yarn-lock` instead."; # Added 2026-04-25
   flashrom-stable = throw "'flashrom-stable' has been renamed to/replaced by 'flashprog'"; # Converted to throw 2025-10-27
   flat-remix-gtk = throw "'flat-remix-gtk' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   flatbuffers_2_0 = throw "'flatbuffers_2_0' has been renamed to/replaced by 'flatbuffers'"; # Converted to throw 2025-10-27
   flattenReferencesGraph = warnAlias "'flattenReferencesGraph' has been renamed to 'flatten-references-graph'" flatten-references-graph; # Added 2026-02-08
+  flclash = throw "'flclash' has been removed due to low number of users and lack of maintenance."; # Added 2026-08-17
   flint3 = flint; # Added 2025-09-21
   floorp = throw "floorp has been replaced with floorp-bin, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
   floorp-unwrapped = throw "floorp-unwrapped has been replaced with floorp-bin-unwrapped, as building from upstream sources has become unfeasible starting with version 12.x"; # Added 2025-09-06
@@ -1192,8 +1193,6 @@ mapAliases {
   joplin = joplin-cli; # Added 2025-11-03
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
-  julia_19 = throw "Julia 1.9 has reached its end of life and 'julia_19' has been removed. Please use a supported version."; # Added 2025-10-29
-  julia_19-bin = throw "Julia 1.9 has reached its end of life and 'julia_19-bin' has been removed. Please use a supported version."; # Added 2025-10-29
   jwm-settings-manager = throw "'jwm-settings-manager' has been removed, as it is unmaintained upstream"; # Added 2026-08-01
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   k3s_1_31 = throw "'k3s_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08
@@ -1444,6 +1443,7 @@ mapAliases {
   linux_6_19 = linuxKernel.kernels.linux_6_19;
   linux_7_0 = linuxKernel.kernels.linux_7_0;
   linux_7_1 = linuxKernel.kernels.linux_7_1;
+  linux_7_2 = linuxKernel.kernels.linux_7_2;
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = throw "linux_hardened has been removed due to lack of maintenance"; # Added 2026-03-18
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
@@ -1480,6 +1480,7 @@ mapAliases {
   linuxPackages_6_19 = linuxKernel.packages.linux_6_19;
   linuxPackages_7_0 = linuxKernel.packages.linux_7_0;
   linuxPackages_7_1 = linuxKernel.packages.linux_7_1;
+  linuxPackages_7_2 = linuxKernel.packages.linux_7_2;
   linuxPackages_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linuxPackages_hardened = throw "linuxPackages_hardened has been removed due to lack of maintenance"; # Added 2026-03-18
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
@@ -2206,6 +2207,8 @@ mapAliases {
   sawfish = throw "'sawfish' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-08-03
   scantailor = throw "'scantailor' has been renamed to/replaced by 'scantailor-advanced'"; # Converted to throw 2025-10-27
   scaphandre = throw "'scaphandre' was broken with no upstream progress since February 2025"; # Added 2026-06-14
+  scenefx_0_4 = throw "'scenefx_0_4' has been removed in favor of newer versions."; # Added 2026-08-14
+  scenefx_0_5 = scenefx; # Added 2026-08-14
   scitoken-cpp = throw "'scitoken-cpp' has been renamed to/replaced by 'scitokens-cpp'"; # Converted to throw 2025-10-27
   scudcloud = throw "'scudcloud' has been removed as it was archived by upstream"; # Added 2025-07-24
   SDL2_classic = throw "'SDL2_classic' has been removed. Consider upgrading to 'sdl2-compat', also available as 'SDL2'."; # Added 2025-05-20
@@ -2315,6 +2318,7 @@ mapAliases {
   springLobby = throw "springLobby has been removed, as it had been broken since 2023"; # Added 2025-09-16
   sqlar = throw "'sqlar' has been removed, as it is umaintained upstream, and depends on fuse2. Consider using the sqlite builtin VACUUM";
   sqlbag = throw "sqlbag has been removed because it has been marked as broken since May 2024."; # Added 2025-10-11
+  squashfsTools = squashfs-tools; # Added 2026-07-05
   squirreldisk = throw "'squirreldisk' has been removed as it depended on webkitgtk 4.0"; # Added 2026-06-07
   src = throw "The \"src\" package has been renamed to \"simple-revision-control\". If you encounter this error and did not intend to use that package you may have a falsely constructed overlay."; # Added 2025-11-19
   ssh-ashkpass-fullscreen = throw "'ssh-askpass-fullscreen' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-08-03
