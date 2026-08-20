@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   alsa-lib,
   ffmpeg,
   libjack2,
@@ -36,15 +35,6 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DWITH_QT5=TRUE"
     "-DWITH_GLINJECT=${if stdenv.hostPlatform.isx86 then "TRUE" else "FALSE"}"
-  ];
-
-  patches = [
-    # patch for ffmpeg 9
-    # https://github.com/MaartenBaert/ssr/pull/1092
-    (fetchpatch {
-      url = "https://github.com/MaartenBaert/ssr/commit/cbbd9920468babb62155aaa6aa6b8e467da78aff.patch";
-      hash = "sha256-dheOoeTt18Rrjh2ibVAGqRU54gf4smbIuxmVe5guZH0=";
-    })
   ];
 
   postPatch = ''
