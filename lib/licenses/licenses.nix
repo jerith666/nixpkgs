@@ -1284,6 +1284,11 @@ lib.mapAttrs mkLicense (
       fullName = "Open Data Commons Open Database License v1.0";
     };
 
+    ofl10 = {
+      spdxId = "OFL-1.0";
+      fullName = "SIL Open Font License 1.0";
+    };
+
     ofl = {
       spdxId = "OFL-1.1";
       fullName = "SIL Open Font License 1.1";
@@ -1643,6 +1648,8 @@ lib.mapAttrs mkLicense (
     vol-sl = {
       fullName = "Volatility Software License, Version 1.0";
       url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+      free = false;
+      redistributable = true;
     };
 
     vsl10 = {

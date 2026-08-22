@@ -2498,9 +2498,9 @@
   };
 
   sourcepawn = {
-    version = "0.7.8";
+    version = "0.8.0";
     url = "github:nilshelmig/tree-sitter-sourcepawn";
-    hash = "sha256-TfLCG2Ro3QnGStyCNqHwO54HQMR2fEOV6FjBv+0LjJ0=";
+    hash = "sha256-FmVOiJDOGDgw/Uju1PZZkG7hsy/6u3XTRUCycpbZ7M8=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -2556,9 +2556,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.8.6";
+    version = "2026.8.13";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-2po80xskxqmgwA32WIj9yE2BtjALUFcKCcwjcYx6jMg=";
+    hash = "sha256-a4tkU01oJ7x9rfVJRB3F9y8O3gmCVy0gLV6RieTrLLc=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [
