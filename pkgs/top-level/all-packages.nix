@@ -5613,10 +5613,10 @@ with pkgs;
             gccNGPackages.libgcc-no-libc
           else
             callPackage ../development/libraries/gcc/libgcc {
-          gcc = gccCrossLibcStdenv.cc;
-          glibc = glibc.override { libgcc = null; };
-          stdenvNoLibs = gccCrossLibcStdenv;
-        };
+              gcc = gccCrossLibcStdenv.cc;
+              glibc = glibc.override { libgcc = null; };
+              stdenvNoLibs = gccCrossLibcStdenv;
+            };
       }
     else
       {
