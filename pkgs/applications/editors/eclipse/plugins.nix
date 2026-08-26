@@ -7,17 +7,11 @@
   config,
   autoPatchelfHook,
   freetype,
-  glib,
   libX11,
   libXext,
   libXrender,
   libXtst,
-  alsa-lib,
-  libei,
-  libjpeg8,
-  libpng,
-  libsecret,
-  pipewire,
+  alsa-lib
 }:
 
 rec {
@@ -99,8 +93,6 @@ rec {
       doCheck = false;
 
       installPhase = ''
-        runHook preInstall
-
         dropinDir="$out/eclipse/dropins/${name}"
 
         # Install features.
@@ -132,8 +124,6 @@ rec {
           fi
         done
         cd ..
-
-        runHook postInstall
       '';
       }
     );
@@ -344,30 +334,20 @@ rec {
 
   copilot = buildEclipseUpdateSite rec {
     pname = "copilot";
-    version = "0.20.0";
+    version = "0.16.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/microsoft/copilot-for-eclipse/releases/download/${version}/GithubCopilotForEclipse.zip";
-      hash = "sha256-DDzjNOBoev9AuRGERf7G7Wex2G1bl2L+AaImBKFyoFk=";
+      sha256 = "sha256-i+CusKH8GDPMioh52DqWk0LwUFOurWwTEhWq7iIO7RI=";
     };
 
     # the copilot plugin includes the 'copilot-language-server' native binary
-    # as well as a few others; this ensures they have their dependencies
-    # available from the nix store
+    # as well as a few others; this ensures they have their (pretty minimal)
+    # dependencies available from the nix store
     buildInputs = [
       # provides libstdc++.so.6 and libgcc_s.so.1
       (lib.getLib stdenv.cc.cc)
-      # for keytar.node
-      glib
-      libsecret
-      # for computer.node
-      libX11
-      libXtst
-      libjpeg8
-      libpng
-      pipewire
-      libei
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -384,9 +364,6 @@ rec {
         unzip -q "$pluginJar" -d "$pluginDirName"
         rm "$pluginJar"
       done
-
-      # remove musl-targeted prebuilds; they cannot run on glibc-based NixOS
-      find "$out" -type d -name 'linuxmusl-*' -exec rm -rf {} +
     '';
 
     meta = {
