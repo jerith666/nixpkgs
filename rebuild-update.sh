@@ -21,12 +21,24 @@ ulimit -s 100000;
 
 echo "computing store path for new system";
 echo;
+
+mfsub="ssh://nix-alpha-mf-o";
+
+if grep "trusted-substituters[[:space:]]*=.*${mfsub}" /etc/nix/nix.conf > /dev/null; then
+    echo "using extra substituter ${mfsub} for all 'nix build's (but not 'nix-build's :( )";
+    echo;
+    xsub="--extra-substituters ${mfsub}";
+else
+    xsub="";
+fi
+
 if nixos-rebuild dry-build -I nixpkgs=$wt 2>dryout >dryout; then
     if grep nixos-system dryout; then
         system=$(grep nixos-system dryout);
         echo "building new system store path $system";
         echo;
-        nix build --keep-going ${system}^\*;
+
+        nix build --keep-going ${system}^\* ${xsub};
     else
         echo "nixos-rebuild dry-build succeeded without producing a nixos-system path";
         echo "perhaps the system is already built; proceeding with nixos-rebuild";
@@ -47,15 +59,21 @@ nix-build -I nixpkgs=$wt -A pkgs.client-ip-echo;
 nix-store --realise --add-root client-ip-echo-result --indirect result;
 
 for sd in calendar-filter client-ip-echo elbum bills-automation haskell-rest-service; do
-    echo; echo "confirming that nix-shell works for ${sd}";
+    if [ -d ~/git/${sd} ]; then
+        echo; echo "confirming that nix-shell works for ${sd}";
+    else
+        echo; echo "~/git/${sd} does not exist, skipping its nix-shell check";
+        continue;
+    fi
+
     todo=$(nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --dry-run 2>&1 | grep '/nix/store/.*\.drv$' || true)
     if echo $todo | grep '/nix/store/.*\.drv$' > /dev/null; then
-        nix build $(echo $todo | sed 's|.drv|.drv^\*|g') --keep-going --max-jobs 4;
+        nix build $(echo $todo | sed 's|.drv|.drv^\*|g') --keep-going --max-jobs 4 ${xsub};
     fi
     nix-shell -I nixpkgs=$wt ~/git/${sd}/shell.nix --keep-going --run true;
     nix-build -I nixpkgs=$wt ~/git/${sd}/shell.nix -A inputDerivation -o shell-${sd}-result
     if [ -f ~/git/${sd}/default.nix ]; then
-        nix build -I nixpkgs=$wt -f ~/git/${sd}/default.nix -o ${sd}-result
+        nix build -I nixpkgs=$wt -f ~/git/${sd}/default.nix -o ${sd}-result ${xsub};
     fi
 done
 

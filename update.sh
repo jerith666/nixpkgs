@@ -19,9 +19,20 @@ if git merge-base --is-ancestor origin/nixos-unstable $current; then
     exit 0;
 fi;
 
+cb=$(git branch --show-current);
+
+if [ "$cb" == "home-alpha-i9" ]; then
+    ub=origin/nixos-unstable;
+elif [ "$cb" == "work-laptop-t14s" ]; then
+    ub=jerith666/home-alpha-i9;
+else
+    echo "current branch $cb has no defined nixpkgs upstream";
+    exit 1;
+fi
+
 d=$(date +%Y-%m-%d-%H-%M)
 
-wt=/home/matt/git/nixos/nixpkgs-update-$d
+wt=${HOME}/git/nixos/nixpkgs-update-$d
 
 git worktree add -b update-$d $wt $current
 
@@ -35,9 +46,9 @@ for commit in ${PRE_CHERRY:-}; do
     git cherry-pick -x $commit;
 done
 
-git merge origin/nixos-unstable \
+git merge ${ub} \
     -X ignore-space-change \
-    -m "Merge remote-tracking branch 'origin/nixos-unstable'";
+    -m "Merge remote-tracking branch '${ub}'";
 
 for commit in ${POST_REVERT:-}; do
     git revert --no-edit $commit;
