@@ -433,37 +433,37 @@ in
       lib.nameValuePair "restic-backups-${name}" (
         {
           environment = {
-              # not %C, because that wouldn't work in the wrapper script
-              RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
-              RESTIC_PASSWORD_FILE = backup.passwordFile;
-              RESTIC_REPOSITORY = backup.repository;
-              RESTIC_REPOSITORY_FILE = backup.repositoryFile;
-            }
-            // lib.optionalAttrs (backup.rcloneOptions != null) (
-              lib.mapAttrs' (
-                name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-              ) backup.rcloneOptions
-            )
-            // lib.optionalAttrs (backup.rcloneConfigFile != null) {
-              RCLONE_CONFIG = backup.rcloneConfigFile;
-            }
-            // lib.optionalAttrs (backup.rcloneConfig != null) (
-              lib.mapAttrs' (
-                name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
-              ) backup.rcloneConfig
-            )
-            // lib.optionalAttrs (backup.progressFps != null) {
-              RESTIC_PROGRESS_FPS = toString backup.progressFps;
-            };
+            # not %C, because that wouldn't work in the wrapper script
+            RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
+            RESTIC_PASSWORD_FILE = backup.passwordFile;
+            RESTIC_REPOSITORY = backup.repository;
+            RESTIC_REPOSITORY_FILE = backup.repositoryFile;
+          }
+          // lib.optionalAttrs (backup.rcloneOptions != null) (
+            lib.mapAttrs' (
+              name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+            ) backup.rcloneOptions
+          )
+          // lib.optionalAttrs (backup.rcloneConfigFile != null) {
+            RCLONE_CONFIG = backup.rcloneConfigFile;
+          }
+          // lib.optionalAttrs (backup.rcloneConfig != null) (
+            lib.mapAttrs' (
+              name: value: lib.nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+            ) backup.rcloneConfig
+          )
+          // lib.optionalAttrs (backup.progressFps != null) {
+            RESTIC_PROGRESS_FPS = toString backup.progressFps;
+          };
           path = [ config.programs.ssh.package ];
           restartIfChanged = false;
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
           serviceConfig = {
-              Type = "oneshot";
-              ExecStart =
+            Type = "oneshot";
+            ExecStart =
               lib.optionals doBackup [
-                  "${resticCmd} backup ${
+                "${resticCmd} backup ${
                   lib.concatStringsSep " " (
                     backup.extraBackupArgs
                     ++ lib.optionals fileBackup (excludeFlags ++ [ "--files-from=${filesFromTmpFile}" ])
@@ -471,17 +471,17 @@ in
                   )
                 }"
               ]
-                ++ pruneCmd
-                ++ checkCmd;
-              User = backup.user;
-              RuntimeDirectory = "restic-backups-${name}";
-              CacheDirectory = "restic-backups-${name}";
-              CacheDirectoryMode = "0700";
-              PrivateTmp = true;
-            }
-            // lib.optionalAttrs (backup.environmentFile != null) {
-              EnvironmentFile = backup.environmentFile;
-            };
+              ++ pruneCmd
+              ++ checkCmd;
+            User = backup.user;
+            RuntimeDirectory = "restic-backups-${name}";
+            CacheDirectory = "restic-backups-${name}";
+            CacheDirectoryMode = "0700";
+            PrivateTmp = true;
+          }
+          // lib.optionalAttrs (backup.environmentFile != null) {
+            EnvironmentFile = backup.environmentFile;
+          };
         }
         // lib.optionalAttrs (backup.unitConfig != null) backup.unitConfig
         // lib.optionalAttrs (backup.initialize || doBackup || backup.backupPrepareCommand != null) {

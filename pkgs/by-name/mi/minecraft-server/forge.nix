@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, pkgs
-, jre_headless
-, rsync
-, bash
-, version
-, installerJarHash
-, installerResultHash
+{
+  lib,
+  stdenv,
+  pkgs,
+  jre_headless,
+  rsync,
+  bash,
+  version,
+  installerJarHash,
+  installerResultHash,
 }:
 
 let
@@ -57,7 +58,11 @@ stdenv.mkDerivation {
 
   src = forgeInstall;
 
-  buildInputs = [ jre_headless rsync bash ];
+  buildInputs = [
+    jre_headless
+    rsync
+    bash
+  ];
 
   startupScript = pkgs.writeScript "minecraft-server" ''
     #!${bash}/bin/sh

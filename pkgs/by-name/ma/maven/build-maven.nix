@@ -21,15 +21,14 @@
 #
 # @example
 #     project = pkgs.buildMaven ./project-info.json
-src:
-infoFile:
+src: infoFile:
 let
   info = lib.importJSON infoFile;
 
   dependencies = lib.flatten (
     map (
       dep:
-    let
+      let
         inherit (dep)
           sha1
           groupId
@@ -38,38 +37,38 @@ let
           metadata
           repository-id
           ;
-      versionDir = dep.unresolved-version or version;
-      authenticated = dep.authenticated or false;
-      url = dep.url or "";
+        versionDir = dep.unresolved-version or version;
+        authenticated = dep.authenticated or false;
+        url = dep.url or "";
 
         fetch =
           if (url != "") then
-        ((if authenticated then requireFile else fetchurl) {
-        inherit url sha1;
-        })
-      else
-        "";
+            ((if authenticated then requireFile else fetchurl) {
+              inherit url sha1;
+            })
+          else
+            "";
 
-      fetchMetadata = (if authenticated then requireFile else fetchurl) {
-        inherit (metadata) url sha1;
-      };
+        fetchMetadata = (if authenticated then requireFile else fetchurl) {
+          inherit (metadata) url sha1;
+        };
 
         layout = "${builtins.replaceStrings [ "." ] [ "/" ] groupId}/${artifactId}/${versionDir}";
       in
       lib.optional (url != "") {
-      layout = "${layout}/${fetch.name}";
-      drv = fetch;
+        layout = "${layout}/${fetch.name}";
+        drv = fetch;
       }
       ++ lib.optionals (dep ? metadata) (
         [
           {
-      layout = "${layout}/maven-metadata-${repository-id}.xml";
-      drv = fetchMetadata;
+            layout = "${layout}/maven-metadata-${repository-id}.xml";
+            drv = fetchMetadata;
           }
         ]
         ++ lib.optional (fetch != "") {
           layout = "${layout}/${builtins.replaceStrings [ version ] [ dep.unresolved-version ] fetch.name}";
-      drv = fetch;
+          drv = fetch;
         }
       )
     ) info.dependencies
@@ -77,8 +76,8 @@ let
 
   repo = linkFarm "maven-repository" (
     lib.forEach dependencies (dependency: {
-    name = dependency.layout;
-    path = dependency.drv;
+      name = dependency.layout;
+      path = dependency.drv;
     })
   );
 
