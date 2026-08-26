@@ -344,12 +344,12 @@ rec {
 
   copilot = buildEclipseUpdateSite rec {
     pname = "copilot";
-    version = "0.20.0";
+    version = "0.21.0";
 
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/microsoft/copilot-for-eclipse/releases/download/${version}/GithubCopilotForEclipse.zip";
-      hash = "sha256-DDzjNOBoev9AuRGERf7G7Wex2G1bl2L+AaImBKFyoFk=";
+      hash = "sha256-HjmQf3Vaid6VgMBdGaLvVk0mc3VbSNkRRspU9Og4XLk=";
     };
 
     # the copilot plugin includes the 'copilot-language-server' native binary
