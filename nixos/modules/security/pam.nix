@@ -244,17 +244,17 @@ let
 
         u2f = {
           enable = lib.mkOption {
-          default = config.security.pam.u2f.enable;
-          defaultText = lib.literalExpression "config.security.pam.u2f.enable";
-          type = lib.types.bool;
-          description = ''
-            If set, users listed in
-            {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
-            {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
-            not set) are able to log in with the associated U2F key. Path can be
-            changed using {option}`security.pam.u2f.authFile` option.
-          '';
-        };
+            default = config.security.pam.u2f.enable;
+            defaultText = lib.literalExpression "config.security.pam.u2f.enable";
+            type = lib.types.bool;
+            description = ''
+              If set, users listed in
+              {file}`$XDG_CONFIG_HOME/Yubico/u2f_keys` (or
+              {file}`$HOME/.config/Yubico/u2f_keys` if XDG variable is
+              not set) are able to log in with the associated U2F key. Path can be
+              changed using {option}`security.pam.u2f.authFile` option.
+            '';
+          };
 
           control = lib.mkOption {
             default = config.security.pam.u2f.control;
@@ -601,10 +601,10 @@ let
 
         lastlog = {
           enable = lib.mkOption {
-          default = false;
-          type = lib.types.bool;
-          description = "Whether to update {file}`/var/log/wtmp`.";
-        };
+            default = false;
+            type = lib.types.bool;
+            description = "Whether to update {file}`/var/log/wtmp`.";
+          };
 
           silent = lib.mkOption {
             default = true;
@@ -684,6 +684,18 @@ let
             If the user's login password does not match their keyring password,
             oo7 will prompt separately after login.
           '';
+        };
+
+        rosec = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = ''
+              If enabled, pam_rosec will attempt to automatically unlock the
+              user's rosec vault upon login. If the user login password does not
+              match their vault password, rosec will prompt separately after login.
+            '';
+          };
         };
 
         enableUMask = lib.mkOption {
@@ -904,16 +916,18 @@ let
 
         text =
           let
+            hasSpaceInfix = lib.hasInfix " ";
+            escapeEndingBrackets = lib.replaceStrings [ "]" ] [ "\\]" ];
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
-              token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+              token: if hasSpaceInfix token then "[${escapeEndingBrackets token}]" else token;
 
             formatRules =
               type:
               concatStringsSep "\n" (
                 map
                   (
-                  rule:
+                    rule:
                     "${type} ${rule.control} ${rule.modulePath}${
                       if rule.args == [ ] then "" else " " + concatStringsSep " " (map formatModuleArgument rule.args)
                     } # ${rule.name} (order ${toString rule.order})"
@@ -1208,6 +1222,7 @@ let
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
                       || cfg.oo7.enable
+                      || cfg.rosec.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1285,6 +1300,12 @@ let
                       enable = cfg.oo7.enable;
                       control = "optional";
                       modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                    }
+                    {
+                      name = "rosec";
+                      enable = cfg.rosec.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
                     }
                     {
                       name = "intune";
@@ -1432,7 +1453,6 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
@@ -1513,6 +1533,12 @@ let
                 enable = cfg.oo7.enable;
                 control = "optional";
                 modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
             ];
 
@@ -1748,6 +1774,12 @@ let
                 };
               }
               {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
+              }
+              {
                 name = "gnupg";
                 enable = cfg.gnupg.enable;
                 control = "optional";
@@ -1853,11 +1885,6 @@ let
       pkgs.writeText "motd" config.users.motd
     else
       config.users.motdFile;
-
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
 
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
@@ -2677,7 +2704,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))
@@ -2765,8 +2811,8 @@ in
           rules = concatMap attrValues types;
 
           isDirect = flip elem [
-              "include"
-              "substack"
+            "include"
+            "substack"
           ];
           activeRules = filter (rule: rule.enable && !isDirect rule.control) rules;
 
