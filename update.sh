@@ -7,18 +7,6 @@ git fetch --all
 
 current=$(nixos-version --revision);
 
-if git merge-base --is-ancestor origin/nixos-unstable $current; then
-    echo;
-    echo "at                                         $(date +%c)";
-    echo;
-    echo "the current version:        $(git log -1 --date=format-local:%c --format='%h @ %ad' $current)";
-    echo;
-    echo "already contains the";
-    echo "latest nixos-unstable:      $(git log -1 --date=format-local:%c --format='%h @ %ad' origin/nixos-unstable)"
-    echo;
-    exit 0;
-fi;
-
 cb=$(git branch --show-current);
 
 if [ "$cb" == "home-alpha-i9" ]; then
@@ -29,6 +17,19 @@ else
     echo "current branch $cb has no defined nixpkgs upstream";
     exit 1;
 fi
+
+if git merge-base --is-ancestor ${ub} $current; then
+    echo;
+    echo "at                                         $(date +%c)";
+    echo;
+    echo "the current version:        $(git log -1 --date=format-local:%c --format='%h @ %ad' $current)";
+    echo;
+    echo "already contains the";
+    echo "latest ${ub}:";
+    echo "                            $(git log -1 --date=format-local:%c --format='%h @ %ad' origin/nixos-unstable)"
+    echo;
+    exit 0;
+fi;
 
 d=$(date +%Y-%m-%d-%H-%M)
 
