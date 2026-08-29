@@ -3694,13 +3694,6 @@
     githubId = 185443;
     name = "Alexey Lebedeff";
   };
-  binary-eater = {
-    email = "sergeantsagara@protonmail.com";
-    github = "Binary-Eater";
-    githubId = 10691440;
-    name = "Rahul Rameshbabu";
-    keys = [ { fingerprint = "678A 8DF1 D9F2 B51B 7110  BE53 FF24 7B3E 5411 387B"; } ];
-  };
   binarycat = {
     email = "binarycat@envs.net";
     github = "lolbinarycat";
@@ -20948,6 +20941,12 @@
     githubId = 41154684;
     name = "nokazn";
   };
+  nolight132 = {
+    email = "contact@nolight.dev";
+    github = "nolight132";
+    githubId = 71591964;
+    name = "Pavel Olizko";
+  };
   nolith = {
     github = "nolith";
     githubId = 78752;
@@ -21702,6 +21701,12 @@
     github = "Oops418";
     name = "Oops418";
     githubId = 93655215;
+  };
+  opdavies = {
+    email = "oliver+github@oliverdavies.uk";
+    github = "opdavies";
+    githubId = 339813;
+    name = "Oliver Davies";
   };
   opeik = {
     email = "sandro@stikic.com";
@@ -23085,6 +23090,12 @@
     name = "Pradyuman Vig";
     keys = [ { fingerprint = "240B 57DE 4271 2480 7CE3  EAC8 4F74 D536 1C4C A31E"; } ];
   };
+  prauscher = {
+    email = "prauscher@prauscher.de";
+    github = "prauscher";
+    githubId = 175521;
+    name = "Patrick Rauscher";
+  };
   preisschild = {
     email = "florian@florianstroeger.com";
     github = "Preisschild";
@@ -23432,12 +23443,6 @@
     email = "adam@pyle.dev";
     github = "pyle";
     githubId = 7279609;
-  };
-  pyrotelekinetic = {
-    name = "Clover Ison";
-    email = "clover@isons.org";
-    github = "pyrotelekinetic";
-    githubId = 29682759;
   };
   pyrox0 = {
     name = "Pyrox";
@@ -27744,6 +27749,12 @@
     githubId = 1939855;
     name = "Kimmo Suominen";
   };
+  suorcd = {
+    email = "fair.sand8703@fastmail.com";
+    github = "suorcd";
+    githubId = 60907848;
+    name = "suorcd";
+  };
   supa = {
     email = "supa.codes@gmail.com";
     github = "0Supa";
@@ -29386,6 +29397,12 @@
     matrix = "@tpw_rules:matrix.org";
     github = "tpwrules";
     githubId = 208010;
+  };
+  tr3foil = {
+    name = "Clover Ison";
+    email = "clover@isons.org";
+    github = "tr3foil";
+    githubId = 29682759;
   };
   transcaffeine = {
     name = "transcaffeine";
