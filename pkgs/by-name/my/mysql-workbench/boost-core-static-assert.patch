@@ -1,0 +1,30 @@
+diff --git a/library/base/base/string_utilities.h b/library/base/base/string_utilities.h
+index 100e6db9c..05a0417a3 100644
+--- a/library/base/base/string_utilities.h
++++ b/library/base/base/string_utilities.h
+@@ -40,6 +40,7 @@
+ #include <typeinfo>
+ #include <string.h>
+ 
++#include <boost/core/static_assert.hpp>
+ #include <boost/optional.hpp>
+ #include <memory>
+ #include <iomanip>
+@@ -318,7 +319,7 @@ namespace base {
+   template <typename T>
+   T inline atoi(const std::string &val, boost::optional<T> def_val = boost::none) {
+     // Don't remove the double parentheses. GCC needs them here.
+-    BOOST_STATIC_ASSERT((ConvertHelper::is_same<T, int>::value || ConvertHelper::is_same<T, long>::value ||
++    BOOST_CORE_STATIC_ASSERT((ConvertHelper::is_same<T, int>::value || ConvertHelper::is_same<T, long>::value ||
+                          ConvertHelper::is_same<T, long long>::value || ConvertHelper::is_same<T, size_t>::value ||
+                          ConvertHelper::is_same<T, ssize_t>::value || ConvertHelper::is_same<T, int64_t>::value));
+ 
+@@ -327,7 +328,7 @@ namespace base {
+ 
+   template <typename T>
+   T inline atof(const std::string &val, boost::optional<T> def_val = boost::none) {
+-    BOOST_STATIC_ASSERT((ConvertHelper::is_same<T, double>::value || ConvertHelper::is_same<T, float>::value));
++    BOOST_CORE_STATIC_ASSERT((ConvertHelper::is_same<T, double>::value || ConvertHelper::is_same<T, float>::value));
+ 
+     return ConvertHelper::string_to_number<T>(val, def_val);
+   }

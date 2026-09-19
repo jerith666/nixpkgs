@@ -87,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.pld-linux.org/?p=packages/mysql-workbench.git;a=blob_plain;f=python-3.13.patch;h=d1425a93c41fb421603cda6edbb0514389cdc6a8;hb=bb09cb858f3b9c28df699d3b98530a6c590b5b7a";
       hash = "sha256-hLfPqZSNf3ls2WThF1SBRjV33zTUymfgDmdZVpgO22Q=";
     })
+
+    ./boost-core-static-assert.patch
   ];
 
   postPatch = ''
