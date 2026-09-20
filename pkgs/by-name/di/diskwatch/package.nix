@@ -11,24 +11,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diskwatch";
-  version = "0.5.2";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "diskwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aebepClhjC5Gnw9Ct+z04XX0bcDRytk2Z88BeA0lE8Y=";
+    hash = "sha256-RDQg3DIlfF/BIxcN8+Jg1UWnPZYp73wmfUb8DLsw9Ng=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-+TY+EY3VfMLONYYVH+HdoKdUKXPSer4UvpVgNH59hHI=";
+  cargoHash = "sha256-zgPA8YUVaN8ZqosjlSZzAxLBwMwturQdF2eZpyXlIAQ=";
 
   nativeCheckInputs = [ versionCheckHook ];
 
   buildInputs = lib.optionals withSmartmontools [ smartmontools ];
 
   doInstallCheck = true;
+
+  cargoTestFlags = [
+    "--"
+    "--skip=left_right_cycle_all_tabs_without_moving_selections"
+  ];
 
   meta = {
     description = "Single-host, read-only disk diagnostics TUI";

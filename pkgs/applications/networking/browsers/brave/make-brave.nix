@@ -71,7 +71,7 @@
   libxcb,
   zlib,
   # Darwin dependencies
-  unzip,
+  undmg,
   makeWrapper,
   # command line arguments which are always set e.g "--disable-gpu"
   commandLineArgs ? "",
@@ -191,9 +191,12 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (archive) url sha256; };
 
+  sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "${darwinApp}.app";
+
   dontConfigure = true;
   dontBuild = true;
   dontPatchELF = true;
+  dontStrip = stdenv.hostPlatform.isDarwin;
   doInstallCheck = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs =
@@ -204,7 +207,7 @@ stdenv.mkDerivation {
       (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      unzip
+      undmg
       makeWrapper
     ];
 
@@ -309,7 +312,7 @@ stdenv.mkDerivation {
     $out/opt/brave.com/${optName}/brave --version
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = ./update.py;
 
   meta = {
     homepage = homepage;

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
@@ -25,7 +26,7 @@
 }:
 
 let
-  version = "2.3.0";
+  version = "2.3.1";
   devenvNixVersion = "2.35";
   devenvNixRev = "b9b81726b38469c55b9706d80d37d6c73cc7f76c";
 
@@ -42,23 +43,27 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v2.3";
-    hash = "sha256-ZH5WcgnRjqV1jY4gCHWOv6DlDVgBz+xLIoja/e8cWjw=";
+    tag = "v2.3.1";
+    hash = "sha256-zZB/UVcdL0VWuAPEe/ALY7onj8Q18efSUdL3ZJlUspk=";
   };
 
-  cargoHash = "sha256-IAmZzN+sj8GZvbW0Q0wEdz+m3ZMrpvGKh1iH8r2LgLQ=";
+  cargoHash = "sha256-oaBQMX8gTj/jFliJnfl+lO4yndSrorJT/Y3p2/YoRas=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -67,6 +72,8 @@ rustPlatform.buildRustPackage {
     "devenv"
     "-p"
     "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
   ];
 
   nativeBuildInputs = [

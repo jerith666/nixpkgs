@@ -857,6 +857,7 @@
   ./services/misc/anki-sync-server.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
+  ./services/misc/aurral.nix
   ./services/misc/autobrr.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
@@ -968,7 +969,6 @@
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
   ./services/misc/persistent-evdev.nix
-  ./services/misc/pghero.nix
   ./services/misc/pinchflat.nix
   ./services/misc/pinnwand.nix
   ./services/misc/plex.nix
@@ -1003,7 +1003,6 @@
   ./services/misc/serviio.nix
   ./services/misc/shelfmark.nix
   ./services/misc/shoko.nix
-  ./services/misc/sickbeard.nix
   ./services/misc/snapper.nix
   ./services/misc/soft-serve.nix
   ./services/misc/spice-autorandr.nix
@@ -1284,6 +1283,7 @@
   ./services/networking/imaginary.nix
   ./services/networking/inadyn.nix
   ./services/networking/inspircd.nix
+  ./services/networking/iocaine.nix
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
@@ -1354,6 +1354,7 @@
   ./services/networking/nebula-lighthouse-service.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
+  ./services/networking/netbird/netbird-relay.nix
   ./services/networking/netbird/server.nix
   ./services/networking/netclient.nix
   ./services/networking/netfoil.nix
@@ -1546,6 +1547,7 @@
   ./services/search/manticore.nix
   ./services/search/meilisearch.nix
   ./services/search/nominatim.nix
+  ./services/search/opensearch-dashboards.nix
   ./services/search/opensearch.nix
   ./services/search/qdrant.nix
   ./services/search/quickwit.nix
