@@ -4,8 +4,8 @@
   fetchFromGitHub,
   lib,
   openconnect,
-  libsoup,
-  webkitgtk_4_0,
+  libsoup_3,
+  webkitgtk_4_1,
   pkg-config,
   callPackage,
   rustPlatform,
@@ -54,15 +54,15 @@ rustPlatform.buildRustPackage {
     perl
     jq
     openconnect
-    libsoup
-    webkitgtk_4_0
+    libsoup_3
+    webkitgtk_4_1
     pkg-config
   ];
 
   PKG_CONFIG_PATH = lib.strings.concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig/") [
     glib.dev
-    libsoup.dev
-    webkitgtk_4_0.dev
+    libsoup_3.dev
+    webkitgtk_4_1.dev
     atk.dev
     gdk-pixbuf.dev
     pango.dev

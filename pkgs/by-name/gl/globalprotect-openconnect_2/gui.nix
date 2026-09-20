@@ -2,12 +2,12 @@
   fetchurl,
   stdenv,
   zstd,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libappindicator,
   gtk3,
   cairo,
   gdk-pixbuf,
-  libsoup,
+  libsoup_3,
   glib,
   autoPatchelfHook,
 }:
@@ -40,13 +40,13 @@ stdenv.mkDerivation {
   src = remotes.${stdenv.hostPlatform.system};
   nativeBuildInputs = [
     zstd
-    webkitgtk_4_0
+    webkitgtk_4_1
     autoPatchelfHook
     libappindicator
     gtk3
     cairo
     gdk-pixbuf
-    libsoup
+    libsoup_3
     glib
   ];
   postUnpack = ''
