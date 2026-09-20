@@ -8,10 +8,10 @@
   autoPatchelfHook,
   freetype,
   glib,
-  libX11,
-  libXext,
-  libXrender,
-  libXtst,
+  libx11,
+  libxext,
+  libxrender,
+  libxtst,
   alsa-lib,
   libei,
   libjpeg8,
@@ -362,8 +362,8 @@ rec {
       glib
       libsecret
       # for computer.node
-      libX11
-      libXtst
+      libx11
+      libxtst
       libjpeg8
       libpng
       pipewire
@@ -703,10 +703,10 @@ rec {
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [
       freetype
-      libX11
-      libXext
-      libXrender
-      libXtst
+      libx11
+      libxext
+      libxrender
+      libxtst
       alsa-lib
     ];
 
