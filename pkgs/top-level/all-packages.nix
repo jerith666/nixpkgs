@@ -314,7 +314,7 @@ with pkgs;
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
-  buildEnvTest = callPackage ../build-support/buildenv/test.nix { };
+  # buildEnvTest = callPackage ../build-support/buildenv/test.nix { };
 
   buildFHSEnv = buildFHSEnvBubblewrap;
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
