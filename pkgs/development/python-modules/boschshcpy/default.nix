@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "boschshcpy";
-  version = "0.6.10";
+  version = "0.6.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tschamm";
     repo = "boschshcpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wlTGcCufsmVnbgQPTNAsxmuXZBBOvP9F6SusuywZYuk=";
+    hash = "sha256-90yxDOJ5yXOVIF+hjNm8v+uQTTLqwq8ep1e86SO6N3s=";
   };
 
   build-system = [ setuptools ];

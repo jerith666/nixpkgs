@@ -40,9 +40,6 @@ mkKdeDerivation {
       QtBinariesDir = null;
     })
 
-    # stop accidentally duplicating fontconfig configs
-    ./fontconfig.patch
-
     ./kde-lock-screen.patch
   ];
 
@@ -67,6 +64,7 @@ mkKdeDerivation {
     pkg-config
     spirv-tools
   ];
+
   extraBuildInputs = [
     qtlocation
     qtpositioning
@@ -104,8 +102,5 @@ mkKdeDerivation {
     moveToOutput share/wayland-sessions $sessions
   '';
 
-  passthru.providedSessions = [
-    "plasma"
-    "plasmax11"
-  ];
+  passthru.providedSessions = [ "plasma" ];
 }
