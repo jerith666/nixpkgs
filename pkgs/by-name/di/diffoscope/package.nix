@@ -248,7 +248,8 @@ python.pkgs.buildPythonApplication rec {
       ++ (with python.pkgs; [
         androguard
         black
-        guestfs
+        # broken due to dependency on fuse2
+        # guestfs
         h5py
         pdfminer-six
         r2pipe
