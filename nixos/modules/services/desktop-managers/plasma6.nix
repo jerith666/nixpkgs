@@ -157,7 +157,6 @@ in
           plasma-browser-integration
           plasma-workspace-wallpapers
           konsole
-          kwin-x11
           (lib.getBin qttools) # Expose qdbus in PATH
           ark
           elisa
@@ -228,7 +227,6 @@ in
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
-      ++ lib.optional config.services.xserver.wacom.enable wacomtablet
       ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
     environment.pathsToLink = [

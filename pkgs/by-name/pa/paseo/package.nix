@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   buildNpmPackage,
+  callPackage,
   fetchFromGitHub,
   lib,
   libuv,
@@ -13,7 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.8.0";
+  version = "0.14.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,12 +23,12 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zYUj7CGz+i+w0elysbU+Sup+NACsBoIEqCu8WHA24PE=";
+    hash = "sha256-gtmTf6gbCczT18jk4ZYrNhcW3b6it1yVCnvZqa6gOsA=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-gDB48rHd0K1VOAblaQlPP4XnKGHI8cAt9S09aRxx6b4=";
+  npmDepsHash = "sha256-6C4Rjh0mRVrC9akBVGK0NZaCaLJhwKObT7HrgPmcvyw=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -49,8 +50,10 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # Rebuild only node-pty (native addon for terminal emulation)
-    npm rebuild node-pty
+    npm run postinstall
+
+    npm_config_build_from_source=true npm_config_nodedir=${finalAttrs.nodejs} \
+      npm rebuild node-pty --workspace @getpaseo/server
 
     npm run build:server
     npm run build:daemon-web-ui
@@ -71,6 +74,14 @@ buildNpmPackage (finalAttrs: {
       cp -a "$path" "$out/lib/paseo/$path"
     done < daemon-files.txt
 
+    # The CLI resolves this export to locate the supervisor without loading it.
+    cp packages/server/dist/server/server/exports.js \
+      $out/lib/paseo/packages/server/dist/server/server/
+
+    nodePty=packages/server/node_modules/node-pty
+    mkdir -p "$out/lib/paseo/$nodePty/build"
+    cp -a "$nodePty/build/Release" "$out/lib/paseo/$nodePty/build/"
+
     # Root package.json lets node resolve the workspace layout when the
     # CLI/server bin starts from $out.
     cp package.json $out/lib/paseo/
@@ -90,7 +101,18 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        meta
+        nodejs
+        npmDeps
+        src
+        version
+        ;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Orchestrate multiple coding agents from desktop and mobile";

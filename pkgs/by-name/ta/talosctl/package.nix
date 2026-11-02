@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "talosctl";
-  version = "1.14.1";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-55BnNQAUxzUbtYjvMAM6ExnDPNyl7XN7pASYBeMWt3Y=";
+    hash = "sha256-GzaPK2whp3L9eO6psXndDn7yWnA/WoDOzgTVnU+0x3s=";
   };
 
-  vendorHash = "sha256-2mhMSfw3YMO5Tg3b14DIFtJiGFdXaDSaJ4XoR6PXdHA=";
+  vendorHash = "sha256-FJjHvEikYtFJF2kdisNMTqQGjy0D2kjXR5tPvAl0LNg=";
 
   postPatch = lib.optionalString withQemu ''
     substituteInPlace pkg/provision/providers/qemu/arch.go \

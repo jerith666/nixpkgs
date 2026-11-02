@@ -1,9 +1,8 @@
 --- a/lookandfeel/components/WallpaperFader.qml	2026-02-12 05:09:47.000000000 -0500
 +++ b/lookandfeel/components/WallpaperFader.qml	2026-02-21 12:04:04.574913541 -0500
-@@ -79,7 +79,7 @@
+@@ -79,6 +79,6 @@
              PropertyChanges {
                  mainStack.opacity: 1
-                 footer.opacity: 1
 -                wallpaperFader.factor: 1
 +                wallpaperFader.factor: 0
                  clock.shadow.opacity: 0
