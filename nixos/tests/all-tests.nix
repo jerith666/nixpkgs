@@ -1907,6 +1907,7 @@ in
   tmate-ssh-server = runTest ./tmate-ssh-server.nix;
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
+  toxvpn = runTest ./toxvpn.nix;
   tpm-ek = handleTest ./tpm-ek { };
   tpm2 = import ./tpm2 { inherit runTest; };
   traccar = runTest ./traccar.nix;
@@ -2063,6 +2064,7 @@ in
     inherit lib runTest;
   };
   yggdrasil = runTest ./yggdrasil.nix;
+  yopass = import ./web-apps/yopass.nix { inherit pkgs runTest; };
   your_spotify = runTest ./your_spotify.nix;
   zammad = runTest ./zammad.nix;
   zapret2 = runTest ./zapret2.nix;

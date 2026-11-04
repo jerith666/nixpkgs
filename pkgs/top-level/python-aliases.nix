@@ -389,6 +389,7 @@ mapAliases {
   libbs = throw "'libbs' has been replaced by 'declib', which uses a different Python module name"; # Added 2026-08-20
   libclang = clang; # added 2026-06-18
   libgpiod = gpiod; # added 2026-03-30
+  libparse-python = lib.warnOnInstantiate "'libparse-python' has been renamed to 'lln-libparse'" lln-libparse; # Added 2026-11-01
   libpyfoscam = throw "libpyfoscam was removed because Home Assistant switched to libpyfoscamcgi"; # added 2025-07-03
   libvirt = libvirt-python; # added 2026-07-20
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
@@ -548,6 +549,7 @@ mapAliases {
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29
   pycrc = throw "'pycrc' has been removed because its source is unavailable"; # Added 2025-12-22
+  pycxx = cxx; # Added 2026-10-31
   pydns = throw "'pydns' has been renamed to/replaced by 'py3dns'"; # Converted to throw 2025-10-29
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
   pyeiscp = throw "'pyeiscp' was removed because it was an unmaintained leaf package."; # added 2026-01-22

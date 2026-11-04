@@ -2828,6 +2828,8 @@ self: super: with self; {
 
   bytesize = toPythonModule (pkgs.libbytesize.override { python3Packages = self; });
 
+  bytestruct = callPackage ../development/python-modules/bytestruct { };
+
   bytewax = callPackage ../development/python-modules/bytewax { };
 
   cache = callPackage ../development/python-modules/cache { };
@@ -3980,6 +3982,8 @@ self: super: with self; {
   cx-logging = callPackage ../development/python-modules/cx-logging { };
 
   cx-oracle = callPackage ../development/python-modules/cx-oracle { };
+
+  cxx = callPackage ../development/python-modules/cxx { };
 
   cxxfilt = callPackage ../development/python-modules/cxxfilt { };
 
@@ -9212,8 +9216,6 @@ self: super: with self; {
 
   kconfiglib = callPackage ../development/python-modules/kconfiglib { };
 
-  kde-material-you-colors = callPackage ../development/python-modules/kde-material-you-colors { };
-
   kdl-py = callPackage ../development/python-modules/kdl-py { };
 
   keba-kecontact = callPackage ../development/python-modules/keba-kecontact { };
@@ -9781,8 +9783,6 @@ self: super: with self; {
     }
   );
 
-  libparse-python = callPackage ../development/python-modules/libparse-python/package.nix { };
-
   libpass = callPackage ../development/python-modules/libpass { };
 
   libpcap = callPackage ../development/python-modules/libpcap {
@@ -10269,6 +10269,8 @@ self: super: with self; {
   llm-video-frames = callPackage ../development/python-modules/llm-video-frames { };
 
   llmx = callPackage ../development/python-modules/llmx { };
+
+  lln-libparse = callPackage ../development/python-modules/lln-libparse/package.nix { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     inherit (pkgs) cmake ninja;
@@ -12339,6 +12341,8 @@ self: super: with self; {
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nrf-ota = callPackage ../development/python-modules/nrf-ota { };
+
+  nrf802154-sniffer = callPackage ../development/python-modules/nrf802154-sniffer { };
 
   nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
@@ -14858,8 +14862,6 @@ self: super: with self; {
   pycups = callPackage ../development/python-modules/pycups { };
 
   pycurl = callPackage ../development/python-modules/pycurl { };
-
-  pycxx = callPackage ../development/python-modules/pycxx { };
 
   pycycling = callPackage ../development/python-modules/pycycling { };
 
