@@ -227,6 +227,7 @@
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
   ./programs/foot
+  ./programs/framework-settings.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/fzf.nix
@@ -362,6 +363,7 @@
   ./programs/vim.nix
   ./programs/virt-manager.nix
   ./programs/vivid.nix
+  ./programs/vlc.nix
   ./programs/vscode.nix
   ./programs/wavemon.nix
   ./programs/wayland/dux-shell.nix
