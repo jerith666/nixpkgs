@@ -3783,6 +3783,8 @@ self: super: with self; {
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
+  cppimport = callPackage ../development/python-modules/cppimport { };
+
   cppy = callPackage ../development/python-modules/cppy { };
 
   cpufeature = callPackage ../development/python-modules/cpufeature { };
@@ -11513,6 +11515,8 @@ self: super: with self; {
 
   mutf8 = callPackage ../development/python-modules/mutf8 { };
 
+  mvcrender = callPackage ../development/python-modules/mvcrender { };
+
   mvg = callPackage ../development/python-modules/mvg { };
 
   mwcli = callPackage ../development/python-modules/mwcli { };
@@ -12238,6 +12242,8 @@ self: super: with self; {
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel { inherit (pkgs) nix; };
 
+  nix-manipulator = callPackage ../development/python-modules/nix-manipulator { };
+
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nixl = callPackage ../development/python-modules/nixl {
@@ -12458,6 +12464,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvidia-modelopt = callPackage ../development/python-modules/nvidia-modelopt { };
+
   nvidia-resiliency-ext = callPackage ../development/python-modules/nvidia-resiliency-ext { };
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
@@ -12644,6 +12652,8 @@ self: super: with self; {
   };
 
   onnx-asr = callPackage ../development/python-modules/onnx-asr { };
+
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
 
   onnx-ir = callPackage ../development/python-modules/onnx-ir { };
 
@@ -14004,6 +14014,8 @@ self: super: with self; {
   polyfactory = callPackage ../development/python-modules/polyfactory { };
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
+
+  polygraphy = callPackage ../development/python-modules/polygraphy { };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
@@ -19949,8 +19961,6 @@ self: super: with self; {
 
   sphinxfeed-lsaffre = callPackage ../development/python-modules/sphinxfeed-lsaffre { };
 
-  spiderpy = callPackage ../development/python-modules/spiderpy { };
-
   spidev = callPackage ../development/python-modules/spidev { };
 
   spinners = callPackage ../development/python-modules/spinners { };
@@ -21290,6 +21300,8 @@ self: super: with self; {
 
   travispy = callPackage ../development/python-modules/travispy { };
 
+  trayer = callPackage ../development/python-modules/trayer { };
+
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
@@ -22376,11 +22388,21 @@ self: super: with self; {
 
   vacuum-map-parser-base = callPackage ../development/python-modules/vacuum-map-parser-base { };
 
+  vacuum-map-parser-dreame = callPackage ../development/python-modules/vacuum-map-parser-dreame { };
+
+  vacuum-map-parser-ijai = callPackage ../development/python-modules/vacuum-map-parser-ijai { };
+
   vacuum-map-parser-roborock =
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
 
+  vacuum-map-parser-roidmi = callPackage ../development/python-modules/vacuum-map-parser-roidmi { };
+
+  vacuum-map-parser-viomi = callPackage ../development/python-modules/vacuum-map-parser-viomi { };
+
   vacuum-map-parser-xiaomi = callPackage ../development/python-modules/vacuum-map-parser-xiaomi { };
+
+  valetudo-map-parser = callPackage ../development/python-modules/valetudo-map-parser { };
 
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 

@@ -597,6 +597,7 @@ in
     (mkRemovedOptionModule [ "services" "castopod" ] ''
       services.castopod has been removed together with pkgs.castopod.
     '')
+    (mkRemovedOptionModule [ "services" "scx" ] "Please migrate to services.scx-loader instead.")
     # Do NOT add any option renames here, see top of the file
   ];
 }
