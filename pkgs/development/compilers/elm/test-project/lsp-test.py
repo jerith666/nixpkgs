@@ -71,7 +71,7 @@ def main():
 
     # 2. initialized notification
     send({"jsonrpc": "2.0", "method": "initialized", "params": {}})
-    read_messages(129, "initialized response", proc.stdout)
+    read_messages(127, "initialized response", proc.stdout)
 
     # 3. open a fake document (definition/hover usually require an open doc)
     uri = f'file://{projDir}/src/Main.elm'
