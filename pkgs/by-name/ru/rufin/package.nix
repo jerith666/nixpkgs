@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  aws-lc,
   cacert,
   cargo,
   cmake,
@@ -15,12 +16,13 @@
   ninja,
   pkg-config,
   rustc,
+  sqlite,
   wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rufin";
-  version = "0.16.6";
+  version = "0.17.0";
 
   __structuredAttrs = true;
 
@@ -28,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Anm5iV/cd9Qw/xolZUQD3RpOfjaU9GOPwJY4zmoJ+bA=";
+    hash = "sha256-q7QGUUYxcJ20My9J/AIy1N7aagLrkQBXFuhh/BGbf+I=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-s+wUcvssyjL1nHTqAmqTgYe2ECxAqJyhZeD4PQg0Lu0=";
+    hash = "sha256-jvJQ1TP48AGW9g4JSKre+PoYVycwlnukeOrJnJLp7TI=";
   };
 
   strictDeps = true;
@@ -50,10 +52,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     glib
     glib-networking
     gtk4
     libadwaita
+    sqlite
   ]
   ++ (with gst_all_1; [
     gstreamer

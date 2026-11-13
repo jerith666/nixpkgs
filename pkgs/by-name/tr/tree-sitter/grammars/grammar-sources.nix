@@ -1423,7 +1423,7 @@
 
   inko = {
     version = "0.9.0";
-    url = "github:inko-lang/tree-sitter-inko";
+    url = "codeberg:inko-lang/tree-sitter-inko";
     hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
@@ -3134,9 +3134,9 @@
   };
 
   tera = {
-    version = "0.1.0";
+    version = "0.1.2";
     url = "github:uncenter/tree-sitter-tera";
-    hash = "sha256-1Gb947YJnEFrCVKAuz06kwJdKD9PMab/alFJtyYjBso=";
+    hash = "sha256-zjD92no4d2aGb4HDR0sbnvV/igwsUbO19QnSnT0QtTg=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -3409,10 +3409,10 @@
   };
 
   vhdl = {
-    version = "2.0.3-unstable-2026-09-14";
+    version = "2.0.3-unstable-2026-10-24";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "9be8e45c3ae7e7a4373a943a5c81ff92ce3656f8";
-    hash = "sha256-TU1dnMty8+OD24993bb7PB2M0RuzvKElWk4IkTCwGeg=";
+    rev = "0d5d60b269c7f9861c2bada7cef58fe62e6e7879";
+    hash = "sha256-wBmJlUFjK1E2nDdz3S+lm3QzVIStRfV2/LIXPiqsGFY=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
