@@ -1185,8 +1185,6 @@ self: super: with self; {
 
   anthropic = callPackage ../development/python-modules/anthropic { };
 
-  anthropic_0 = callPackage ../development/python-modules/anthropic/0.nix { };
-
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
     inherit (pkgs) antlr4;
   };
@@ -1317,9 +1315,7 @@ self: super: with self; {
 
   area = callPackage ../development/python-modules/area { };
 
-  arelle = callPackage ../development/python-modules/arelle { gui = true; };
-
-  arelle-headless = callPackage ../development/python-modules/arelle { gui = false; };
+  arelle-release = callPackage ../development/python-modules/arelle-release { };
 
   aresponses = callPackage ../development/python-modules/aresponses { };
 
@@ -2723,6 +2719,8 @@ self: super: with self; {
   broadbean = callPackage ../development/python-modules/broadbean { };
 
   broadlink = callPackage ../development/python-modules/broadlink { };
+
+  broadlink-async = callPackage ../development/python-modules/broadlink-async { };
 
   brother = callPackage ../development/python-modules/brother { };
 
@@ -4178,8 +4176,6 @@ self: super: with self; {
 
   datashader = callPackage ../development/python-modules/datashader { };
 
-  datashaper = callPackage ../development/python-modules/datashaper { };
-
   datasketch = callPackage ../development/python-modules/datasketch { };
 
   datastar-py = callPackage ../development/python-modules/datastar-py { };
@@ -5424,6 +5420,8 @@ self: super: with self; {
 
   e2b-code-interpreter = callPackage ../development/python-modules/e2b-code-interpreter { };
 
+  e2b-dockerfile-utils = callPackage ../development/python-modules/e2b-dockerfile-utils { };
+
   e3-core = callPackage ../development/python-modules/e3-core { };
 
   e3-testsuite = callPackage ../development/python-modules/e3-testsuite { };
@@ -6406,6 +6404,8 @@ self: super: with self; {
   flask-webtest = callPackage ../development/python-modules/flask-webtest { };
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
+
+  flask-wtforms-htmx = callPackage ../development/python-modules/flask-wtforms-htmx { };
 
   flask-xml-rpc-re = callPackage ../development/python-modules/flask-xml-rpc-re { };
 
@@ -7638,6 +7638,8 @@ self: super: with self; {
   hatch-regex-commit = callPackage ../development/python-modules/hatch-regex-commit { };
 
   hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
+
+  hatch-rs = callPackage ../development/python-modules/hatch-rs { };
 
   hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
@@ -11473,6 +11475,8 @@ self: super: with self; {
 
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
+  multi-demangle = callPackage ../development/python-modules/multi-demangle { };
+
   multi-key-dict = callPackage ../development/python-modules/multi-key-dict { };
 
   multiaddr = callPackage ../development/python-modules/multiaddr { };
@@ -12184,7 +12188,7 @@ self: super: with self; {
 
   nfcpy = callPackage ../development/python-modules/nfcpy { };
 
-  nftables = callPackage ../os-specific/linux/nftables/python.nix { inherit (pkgs) nftables; };
+  nftables = callPackage ../by-name/nf/nftables/python.nix { };
 
   ngff-zarr = callPackage ../development/python-modules/ngff-zarr { };
 
@@ -12444,7 +12448,7 @@ self: super: with self; {
 
   nutils-poly = callPackage ../development/python-modules/nutils-poly { };
 
-  nutpie = callPackage ../development/python-modules/nutpie { };
+  nutpie = callPackage ../development/python-modules/nutpie { inherit (pkgs) zstd; };
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
@@ -14655,7 +14659,7 @@ self: super: with self; {
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
-  pyaskalono = callPackage ../development/python-modules/pyaskalono { };
+  pyaskalono = callPackage ../development/python-modules/pyaskalono { inherit (pkgs) zstd; };
 
   pyasn = callPackage ../development/python-modules/pyasn { };
 
@@ -15189,8 +15193,6 @@ self: super: with self; {
 
   pyfritzhome = callPackage ../development/python-modules/pyfritzhome { };
 
-  pyfronius = callPackage ../development/python-modules/pyfronius { };
-
   pyftdi = callPackage ../development/python-modules/pyftdi { };
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
@@ -15227,6 +15229,8 @@ self: super: with self; {
   pygame-sdl2 = callPackage ../development/python-modules/pygame-sdl2 { };
 
   pygatt = callPackage ../development/python-modules/pygatt { };
+
+  pygbl = callPackage ../development/python-modules/pygbl { };
 
   pygccxml = callPackage ../development/python-modules/pygccxml { };
 
@@ -15354,8 +15358,6 @@ self: super: with self; {
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
   pyi2cflash = callPackage ../development/python-modules/pyi2cflash { };
-
-  pyialarm = callPackage ../development/python-modules/pyialarm { };
 
   pyiceberg = callPackage ../development/python-modules/pyiceberg { };
 
@@ -16008,9 +16010,7 @@ self: super: with self; {
 
   pypdf3 = callPackage ../development/python-modules/pypdf3 { };
 
-  pypdfium2 = callPackage ../development/python-modules/pypdfium2 {
-    inherit (pkgs) jq;
-  };
+  pypdfium2 = callPackage ../development/python-modules/pypdfium2 { };
 
   pypeg2 = callPackage ../development/python-modules/pypeg2 { };
 
@@ -16250,8 +16250,6 @@ self: super: with self; {
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
 
-  pyrituals = callPackage ../development/python-modules/pyrituals { };
-
   pyrmvtransport = callPackage ../development/python-modules/pyrmvtransport { };
 
   pyro-api = callPackage ../development/python-modules/pyro-api { };
@@ -16281,8 +16279,6 @@ self: super: with self; {
   pysail = callPackage ../development/python-modules/pysail {
     protoc = pkgs.protobuf;
   };
-
-  pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
 
@@ -16820,6 +16816,8 @@ self: super: with self; {
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-mypy-plugins = callPackage ../development/python-modules/pytest-mypy-plugins { };
+
+  pytest-mysql = callPackage ../development/python-modules/pytest-mysql { };
 
   pytest-notebook = callPackage ../development/python-modules/pytest-notebook { };
 
@@ -20508,6 +20506,8 @@ self: super: with self; {
 
   swh-model = callPackage ../development/python-modules/swh-model { };
 
+  swh-mosaic = callPackage ../development/python-modules/swh-mosaic { };
+
   swh-objstorage = callPackage ../development/python-modules/swh-objstorage { };
 
   swh-scanner = callPackage ../development/python-modules/swh-scanner { };
@@ -22576,7 +22576,7 @@ self: super: with self; {
     inherit (pkgs) protobuf;
   };
 
-  vllm = callPackage ../development/python-modules/vllm { };
+  vllm = callPackage ../development/python-modules/vllm { inherit (pkgs) zstd; };
 
   vllm-tt-plugin = callPackage ../development/python-modules/vllm-tt-plugin { };
 
@@ -22595,8 +22595,6 @@ self: super: with self; {
   voip-utils = callPackage ../development/python-modules/voip-utils { };
 
   volatile = callPackage ../development/python-modules/volatile { };
-
-  volkswagencarnet = callPackage ../development/python-modules/volkswagencarnet { };
 
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 
@@ -22710,6 +22708,8 @@ self: super: with self; {
   warrant-lite = callPackage ../development/python-modules/warrant-lite { };
 
   wasabi = callPackage ../development/python-modules/wasabi { };
+
+  wasm-tools = callPackage ../development/python-modules/wasm-tools { inherit (pkgs) jq; };
 
   inherit (self.wasmerPackages)
     wasmer
@@ -22993,7 +22993,13 @@ self: super: with self; {
 
   wtforms-bootstrap5 = callPackage ../development/python-modules/wtforms-bootstrap5 { };
 
+  wtforms-htmx = callPackage ../development/python-modules/wtforms-htmx { };
+
+  wtforms-htmx-components = callPackage ../development/python-modules/wtforms-htmx-components { };
+
   wtforms-sqlalchemy = callPackage ../development/python-modules/wtforms-sqlalchemy { };
+
+  wtforms_3_3 = callPackage ../development/python-modules/wtforms/3_3.nix { };
 
   wunsen = callPackage ../development/python-modules/wunsen { };
 

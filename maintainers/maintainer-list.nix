@@ -3104,6 +3104,14 @@
     github = "axodentally";
     githubId = 24368475;
   };
+  axunes = {
+    name = "axunes";
+    email = "axunes@axunes.net";
+    matrix = "@axunes:matrix.org";
+    github = "axunes";
+    githubId = 55267708;
+    keys = [ { fingerprint = "024A A47E 55D7 FCF6 38BF  2189 46B4 2EE8 C118 DBE9"; } ];
+  };
   ayazhafiz = {
     email = "ayaz.hafiz.1@gmail.com";
     github = "hafiz";
@@ -3798,12 +3806,6 @@
     github = "brendan-hall";
     githubId = 34919100;
     name = "Brendan Hall";
-  };
-  bhankas = {
-    email = "payas@relekar.org";
-    github = "bhankas";
-    githubId = 24254289;
-    name = "Payas Relekar";
   };
   bhansconnect = {
     github = "bhansconnect";
@@ -5812,6 +5814,17 @@
     matrix = "@colin:uninsane.org";
     github = "uninsane";
     githubId = 106709944;
+  };
+  colinxu2020 = {
+    email = "colinxu2020@gmail.com";
+    github = "colinxu2020";
+    githubId = 63941938;
+    name = "Xu Colin";
+    keys = [
+      {
+        fingerprint = "8135 7B65 4FBE F2AD 009C EB3A 30CA D8CC 8FD6 EE77";
+      }
+    ];
   };
   collares = {
     email = "mauricio@collares.org";
@@ -10822,6 +10835,12 @@
     github = "Gordon-BP";
     githubId = 77560236;
     name = "Gordon Clark";
+  };
+  gordon01 = {
+    email = "etc9053@gmail.com";
+    github = "Gordon01";
+    githubId = 4996834;
+    name = "Alexander Sergeev";
   };
   gotcha = {
     email = "gotcha@bubblenet.be";
@@ -20982,6 +21001,13 @@
     matrix = "@neobrain:matrix.org";
     name = "Tony Wasserka";
   };
+  neolouker = {
+    email = "neolouker@gmail.com";
+    github = "neolouker";
+    githubId = 36087559;
+    matrix = "@neolouker:matrix.org";
+    name = "Neolouker";
+  };
   neonvoid = {
     email = "me@neonvoid.dev";
     github = "neonvoidx";
@@ -26597,7 +26623,7 @@
     name = "Christian Rackerseder";
   };
   screwys = {
-    email = "screwygit@proton.me";
+    email = "me@screwy.dev";
     github = "screwys";
     githubId = 254296947;
     name = "screwy";
@@ -29385,6 +29411,12 @@
     github = "Theaninova";
     githubId = 19289296;
     keys = [ { fingerprint = "6C9E EFC5 1AE0 0131 78DE  B9C8 68FF FB1E C187 88CA"; } ];
+  };
+  thebigjc = {
+    email = "thebigjc@gmail.com";
+    github = "thebigjc";
+    githubId = 311085;
+    name = "Jordan Christensen";
   };
   TheBrainScrambler = {
     email = "esthromeris@riseup.net";
