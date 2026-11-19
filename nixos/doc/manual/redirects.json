@@ -1013,6 +1013,9 @@
   "module-pelican-wings-setup": [
     "index.html#module-pelican-wings-setup"
   ],
+  "module-pelican-wings-podman": [
+    "index.html#module-pelican-wings-podman"
+  ],
   "module-pelican-wings-traefik": [
     "index.html#module-pelican-wings-traefik"
   ],
@@ -1027,6 +1030,15 @@
   ],
   "module-pelican-panel-reverse-proxy": [
     "index.html#module-pelican-panel-reverse-proxy"
+  ],
+  "module-pelican-panel-database": [
+    "index.html#module-pelican-panel-database"
+  ],
+  "module-pelican-panel-database-type": [
+    "index.html#module-pelican-panel-database-type"
+  ],
+  "module-pelican-panel-database-remote-database": [
+    "index.html#module-pelican-panel-database-remote-database"
   ],
   "module-services-pict-rs": [
     "index.html#module-services-pict-rs"
