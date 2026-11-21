@@ -307,6 +307,7 @@ mapAliases {
   fuse = throw "'fuse-python' was removed, because it is stuck on the old, unmaintained fuse 2.x"; # Added 2026-05-30
   fvs = throw "'fvs' has been removed due to being unused"; # Added 2026-05-23
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
+  garth = throw "'garth' was removed because Garmin changed its authentication flow, breaking new logins, and upstream is no longer maintained. See https://github.com/matin/garth#readme"; # Added 2026-11-09
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
   gepetto-gui = throw "'gepetto-gui' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   gepetto-viewer = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
@@ -516,6 +517,7 @@ mapAliases {
   orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   otr = warnAlias "otr has been renamed to python3-otr" python3-otr; # Added 2026-07-26
+  paho-mqtt_1 = throw "'paho-mqtt_1' has been removed, as it was unused"; # Added 2026-11-19
   paho-mqtt_2 = throw "'paho-mqtt_2' has been renamed to/replaced by 'paho-mqtt'"; # Converted to throw 2025-10-29
   pam = throw "'pam' has been renamed to/replaced by 'python-pam'"; # Converted to throw 2025-10-29
   pandas-ta = throw "pandas-ta has been removed: abandoned upstream"; # added 2026-07-20
@@ -839,6 +841,7 @@ mapAliases {
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = throw "'trezor_agent' has been renamed to/replaced by 'trezor-agent'"; # Converted to throw 2025-10-29
   ts1-signatures = warnAlias "'ts1-signatures' has been renamed to 'th1'" th1; # Added 2026-11-07
+  tunigo = throw "'tunigo' has been removed because the Tunigo service is no longer operational. For similar functionality, consider the Spotify Web API."; # Added 2026-11-20
   tvdb_api = throw "'tvdb_api' has been renamed to/replaced by 'tvdb-api'"; # Converted to throw 2025-10-29
   tweedledum = throw "'tweedledum' has been removed due to lack of upstream maintenance."; # Added 2025-11-22
   twitter = throw "'twitter' has been removed because it was archived upstream"; # Added 2026-09-06

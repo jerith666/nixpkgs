@@ -9985,6 +9985,12 @@
     githubId = 189939;
     name = "Santhosh Raju";
   };
+  frai3mega = {
+    email = "frai3mega@213742.xyz";
+    github = "FraI3mega";
+    githubId = 69040313;
+    name = "Franciszek Sośniak";
+  };
   fraioveio = {
     email = "francesco@vecchia.lol";
     github = "FraioVeio";
@@ -16744,7 +16750,7 @@
     keys = [ { fingerprint = "5BE4 98D5 1C24 2CCD C21A  4604 AC6F 4BA0 78E6 7833"; } ];
   };
   leoflo = {
-    email = "noreply@leoflo.me";
+    email = "leonardo@leoflo.net";
     github = "le0flo";
     githubId = 128467278;
     name = "Leonardo";
@@ -23078,6 +23084,12 @@
     name = "Patrick";
     keys = [ { fingerprint = "5E4C 3D74 80C2 35FE 2F0B  D23F 7DD6 A72E C899 617D"; } ];
   };
+  patrickelectric = {
+    email = "patrickelectric@gmail.com";
+    github = "patrickelectric";
+    githubId = 1215497;
+    name = "Patrick José Pereira";
+  };
   patryk27 = {
     email = "pwychowaniec@pm.me";
     github = "Patryk27";
@@ -23857,6 +23869,12 @@
     githubId = 46154511;
     name = "Kevin Mullins";
     keys = [ { fingerprint = "2CD2 B030 BD22 32EF DF5A  008A 3618 20A4 5DB4 1E9A"; } ];
+  };
+  poacher = {
+    email = "poacher@poacher.dev";
+    github = "poach3r";
+    githubId = 58641438;
+    name = "Henry Matonis";
   };
   podium868909 = {
     email = "89096245@proton.me";
@@ -33025,6 +33043,12 @@
     github = "yuannan";
     githubId = 8006928;
     name = "Yuannan (Brandon) Lin";
+  };
+  yueyinqiu = {
+    email = "me@yueyinqiu.top";
+    github = "yueyinqiu";
+    githubId = 18749772;
+    name = "yueyinqiu";
   };
   yujonpradhananga = {
     email = "yujonpradhan123@gmail.com";
